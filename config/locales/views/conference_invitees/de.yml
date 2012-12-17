@@ -1,0 +1,55 @@
+de:
+  conference_invitees:
+    name: 'Telefonkonferenz Teilnehmer'
+    controller:
+      successfuly_created: 'Ein Teilnehmer wurde der Telefonkonferenz hinzugefügt.'
+      successfuly_updated: 'Der Teilnehmer wurde aktualisiert.'
+      successfuly_destroyed: 'Der Teilnehmer wurde aus der Telefonkonferenz entfernt.'
+    index:
+      page_title: 'Telefonkonferenz Teilnehmer'
+      conference_id: 'Telefonkonferenz'
+      phone_book_entry_id: 'Telefonbucheintrag'
+      pin: 'PIN'
+      speaker: 'Sprecher-Freischaltung'
+      moderator: 'Moderator'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Teilnehmer aus der Telefonkonferenz entfernen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neuen Teilnehmer für die Telefonkonferenz %{resource} hinzufügen'
+    show:
+      page_title: 'Teilnehmer anzeigen'
+      conference_id: 'Telefonkonferenz'
+      phone_book_entry_id: 'Telefonbucheintrag'
+      pin: 'PIN'
+      speaker: 'Sprecher-Freischaltung'
+      moderator: 'Moderator'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Teilnehmer aus der Telefonkonferenz entfernen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Telefonkonferenz Teilnehmer anzeigen'
+    new:
+      page_title: 'Neuen Teilnehmer hinzufügen'
+      actions:
+    edit:
+      page_title: 'Teilnehmer bearbeiten'
+    form:
+      conference_id:
+        label: 'Telefonkonferenz'
+        hint: ''
+      phone_book_entry_id:
+        label: 'Telefonbucheintrag'
+        hint: ''
+      pin:
+        label: 'PIN'
+        hint: ''
+      speaker:
+        label: 'Sprecher-Freischaltung'
+        hint: ''
+      moderator:
+        label: 'Moderator'
+        hint: ''
+      button: 'Absenden'

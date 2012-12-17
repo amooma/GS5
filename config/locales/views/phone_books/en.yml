@@ -1,0 +1,46 @@
+en:
+  phone_books:
+    name: 'Phone book'
+    general_phone_book:
+      name: 'Public phone book'
+      description: 'Readable for all users of %{resource}.'    
+    private_phone_book:
+      name: "%{resource}'s phone book"
+      description: 'A private phone book.'
+    controller:
+      successfuly_created: 'Successfully created phone book.'
+      successfuly_updated: 'Successfully updated phone book.'
+      successfuly_destroyed: 'Successfully destroyed phone book.'
+    index:
+      page_title: 'Phone books'
+      name: 'Name of the phone book'
+      description: 'Description'
+      count: 'Number of entries'
+      actions:
+        confirm: 'Are you sure you want to delete this phone book?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New phone book for %{resource}'
+    show:
+      page_title: 'Phone Book'
+      name: 'Name'
+      description: 'Description'
+      actions:
+        confirm: 'Are you sure you want to delete this phone book?'
+        destroy: 'Delete phone book'
+        edit: 'Edit phone book'
+        view_all: 'View all phone books'
+    new:
+      page_title: 'New phone book'
+    edit:
+      page_title: 'Editing phone book "%{resource}"'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      description:
+        label: 'Description'
+        hint: ''
+      button: 'Submit'

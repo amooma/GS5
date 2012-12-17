@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+# This command will automatically be run when you run "rails" with Rails 3 gems installed from the root of your application.
+
+APP_PATH = File.expand_path('../../config/application',  __FILE__)
+require File.expand_path('../../config/boot',  __FILE__)
+
+
+# # ---[ Custom stuff ]--------------------------------------{
+# # Start web server with SSL enabled.
+# # http://www.nearinfinity.com/blogs/chris_rohr/configuring_webrick_to_use_ssl.html
+# 
+# require 'rubygems'
+# require 'rails/commands/server'
+# require 'rack'
+# 
+# # like WEBrick::Utils::getservername()
+# def getservername()
+# 	return 'abc'
+# 	require 'socket'
+# 	host = Socket::gethostname
+# 	begin
+# 		return Socket::gethostbyname(host)[0]
+# 	rescue
+# 		return host
+# 	end
+# end
+# 
+# require 'webrick'
+# require 'webrick/https'
+# 
+# module Rails
+# 	class Server < ::Rack::Server
+# 		# http://api.rubyonrails.org/classes/Rails/Server.html#method-i-default_options
+# 		def default_options
+# 			super.merge({
+# 				:Port             => 3001,
+# 				# https://github.com/raesene/dradisframework/commit/705d067eb9eef9ac98de29439757a0b1102c15cc
+# 				:DoNotReverseLookup => true,
+# 				:environment      => (ENV['RAILS_ENV'] || 'development').dup,
+# 				:daemonize        => false,
+# 				:debugger         => false,
+# 				:pid              => File.expand_path( 'tmp/pids/server.pid' ),
+# 				:config           => File.expand_path( 'config.ru' ),
+# 				:SSLEnable        => true,
+# 				:SSLVerifyClient  => OpenSSL::SSL::VERIFY_NONE,
+# 				:SSLPrivateKey    => OpenSSL::PKey::RSA.new(
+# 					File.open( 'misc/etc/ssl/amooma/server_key.pem' ).read),
+# 				:SSLCertificate   => OpenSSL::X509::Certificate.new(
+# 					File.open( 'misc/etc/ssl/amooma/server_cert.pem' ).read),
+# 				:SSLCertName      => [[ 'CN', getservername() ]],
+# 			})
+# 		end
+# 	end
+# end
+# 
+# # require 'rack/handler'
+# # Rack::Handler.class_eval do
+# # 	def self.default( options = {} )
+# # 		Rack::Handler::Thin
+# # 	end
+# # end
+# 
+# # ---------------------------------------------------------}
+# 
+
+
+require 'rails/commands'
+

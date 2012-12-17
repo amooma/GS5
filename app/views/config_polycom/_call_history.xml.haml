@@ -1,0 +1,18 @@
+!!! XML
+%html
+  %head
+    %title= @phone_xml_object[:title]
+  %body
+    %table{ :border => 0 }
+      %tbody
+        - @phone_xml_object[:entries].each do |entry|
+          %tr
+            %td= entry[:date]
+            %td= entry[:text]
+            %td
+              %a{:href => entry[:url]}= entry[:number]
+
+    %softkey{ :index => 1, :label => 'Home', :action => 'SoftKey:Home' }
+    %softkey{ :index => 2, :label => 'Refresh', :action => 'SoftKey:Refresh' }
+    %softkey{ :index => 4, :label => 'Exit', :action => 'SoftKey:Exit' }
+    %softkey{ :index => 3, :label => 'Back', :action => 'SoftKey:Back' }

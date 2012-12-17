@@ -1,0 +1,2 @@
+module AutomaticCallDistributorsHelper
+end

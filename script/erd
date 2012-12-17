@@ -1,0 +1,38 @@
+#! /bin/sh
+
+echo ""
+echo "###  Generating Dot file ..."
+bundle exec \
+  rake erd filetype=dot \
+    attributes=content,foreign_keys \
+    indirect=true \
+    orientation=horizontal \
+    notation=simple
+
+if which dot; then
+  echo ""
+  echo "###  Generating PDF file (via dot) ..."
+  dot -Tpdf:quartz:quartz -o ERD.pdf ERD.dot
+else
+  if which graphviz; then
+    echo ""
+    echo "###  Generating PDF file (via graphviz) ..."
+    bundle exec \
+      rake erd filetype=pdf \
+        attributes=content,foreign_keys \
+        indirect=true \
+        orientation=horizontal \
+        notation=simple
+  else
+    echo "No dot no PDF."
+  fi
+fi
+
+if which dot; then
+  echo ""
+  echo "###  Generating PNG file (via dot) ..."
+  dot -Tpng:quartz:quartz -o ERD.png ERD.dot
+else
+  echo "No dot no PNG."
+fi
+

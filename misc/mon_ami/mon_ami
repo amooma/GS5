@@ -1,0 +1,10 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+# MonAMI Asterisk Manger Interface Server
+# (c) AMOOMA GmbH 2012
+from mon_ami_main import main
+from sys import exit
+
+if (__name__ == "__main__"):
+	result = main()
+	exit(result)

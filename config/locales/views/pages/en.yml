@@ -1,0 +1,9 @@
+en:
+  pages:
+    name: "Pages"
+    welcome_please_log_in: "Welcome to Gemeinschaft! Please Log In to access the System!"
+    not_enough_rights: "Contact Administration" # Not Enough rights to access anything in the Navigation.
+    controller:
+      access_denied_login_first: 'Access denied! You need to login first.'
+      index:
+        name: "Home"

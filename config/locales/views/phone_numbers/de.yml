@@ -1,0 +1,64 @@
+de:
+  phone_numbers:
+    name: "Telefonnummer"
+    controller:
+      successfuly_created: 'Eine neue Telefonnummer wurde eingetragen.'
+      successfuly_updated: 'Die Telefonnummer wurde aktualisiert.'
+      successfuly_destroyed: 'Die Telefonnummer wurde gelöscht.'
+    index:
+      page_title: 'Telefonnummern'
+      phone_book_id: 'Telefonbuch'
+      name: 'Name'
+      number: 'Telefonnummer'
+      country_code: 'Ländervorwahl'
+      area_code: 'Ortsvorwahl'
+      subscriber_number: 'Telefonnummer'
+      extension: 'Durchwahl'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Telefonnummer löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neue Telefonnummer für %{resource} anlegen'
+    show:
+      page_title: 'Telefonnummer anzeigen'
+      phone_book_id: 'Telefonbuch'
+      name: 'Name'
+      number: 'Telefonnummer'
+      country_code: 'Ländervorwahl'
+      area_code: 'Ortsvorwahl'
+      subscriber_number: 'Telefonnummer'
+      extension: 'Durchwahl'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Telefonnummer löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'View all phone numbers'
+    new:
+      page_title: 'Neue Telefonnummer'
+    edit:
+      page_title: 'Telefonnummer bearbeiten'
+    form:
+      phone_book_id:
+        label: 'Telefonbuch'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      number:
+        label: 'Telefonnummer'
+        hint: 'Format: +49-30-2270 für eine normale Telefonnummer. 42 für eine interne Durchwahl.'
+      country_code:
+        label: 'Ländervorwahl'
+        hint: ''
+      area_code:
+        label: 'Ortsvorwahl'
+        hint: ''
+      subscriber_number:
+        label: 'Telefonnummer'
+        hint: ''
+      extension:
+        label: 'Durchwahl'
+        hint: ''
+      button: 'Absenden'

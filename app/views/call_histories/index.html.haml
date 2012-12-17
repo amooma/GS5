@@ -1,0 +1,6 @@
+- if @type
+  - title t("call_histories.index.page_title_#{@type}")
+- else
+  - title t("call_histories.index.page_title")
+
+= render "index_core", :call_histories => @call_histories

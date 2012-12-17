@@ -1,0 +1,2 @@
+module ConferenceInviteesHelper
+end

@@ -1,0 +1,46 @@
+de:
+  <%= plural_name %>:
+    name: '<%= human_name %>'
+    controller:
+      successfuly_created: '<%= human_name %> wurde angelegt.'
+      successfuly_updated: '<%= human_name %> wurde aktualisiert.'
+      successfuly_destroyed: '<%= human_name %> wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von <%= human_name %>'
+      <%- for attribute in model_attributes -%>
+      <%= attribute.name %>: '<%= attribute.human_name %>'
+      <%- end -%>
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie folgendes löschen möchten: <%= human_name %>'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: '<%= human_name %> neu anlegen für %{resource}'
+    show:
+      page_title: '<%= human_name %> bearbeiten'
+      <%- for attribute in model_attributes -%>
+      <%= attribute.name %>: '<%= attribute.human_name %>'
+      <%- end -%>
+      actions:
+        confirm: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: '<%= human_name %> neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: '<%= human_name %> bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      <%- for attribute in model_attributes -%>
+      <%= attribute.name %>:
+        label: '<%= attribute.human_name %>'
+        hint: ''
+      <%- end -%>
+      button: 'Absenden'

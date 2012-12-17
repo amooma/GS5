@@ -1,0 +1,64 @@
+en:
+  softkeys:
+    functions:
+      speed_dial: 'Speed Dial'
+      blf: 'BLF'
+      dtmf: 'DTMF'
+      log_in: 'Log in'
+      log_out: 'Log out'
+      conference: 'Conference'
+      call_forwarding: 'Toggle Call Forwarding'
+      hold: 'Hold'
+      hunt_group_membership: 'Hunt Group'
+      deactivated: 'Deactivated'
+      acd_membership: 'ACD'
+    name: 'Softkey'
+    controller:
+      successfuly_created: 'Successfully created softkeys.'
+      successfuly_updated: 'Successfully updated softkeys.'
+      successfuly_destroyed: 'Successfully destroyed softkeys.'
+    index:
+      page_title: 'Softkeys'
+      phone_id: 'Phone'
+      function: 'Function'
+      number: 'Number'
+      label: 'Label'
+      position: 'Position'
+      actions:
+        confirm: 'Are you sure you want to delete this softkey?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New softkey'
+        create_for: 'New softkey for %{resource}'
+    show:
+      page_title: 'Show softkey'
+      phone_id: 'Phone'
+      function: 'Function'
+      number: 'Number'
+      label: 'Label'
+      position: 'Position'
+      call_forward: 'Call forward'
+      actions:
+        confirm: 'Are you sure you want to delete this softkey?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New softkey'
+    edit:
+      page_title: 'Editing softkey'
+    form:
+      function:
+        label: 'Function'
+        hint: ''
+      call_forward:
+        label: 'Call forward'
+        hint: ''
+      number:
+        label: 'Number'
+        hint: ''
+      label:
+        label: 'Label'
+        hint: ''
+      button: 'Submit'

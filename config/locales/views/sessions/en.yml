@@ -1,0 +1,15 @@
+en:
+  sessions:
+    controller:
+      successfully_created: 'Logged in as %{resource}.'
+      successfully_destroyed: 'Logged out.'
+    new:
+      page_title: 'Log In'
+    form:
+      email: 'E-Mail or Username'
+      password: 'Password'
+      reset_password: 'I forgot my password'
+    flash_messages:
+      invalid_email_or_password: 'Invalid e-mail or password. Please try again.'
+      password_recovery_successful: 'A new password has been sent to your registered email address'
+      password_recovery_failed: 'There was an error updating your password.'

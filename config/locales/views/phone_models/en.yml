@@ -1,0 +1,49 @@
+en:
+  phone_models:
+    name: 'Phone model'
+    controller:
+      successfuly_created: 'Successfully created phone model.'
+      successfuly_updated: 'Successfully updated phone model.'
+      successfuly_destroyed: 'Successfully destroyed phone model.'
+    index:
+      page_title: 'Phone models'
+      name: 'Name'
+      manufacturer_id: 'Manufacturer'
+      product_manual_homepage_url: 'Product manual homepage URL'
+      product_homepage_url: 'Product homepage URL'
+      number_of_phones: 'System count'
+      actions:
+        confirm: 'Are you sure you want to delete this phone model?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+    show:
+      page_title: 'Show phone model'
+      name: 'Name'
+      manufacturer_id: 'Manufacturer'
+      product_manual_homepage_url: 'Product manual homepage URL'
+      product_homepage_url: 'Product homepage URL'
+      actions:
+        confirm: 'Are you sure you want to delete this phone model?'
+        destroy: 'Delete phone model'
+        edit: 'Edit phone model'
+        view_all: 'View all phone models'
+    new:
+      page_title: 'New phone model'
+    edit:
+      page_title: 'Editing phone model'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      manufacturer_id:
+        label: 'Manufacturer'
+        hint: ''
+      product_manual_homepage_url:
+        label: 'Product manual homepage URL'
+        hint: ''
+      product_homepage_url:
+        label: 'Product homepage URL'
+        hint: ''
+      button: 'Submit'

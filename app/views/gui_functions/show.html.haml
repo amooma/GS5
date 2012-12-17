@@ -1,0 +1,18 @@
+- title t("gui_functions.show.page_title")
+
+%p
+  %strong= t('gui_functions.show.name') + ":"
+  = @gui_function.name
+%p
+  %strong= t('gui_functions.show.description') + ":"
+  = @gui_function.description
+
+- @user_groups.each do |user_group|
+  %p
+    %strong= "#{user_group}:"
+    - if @gui_function.gui_function_memberships.where(:user_group_id => user_group.id, :activated => true).count > 0
+      = 'x'
+    - else
+      = 'not activated'
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @gui_function }

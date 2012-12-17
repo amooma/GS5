@@ -1,0 +1,21 @@
+- title t("fax_accounts.show.page_title")
+
+%p
+  %strong= t('fax_accounts.show.name') + ":"
+  = @fax_account.name
+%p
+  %strong= t('fax_accounts.show.email') + ":"
+  = @fax_account.email
+%p
+  %strong= t('fax_accounts.show.days_till_auto_delete') + ":"
+  = @fax_account.days_till_auto_delete
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @parent, :child => @fax_account }
+
+= render :partial => 'shared/create_link', :locals => { :parent => @fax_account, :child_class => FaxDocument }
+
+%h2= t('phone_numbers.index.page_title')  
+- if @fax_account.phone_numbers.count > 0
+  = render "phone_numbers/index_core", :phone_numbers => @fax_account.phone_numbers
+  %br
+= render :partial => 'shared/create_link', :locals => { :parent => @fax_account, :child_class => PhoneNumber }

@@ -1,0 +1,27 @@
+- title t("phone_numbers.show.page_title")
+
+- if @phone_number.phone_numberable.class == PhoneBookEntry
+  %p
+    %strong= t('phone_numbers.show.name') + ":"
+    = @phone_number.name
+
+%p
+  %strong= t('phone_numbers.show.number') + ":"
+  = @phone_number.to_s
+
+- if @ringtoneable_classes.has_key?(@phone_number.phone_numberable.class.to_s)
+  %p
+    %strong= t('ringtones.name') + ':'
+    - if @phone_number.ringtones.count > 0
+      = link_to @phone_number.ringtones.first, phone_number_ringtone_path(@phone_number, @phone_number.ringtones.first)
+    - else
+      = link_to t('ringtones.set_a_ringtone'), new_phone_number_ringtone_path(@phone_number)
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone_number.phone_numberable, :child => @phone_number }
+
+- if @forwardable_classes.has_key?(@phone_number.phone_numberable.class.to_s)
+  %h3= t("call_forwards.index.page_title")
+  - if @phone_number.call_forwards.length > 0
+    = render "call_forwards/index_core", :call_forwards => @phone_number.call_forwards
+
+  = render :partial => 'shared/create_link', :locals => {:parent => @phone_number, :child_class => CallForward}

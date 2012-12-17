@@ -1,0 +1,6 @@
+- title t("acd_callers.index.page_title")
+
+- if @acd_callers && @acd_callers.count > 0
+  = render "index_core", :acd_callers => @acd_callers
+
+= render :partial => 'shared/create_link', :locals => {:child_class => AcdCaller}

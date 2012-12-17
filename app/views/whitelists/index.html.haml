@@ -1,0 +1,6 @@
+- title t("whitelists.index.page_title")
+
+- if @whitelists.count > 0
+  = render "index_core", :whitelists => @whitelists
+
+= render :partial => 'shared/create_link', :locals => {:parent => @parent, :child_class => Whitelist}

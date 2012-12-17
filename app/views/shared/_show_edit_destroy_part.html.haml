@@ -1,0 +1,16 @@
+%p
+  - if !(defined? parent).nil? && !(defined? child).nil?
+    - if can? :edit, child
+      = link_to t("#{child.class.name.underscore.pluralize}.show.actions.edit"), method( :"edit_#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child)
+    - if can? :destroy, child
+      - if can? :edit, child
+        |
+      = link_to t("#{child.class.name.underscore.pluralize}.show.actions.destroy"), method( :"#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child), :method => :delete
+
+  - elsif !(defined? child).nil?
+    - if can? :edit, child
+      = link_to t("#{child.class.name.underscore.pluralize}.show.actions.edit"), method( :"edit_#{child.class.name.underscore}_path" ).(child)
+    - if can? :destroy, child
+      - if can? :edit, child
+        |
+      = link_to t("#{child.class.name.underscore.pluralize}.show.actions.destroy"), method( :"#{child.class.name.underscore}_path" ).(child), :method => :delete

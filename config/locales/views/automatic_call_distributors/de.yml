@@ -1,0 +1,131 @@
+de:
+  automatic_call_distributors:
+    name: 'Warteschleife'
+    controller:
+      successfuly_created: 'Eine neue Warteschleife wurde angelegt.'
+      successfuly_updated: 'Die Warteschleife wurde aktualisiert.'
+      successfuly_destroyed: 'Die Warteschleife wurde gelöscht.'
+    index:
+      page_title: 'Warteschleifen'
+      uuid: 'UUID'
+      name: 'Name'
+      strategy: 'Strategie'
+      max_callers: 'Max. Anrufer'
+      agent_timeout: 'Agenten-Timeout'
+      retry_timeout: 'Wiederh.-Timeout'
+      join: 'Betreten'
+      leave: 'Verlassen'
+      phone_numbers: 'Telefonnummern'
+      acd_agents: 'Agenten'
+      gs_node_id: 'Knoten'
+      announce_position: 'Position ansagen'
+      announce_call_agents: 'Anruf ansagen'
+      greeting: 'Begrüßung'
+      goodbye: 'Abschied'
+      music: 'Musik'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Warteschleife löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neue Warteschleife für %{resource} anlegen'
+    show:
+      page_title: 'Warteschleife'
+      uuid: 'UUID'
+      name: 'Name'
+      strategy: 'Strategie'
+      max_callers: 'Max. Anrufer'
+      agent_timeout: 'Agenten-Timeout'
+      retry_timeout: 'Wiederholungs-Timeout'
+      join: 'Betreten'
+      leave: 'Verlassen'
+      gs_node_id: 'GS Knoten'
+      announce_position: 'Position ansagen'
+      announce_call_agents: 'Anruf ansagen'
+      greeting: 'Begrüßung'
+      goodbye: 'Abschied'
+      music: 'Musik'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Warteschleife löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neue Warteschleife'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Warteschleife bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      uuid:
+        label: 'UUID'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      strategy:
+        label: 'Strategie'
+        hint: ''
+      automatic_call_distributorable_type:
+        label: 'Warteschleifen-Typ'
+        hint: ''
+      automatic_call_distributorable_id:
+        label: 'Warteschleifen ID'
+        hint: ''
+      max_callers:
+        label: 'Maximale Anzahl von Anrufern'
+        hint: ''
+      agent_timeout:
+        label: 'Agenten-Timeout'
+        hint: ''
+      retry_timeout:
+        label: 'Wiederholungs-Timeout'
+        hint: ''
+      join:
+        label: 'Betreten'
+        hint: ''
+      leave:
+        label: 'Verlassen'
+        hint: ''
+      gs_node_id:
+        label: 'GS Knoten'
+        hint: ''
+      announce_position: 
+        label: 'Position ansagen'
+        hint: ''      
+      announce_call_agents: 
+        label: 'Anruf ansagen'
+        hint: ''      
+      greeting: 
+        label: 'Begrüßung'
+        hint: '' 
+      goodbye: 
+        label: 'Abschied'
+        hint: '' 
+      music: 
+        label: 'Musik'
+        hint: '' 
+      button: 'Absenden'
+    strategies:
+      round_robin: 'Ringverteilung'
+      ring_all: 'Alle'
+    join_on:
+      agents_available: 'Agenten verfügbar'
+      agents_active: 'Agenten aktiv'
+      always: 'Immer'
+    leave_on:
+      no_agents_available_timeout: 'Keine Agenten verfügbar oder Zeitüberschreitung'
+      no_agents_active_timeout: 'Keine Agenten aktiv oder Zeitüberschreitung'
+      no_agents_available: 'Keine Agenten verfügbar'
+      no_agents_active: 'Keine Agenten aktiv'
+      timeout: 'Zeitüberschreitung'
+      never: 'Nie'
+    announce_position:
+      never: 'Nie'
+      on_change_only: 'Ansage bei jeder Änderung der Position'
+      every_x_seconds: "Ansage alle %{x_seconds} Sekunden und nach jeder Änderung der Position"

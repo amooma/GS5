@@ -1,0 +1,8 @@
+- amount_of_hunt_group_members = hunt_group_members.count
+- if amount_of_hunt_group_members > 0
+  - if amount_of_hunt_group_members < 30
+    = hunt_group_members.map{|hunt_group_member| hunt_group_member}.join(', ')
+  - else
+    = hunt_group_members.limit(15).map{|hunt_group_member| hunt_group_member}.join(', ') + ', '
+    = '[...]'
+    = hunt_group_members.offset(amount_of_hunt_group_members - 15).map{|hunt_group_member| hunt_group_member}.join(', ')

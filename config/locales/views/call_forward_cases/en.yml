@@ -1,0 +1,7 @@
+en:
+  call_forward_cases:
+    always: 'always'
+    busy: 'busy'
+    noanswer: 'no answer'
+    offline: 'offline'
+    assistant: 'assistant'

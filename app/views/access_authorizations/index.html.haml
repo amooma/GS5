@@ -1,0 +1,6 @@
+- title t("access_authorizations.index.page_title")
+
+- if @access_authorizations.count > 0
+  = render "index_core", :access_authorizations => @access_authorizations
+
+= render :partial => 'shared/create_link', :locals => {:parent => @parent, :child_class => AccessAuthorization}

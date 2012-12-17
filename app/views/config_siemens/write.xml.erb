@@ -1,0 +1,10 @@
+<DlsMessage xsi:schemaLocation="http://www.siemens.com/DLS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.siemens.com/DLS"> 
+ <Message nonce="<%=@my_nonce%>">
+  <Action>WriteItems</Action>
+    <ItemList>
+      <% @new_settings.each do |setting| %>
+        <Item name="<%=setting[0]%>" <% if ! setting[1].nil? %>index="<%=setting[1]%>"<%end%>><%=setting[2]%></Item>
+      <% end %>
+    </ItemList>
+  </Message>
+</DlsMessage>

@@ -1,0 +1,50 @@
+de:
+  gui_functions:
+    name: 'Oberflächen-Funktionen'
+    controller:
+      successfuly_created: 'Eine Oberflächen-Funktion wurde erstellt.'
+      successfuly_updated: 'Die Oberflächen-Funktion wurde aktualisiert.'
+      successfuly_destroyed: 'Die Oberflächen-Funktion wurde gelöscht.'
+    index:
+      page_title: 'Oberflächen-Funktionen'
+      category: 'Kategorie'
+      name: 'Name'
+      description: 'Beschreibung'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Oberflächen-Funktion löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neue Oberflächen-Funktion für %{resource}'
+    show:
+      page_title: 'Oberflächen-Funktion anzeigen'
+      category: 'Kategorie'
+      name: 'Name'
+      description: 'Beschreibung'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Oberflächen-Funktion löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neue Oberflächen-Funktion'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Oberflächen-Funktion bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      category: 
+        label: 'Kategorie'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      description:
+        label: 'Beschreibung'
+        hint: ''
+      button: 'Absenden'

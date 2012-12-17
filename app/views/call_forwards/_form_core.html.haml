@@ -1,0 +1,15 @@
+.inputs
+  = f.input :call_forward_case_id, :as => :select, :collection => @available_call_forward_cases.map {|x| [I18n.t("call_forward_cases.#{x.value}"), x.id] }, :label => t('call_forwards.form.call_forward_case_id.label'), :hint => conditional_hint('call_forwards.form.call_forward_case_id.hint'), :include_blank => false
+  = f.input :timeout, :label => t('call_forwards.form.timeout.label'), :hint => conditional_hint('call_forwards.form.timeout.hint')
+  
+  = f.input :call_forwarding_destination , :as => :select, :collection => @call_forwarding_destinations, :label => t('call_forwards.form.call_forwarding_destination.label'), :hint => conditional_hint('call_forwards.form.call_forwarding_destination.hint'), :include_blank => false
+
+  = f.input :destination, :label => t('call_forwards.form.destination.label'), :hint => conditional_hint('call_forwards.form.destination.hint')
+
+
+  = f.input :source, :label => t('call_forwards.form.source.label'), :hint => conditional_hint('call_forwards.form.source.hint')
+  - if GuiFunction.display?('depth_field_in_call_forward_form', current_user)
+    = f.input :depth, :collection => 1..MAX_CALL_FORWARD_DEPTH, :label => t('call_forwards.form.depth.label'), :hint => conditional_hint('call_forwards.form.depth.hint')
+  - else
+    = f.hidden_field :depth
+  = f.input :active, :label => t('call_forwards.form.active.label'), :hint => conditional_hint('call_forwards.form.active.hint')

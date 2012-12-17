@@ -1,0 +1,8 @@
+= simple_form_for([@parent, @automatic_call_distributor]) do |f|
+  = f.error_notification
+
+  = render "form_core", :f => f, :join_on => @join_on, :leave_on => @leave_on, :strategies => @strategies
+
+
+  .actions
+    = f.button :submit, conditional_t('automatic_call_distributors.form.submit')

@@ -1,0 +1,39 @@
+en:
+  ringtones:
+    name: 'Ringtone'
+    controller:
+      successfuly_created: 'Successfully created ringtone.'
+      successfuly_updated: 'Successfully updated ringtone.'
+      successfuly_destroyed: 'Successfully destroyed ringtone.'
+    index:
+      page_title: 'Ringtones'
+      audio: 'Audio'
+      bellcore_id: 'Bellcore ID'
+      actions:
+        confirm: 'Are you sure you want to delete this ringtone?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+    show:
+      page_title: 'Show ringtone'
+      audio: 'Audio'
+      bellcore_id: 'Bellcore ID'
+      actions:
+        confirm: 'Are you sure you want to delete this ringtone?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New ringtone'
+    edit:
+      page_title: 'Editing ringtone'
+    form:
+      audio:
+        label: 'Audio'
+        hint: ''
+      bellcore_id:
+        label: 'Bellcore ID'
+        hint: 'Build in ringtone ID. A "0" means silence.'
+      button: 'Submit'
+    set_a_ringtone: 'Set a ringtone'

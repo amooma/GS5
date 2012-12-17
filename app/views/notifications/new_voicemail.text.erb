@@ -1,0 +1,9 @@
+Hello <%= @voicemail[:greeting] %>,
+
+You've just received a voicemail on your Gemeinschaft account <%= @voicemail[:destination] %>.
+
+          From: <%= @voicemail[:from] %>
+            To: <%= @voicemail[:to] %>
+Receiving Time: <%= @voicemail[:date] %>
+Message length: <%= @voicemail[:duration] %>
+          File: <%= @voicemail[:file_name] %>

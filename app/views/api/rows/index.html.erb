@@ -1,0 +1,29 @@
+<h1>Listing rows</h1>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>User name</th>
+    <th>Last name</th>
+    <th>First name</th>
+    <th>Internal extension</th>
+    <th>Office phone number</th>
+    <th>Fax phone number</th>
+    <th>Email</th>
+    <th>Pin</th>
+  </tr>
+
+<% @rows.each do |row| %>
+  <tr class='<%= cycle('odd', 'even') %>'>
+    <td><%= row.id %></td>
+    <td><%= link_to row.user_name, tenant_user_path(row.user.current_tenant, row.user) %></td>
+    <td><%= row.last_name %></td>
+    <td><%= row.first_name %></td>
+    <td><%= row.internal_extension %></td>
+    <td><%= row.office_phone_number %></td>
+    <td><%= row.fax_phone_number %></td>
+    <td><%= row.email %></td>
+    <td><%= row.pin %></td>
+  </tr>
+<% end %>
+</table>

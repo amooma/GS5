@@ -1,0 +1,99 @@
+// Survival ✚ Kit
+
+// News Item
+// ----------------------------------------
+// <div class="blog-item">
+//	 <h6 class="date">14 de Julio 2010</h6>
+//	 <h3><a href="#">Lorem My Ipsum</a></h3>
+//	 <img src="image.jpg" width="194" height="146" alt="Blog Thumb"/>
+//	 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras nec ipsum magna. Duis porttitor, felis quis eleifend vehicula, mauris mi varius nibh, sit amet iaculis magna magna vitae justo...</p>
+//	 <p class="read-more"><a href="#">Nota Completa</a></p>
+// </div>
+@mixin news-item($date:#383838, $header:#1491EE) {
+		@include clearfix;
+		.date {
+			color:$date;
+			font:{
+				size:11px;
+				weight:normal;
+			};
+		}
+		img {
+			float:left;
+			padding: 4px 14px 50px 0;
+		}
+		p {
+			color:$link-color;
+		}
+		h3 {
+			margin-bottom:8px;
+			a{
+				color:$header;
+				font-size:15px;
+				font-weight:bold;
+				text-decoration:none;
+			}
+		}
+}
+
+
+// Pagination Styling
+// ----------------------------------------
+// <div class="pagination">
+//   <span class="previous_page disabled">← Previous</span>
+//   <em>1</em>
+//   <a rel="next" href="/?page=2">2</a>
+//   <a href="/?page=3">3</a>
+//   <a href="/?page=4">4</a>
+//   <a class="next_page" rel="next" href="/?page=2">Next →</a>
+// </div>
+
+// Notes for Later
+//$active-state: (border (1px solid red), height 300px, ..[infinite]);
+// Would Output:
+// border: 1px solid red; heigh: 300px;
+
+// Normal, hover, active, disabled
+//$pagination-font-weights: normal bold normal;
+//$pagination-font-colors: #7F7F7F yellow #FFFFFF #4C7DB5;
+//$pagination-borders:none (1px solid #4C7DB5) (none) (1px solid #D0D0D0);
+//$pagination-backgrounds: #F5F5F5 #FFFFFF none none;
+// color, background, border, weight
+//@include pagination(#7F7F7F yellow #FFFFFF #4C7DB5, #F5F5F5 #FFFFFF none none,  none (1px solid #4C7DB5) (none) (1px solid #D0D0D0), );
+
+@mixin pagination() {
+	text-align:center;
+	* {
+	  @include border-radius(4px);
+	}
+	.current {
+		font-weight:bold;
+		color:#0090BC;
+		font-size:14px;
+		padding: 3px 8px;
+		margin-right:2px;
+	}
+	.disabled {
+		color:#518CBC;
+		border:1px solid #518CBC;
+	}
+	a {
+		padding: 3px 8px;
+    @include gradient(#80DFFF, #3BBBE7);
+		@include box-shadow(0 2px 0px #EBEBEB);
+    text-decoration:none;
+		color: #FFF;
+		font-weight: bold;
+		border:1px solid #4DC6EF;
+    &:active {
+      @include box-shadow(0px 1px #96C5FA, inset 0px 1px #5D96CC);
+      background:#F6FAFC !important;
+    }
+		&:hover {
+			background:#D0F0FC;
+			border:1px solid #4DC6EF;
+			color:$link-hover-color;
+			@include box-shadow(none);
+		}
+	}
+}

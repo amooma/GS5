@@ -1,0 +1,6 @@
+- if @type
+  - title t("voicemail_messages.index.page_title_#{@type}")
+- else
+  - title t("voicemail_messages.index.page_title")
+
+= render "index_core", :voicemail_messages => @voicemail_messages

@@ -1,0 +1,7 @@
+!!! XML
+%html
+  %head
+    %title= @sip_account.caller_name
+  %body
+    - @sip_account.phone_numbers.each do |number|
+      %br= number.number

@@ -1,0 +1,21 @@
+%table
+  %tr
+    %th= t('acd_callers.index.channel_uuid')
+    %th= t('acd_callers.index.automatic_call_distributor_id')
+    %th= t('acd_callers.index.status')
+    %th= t('acd_callers.index.enter_time')
+    %th= t('acd_callers.index.agent_answer_time')
+    %th= t('acd_callers.index.callback_number')
+    %th= t('acd_callers.index.callback_attempts')
+
+  - reset_cycle
+  - for acd_caller in acd_callers
+    %tr{:class => cycle('odd', 'even')}
+      %td= acd_caller.channel_uuid
+      %td= acd_caller.automatic_call_distributor_id
+      %td= acd_caller.status
+      %td= acd_caller.enter_time
+      %td= acd_caller.agent_answer_time
+      %td= acd_caller.callback_number
+      %td= acd_caller.callback_attempts
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => acd_caller}

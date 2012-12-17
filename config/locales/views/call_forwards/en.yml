@@ -1,0 +1,77 @@
+en:
+  call_forwards:
+    name: 'Call forward'
+    controller:
+      successfuly_created: 'Successfully created call forward.'
+      successfuly_updated: 'Successfully updated call forward.'
+      successfuly_destroyed: 'Successfully destroyed call forward.'
+    index:
+      page_title: 'Call forwards'
+      phone_number_id: 'Phone number'
+      call_forward_case_id: 'Call forward case'
+      timeout: 'Timeout'
+      destination: 'Destination'
+      to_voicemail: 'Voicemail'
+      source: 'Source'
+      depth: 'Hops'
+      active: 'Active'
+      hunt_group: 'Hunt group connection'
+      actions:
+        confirm: 'Are you sure you want to delete this call forward?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New call forward for phone number %{resource}'
+    show:
+      page_title: 'Show call forward'
+      phone_number_id: 'Phone number'
+      call_forward_case_id: 'Call forward case'
+      timeout: 'Timeout'
+      destination: 'Destination'
+      hunt_group: 'Hunt group connection'
+      to_voicemail: 'Voicemail'
+      source: 'Source'
+      depth: 'Hops'
+      active: 'Active'
+      actions:
+        confirm: 'Are you sure you want to delete this call forward?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View all call forwards'
+    new:
+      page_title: 'New call forward'
+    edit:
+      page_title: 'Editing call forward'
+    form:
+      phone_number_id:
+        label: 'Phone number'
+        hint: ''
+      call_forward_case_id:
+        label: 'Call forward case'
+        hint: ''
+      timeout:
+        label: 'Timeout in seconds'
+        hint: 'Just needed for the "noanswer" case.'
+      destination:
+        label: 'Destination phone number'
+        hint: 'Format: +49-30-2270 for a normal phone number or 42 for an internal extension.'
+      call_forwarding_destination:
+        label: 'Destination Type'
+        hint: 'Select destination or enter phone number below'        
+      hunt_group:
+        label: 'Hunt group connection'
+        hint: 'This hunt group auto activates this call forward.'
+      to_voicemail:
+        label: 'Forward to voicemail'
+        hint: 'Can not be activated together with a destination number.'
+      source:
+        label: 'Source'
+        hint: "The caller's ID for which this call forward should be valid. Leave empty for calls from any number."
+      depth:
+        label: 'Hops'
+        hint: "The maximum number of hops you want to permit. 1 means calls won't be forwarded beyond the next destination."
+      active:
+        label: 'Active'
+        hint: ''
+      button: 'Submit'

@@ -1,0 +1,10 @@
+- title t("sip_domains.show.page_title")
+
+%p
+  %strong= t('sip_domains.show.host') + ":"
+  = @sip_domain.host
+%p
+  %strong= t('sip_domains.show.realm') + ":"
+  = @sip_domain.realm
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @sip_domain }

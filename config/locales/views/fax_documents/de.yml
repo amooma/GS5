@@ -1,0 +1,148 @@
+de:
+  fax_documents:
+    name: 'Fax-Dokument'
+    controller:
+      successfuly_created: 'Eine neues Fax-Dokument wurde erstellt.'
+      successfuly_updated: 'Das Fax-Dokument wurde aktualisiert.'
+      successfuly_destroyed: 'Das Fax-Dokument wurde gelöscht.'
+    states:
+      queued_for_sending: 'In der Warteschleife zum Versand'
+      sending: 'Wird aktuell versendet'
+      unsuccessful: 'Nicht erfolgreich'
+      successful: 'Erfolgreich'
+      inbound: 'Eingehendes Fax'      
+    result_codes:
+      code_0: 'OK'
+      code_2: 'Timeout beim Warten auf den Beginn der Kommunikation'
+      code_3: 'Timeout beim Warten auf die erste Nachricht'
+      code_5: 'Der HDLC Träger wurde nicht rechtzeitig beendet'
+      code_6: 'Training mit allen kompatiblen Modems fehlgeschlagen'
+      code_13: 'Unerwartete Nachricht erhalten'
+      code_14: 'Fehlerhafte Antwort auf DCS oder Training'
+      code_15: 'DCN von der Gegenstelle empfangen nachdem eine Seite gesendet wurde'
+      code_17: 'DCN empfangen während DIS erwartet wurde'
+      code_20: 'Keine Antwort auf DCS oder TCF empfangen'
+      code_23: 'Fehlerhafte ECM Antwort vom Sender empfangen'
+      code_31: 'Timer T2 abgelaufen während auf die Seite gewartet wurde'
+      code_32: 'Timer T2 abgelaufen während auf die nächse Seite gewartet wurde'
+      code_48: 'Nach zu vielen Fehlversuchen beendet'
+      code_49: 'Anruf vorzeitig beendet'
+    index:
+      page_title: 'Fax-Dokumente'
+      inbound: 'Eingehend'
+      state: 'Status'
+      transmission_time: 'Übertragungszeit'
+      sent_at: 'Sendezeit'
+      document_total_pages: 'Seitenanzahl'
+      document_transferred_pages: 'Übertragene Seiten'
+      ecm_requested: 'Fehlerkorrektur (ECM) angefragt'
+      ecm_used: 'Fehlerkorrektur (ECM) verwendet'
+      image_resolution: 'Bildauflösung'
+      image_size: 'Bildgröße'
+      local_station_id: 'Lokale Gegenstelle'
+      result_code: 'Ergebnis-Code'
+      result_text: 'Ergebnis-Text'
+      remote_station_id: 'Stations-ID der Gegenstelle'
+      success: 'Erfolgreich'
+      transfer_rate: 'Transferrate'
+      fax_resolution: 'Fax Auflösung'
+      document: 'Dokument'
+      destination_phone_number: 'Ziel Fax-Nummer'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie dieses Fax-Dokument löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neues Fax-Dokument'
+        download_pdf: 'PDF herunterladen'
+    show:
+      page_title: 'Fax-Dokument anzeigen'
+      inbound: 'Eingehend'
+      state: 'Status'
+      transmission_time: 'Übertragungszeit'
+      sent_at: 'Sendezeit'
+      document_total_pages: 'Seitenanzahl'
+      document_transferred_pages: 'Übertragende Seiten'
+      ecm_requested: 'Fehlerkorrektur (ECM) angefragt'
+      ecm_used: 'Fehlerkorrektur (ECM) verwendet'
+      image_resolution: 'Bildauflösung'
+      image_size: 'Bildgröße'
+      local_station_id: 'Lokale Gegenstelle'
+      result_code: 'Ergebnis-Code'
+      result_text: 'Ergebnis-Text'
+      remote_station_id: 'Stations-ID der Gegenstelle'
+      success: 'Erfolgreich'
+      transfer_rate: 'Transferrate'
+      document: 'Dokument'
+      fax_resolution: 'Fax Auflösung'
+      destination_phone_number: 'Ziel Fax-Nummer'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie dieses Fax-Dokument löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+        view_all_for: 'Alle Fax-Dokumente von %{resource} anzeigen'
+    new:
+      page_title: 'Neues Fax-Dokument'
+    edit:
+      page_title: 'Fax-Dokument bearbeiten'
+    form:
+      inbound:
+        label: 'Eingehend'
+        hint: ''
+      state:
+        label: 'Status'
+        hint: ''
+      transmission_time:
+        label: 'Übertragungszeit'
+        hint: ''
+      sent_at:
+        label: 'Sendezeit'
+        hint: ''
+      document_total_pages:
+        label: 'Seitenanzahl'
+        hint: ''
+      document_transferred_pages:
+        label: 'Übertragene Seiten'
+        hint: ''
+      ecm_requested:
+        label: 'Fehlerkorrektur (ECM) angefragt'
+        hint: ''
+      ecm_used:
+        label: 'Fehlerkorrektur (ECM) verwendet'
+        hint: ''
+      image_resolution:
+        label: 'Bildauflösung'
+        hint: ''
+      image_size:
+        label: 'Bildgröße'
+        hint: ''
+      local_station_id:
+        label: 'Lokale Gegenstelle'
+        hint: ''
+      result_code:
+        label: 'Ergebnis-Code'
+        hint: ''
+      result_text:
+        label: 'Ergebnis-Text'
+        hint: ''
+      remote_station_id:
+        label: 'Stations-ID der Gegenstelle'
+        hint: ''
+      success:
+        label: 'Erfolgreich'
+        hint: ''
+      transfer_rate:
+        label: 'Transferrate'
+        hint: ''
+      document:
+        label: 'Dokument'
+        hint: ''
+      fax_resolution:
+        label: 'Fax Auflösung'
+        hint: ''
+      destination_phone_number: 
+        label: 'Ziel Fax-Nummer'
+        hint: ''
+      button: 'Absenden'
+

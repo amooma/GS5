@@ -1,0 +1,22 @@
+- title t("gs_nodes.show.page_title")
+
+%p
+  %strong= t('gs_nodes.show.name') + ":"
+  = @gs_node.name
+%p
+  %strong= t('gs_nodes.show.ip_address') + ":"
+  = @gs_node.ip_address
+%p
+  %strong= t('gs_nodes.show.site') + ":"
+  = @gs_node.site
+%p
+  %strong= t('gs_nodes.show.element_name') + ":"
+  = @gs_node.element_name
+%p
+  %strong= t('gs_nodes.show.push_updates_to') + ":"
+  = @gs_node.push_updates_to
+%p
+  %strong= t('gs_nodes.show.accepts_updates_from') + ":"
+  = @gs_node.accepts_updates_from
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @gs_node }

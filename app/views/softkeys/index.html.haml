@@ -1,0 +1,6 @@
+- title t("softkeys.index.page_title")
+
+- if @softkeys.count > 0
+  = render "index_core", :softkeys => @softkeys
+
+= render :partial => 'shared/create_link', :locals => {:parent => @sip_account, :child_class => Softkey}

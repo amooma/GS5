@@ -1,0 +1,7 @@
+.inputs
+  = f.simple_fields_for :phone_number, @phone_number do |p|
+    = p.input :number, :label => t('phone_numbers.form.number.label'), :hint => conditional_hint('phone_numbers.form.number.hint')
+
+  = f.input :pin, :label => t('conference_invitees.form.pin.label'), :hint => conditional_hint('conference_invitees.form.pin.hint')
+  = f.input :speaker, :label => t('conference_invitees.form.speaker.label'), :hint => conditional_hint('conference_invitees.form.speaker.hint')
+  = f.input :moderator, :label => t('conference_invitees.form.moderator.label'), :hint => conditional_hint('conference_invitees.form.moderator.hint')

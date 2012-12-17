@@ -1,0 +1,70 @@
+en:
+  acd_callers:
+    name: 'Negotiated callers'
+    controller:
+      successfuly_created: 'Successfully created negotiated caller.'
+      successfuly_updated: 'Successfully updated negotiated caller.'
+      successfuly_destroyed: 'Successfully destroyed negotiated caller.'
+    index:
+      page_title: 'Listing negotiated callers'
+      channel_uuid: 'Channel UUID'
+      automatic_call_distributor_id: 'Automatic call distributor'
+      status: 'Status'
+      enter_time: 'Enter time'
+      agent_answer_time: 'Agent answer time'
+      callback_number: 'Callback number'
+      callback_attempts: 'Callback attempts'
+      actions:
+        confirm: 'Are you sure you want to delete this negotiated caller?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New negotiated callers for %{resource}'
+    show:
+      page_title: 'Show negotiated callers'
+      channel_uuid: 'Channel UUID'
+      automatic_call_distributor_id: 'Automatic call distributor'
+      status: 'Status'
+      enter_time: 'Enter time'
+      agent_answer_time: 'Agent answer time'
+      callback_number: 'Callback number'
+      callback_attempts: 'Callback attempts'
+      actions:
+        confirm: 'Are you sure you want to delete this negotiated caller?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New negotiated caller'
+      actions:
+        back_to_list: 'Back to Index'
+    edit:
+      page_title: 'Editing negotiated callers'
+      actions:
+        back_to_list: 'Back to Index'
+        edit: 'Edit'
+        view_all: 'View All'
+    form:
+      channel_uuid:
+        label: 'Channel UUID'
+        hint: ''
+      automatic_call_distributor_id:
+        label: 'Automatic call distributor'
+        hint: ''
+      status:
+        label: 'Status'
+        hint: ''
+      enter_time:
+        label: 'Enter time'
+        hint: ''
+      agent_answer_time:
+        label: 'Agent answer time'
+        hint: ''
+      callback_number:
+        label: 'Callback number'
+        hint: ''
+      callback_attempts:
+        label: 'Callback attempts'
+        hint: ''
+      button: 'Submit'

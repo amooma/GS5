@@ -1,0 +1,52 @@
+en:
+  voicemail_settings:
+    name: 'Voicemail Settings'
+    controller:
+      successfuly_destroyed: 'Successfully destroyed voicemail settings.'
+      successfuly_created: 'Successfully created voicemail settings.'
+      successfuly_updated: 'Successfully updated voicemail settings.'
+    index:
+      page_title: 'Voicemail Settings'
+      actions:
+        confirm: 'Are you sure you want to delete voicemail settings?'
+        destroy: 'Delete'
+    show:
+      page_title: 'Voicemail Settings'
+      greeting_path: 'Greeting'
+      name_path: 'Name'
+      flags: 'Flags'
+      notify: 'Notify by email'
+      attachment: 'Attach file'
+      mark_read: 'Mark read'
+      purge: 'Delete'
+      actions:
+        confirm: 'Are you sure you want to delete voicemail settings?'
+        destroy: 'Delete'
+        edit: 'Edit'
+    new:
+      page_title: 'Voicemail Settings'
+    edit:
+      page_title: 'Voicemail Settings'
+    form:
+      greeting:
+        label: 'Greeting'
+        hint: 'Voicemail greeting'
+      name:
+        label: 'Name'
+        hint: 'Voicemail name'
+      pin:
+        label: 'Voicemail PIN'
+        hint: 'Voicemail PIN'
+      notify:
+        label: 'Notify by email'
+        hint: 'Notify user by email'
+      attachment:
+        label: 'Attach file'
+        hint: 'Attach file to notification email'
+      mark_read:
+        label: 'Mark read'
+        hint: 'Mark message read after notification is sent'
+      purge:
+        label: 'Delete'
+        hint: 'Delete message after notification is sent'
+      button: 'Submit'

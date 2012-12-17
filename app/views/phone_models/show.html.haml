@@ -1,0 +1,18 @@
+- title t("phone_models.show.page_title")
+
+%p
+  %strong= t('phone_models.show.name') + ":"
+  = @phone_model.name
+%p
+  %strong= t('phone_models.show.manufacturer_id') + ":"
+  = @phone_model.manufacturer
+%p
+  %strong= t('phone_models.show.product_manual_homepage_url') + ":"
+  - if @phone_model.product_manual_homepage_url
+    =link_to @phone_model.product_manual_homepage_url, @phone_model.product_manual_homepage_url
+%p
+  %strong= t('phone_models.show.product_homepage_url') + ":"
+  - if @phone_model.product_homepage_url
+    =link_to @phone_model.product_homepage_url, @phone_model.product_homepage_url
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @manufacturer, :child => @phone_model }

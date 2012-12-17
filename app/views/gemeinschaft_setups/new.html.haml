@@ -1,0 +1,25 @@
+- title "Configure a new Gemeinschaft #{GEMEINSCHAFT_VERSION} server"
+
+= simple_form_for(@gemeinschaft_setup) do |f|
+  = f.error_notification
+
+  %h3 Admin user account
+  %p
+    This is the first user of this system who has admin rights by default.
+
+  = f.simple_fields_for :user, @user do |u|
+    = render "users/form_core", :f => u
+
+  %h3 SIP domain
+  %p You should use the same value for the SIP realm as for the SIP domain to ensure compatibility with different phone models. In case you have no clue what we are talking about: Just enter the IP address of this server.
+
+  = f.simple_fields_for :sip_domain, @sip_domain do |s|
+    = render "sip_domains/form_core", :f => s
+
+  %h3 General information
+
+  = f.association :country, :label => t('gemeinschaft_setups.form.country_id.label'), :hint => conditional_hint('gemeinschaft_setups.form.country_id.hint'), :include_blank => false
+  = f.association :language, :label => t('gemeinschaft_setups.form.language_id.label'), :hint => conditional_hint('gemeinschaft_setups.form.language_id.hint'), :include_blank => false
+
+  .actions
+    = f.button :submit, conditional_t('gemeinschaft_setups.form.submit')

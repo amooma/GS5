@@ -1,0 +1,77 @@
+de:
+  call_forwards:
+    name: 'Rufumleitung'
+    controller:
+      successfuly_created: 'Eine neue Rufumleitung wurde erstellt.'
+      successfuly_updated: 'Die Rufumleitung wurde aktualisiert.'
+      successfuly_destroyed: 'Die Rufumleitung wurde gelöscht.'
+    index:
+      page_title: 'Rufumleitungen'
+      phone_number_id: 'Telefonnummer'
+      call_forward_case_id: 'Art der Rufumleitung'
+      timeout: 'Zeitüberschreitung'
+      destination: 'Ziel'
+      hunt_group: 'Rufgruppen-Verknüpfung'
+      to_voicemail: 'Anrufbeantworter'
+      source: 'Quelle'
+      depth: 'Weiterleitungs-Sprünge'
+      active: 'Aktiv'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Rufumleitung löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neue Rufumleitung für die %{resource} anlegen'
+    show:
+      page_title: 'Rufumleitung anzeigen'
+      phone_number_id: 'Telefonnummer'
+      call_forward_case_id: 'Art der Rufumleitung'
+      timeout: 'Zeitüberschreitung'
+      destination: 'Ziel'
+      hunt_group: 'Rufgruppen-Verknüpfung'
+      to_voicemail: 'Anrufbeantworter'
+      source: 'Quelle'
+      depth: 'Weiterleitungs-Sprünge'
+      active: 'Aktiv'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Rufumleitung löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Rufumleitung anzeigen'
+    new:
+      page_title: 'Neue Rufumleitung anlegen'
+    edit:
+      page_title: 'Rufumleitung bearbeiten'
+    form:
+      phone_number_id:
+        label: 'Telefonnummer'
+        hint: ''
+      call_forward_case_id:
+        label: 'Art der Rufumleitung'
+        hint: ''
+      timeout:
+        label: 'Zeitüberschreitung in Sekunden'
+        hint: 'Nur für "nicht antworten" benötigt.'
+      destination:
+        label: 'Ziel Telefonnummer'
+        hint: 'Format: +49-30-2270 für eine normale Telefonnummer. 42 für eine interne Durchwahl.'
+      call_forwarding_destination:
+        label: 'Zielauswahl'
+        hint: 'Ziel auswählen oder Rufnummer unten eingeben.'
+      hunt_group: 
+        label: 'Rufgruppen-Verknüpfung'
+        hint: 'Die hier ausgewählt Rufgruppe schaltet automatisch diese Weiterleitung an und aus.'
+      to_voicemail:
+        label: 'Weiterleitung zum Anrufbeantworter'
+        hint: 'Kann nicht zusammen mit einer Ziel Telefonnummer aktiert werden.'
+      source:
+        label: 'Quelle'
+        hint: "Für welche Anrufer Telefonnummern soll diese Rufumleitung aktiv sein? Wenn kein Eintrag, dann für alle."
+      depth:
+        label: 'Weiterleitungs-Sprünge'
+        hint: "Die maximale Anzahl von Rufumleitungssprüngen. 1 bedeutet, das der Anruf nur bis zum nächsten Ziel weitergeleitet wird."
+      active:
+        label: 'Aktiv'
+        hint: ''       
+      button: 'Absenden'

@@ -1,0 +1,37 @@
+// Survival ✚ Kit
+
+// Add docs to float-list!
+@mixin float-list($side:left) {
+  @include no-mp;
+  list-style-type: none;
+  li { float:$side; }
+}
+
+$tc-begin-color    : #000 !default;
+$tc-end-color      : lighten(#646464, 30) !default;
+$tc-base-font-size : 11px !default;
+$tc-max-font-size  : 20px !default;
+$tc-how-many       : 10 !default;
+@mixin tag-cloud($tc-begin-color, $tc-end-color, $tc-base-font-size, $tc-max-font-size, $tc-how-many) {
+  $font-calculations : $tc-base-font-size;
+  
+  li {
+    display:inline;
+    background:none;
+    padding:0 2px;
+  }
+  
+  a {
+    // Stops words from breaking.
+    display:inline-block;
+  }
+
+  @for $i from 1 through $tc-how-many {
+    // The last item gets the max-font size.
+    $font-calculations: round($font-calculations + (($tc-max-font-size - $tc-base-font-size) / $tc-how-many));
+    a.tag-#{$i} {
+      font-size:$font-calculations;
+      color: mix($tc-end-color, $tc-begin-color, ( $i * (100 / $tc-how-many) ));
+    }
+  }
+}

@@ -1,0 +1,9 @@
+de:
+  pages:
+    name: "Webseiten"
+    welcome_please_log_in: "Willkommen bei Gemeinschaft! Bitte melden Sie sich beim System mit Ihrem Benutzer-Namen und Ihrem Passwort an."
+    not_enough_rights: "Kontaktieren Sie bitte Ihre System-Administration" # Not Enough rights to access anything in the Navigation.
+    controller:
+      access_denied_login_first: 'Zugriff verweigert! Bitte melden Sie sich erst an.'
+      index:
+        name: "Startseite"

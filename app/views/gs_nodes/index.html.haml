@@ -1,0 +1,6 @@
+- title t("gs_nodes.index.page_title")
+
+- if @gs_nodes && @gs_nodes.count > 0
+  = render "index_core", :gs_nodes => @gs_nodes
+
+= render :partial => 'shared/create_link', :locals => {:child_class => GsNode}

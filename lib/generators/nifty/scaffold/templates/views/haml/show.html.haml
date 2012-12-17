@@ -1,0 +1,9 @@
+- title t("<%= plural_name %>.show.page_title")
+
+<%- for attribute in model_attributes -%>
+%p
+  %strong= t('<%= plural_name %>.show.<%= attribute.name %>') + ":"
+  = @<%= instance_name %>.<%= attribute.name %>
+<%- end -%>
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @<%= instance_name %> }

@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="freeswitch/xml">
+  <X-PRE-PROCESS cmd="set" data="sound_prefix=/opt/freeswitch/sounds/en/us/callie"/>
+  <X-PRE-PROCESS cmd="set" data="hold_music=local_stream://moh"/>
+  <X-PRE-PROCESS cmd="set" data="use_profile=internal"/>
+  <X-PRE-PROCESS cmd="set" data="send_silence_when_idle=400"/>
+  <X-PRE-PROCESS cmd="set" data="de-ring=%(1000,4000,425.0)"/>
+  <section name="languages" description="Language Management">
+    <language name="en" say-module="en" sound-prefix="/opt/freeswitch/sounds/en/us/callie">
+      <phrases>
+        <macros>
+          <macro name="voicemail_hello">
+            <input pattern="(.*)">
+              <match>
+                <action function="play-file" data="voicemail/vm-hello.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_enter_id">
+            <input pattern="(.*)">
+              <match>
+                <action function="play-file" data="voicemail/vm-enter_id.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_enter_pass">
+            <input pattern="(.*)">
+              <match>
+                <action function="play-file" data="voicemail/vm-enter_pass.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_fail_auth">
+            <input pattern="(.*)">
+              <match>
+                <action function="play-file" data="voicemail/vm-fail_auth.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_goodbye">
+            <input pattern="(.*)">
+              <match>
+                <action function="play-file" data="voicemail/vm-goodbye.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_abort">
+            <input pattern="(.*)">
+              <match>
+                <action function="play-file" data="voicemail/vm-abort.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_message_count">
+            <input pattern="^(1):(.*)$" break_on_match="true">
+              <match>
+                <action function="play-file" data="voicemail/vm-you_have.wav"/>
+                <action function="say" data="$1" method="pronounced" type="items"/>
+                <action function="play-file" data="voicemail/vm-$2.wav"/>
+                <action function="play-file" data="voicemail/vm-message.wav"/>
+              </match>
+            </input>
+            <input pattern="^(\d+):(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-you_have.wav"/>
+                <action function="say" data="$1" method="pronounced" type="items"/>
+                <action function="play-file" data="voicemail/vm-$2.wav"/>
+                <action function="play-file" data="voicemail/vm-messages.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_menu">
+            <input pattern="^([0-9#*]):([0-9#*]):([0-9#*]):([0-9#*])$">
+              <match>
+                <action function="play-file" data="voicemail/vm-listen_new.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+                <action function="execute" data="sleep(100)"/>
+                <action function="play-file" data="voicemail/vm-listen_saved.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$2" method="pronounced" type="name_spelled"/>
+                <action function="execute" data="sleep(100)"/>
+                <action function="play-file" data="voicemail/vm-advanced.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$3" method="pronounced" type="name_spelled"/>
+                <action function="execute" data="sleep(100)"/>
+                <action function="play-file" data="voicemail/vm-to_exit.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$4" method="pronounced" type="name_phonetic"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_config_menu">
+            <input pattern="^([0-9#*]):([0-9#*]):([0-9#*]):([0-9#*]):([0-9#*])$">
+              <match>
+                <action function="play-file" data="voicemail/vm-to_record_greeting.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+                <action function="execute" data="sleep(100)"/>
+                <action function="play-file" data="voicemail/vm-choose_greeting.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$2" method="pronounced" type="name_spelled"/>
+                <action function="execute" data="sleep(100)"/>
+                <action function="play-file" data="voicemail/vm-record_name2.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$3" method="pronounced" type="name_spelled"/>
+                <action function="execute" data="sleep(100)"/>
+                <action function="play-file" data="voicemail/vm-change_password.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$4" method="pronounced" type="name_spelled"/>
+                <action function="execute" data="sleep(100)"/>
+                <action function="play-file" data="voicemail/vm-main_menu.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$5" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_record_name">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-record_name1.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_record_file_check">
+            <input pattern="^([0-9#*]):([0-9#*]):([0-9#*])$">
+              <match>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-listen_to_recording.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$2" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-save_recording.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$3" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-rerecord.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_record_urgent_check">
+            <input pattern="^([0-9#*]):([0-9#*])$">
+              <match>
+                <action function="play-file" data="voicemail/vm-mark-urgent.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-continue.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$2" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_forward_prepend">
+            <input pattern="^([0-9#*]):([0-9#*])$">
+              <match>
+                <action function="play-file" data="voicemail/vm-forward_add_intro.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-send_message_now.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$2" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_forward_message_enter_extension">
+            <input pattern="^([0-9#*])$">
+              <match>
+                <action function="play-file" data="voicemail/vm-forward_enter_ext.wav"/>
+                <action function="play-file" data="voicemail/vm-followed_by.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_invalid_extension">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-that_was_an_invalid_ext.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_listen_file_check">
+            <input pattern="^([0-9#*]):([0-9#*]):([0-9#*]):([0-9#*]):([0-9#*]):([0-9#*]):(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-listen_to_recording.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-save_recording.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$2" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-delete_recording.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$3" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-forward_to_email.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$4" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-return_call.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$5" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-to_forward.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$6" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+            <input pattern="^([0-9#*]):([0-9#*]):([0-9#*]):([0-9#*]):([0-9#*]):([0-9#*])$">
+              <match>
+                <action function="play-file" data="voicemail/vm-listen_to_recording.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-save_recording.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$2" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-delete_recording.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$3" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-return_call.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$5" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-to_forward.wav"/>
+                <action function="play-file" data="voicemail/vm-press.wav"/>
+                <action function="say" data="$6" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_choose_greeting">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-choose_greeting_choose.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_choose_greeting_fail">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-choose_greeting_fail.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_record_greeting">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-record_greeting.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_record_message">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-record_message.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_greeting_selected">
+            <input pattern="^(\d+)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-greeting.wav"/>
+                <action function="say" data="$1" method="pronounced" type="items"/>
+                <action function="play-file" data="voicemail/vm-selected.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_play_greeting">
+            <input pattern="^(\d+)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-person.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+                <action function="play-file" data="voicemail/vm-not_available.wav"/>
+              </match>
+            </input>
+            <input pattern="^name:(.+)$">
+              <match>
+                <action function="play-file" data="$1"/>
+                <action function="play-file" data="voicemail/vm-not_available.wav"/>
+              </match>
+            </input>
+            <input pattern="^greeting:(.+)$">
+              <match>
+                <action function="play-file" data="$1"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_say_number">
+            <input pattern="^(\d+)$">
+              <match>
+                <action function="say" data="$1" method="pronounced" type="items"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_say_message_number">
+            <input pattern="^([a-z]+):(\d+)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-$1.wav"/>
+                <action function="play-file" data="voicemail/vm-message_number.wav"/>
+                <action function="say" data="$2" method="pronounced" type="items"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_say_phone_number">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_say_name">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_ack">
+            <input pattern="^(too-small)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-too-small.wav"/>
+              </match>
+            </input>
+            <input pattern="^(deleted)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-message.wav"/>
+                <action function="play-file" data="voicemail/vm-$1.wav"/>
+              </match>
+            </input>
+            <input pattern="^(saved)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-message.wav"/>
+                <action function="play-file" data="voicemail/vm-$1.wav"/>
+              </match>
+            </input>
+            <input pattern="^(emailed)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-message.wav"/>
+                <action function="play-file" data="voicemail/vm-$1.wav"/>
+              </match>
+            </input>
+            <input pattern="^(marked-urgent)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-message.wav"/>
+                <action function="play-file" data="voicemail/vm-$1.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_say_date">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="say" data="$1" method="pronounced" type="current_date_time"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_disk_quota_exceeded">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-mailbox_full.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="valet_announce_ext">
+            <input pattern="^([^\:]+):(.*)$">
+              <match>
+                <action function="say" data="$2" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="valet_lot_full">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="tone_stream://%(275,10,600);%(275,100,300)"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="valet_lot_empty">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="tone_stream://%(275,10,600);%(275,100,300)"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="logged_in">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="ivr/ivr-you_are_now_logged_in.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="logged_out">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="ivr/ivr-you_are_now_logged_out.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="acd_announce_position_enter">
+            <input pattern="^([0-9]+)$">
+              <match>
+                <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
+                <action function="say" data="$1" method="pronounced" type="number"/>
+                <action function="play-file" data="ivr/ivr-in_line.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="acd_announce_position_change">
+            <input pattern="^1$">
+              <match>
+                <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
+                <action function="say" data="1" method="pronounced" type="number"/>
+                <action function="play-file" data="ivr/ivr-in_line.wav"/>
+                <action function="break"/>
+              </match>
+            </input>
+            <input pattern="^([0-9]+)$">
+              <match>
+                <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
+                <action function="say" data="$1" method="pronounced" type="number"/>
+                <action function="play-file" data="ivr/ivr-in_line.wav"/>
+                <action function="play-file" data="ivr/ivr-thank_you_for_holding.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="acd_announce_position_periodic">
+            <input pattern="^1$">
+              <match>
+                <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
+                <action function="say" data="1" method="pronounced" type="number"/>
+                <action function="play-file" data="ivr/ivr-in_line.wav"/>
+                <action function="break"/>
+              </match>
+            </input>
+            <input pattern="^([0-9]+)$">
+              <match>
+                <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
+                <action function="say" data="$1" method="pronounced" type="number"/>
+                <action function="play-file" data="ivr/ivr-in_line.wav"/>
+                <action function="play-file" data="ivr/ivr-thank_you_for_holding.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="acd_announce_call_agents">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="$1"/>
+              </match>
+            </input>   
+          </macro>
+          <macro name="acd_greeting">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="$1"/>
+              </match>
+            </input>   
+          </macro>
+          <macro name="acd_goodbye">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="$1"/>
+              </match>
+            </input>   
+          </macro>
+          <macro name="acd_agent_status">
+            <input pattern="^active$">
+              <match>
+                <action function="play-file" data="ivr/ivr-you_are_now_logged_in.wav"/>
+              </match>
+            </input>
+            <input pattern="^inactive$">
+              <match>
+                <action function="play-file" data="ivr/ivr-you_are_now_logged_out.wav"/>
+              </match>
+            </input>
+          </macro>
+        </macros>
+      </phrases>
+    </language>
+  </section>
+  <section name="configuration" description="Gemeinschaft5 FreeSwitch configuration">
+    <configuration name="acl.conf" description="Network Lists">
+      <network-lists>
+        <list name="domains" default="deny">
+          <node type="allow" cidr="127.0.0.1/32"/>
+        </list>
+      </network-lists>
+    </configuration>
+    <configuration name="console.conf" description="Console Logger">
+      <mappings>
+        <map name="all" value="console,debug,info,notice,warning,err,crit,alert"/>
+      </mappings>
+      <settings>
+        <param name="colorize" value="true"/>
+        <param name="loglevel" value="info"/>
+      </settings>
+    </configuration>
+    <configuration name="event_socket.conf" description="Socket Client">
+      <settings>
+        <param name="nat-map" value="false"/>
+        <param name="listen-ip" value="127.0.0.1"/>
+        <param name="listen-port" value="8021"/>
+      </settings>
+    </configuration>
+    <configuration name="fifo.conf" description="FIFO Configuration">
+      <settings>
+        <param name="delete-all-outbound-member-on-startup" value="false"/>
+      </settings>
+      <fifos>
+      </fifos>
+    </configuration>
+    <configuration name="local_stream.conf" description="stream files from local dir">
+      <directory name="default" path="/opt/freeswitch/sounds/music/16000">
+        <param name="rate" value="16000"/>
+        <param name="shuffle" value="true"/>
+        <param name="channels" value="1"/>
+        <param name="interval" value="20"/>
+        <param name="timer-name" value="soft"/>
+      </directory>
+      <directory name="moh" path="/opt/freeswitch/sounds/music/16000">
+        <param name="rate" value="16000"/>
+        <param name="shuffle" value="true"/>
+        <param name="channels" value="1"/>
+        <param name="interval" value="20"/>
+        <param name="timer-name" value="soft"/>
+      </directory>
+      <directory name="mohl" path="/opt/freeswitch/sounds/music/8000">
+        <param name="rate" value="8000"/>
+        <param name="shuffle" value="true"/>
+        <param name="channels" value="1"/>
+        <param name="interval" value="20"/>
+        <param name="timer-name" value="soft"/>
+      </directory>
+    </configuration>
+    <configuration name="logfile.conf" description="File Logging">
+      <settings>
+        <param name="rotate-on-hup" value="true"/>
+      </settings>
+      <profiles>
+        <profile name="default">
+          <settings>
+            <param name="logfile" value="/var/log/freeswitch/freeswitch.log"/>
+            <param name="rollover" value="10485760"/>
+          </settings>
+          <mappings>
+            <map name="all" value="debug,info,notice,warning,err,crit,alert"/>
+          </mappings>
+        </profile>
+      </profiles>
+    </configuration>
+    <configuration name="xml_rpc.conf" description="XML RPC">
+      <settings>
+        <param name="http-port" value="228080"/>
+        <param name="auth-realm" value="gemeinschaft"/>
+        <param name="auth-user" value="7ff020f74d99a1b88bd2"/>
+        <param name="auth-pass" value="85d13b5a56c55f7261cc"/>
+      </settings>
+    </configuration>
+    <configuration name="switch.conf" description="Core Configuration">
+      <cli-keybindings>
+      </cli-keybindings>
+      <settings>
+        <param name="colorize-console" value="true"/>
+        <param name="max-sessions" value="1000"/>
+        <param name="sessions-per-second" value="30"/>
+        <param name="loglevel" value="debug"/>
+        <param name="mailer-app" value="sendmail"/>
+        <param name="mailer-app-args" value="-t"/>
+        <param name="dump-cores" value="yes"/>
+        <param name="auto-create-schemas" value="true"/>
+        <param name="rtp-enable-zrtp" value="false"/>
+        <param name="rtp-start-port" value="16384" />
+        <param name="rtp-end-port" value="32768" />
+	<param name="core-db-dsn" value="gemeinschaft:gemeinschaft:gemeinschaft"/>
+      </settings>
+    </configuration>
+    <configuration name="spandsp.conf" description="Tone detector descriptors">
+      <descriptors>
+        <descriptor name="1">
+          <tone name="CED_TONE">
+            <element freq1="2100" freq2="0" min="500" max="0"/>
+          </tone>
+          <tone name="SIT">
+            <element freq1="950" freq2="0" min="256" max="400"/>
+            <element freq1="1400" freq2="0" min="256" max="400"/>
+            <element freq1="1800" freq2="0" min="256" max="400"/>
+          </tone>
+          <tone name="REORDER_TONE">
+            <element freq1="480" freq2="620" min="224" max="272"/>
+            <element freq1="0" freq2="0" min="224" max="272"/>
+          </tone>
+          <tone name="BUSY_TONE">
+            <element freq1="480" freq2="620" min="464" max="516"/>
+            <element freq1="0" freq2="0" min="464" max="516"/>
+          </tone>
+        </descriptor>
+        <descriptor name="44">
+          <tone name="CED_TONE">
+            <element freq1="2100" freq2="0" min="500" max="0"/>
+          </tone>
+          <tone name="SIT">
+            <element freq1="950" freq2="0" min="256" max="400"/>
+            <element freq1="1400" freq2="0" min="256" max="400"/>
+            <element freq1="1800" freq2="0" min="256" max="400"/>
+          </tone>
+          <tone name="REORDER_TONE">
+            <element freq1="400" freq2="0" min="368" max="416"/>
+            <element freq1="0" freq2="0" min="336" max="368"/>
+            <element freq1="400" freq2="0" min="256" max="288"/>
+            <element freq1="0" freq2="0" min="512" max="544"/>
+          </tone>
+          <tone name="BUSY_TONE">
+            <element freq1="400" freq2="0" min="352" max="384"/>
+            <element freq1="0" freq2="0" min="352" max="384"/>
+            <element freq1="400" freq2="0" min="352" max="384"/>
+            <element freq1="0" freq2="0" min="352" max="384"/>
+          </tone>
+        </descriptor>
+        <descriptor name="49">
+          <tone name="CED_TONE">
+            <element freq1="2100" freq2="0" min="500" max="0"/>
+          </tone>
+          <tone name="SIT">
+            <element freq1="900" freq2="0" min="256" max="400"/>
+            <element freq1="1400" freq2="0" min="256" max="400"/>
+            <element freq1="1800" freq2="0" min="256" max="400"/>
+          </tone>
+          <tone name="REORDER_TONE">
+            <element freq1="425" freq2="0" min="224" max="272"/>
+            <element freq1="0" freq2="0" min="224" max="272"/>
+          </tone>
+          <tone name="BUSY_TONE">
+            <element freq1="425" freq2="0" min="464" max="516"/>
+            <element freq1="0" freq2="0" min="464" max="516"/>
+          </tone>
+        </descriptor>
+      </descriptors>
+    </configuration>
+    <configuration name="fax.conf" description="FAX application configuration">
+      <settings>
+        <param name="use-ecm" value="true"/>
+        <param name="verbose" value="true"/>
+        <param name="disable-v17" value="false"/>
+        <param name="ident" value=""/>
+        <param name="header" value="GS4"/>
+        <param name="spool-dir" value="/opt/GS5/misc/fax"/>
+        <param name="file-prefix" value="fax_in_"/>
+      </settings>
+    </configuration>
+    <configuration name="modules.conf" description="Modules">
+      <modules>
+        <load module="mod_console"/>
+        <load module="mod_logfile"/>
+        <load module="mod_lua"/>
+        <!-- <load module="mod_xml_rpc"/> -->
+        <!-- <load module="mod_cdr_csv"/> -->
+        <load module="mod_event_socket"/>
+        <load module="mod_sofia"/>
+        <load module="mod_loopback"/>
+        <load module="mod_commands"/>
+        <load module="mod_conference"/>
+        <load module="mod_dptools"/>
+        <load module="mod_expr"/>
+        <!-- <load module="mod_fifo"/> -->
+        <load module="mod_voicemail"/>
+        <!-- <load module="mod_esf"/> -->
+        <!-- <load module="mod_fsv"/> -->
+        <load module="mod_valet_parking"/>
+        <!-- <load module="mod_curl"/> -->
+        <load module="mod_dialplan_xml"/>
+        <load module="mod_sndfile"/>
+        <load module="mod_native_file"/>
+        <load module="mod_local_stream"/>
+        <load module="mod_tone_stream"/>
+        <load module="mod_say_en"/>
+        <load module="mod_spandsp"/>
+      </modules>
+    </configuration>
+    <configuration name="post_load_modules.conf" description="Modules">
+      <modules>
+      </modules>
+    </configuration>    
+    <configuration name="voicemail.conf" description="Voicemail">
+      <settings>
+      </settings>
+      <profiles>
+        <profile name="default">
+          <param name="file-extension" value="wav"/>
+          <param name="terminator-key" value="#"/>
+          <param name="max-login-attempts" value="3"/>
+          <param name="digit-timeout" value="10000"/>
+          <param name="min-record-len" value="3"/>
+          <param name="max-record-len" value="300"/>
+          <param name="max-retries" value="3"/>
+          <param name="tone-spec" value="%(1000, 0, 640)"/>
+          <param name="callback-dialplan" value="XML"/>
+          <param name="callback-context" value="default"/>
+          <param name="play-new-messages-key" value="1"/>
+          <param name="play-saved-messages-key" value="2"/>
+          <param name="login-keys" value="0"/>
+          <param name="main-menu-key" value="0"/>
+          <param name="config-menu-key" value="5"/>
+          <param name="record-greeting-key" value="1"/>
+          <param name="choose-greeting-key" value="2"/>
+          <param name="change-pass-key" value="6"/>
+          <param name="record-name-key" value="3"/>
+          <param name="record-file-key" value="3"/>
+          <param name="listen-file-key" value="1"/>
+          <param name="save-file-key" value="2"/>
+          <param name="delete-file-key" value="7"/>
+          <param name="undelete-file-key" value="8"/>
+          <param name="email-key" value="4"/>
+          <param name="pause-key" value="0"/>
+          <param name="restart-key" value="1"/>
+          <param name="ff-key" value="6"/>
+          <param name="rew-key" value="4"/>
+          <param name="skip-greet-key" value="#"/>
+          <param name="record-silence-threshold" value="200"/>
+          <param name="record-silence-hits" value="2"/>
+          <param name="web-template-file" value="web-vm.tpl"/>
+          <param name="operator-extension" value="operator XML default"/>
+          <param name="operator-key" value="9"/>
+          <param name="vmain-extension" value="vmain XML default"/>
+          <param name="vmain-key" value="*"/>
+          <param name="odbc-dsn" value="gemeinschaft:gemeinschaft:gemeinschaft"/>
+          <email>
+            <param name="notify-template-file" value="notify-voicemail.tpl"/>
+            <param name="template-file" value="voicemail.tpl"/>
+            <param name="date-fmt" value="%A, %B %d %Y, %I %M %p"/>
+            <param name="email-from" value="${voicemail_account}@${voicemail_domain}"/>
+          </email>
+        </profile>
+      </profiles>
+    </configuration>
+    <configuration name="lua.conf" description="LUA Configuration">
+      <settings>
+        <param name="script-directory" value="$${base_dir}/scripts/?.lua"/>
+        <param name="xml-handler-script" value="configuration.lua"/>
+        <param name="xml-handler-bindings" value="directory|configuration"/>
+        <param name="startup-script" value="fax_daemon.lua"/>
+        <param name="startup-script" value="event_manager.lua"/>
+      </settings>
+    </configuration>
+  </section>
+  <section name="dialplan" description="Regex/XML dialplan">
+    <context name="default">
+      <extension name="invoke_default_dialplan" continue="true">
+        <condition>
+          <action application="set" data="script=${lua(dialplan_default.lua)}"/>
+        </condition>
+      </extension>
+      <extension name="transfer_loop" continue="false">
+        <condition field="endpoint_disposition" expression="BLIND_TRANSFER">
+          <action application="transfer" data=" XML default"/>
+        </condition>
+      </extension>
+    </context>
+    <context name="redirected">
+      <extension name="redirected" continue="true">
+        <condition>
+          <action application="transfer" data="${sip_redirect_contact_user_0} XML default"/>
+        </condition>
+      </extension>
+    </context>
+  </section>
+</document>

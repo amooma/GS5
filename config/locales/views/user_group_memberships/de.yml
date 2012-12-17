@@ -1,0 +1,35 @@
+de:
+  user_group_memberships:
+    name: "Gruppenzugehörigkeit"
+    controller:
+      successfuly_created: 'Ein Benutzer wurde einer Gruppe zugeordnet.'
+      successfuly_updated: 'Die Gruppenzugehörigkeit wurde aktualisiert.'
+      successfuly_destroyed: 'Die Gruppenzugehörigkeit wurde gelöscht.'
+      no_more_user_to_add: 'Es gibt keine weiteren Benutzer, die dieser Gruppe zugeordnet werden können.'
+    index:
+      page_title: 'Gruppenzugehörigkeiten'
+      user: 'Benutzer'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Gruppenzugehörigkeit löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neue Gruppenzugehörigkeiten für %{resource}'
+    show:
+      page_title: 'Gruppenzugehörigkeiten anzeigen'
+      user: 'Benutzer'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Gruppenzugehörigkeit löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Gruppenzugehörigkeitenen anzeigen'
+    new:
+      page_title: 'Neue Gruppenzugehörigkeit'
+    edit:
+      page_title: 'Gruppenzugehörigkeiten von "%{resource}" bearbeiten'
+    form:
+      name:
+        user: 'Benutzer'
+        hint: ''
+      button: 'Absenden'

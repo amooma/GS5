@@ -1,0 +1,8 @@
+- title t("system_messages.show.page_title")
+
+%p
+  %strong= t('system_messages.show.created_at') + ":"
+  = @system_message.created_at
+%p
+  %strong= t('system_messages.show.content') + ":"
+  = @system_message.content

@@ -1,0 +1,83 @@
+en:
+  sip_accounts:
+    name: 'SIP account'
+    controller:
+      successfuly_created: 'Successfully created a new SIP account for %{resource}.'
+      successfuly_updated: 'Successfully updated a SIP account.'
+      successfuly_destroyed: 'Successfully destroyed a SIP account.'
+    index:
+      page_title: 'SIP accounts'
+      auth_name: 'Auth name'
+      caller_name: 'Caller name'
+      password: 'Password'
+      voicemail_pin: 'Voicemail PIN'
+      phone_numbers: 'Phone numbers'
+      call_waiting: 'Call waiting'
+      clir: 'CLIR'
+      clip: 'CLIP'
+      hotdeskable: 'Hotdeskable'
+      clip_no_screening: 'CLIP -no screening-'
+      callforward_rules_act_per_sip_account: 'Callforwards work for the whole sip account'
+      online: 'Online'
+      actions:
+        confirm: 'Are you sure you want to delete this SIP account?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New SIP account for %{resource}'
+    show:
+      page_title: 'Show SIP account'
+      auth_name: 'Auth name'
+      caller_name: 'Caller name'
+      password: 'Password'
+      voicemail_pin: 'Voicemail PIN'
+      call_waiting: 'Call waiting'
+      clir: 'CLIR'
+      clip: 'CLIP'
+      hotdeskable: 'Hotdeskable'
+      clip_no_screening: 'CLIP -no screening-'
+      callforward_rules_act_per_sip_account: 'Callforwards work for the whole sip account'
+      registration: 'Registration'
+      expires: 'Expires'
+      actions:
+        confirm: 'Are you sure you want to delete this SIP account?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View all SIP accounts'
+    new:
+      page_title: 'New SIP account'
+    edit:
+      page_title: 'Editing SIP account'
+    form:
+      auth_name:
+        label: 'Auth name'
+        hint: ''
+      caller_name:
+        label: 'Caller name'
+        hint: ''
+      password:
+        label: 'Password'
+        hint: ''
+      voicemail_pin:
+        label: 'Voicemail PIN'
+        hint: ''
+      call_waiting:
+        label: 'Call waiting'
+        hint: ''
+      clir:
+        label: 'CLIR'
+        hint: 'Calling Line Identification Restriction. If set true no number will be transmitted.'
+      clip:
+        label: 'CLIP'
+        hint: 'Calling Line Identification Presentation.'
+      clip_no_screening:
+        label: 'CLIP -no screening-'
+        hint: 'Calling Line Identification Presentation. Leave blank if you are not sure.'
+      callforward_rules_act_per_sip_account: 
+        label: 'Callforwards work for the whole sip account'
+        hint: ''
+      hotdeskable: 
+        label: 'Hotdeskable'
+        hint: ''
+      button: 'Submit'

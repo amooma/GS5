@@ -1,0 +1,8 @@
+- amount_of_users = users.count
+- if amount_of_users > 0
+  - if amount_of_users < 30
+    = users.map{|user| user}.join(', ')
+  - else
+    = users.limit(15).map{|user| user}.join(', ') + ', '
+    = '[...]'
+    = users.offset(amount_of_users - 15).map{|user| user}.join(', ')

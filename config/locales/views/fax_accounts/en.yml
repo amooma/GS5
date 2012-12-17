@@ -1,0 +1,60 @@
+en:
+  fax_accounts:
+    name: 'Fax account'
+    controller:
+      successfuly_created: 'Successfully created fax account.'
+      successfuly_updated: 'Successfully updated fax account.'
+      successfuly_destroyed: 'Successfully destroyed fax account.'
+    index:
+      page_title: 'Fax accounts'
+      name: 'Name'
+      station_id: 'Station ID'
+      email: 'E-Mail'
+      phone_numbers: 'Phone numbers'
+      days_till_auto_delete: 'Day till auto delete'
+      thumbnails: 'Thumbnails'
+      received: 'Received'
+      sent: 'Sent'
+      retries: 'Retries'
+      last_update: 'last update'
+      send_a_fax: 'send a fax'
+      actions:
+        confirm: 'Are you sure you want to delete this fax account?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New fax account for %{resource}'
+    show:
+      page_title: 'Show fax account'
+      name: 'Name'
+      station_id: 'Station ID'
+      email: 'E-Mail'
+      days_till_auto_delete: 'Day till auto delete'
+      retries: 'Retries'
+      actions:
+        confirm: 'Are you sure you want to delete this fax account?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New fax account'
+    edit:
+      page_title: 'Editing fax account'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      station_id: 
+        label: 'Station ID'
+        hint: 'This string will be displayed in the top row of a fax before the fax number.'
+      email:
+        label: 'E-Mail'
+        hint: 'A PDF of each received fax will be send by e-mail to this address.'
+      days_till_auto_delete: 
+        label: 'Days till auto delete'
+        hint: 'Number of days after faxes can be automaticaly deleted in the system to save storage space.'
+      retries: 
+        label: 'Retries'
+        hint: 'Number of times the system retries to send the fax in case the destination is busy.'
+      button: 'Submit'

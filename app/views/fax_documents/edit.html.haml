@@ -1,0 +1,9 @@
+- title t("fax_documents.edit.page_title")
+
+= render "form"
+
+%p
+  - if can? :edit, @fax_document
+    = link_to t('fax_documents.edit.actions.edit'), @fax_document
+  |
+  = link_to t('fax_documents.edit.actions.view_all'), fax_documents_path

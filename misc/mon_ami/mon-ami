@@ -1,0 +1,58 @@
+#!/bin/sh
+
+#####################################################################
+# MonAMI Asterisk Manger Interface Emulator
+# Start Script
+# (c) AMOOMA GmbH 2012
+#####################################################################
+
+### BEGIN INIT INFO
+# Provides:          mon_ami 
+# Required-Start:    freeswitch 
+# Required-Stop:     freeswitch
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: MonAMI Asterisk Manger Interface Emulator
+# Description:
+#
+### END INIT INFO
+
+DAEMON=/opt/GS5/misc/mon_ami/mon_ami
+EXECUTABLE=`basename 'mon_ami'`
+DESC="MonAMI Asterisk Manger Interface Emulator"
+ARGS="--log-file=/var/log/mon_ami.log"
+
+if ! [ -x $DAEMON ] ; then
+	echo "ERROR: $DAEMON not found"
+	exit 1
+fi
+
+case "$1" in
+	start)
+	        echo -n "Starting $DESC: "
+	        start-stop-daemon --start --pidfile /var/run/$EXECUTABLE.pid \
+            	--make-pidfile --background --startas $DAEMON -- $ARGS
+		echo "$EXECUTABLE."
+		;;
+
+	stop)
+		echo -n "Stopping $DESC: "
+		start-stop-daemon --stop --quiet --oknodo --retry=TERM/30/KILL/5 \
+		--pidfile /var/run/$EXECUTABLE.pid
+		rm -f /var/run/$NAME.pid
+		echo "$EXECUTABLE."
+		;;
+
+	reload|restart|force-reload)
+		$0 stop
+		sleep 2
+		$0 start
+		;;
+
+	*)
+		echo "Usage: $0 {start|stop|restart|reload|force-reload}" >&2
+		exit 1
+		;;
+esac
+
+exit 0

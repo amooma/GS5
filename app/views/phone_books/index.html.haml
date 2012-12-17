@@ -1,0 +1,6 @@
+- title t("phone_books.index.page_title")
+
+- if @phone_books.count > 0
+  = render "index_core", :phone_books => @phone_books
+
+= render :partial => 'shared/create_link', :locals => {:parent => @parent, :child_class => PhoneBook}

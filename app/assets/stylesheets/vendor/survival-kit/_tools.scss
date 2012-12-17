@@ -1,0 +1,267 @@
+// Survival ✚ Kit
+$container-width           : 1000px !default;
+$compatibility-mode        : true, ie ie7 ie8 ie9 ff2 chrome9 !default;
+
+// Function to know if we're in compatibility mode, if $version is set it'll return if there's  a match for that browser.
+@function in-compatibility-mode($version: false) {
+  @if $compatibility-mode {
+    @if $version {
+      @return index(nth($compatibility-mode, 2), $version);
+    } @else {
+      @return nth($compatibility-mode, 1);
+    }
+  } @else {
+    @return false;
+  }
+}
+
+// Shortcut to remove margin an padding.
+// Used on several @mixins.
+@mixin no-mp($extend:false) {
+  @if $extend {
+    @extend .no-mp;
+  } @else {
+    margin:0;
+    padding:0;
+  }
+}
+// Sometimes it's better to extend a class.
+.no-mp {
+  margin:0;
+  padding:0;
+}
+
+// Center an element.
+@mixin center-container($container-width, $vertical-margin:0, $padding:0) {
+  margin:$vertical-margin auto;
+  @if $padding == 0 {
+    width:$container-width;
+  } @else {
+    @include size($container-width, auto, $padding);
+  }
+}
+
+// Inline Block CrossBrowser.
+// Disregards FF2 and IE6
+@mixin inline-block {
+  display: inline-block;
+  @if in-compatibility-mode(ie7) {
+    zoom: 1;
+    *display:inline;
+  }
+}
+
+// Shortcut to set absolute positioning.
+@mixin pos($pos, $debug: false) {
+  @if length($pos) == 1 {
+    $pos: $pos 0 0 0;
+  }
+  @if length($pos) == 2 {
+    $pos: nth($pos,1) nth($pos,2) 0 0;
+  }
+  @if length($pos) == 3 {
+    $pos: nth($pos,1) nth($pos,2) nth($pos, 3) 0;
+  }
+  position:absolute;
+  @if "#{nth($pos, 1)}" != "0" { top: nth($pos, 1); }
+  @if "#{nth($pos, 2)}" != "0" { right: nth($pos, 2); }
+  @if "#{nth($pos, 3)}" != "0" { bottom: nth($pos, 3); }
+  @if "#{nth($pos, 4)}" != "0" { left: nth($pos, 4); }
+	@if $debug { @include debug($debug); }
+}
+
+// Center a absolute element horizontally; optional offset.
+@mixin pos-x-center($width, $offset:0) {
+  @include pos(0 50% 0 50%);
+  margin-left:$offset - ( $width / 2 );
+  width:$width;
+}
+
+// Center a absolute element vertically; optional offset.
+@mixin pos-y-center($height, $offset:0) {
+  @include pos(50% 0 50% 0);
+  height:$height;
+  margin-top:$offset - ( $height / 2 );
+}
+
+// Set a debug variable.
+@mixin debug($color:red) {
+  @if $debug != false {
+		@if $color == true { $color:red; }
+    background: rgba($color, 0.2); // incompatible with IE.
+  }
+}
+
+// Class available to center container to 1000px
+.w, .pagewidth {
+	@include center-container($container-width);
+}
+
+// Crossbrowser linear gradient.
+// Compatible Browsers: FF3.6+ Saf4+ Chrome IE6-IE9
+// @author SitePoint
+@mixin background-gradient($from, $to, $start: top, $end: bottom, $fallback:$from, $ie:false) {
+  @include gradient($from, $to, $start, $end, $fallback);
+}
+@mixin gradient($from, $to, $start: top, $end: bottom, $fallback:$from){
+  background-color: $fallback;
+
+  @if $end == bottom and $start == top {
+    @if $start == 0 {
+      background-image: -webkit-gradient(linear, left $start, left bottom, from($from), to($to));
+    } @else {
+      background-image: -webkit-gradient(linear, $start, left bottom, from($from), to($to));
+    }
+    background-image: -webkit-linear-gradient($start, $from, $to);
+    background-image: -moz-linear-gradient($start, $from, $to);
+    background-image: -ms-linear-gradient($start, $from, $to);
+    background-image: -o-linear-gradient($start, $from, $to);
+    @if in-compatibility-mode()  {
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#{ie-hex-str($from)}', EndColorStr='#{ie-hex-str($to)}');
+    }
+  } @else if $end == bottom {
+    background-image: -webkit-gradient(linear, left $start,  0 $end, from($from), to($to));
+    background-image: -webkit-linear-gradient(top, $from $start+px, $to);
+    background-image: -moz-linear-gradient(top, $from $start+px, $to);
+    background-image: -ms-linear-gradient(top, $from $start+px, $to);
+    background-image: -o-linear-gradient(top, $from $start+px, $to);
+
+  } @else {
+    background-image: -webkit-gradient(linear, left $start,  0 $end, from($from), to($to));
+    background-image: -webkit-linear-gradient(top, $from $start+px, $to $end+px);
+    background-image: -moz-linear-gradient(top, $from $start+px, $to $end+px);
+    background-image: -ms-linear-gradient(top, $from $start+px, $to $end+px);
+    background-image: -o-linear-gradient(top, $from $start+px, $to $end+px);
+    // No IE support for positioned gradients
+  }
+}
+
+// Mixin that allows you to set the size of the box to a fixed width/height
+// taking into consideration the padding and borders for you.
+//
+// Examples:
+//     @include size(100px, 100px, 10px, 5px solid red);
+//     Will render a 100x100.
+//
+// $width: Pixel value for width
+// $height: Pixel value for height
+// $padding: Padding accepts: 1px or 1px 2px or 1px 2px 3px 4px
+// $border: Border, accepts 1px solid #000 or 1px or 1px 2px or 1px 2px 3px 4px
+// 					When passing a border declaration (1px solid #000) it'll add the CSS for you.
+@mixin size($width, $height:auto, $padding: none, $border:none) {
+	// Prepare the borders, accept the following:
+	//   1px solid #000 or 1px or 1px 2px or 1px 2px 3px 4px
+	@if true {
+		@if $border == none {
+			$border:0;
+		}
+
+		$border-len: length($border);
+	  // Standardize padding to a list with 4 items.
+		@if $border-len == 3 {
+			border:$border;
+			$bw: nth($border, 1);
+			$border: $bw $bw $bw $bw;
+		} @else if $border-len == 1 {
+			$border: $border $border $border $border;
+		} @else if $border-len == 2 {
+			$border: join($border, $border);
+		}
+	}
+
+	// Prepare padding, accept the following:
+	//   1px or 1px 2px or 1px 2px 3px 4px
+	@if true {
+		@if $padding == none {
+			$padding:0;
+		} @else {
+			padding:$padding;
+		}
+
+	  // Standardize padding to a list with 4 items.
+		$padding-len: length($padding);
+		@if $padding-len == 1 {
+			$padding: $padding $padding $padding $padding;
+		} @else if $padding-len == 2 {
+			$padding: join($padding, $padding);
+		}
+	}
+
+	@if $width != auto {
+		width: $width - (nth($padding, 2) + nth($padding, 4)) - (nth($border, 2) + nth($border, 4));
+	}
+	@if $height != auto {
+		height: $height - (nth($padding, 1) + nth($padding, 3)) - (nth($border, 1) + nth($border, 3));
+	}
+}
+
+// Float an element with a given width and a direction. Third parameter allows easy debugging.
+// Yes, we override Compass :(
+// @TODO: Make it use box-size and allow padding.
+@mixin float($side, $size:auto, $debug-color:false) {
+  @if $size != auto {
+    @if length($size) == 1 {
+      width:$size;
+    } @else {
+      height:nth($size, 2);
+      width:nth($size, 1);
+    }
+
+  }
+  @if in-compatibility-mode(ie6) {
+    display:inline;
+  }
+  float: $side;
+  @if $debug-color and $debug {
+    @include debug($debug-color);
+  }
+}
+
+@mixin transition($property: all, $time: 400ms, $easing: ease-out){
+  transition: $property $time $easing;
+  -moz-transition: $property $time $easing;
+  -ms-transition: $property $time $easing;
+  -o-transition: $property $time $easing;
+  -webkit-transition: $property $time $easing;
+}
+
+// Calculate the Golden Ratio of a given value.
+// ----------------------------------------
+@function golden-ratio($size, $type) {
+  $big   : round($size / 1.61803);
+  $small : $size - $big;
+  @return if($type == large, $big, $small);
+}
+
+
+//
+// @TODO: Add docs to link-colors!
+//
+@mixin link-colors($normal, $hover: false, $active: false, $visited: false, $focus: false) {
+  @if $normal == default {
+    $hover: $link-hover-color;
+    $normal: $link-color;
+    $visited: $link-visited-color;
+  }
+  color: $normal;
+  @if $visited {
+    &:visited {
+      color: $visited; } }
+  @if $focus {
+    &:focus {
+      color: $focus; } }
+  @if $hover {
+    &:hover {
+      color: $hover; } }
+  @if $active {
+    &:active {
+      color: $active; } }
+}
+
+// Substract the Body to the Container width to get the sidebar.
+@function sidebar($body-width, $container-width-over: false) {
+  @if $container-width-over == false {
+    $container-width-over : $container-width;
+  }
+  @return $container-width - $body-width;
+}

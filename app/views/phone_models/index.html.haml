@@ -1,0 +1,6 @@
+- title t("phone_models.index.page_title")
+
+- if @phone_models.count > 0
+  = render "index_core", :phone_models => @phone_models
+
+= render :partial => 'shared/create_link', :locals => {:parent => @manufacturer, :child_class => PhoneModel}

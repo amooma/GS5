@@ -1,0 +1,38 @@
+de:
+  system_messages:
+    name: 'Systemnachricht'
+    controller:
+      successfuly_created: 'Eine Systemnachricht wurde erstellt.'
+      successfuly_updated: 'Eine Systemnachricht wurde aktualisiert.'
+      successfuly_destroyed: 'Eine Systemnachricht wurde gelöscht.'
+    index:
+      page_title: 'Systemnachrichten'
+      user_id: 'Benutzer'
+      content: 'Nachricht'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Systemnachricht löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+    show:
+      page_title: 'Systemnachricht anzeigen'
+      user_id: 'Benutzer'
+      content: 'Nachricht'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Systemnachricht löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neue Systemnachricht'
+    edit:
+      page_title: 'Systemnachricht bezüglich %{resource} bearbeiten'
+    form:
+      user_id:
+        label: 'Benutzer'
+        hint: ''
+      content:
+        label: 'Nachricht'
+        hint: ''
+      button: 'Absenden'

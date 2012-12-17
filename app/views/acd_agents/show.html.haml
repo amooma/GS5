@@ -1,0 +1,28 @@
+- title t("acd_agents.show.page_title")
+
+%p
+  %strong= t('acd_agents.show.uuid') + ":"
+  = @acd_agent.uuid
+%p
+  %strong= t('acd_agents.show.name') + ":"
+  = @acd_agent.name
+%p
+  %strong= t('acd_agents.show.status') + ":"
+  = @acd_agent.status
+%p
+  %strong= t('acd_agents.show.automatic_call_distributor_id') + ":"
+  = @acd_agent.automatic_call_distributor_id
+%p
+  %strong= t('acd_agents.show.last_call') + ":"
+  = @acd_agent.last_call
+%p
+  %strong= t('acd_agents.show.calls_answered') + ":"
+  = @acd_agent.calls_answered
+%p
+  %strong= t('acd_agents.show.destination_type') + ":"
+  = @acd_agent.destination_type
+%p
+  %strong= t('acd_agents.show.destination_id') + ":"
+  = @acd_agent.destination_id
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => {:parent => @automatic_call_distributor, :child => @acd_agent }

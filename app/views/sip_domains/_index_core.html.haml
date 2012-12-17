@@ -1,0 +1,11 @@
+%table
+  %tr
+    %th= t('sip_domains.index.host')
+    %th= t('sip_domains.index.realm')
+
+  - reset_cycle
+  - for sip_domain in sip_domains
+    %tr{:class => cycle('odd', 'even')}
+      %td= sip_domain.host
+      %td= sip_domain.realm
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => sip_domain}

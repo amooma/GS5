@@ -1,0 +1,4 @@
+.inputs
+<%- model_attributes.each do |attribute| -%>
+  = f.<%= attribute.reference? ? :association : :input %> :<%= attribute.name %>, :label => t('<%= plural_name %>.form.<%= attribute.name %>.label'), :hint => conditional_hint('<%= plural_name %>.form.<%= attribute.name %>.hint')
+<%- end -%>

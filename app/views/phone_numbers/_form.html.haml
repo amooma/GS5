@@ -1,0 +1,7 @@
+= simple_form_for([ @parent, @phone_number ]) do |f|
+  = f.error_notification
+
+  = render "form_core", :f => f
+
+  .actions
+    = f.button :submit, conditional_t('phone_numbers.form.submit')

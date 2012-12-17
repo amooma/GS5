@@ -1,0 +1,6 @@
+- title t("conferences.index.page_title")
+
+- if @conferences.count > 0
+  = render "index_core", :conferences => @conferences
+
+= render :partial => 'shared/create_link', :locals => {:parent => @parent, :child_class => Conference}

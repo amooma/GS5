@@ -1,0 +1,25 @@
+#! /bin/sh
+
+# `rake notes` doesn't find everything and is too slow.
+
+#find . -type f \
+#  | grep -vEe '/(\.git|\.DS_Store|\.idea/|\.project|doc/app/|script/notes|log/|debian/visual-inspection/|public/javascripts/controls\.js)' \
+#  | xargs grep --color -IEe '# *(FIXME|TODO|OPTIMIZE)'
+#exit 0
+
+find . -not \( \
+  -name '.svn'            -prune -o \
+  -name '.git'            -prune -o \
+  -name '.DS_Store'       -prune -o \
+  -name '.idea'           -prune -o \
+  -name '.project'        -prune -o \
+  -path '*/script/notes'  -prune -o \
+  -path '*/doc/app/*'     -prune -o \
+  -path '*/doc/html-onefile/*.html' -prune -o \
+  -path '*/doc/docbook-xsl-*' -prune -o \
+  -path '*/public/javascripts/controls.js' -prune -o \
+  -path '*/log/*.log'  -prune -o \
+  -false \
+  \) -type f -print0 \
+  | xargs -0 grep --color -IEe '#[^#]*(FIXME|TODO|OPTIMIZE)\b.*'
+

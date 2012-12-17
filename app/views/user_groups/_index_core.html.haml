@@ -1,0 +1,24 @@
+%table
+  %tr
+    %th= t('user_groups.index.name')
+    %th= t('user_groups.index.description')
+    - if @user
+      %th= t('user_groups.index.tenant_id')
+    - else
+      %th= t('user_groups.index.members')
+
+  - reset_cycle
+  - for user_group in user_groups
+    %tr{:class => cycle('odd', 'even')}
+      %td= user_group.name
+      %td= user_group.description
+      - if @user
+        %td= user_group.tenant
+      - else
+        %td
+          =render 'users/listing', :users => user_group.users
+          - if user_group.users.count > 1
+            %br
+          = render :partial => 'shared/create_link', :locals => {:parent => user_group, :child_class => UserGroupMembership}
+
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => user_group.tenant, :child => user_group}

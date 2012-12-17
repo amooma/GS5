@@ -1,0 +1,117 @@
+// Survival ✚ Kit [ Bootstrapper File ]
+
+// Dependencies
+// ----------------------------------------
+@import "vendor/survival-kit/secure";
+@import "compass";
+@import "vendor/boilerplate-1.0/reset";
+@import "vendor/survival-kit/loader";
+@import "vendor/fancy-buttons/fancy-buttons";
+
+
+// Project Variables
+// ----------------------------------------
+// Use @include debug; to show a color overlay on the element when this is set to true.
+$debug                     : false;
+// Typography
+$base-font-family          : "Helvetica Neue", Arial, Helvetica, sans-serif;
+$base-font-size            : 13px;
+$base-line-height          : 1.231;
+$font-color                : #222;
+$link-color                : #00e;
+$link-hover-color          : #06e;
+$link-visited-color        : #551a8b;
+// ETC
+$hr-color                  : #ccc;
+// Selection
+$selected-font-color       : #fff;
+$selected-background-color : #0084AC;
+// Lists
+$list-margin               : 1em 0;
+$list-padding              : 0 0 0 2em;
+// Container Width
+$container-width           : 1000px;
+// Use @if in-compatibility-mode() to add conditional CSS (useful for mixins).
+$compatibility-mode        : true, ie7 ie8 ie9 ff2 chrome9;
+
+// -- Project Variables Overrides ---------
+
+$site-total-width           : 1000px;
+$vertical-margin            : 15px;
+$global-border-radius       : 8px;
+$global-inner-border-radius : 6px;
+
+
+// -- Colors ------------------------------
+$link-color:#388DDA;
+$border-dark-color: #E3E3E8;
+
+// Hooks
+// ----------------------------------------
+// Mixins that are called from the Library files to add some extra styling.
+
+@mixin sk-html() { }
+
+@mixin sk-body() {
+	background:#F0F3F3 image-url('bg-body.png') left top repeat;
+}
+
+// h1, h2, h3, h4, h5, h6
+@mixin sk-header-tags() {
+  font-weight:bold;
+}
+
+
+// Global Styling
+// ----------------------------------------
+// Calculate all H# Tags.
+@include htags-sizes($base-font-size + 20);
+@include simple-forms(auto, block-hints no-stars );
+ul {
+  ul {
+    margin:0;
+  }
+}
+
+// Global Classes for extension.
+// ----------------------------------------
+// Here you place classes which are used as extensions across all the project.
+// Prefix them with .ext-
+
+
+// The default fancy button, used across the SK.
+// @TODO: Turn this into a mixin @include sk-button(small/medium/big);
+.sk-button, .button {
+  @include fancy-button(#1E81D5);
+}
+a.button { margin:10px 0;}
+
+// Border Radius
+// ----------------------------------------
+.ext-bradius { @include border-radius($global-border-radius); }
+.ext-bradius-inner-t {  @include border-radius($global-inner-border-radius $global-inner-border-radius 0 0); }
+.ext-bradius-inner-b {  @include border-radius(0 0 $global-inner-border-radius $global-inner-border-radius); }
+.ext-bradius-inner {  @include border-radius($global-inner-border-radius); }
+
+
+// The Partials
+// ----------------------------------------
+// Base styles thanks to html5boilerplate. This one uses the Hooks defined before.
+@import "vendor/boilerplate-1.0/styles";
+
+// -- Shared Partials
+  // Headers and related material go here.
+  @import "app/shared/headers";
+  // Footers and related material go here.
+  @import "app/shared/footers";
+  // Content and Related Material go here.
+  @import "app/shared/contents";
+
+// -- Layouts Partials
+  // The most general one goes first
+  @import "app/layouts/app";
+    @import "app/layouts/phone-book-entry";
+    @import "app/layouts/conference";
+
+  // Compatibility.. oh jeez.
+  @import "app/shared/ie";

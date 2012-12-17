@@ -1,0 +1,13 @@
+%table
+  %tr
+    %th= t('phone_sip_accounts.index.phone_id')
+    %th= t('phone_sip_accounts.index.sip_account_id')
+    %th= t('phone_sip_accounts.index.position')
+
+  - reset_cycle
+  - for phone_sip_account in phone_sip_accounts
+    %tr{:class => cycle('odd', 'even')}
+      %td= phone_sip_account.phone
+      %td= phone_sip_account.sip_account
+      %td= phone_sip_account.position
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone_sip_account.phone, :child => phone_sip_account}

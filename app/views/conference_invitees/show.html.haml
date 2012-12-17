@@ -1,0 +1,20 @@
+- title t("conference_invitees.show.page_title")
+
+%p
+  %strong= t('conference_invitees.show.conference_id') + ":"
+  = @conference_invitee.conference
+- if @conference_invitee.phone_book_entry_id
+  %p
+    %strong= t('conference_invitees.show.phone_book_entry_id') + ":"
+    = @conference_invitee.phone_book_entry
+%p
+  %strong= t('conference_invitees.show.pin') + ":"
+  = @conference_invitee.pin
+%p
+  %strong= t('conference_invitees.show.speaker') + ":"
+  = @conference_invitee.speaker
+%p
+  %strong= t('conference_invitees.show.moderator') + ":"
+  = @conference_invitee.moderator
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @conference_invitee.conference, :child => @conference_invitee }

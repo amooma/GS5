@@ -1,0 +1,37 @@
+de:
+  phone_sip_accounts:
+    name: "SIP-Konten auf einem Telefon"
+    controller:
+      successfuly_created: 'Das SIP-Konto wurde auf dem Telefon eingetragen.'
+      successfuly_destroyed: 'Das SIP-Konto wurde von dem Telefon entfernt.'
+      no_existing_sip_accounts_warning: 'Aktuell gibt es keine SIP-Konten, die einem Telefon eingetragen werden können. Bitte legen Sie ein neues SIP-Konto an.'
+    index:
+      page_title: "SIP-Konten auf einem Telefon"
+      phone_id: 'Telefon'
+      sip_account_id: 'SIP-Konto'
+      position: 'Position'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie dieses SIP-Konto von dem Telefon entfernen möchten?'
+        destroy: 'Entfernen'
+        edit: 'Bearbeiten' 
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Auf dem Telefon %{resource} ein neues SIP-Konto eintragen'
+    show:
+      page_title: 'SIP-Konten eines Telefons anzeigen'
+      phone_id: 'Telefon'
+      sip_account_id: 'SIP-Konto'
+      position: 'Position'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie dieses SIP-Konto von dem Telefon entfernen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'SIP-Konto eintragen'
+      actions:
+    form:
+      sip_account_id:
+        label: 'SIP-Konto'
+        hint: ''
+      button: 'Absenden'

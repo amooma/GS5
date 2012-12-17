@@ -1,0 +1,19 @@
+- title t("phone_book_entries.index.page_title")
+
+- if @phone_books
+  %p
+    = t('phone_book_entries.index.available_phone_books')
+    - @phone_books.each do |phone_book|
+      = link_to phone_book, phone_book
+      - if can?(:create, PhoneBookEntry, :phone_book_id => phone_book.id)
+        (
+        = link_to "#{t('phone_book_entries.index.create_new_phone_book_entry')}", new_phone_book_phone_book_entry_path(phone_book)
+        )
+      - if phone_book != @phone_books.last  
+        \,
+
+- if @phone_book_entries.count > 0
+  = render "index_core", :phone_book_entries => @phone_book_entries
+
+- if @phone_book
+  = render :partial => 'shared/create_link', :locals => {:parent => @phone_book, :child_class => PhoneBookEntry}

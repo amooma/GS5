@@ -1,0 +1,11 @@
+%table
+  %tr
+    %th= t('ringtones.index.audio')
+    %th= t('ringtones.index.bellcore_id')
+
+  - reset_cycle
+  - for ringtone in ringtones
+    %tr{:class => cycle('odd', 'even')}
+      %td= ringtone.audio
+      %td= ringtone.bellcore_id
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => ringtone.ringtoneable, :child => ringtone}

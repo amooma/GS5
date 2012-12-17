@@ -1,0 +1,72 @@
+en:
+  addresses:
+    name: 'Address'
+    controller:
+      successfuly_created: 'Successfully created address.'
+      successfuly_updated: 'Successfully updated address.'
+      successfuly_destroyed: 'Successfully destroyed address.'
+    index:
+      page_title: 'Addresses'
+      phone_book_entry_id: 'Phone book entry'
+      line1: 'Line1'
+      line2: 'Line2'
+      street: 'Street'
+      zip_code: 'Zip code'
+      city: 'City'
+      country_id: 'Country'
+      position: 'Position'
+      actions:
+        confirm: 'Are you sure you want to delete this address?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+    show:
+      page_title: 'Editing Address'
+      phone_book_entry_id: 'Phone book entry'
+      line1: 'Line1'
+      line2: 'Line2'
+      street: 'Street'
+      zip_code: 'Zip code'
+      city: 'City'
+      country_id: 'Country'
+      position: 'Position'
+      actions:
+        confirm: 'Are you sure you want to delete this address?'
+        destroy: 'Delete address'
+        edit: 'Edit address'
+        view_all: 'View all addresses'
+    new:
+      page_title: 'New Address'
+      actions:
+    edit:
+      page_title: 'Editing Address'
+      actions:
+        edit: 'Edit address'
+        view_all: 'View all addresses'
+    form:
+      phone_book_entry_id:
+        label: 'Phone book entry'
+        hint: ''
+      line1:
+        label: 'Line1'
+        hint: ''
+      line2:
+        label: 'Line2'
+        hint: ''
+      street:
+        label: 'Street'
+        hint: ''
+      zip_code:
+        label: 'Zip code'
+        hint: ''
+      city:
+        label: 'City'
+        hint: ''
+      country_id:
+        label: 'Country'
+        hint: ''
+      position:
+        label: 'Position'
+        hint: ''
+      button: 'Submit'

@@ -1,0 +1,18 @@
+%table
+  %tr
+    %th
+    %th= t('users.index.user_name')
+    %th= t('users.index.email')
+    %th= t('users.index.first_name')
+    %th= t('users.index.last_name')
+
+  - reset_cycle
+  - for user in users
+    %tr{:class => cycle('odd', 'even')}
+      %td 
+        = image_tag user.image_url(:mini).to_s if user.image_url(:mini)
+      %td= user.user_name
+      %td= user.email
+      %td= user.first_name
+      %td= user.last_name
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => @tenant, :child => user}

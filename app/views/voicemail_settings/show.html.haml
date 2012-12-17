@@ -1,0 +1,26 @@
+- title t("voicemail_settings.show.page_title")
+
+%p
+  %strong= t('voicemail_settings.show.greeting_path') + ":"
+  = File.basename(@voicemail_setting.greeting_path.to_s)
+
+%p
+  %strong= t('voicemail_settings.show.name_path') + ":"
+  = File.basename(@voicemail_setting.name_path.to_s)
+
+%p
+  %strong= t('voicemail_settings.show.flags') + ":"
+  - if @voicemail_setting.notify
+    %br
+    = "- " + t('voicemail_settings.show.notify')
+  - if @voicemail_setting.attachment
+    %br
+    = "- " + t('voicemail_settings.show.attachment')
+  - if @voicemail_setting.mark_read
+    %br
+    = "- " + t('voicemail_settings.show.mark_read')
+  - if @voicemail_setting.purge
+    %br
+    = "- " + t('voicemail_settings.show.purge')
+
+= link_to t('voicemail_settings.actions.edit'), edit_sip_account_voicemail_setting_path(@sip_account, @voicemail_setting)

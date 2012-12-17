@@ -1,0 +1,13 @@
+%table
+  %tr
+    %th= t('user_group_memberships.index.tenant')
+    %th= t('user_group_memberships.index.user_group')
+    %th= t('user_group_memberships.index.user')
+
+  - reset_cycle
+  - for user_group_membership in user_group_memberships
+    %tr{:class => cycle('odd', 'even')}
+      %td= user_group_membership.user_group.tenant
+      %td= user_group_membership.user_group
+      %td= user_group_membership.user
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => user_group_membership.user_group, :child => user_group_membership}

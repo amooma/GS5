@@ -1,0 +1,49 @@
+en:
+  manufacturers:
+    name: 'Manufacturer'
+    controller:
+      successfuly_created: 'Successfully created manufacturer.'
+      successfuly_updated: 'Successfully updated manufacturer.'
+      successfuly_destroyed: 'Successfully destroyed manufacturer.'
+    index:
+      page_title: 'Manufacturers'
+      name: 'Name'
+      ieee_name: 'IEEE name'
+      homepage_url: 'Homepage URL'
+      phone_models: 'Phone models'
+      state: 'State'
+      actions:
+        confirm: 'Are you sure you want to delete this manufacturer?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+    show:
+      page_title: 'Show manufacturer'
+      name: 'Name'
+      ieee_name: 'IEEE name'
+      homepage_url: 'Homepage URL'
+      state: 'State'
+      actions:
+        confirm: 'Are you sure you want to delete this manufacturer?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New manufacturer'
+    edit:
+      page_title: 'Editing manufacturer'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      ieee_name:
+        label: 'IEEE name'
+        hint: ''
+      homepage_url:
+        label: 'Homepage URL'
+        hint: ''
+      state:
+        label: 'State'
+        hint: ''
+      button: 'Submit'

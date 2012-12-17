@@ -1,0 +1,16 @@
+!!! XML
+%SnomIPPhoneText
+  %Title= @phone_xml_object[:title]
+  %Prompt= @phone_xml_object[:prompt]
+  %Text= @phone_xml_object[:text]
+  - if @phone_xml_object[:softkeys]
+    - @phone_xml_object[:softkeys].each do |softkey|
+      %SoftKeyItem
+        %Name=  softkey[:name]
+        %Label= softkey[:label]
+        - if ! softkey[:url].blank?
+          %URL= softkey[:url]
+        - if ! softkey[:softkey].blank?
+          %URL= softkey[:softkey]
+  -if @phone_xml_object[:fetch_url]
+    %fetch{:mil => @phone_xml_object[:fetch_mil]}= @phone_xml_object[:fetch_url]

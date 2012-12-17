@@ -1,0 +1,60 @@
+de:
+  gs_cluster_sync_log_entries:
+    name: 'GS Cluster Synclog Einträge'
+    controller:
+      successfuly_created: 'Ein Eintrag im GS Cluster Synclog wurde erstellt.'
+      successfuly_updated: 'Der Eintrag im GS Cluster Synclog wurde aktualisiert.'
+      successfuly_destroyed: 'Der Eintrag im GS Cluster Synclog wurde gelöscht.'
+    index:
+      page_title: 'GS Cluster Synclog Einträge auflisten'
+      gs_node_id: 'GS Knoten'
+      class_name: 'Klasse'
+      action: 'Aktion'
+      content: 'Inhalt'
+      status: 'Status'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Eintrag aus dem GS Cluster Synclog löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neuen GS Cluster Synclog Eintrag für %{resource}'
+    show:
+      page_title: 'Eintrag anzeigen'
+      gs_node_id: 'GS Knoten'
+      class_name: 'Klasse'
+      action: 'Aktion'
+      content: 'Inhalt'
+      status: 'Status'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Eintrag aus dem GS Cluster Synclog löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neuer Eintrag'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Eintrag bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      gs_node_id:
+        label: 'GS Knoten'
+        hint: ''
+      class_name:
+        label: 'Klasse'
+        hint: ''
+      action:
+        label: 'Aktion'
+        hint: ''
+      content:
+        label: 'Inhalt'
+        hint: ''
+      status:
+        label: 'Status'
+        hint: ''
+      button: 'Absenden'

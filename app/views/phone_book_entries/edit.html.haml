@@ -1,0 +1,9 @@
+- title t("phone_book_entries.edit.page_title")
+
+= render "form"
+
+%p
+  - if can? :edit, @phone_book_entry
+    = link_to t('phone_book_entries.edit.actions.edit'), @phone_book_entry
+  |
+  = link_to t('phone_book_entries.edit.actions.view_all'), phone_book_entries_path

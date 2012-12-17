@@ -1,0 +1,19 @@
+!!! XML
+%SnomIPPhoneInput
+  %Title= @phone_xml_object[:title]
+  %Prompt= @phone_xml_object[:prompt]
+  %URL= @phone_xml_object[:url]
+  %InputItem
+    %DisplayName= @phone_xml_object[:display_name]
+    %QueryStringParam= @phone_xml_object[:query_string_param]
+    %DefaultValue= @phone_xml_object[:default_value]
+    %InputFlags= @phone_xml_object[:input_flags]
+  - if @phone_xml_object[:softkeys]
+    - @phone_xml_object[:softkeys].each do |softkey|
+      %SoftKeyItem
+        %Name=  softkey[:name]
+        %Label= softkey[:label]
+        - if ! softkey[:url].blank?
+          %URL= softkey[:url]
+        - if ! softkey[:softkey].blank?
+          %URL= softkey[:softkey]

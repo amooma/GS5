@@ -1,0 +1,7 @@
+.inputs
+  = f.input :document, :label => t('fax_documents.form.document.label'), :hint => conditional_hint('fax_documents.form.document.hint')
+  = f.association :fax_resolution, :label => t('fax_documents.form.fax_resolution.label'), :hint => conditional_hint('fax_documents.form.fax_resolution.hint'), :include_blank => false
+  
+  = f.simple_fields_for :destination_phone_number, @phone_number do |u|
+    = render "phone_numbers/form_core", :f => u
+  

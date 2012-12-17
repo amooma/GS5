@@ -1,0 +1,5 @@
+- title t("fax_documents.index.page_title")
+
+= render "index_core", :fax_documents => @fax_documents
+
+= render :partial => 'shared/create_link', :locals => {:parent => @fax_account, :child_class => FaxDocument}

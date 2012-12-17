@@ -1,0 +1,201 @@
+:output:
+  CallForwardCase:
+    :options:
+      :fields:
+      - id
+      - value
+  CallForward:
+    :options:
+      :fields:
+      - id
+      - phone_number
+      - call_forward_case
+      - timeout
+      - destination
+      - source
+      - depth
+      - active
+  PhoneNumberRange:
+    :options:
+      :fields:
+      - id
+      - name
+      - description
+      - phone_number_rangeable_type
+      - phone_number_rangeable
+  AreaCode:
+    :options:
+      :fields:
+      - id
+      - country
+      - name
+      - area_code
+      - central_office_code
+  Manufacturer:
+    :options:
+      :fields:
+      - id
+      - name
+      - homepage_url
+      - state
+  PhoneModel:
+    :options:
+      :fields:
+      - id
+      - name
+      - manufacturer
+      - state
+  Oui:
+    :options:
+      :fields:
+      - id
+      - manufacturer
+      - value
+      - state
+  User:
+    :options:
+      :fields:
+      - id
+      - user_name
+      - last_name
+      - email
+      - current_tenant_id
+      - current_tenant
+  Tenant:
+    :options:
+      :fields:
+      - id
+      - name
+      - state
+      - country
+      - sip_domain
+  SipDomain:
+    :options:
+      :fields:
+      - id
+      - host
+      - realm
+  PhoneBook:
+    :options:
+      :fields:
+      - id
+      - name
+      - phone_bookable_type
+      - phone_bookable_id
+      - phone_bookable
+      - state
+  PhoneBookEntry:
+    :options:
+      :fields:
+      - id
+      - phone_book_id
+      - phone_book
+      - first_name
+      - organization
+  PhoneNumber:
+    :options:
+      :fields:
+      - id
+      - name
+      - number
+      - phone_numberable_type
+      - phone_numberable_id
+  Phone:
+    :options:
+      :fields:
+      - id
+      - phone_model
+      - mac_address
+      - ip_address
+      - last_ip_address
+      - phoneable_type
+      - phoneable_id
+      - phoneable
+  SipAccount:
+    :options:
+      :fields:
+      - id
+      - sip_accountable_type
+      - sip_accountable
+      - auth_name
+      - caller_name
+      - voicemail_pin
+  TenantMembership:
+    :options:
+      :fields:
+      - id
+      - tenant
+      - user
+      - state
+  UserGroupMembership:
+    :options:
+      :fields:
+      - id
+      - user_group
+      - user
+  UserGroup:
+    :options:
+      :fields:
+      - id
+      - name
+      - tenant
+      - position
+  Country:
+    :options:
+      :fields:
+      - id
+      - name
+      - country_code
+      - international_call_prefix
+      - trunk_prefix
+  Conference:
+    :options:
+      :fields:
+      - id
+      - name
+      - start
+      - conferenceable_type
+      - conferenceable
+  ConferenceInvitee:
+    :options:
+      :fields:
+      - id
+      - conference
+      - phone_number
+      - phone_book_entry_id
+      - speaker
+      - moderator
+      - pin
+  FaxDocument:
+    :options:
+      :fields:
+      - id
+      - destination_phone_number
+      - document
+  Callthrough:
+    :options:
+      :fields:
+      - id
+      - tenant
+      - name
+  Language:
+    :options:
+      :fields:
+      - id
+      - name
+      - code
+  SoftkeyFunction:
+    :options:
+      :fields:
+      - id
+      - name
+      - position
+  Api::Row:
+    :options:
+      :fields:
+      - id
+      - last_name
+      - first_name
+      - user_name
+      - user
+

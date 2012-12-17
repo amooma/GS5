@@ -1,0 +1,16 @@
+.inputs
+  = f.input :name, :label => t('automatic_call_distributors.form.name.label'), :hint => conditional_hint('automatic_call_distributors.form.name.hint')
+  = f.input :strategy, :label => t('automatic_call_distributors.form.strategy.label'), :hint => conditional_hint('automatic_call_distributors.form.strategy.hint'), :include_blank => false, :as => :select, :collection => strategies
+  = f.input :max_callers, :label => t('automatic_call_distributors.form.max_callers.label'), :hint => conditional_hint('automatic_call_distributors.form.max_callers.hint')
+  = f.input :agent_timeout, :label => t('automatic_call_distributors.form.agent_timeout.label'), :hint => conditional_hint('automatic_call_distributors.form.agent_timeout.hint')
+  = f.input :retry_timeout, :label => t('automatic_call_distributors.form.retry_timeout.label'), :hint => conditional_hint('automatic_call_distributors.form.retry_timeout.hint')
+  = f.input :join, :label => t('automatic_call_distributors.form.join.label'), :hint => conditional_hint('automatic_call_distributors.form.join.hint'), :include_blank => false, :as => :select, :collection => join_on
+  = f.input :leave, :label => t('automatic_call_distributors.form.leave.label'), :hint => conditional_hint('automatic_call_distributors.form.leave.hint'), :include_blank => false, :as => :select, :collection => leave_on
+
+  = f.input :announce_position, :label => t('automatic_call_distributors.form.announce_position.label'), :hint => conditional_hint('automatic_call_distributors.announce_position.hint'), :collection => [[t('automatic_call_distributors.announce_position.on_change_only'), 0],[t('automatic_call_distributors.announce_position.never'), nil],[t('automatic_call_distributors.announce_position.every_x_seconds', :x_seconds => 30), 30],[t('automatic_call_distributors.announce_position.every_x_seconds', :x_seconds => 60), 60], [t('automatic_call_distributors.announce_position.every_x_seconds', :x_seconds => 120), 120], [t('automatic_call_distributors.announce_position.every_x_seconds', :x_seconds => 300), 300], [t('automatic_call_distributors.announce_position.every_x_seconds', :x_seconds => 600), 600]], :include_blank => false
+  
+  = f.input :announce_call_agents, :label => t('automatic_call_distributors.form.announce_call_agents.label'), :hint => conditional_hint('automatic_call_distributors.form.announce_call_agents.hint')
+  = f.input :greeting, :label => t('automatic_call_distributors.form.greeting.label'), :hint => conditional_hint('automatic_call_distributors.form.greeting.hint')
+  = f.input :goodbye, :label => t('automatic_call_distributors.form.goodbye.label'), :hint => conditional_hint('automatic_call_distributors.form.goodbye.hint')
+  = f.input :music, :label => t('automatic_call_distributors.form.music.label'), :hint => conditional_hint('automatic_call_distributors.form.music.hint')
+  

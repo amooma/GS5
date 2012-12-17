@@ -1,0 +1,42 @@
+en:
+  user_groups:
+    name: "User groups"
+    controller:
+      successfuly_created: 'Successfully created user group.'
+      successfuly_updated: 'Successfully updated user group.'
+      successfuly_destroyed: 'Successfully destroyed user group.'
+    index:
+      page_title: 'User groups'
+      name: 'Name'
+      description: 'Description'
+      tenant_id: 'Tenant'
+      number_of_members: 'Number of members'
+      actions:
+        confirm: 'Are you sure you want to delete this user group?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New user group for %{resource}'
+    show:
+      page_title: 'Show user group'
+      name: 'Name'
+      description: 'Description'
+      tenant_id: 'Tenant'
+      actions:
+        confirm: 'Are you sure you want to delete this user group?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View all user groups'
+    new:
+      page_title: 'New user group'
+    edit:
+      page_title: 'Editing user group "%{resource}"'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      description:
+        label: 'Description'
+        hint: ''
+      button: 'Submit'

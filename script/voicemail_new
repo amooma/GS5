@@ -1,0 +1,61 @@
+#! /usr/bin/env ruby
+
+begin
+
+if !ARGV[0] or ARGV[0] == '' or !ARGV[1] or ARGV[1] == ''
+	$stderr.puts "usage: voicemail_new <account_name> <voicemail_uuid>"
+  exit 1
+end
+
+
+APP_PATH = File.expand_path('../../config/application',  __FILE__)
+require File.expand_path('../../config/boot',  __FILE__)
+require APP_PATH
+
+begin
+	Rails.application.require_environment!
+rescue ActiveRecord::AdapterNotSpecified => e
+	error "No such Rails environment: \"#{Rails.env}\"."
+	exit 1
+end
+
+voicemail_account_name = ARGV[0]
+uuid = ARGV[1]
+
+message = FreeswitchVoicemailMsg.where(:username => voicemail_account_name, :uuid => uuid).first
+
+if ! message
+  $stderr.puts "Message \"#{uuid}\" does not exist"
+  exit 1
+end
+
+if !File.exists?( message.file_path ) 
+  $stderr.puts "File \"#{message.file_path}\" does not exist"
+  exit 1
+end
+
+owner_account = SipAccount.where(:auth_name => voicemail_account_name).first
+if ! owner_account 
+  $stderr.puts "SipAccount \"#{voicemail_account_name}\" does not exist"
+  exit 1
+end
+
+sip_account = SipAccount.find_by_auth_name(message.username)
+if sip_account && sip_account.sip_accountable.class == User
+  user = sip_account.sip_accountable
+
+  if user.send_voicemail_as_email_attachment == true
+    if Notifications.new_voicemail(message).deliver
+      message.delete
+    end
+  end
+end
+
+rescue SignalException => e
+	$stderr.print "#{e.class.to_s}"
+	$stderr.print " (Signal #{e.signo.to_s})" if e.respond_to?(:signo) && e.signo
+	$stderr.puts ""
+	exit 130
+end
+
+exit 0

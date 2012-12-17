@@ -1,0 +1,76 @@
+de:
+  acd_agents:
+    name: 'Agent'
+    controller:
+      successfuly_created: 'Ein neuer Agent wurde angelegt.'
+      successfuly_updated: 'Der Agent wurde aktualisiert.'
+      successfuly_destroyed: 'Der Agent wurde gelöscht.'
+    index:
+      page_title: 'Agenten'
+      uuid: 'UUID'
+      name: 'Name'
+      status: 'Status'
+      automatic_call_distributor_id: 'Warteschleifen ID'
+      last_call: 'Letzter Anruf'
+      calls_answered: 'Anrufe'
+      destination_type: 'Zieltyp'
+      destination_id: 'Ziel ID'
+      destination: 'Ziel'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Agenten löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neuen Agenten für %{resource} anlegen'
+    show:
+      page_title: 'Agent'
+      uuid: 'UUID'
+      name: 'Name'
+      status: 'Status'
+      automatic_call_distributor_id: 'Warteschleifen ID'
+      last_call: 'Letzter Anruf'
+      calls_answered: 'Anrufe'
+      destination_type: 'Zieltyp'
+      destination_id: 'Ziel ID'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Agenten löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neuer Agent'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Agent bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      uuid:
+        label: 'UUID'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      status:
+        label: 'Status'
+        hint: ''
+      automatic_call_distributor_id:
+        label: 'Warteschleifen ID'
+        hint: ''
+      last_call:
+        label: 'Letzter Anruf'
+        hint: ''
+      calls_answered:
+        label: 'Anrufe'
+        hint: ''
+      destination_type:
+        label: 'Zieltyp'
+        hint: ''
+      destination_id:
+        label: 'Ziel ID'
+        hint: ''
+      button: 'Absenden'

@@ -1,0 +1,44 @@
+= form_tag(destroy_multiple_sip_account_voicemail_messages_path(@sip_account), :method => :delete, :id => 'voicemail_message_form') do
+  %header.entries-nav= render :partial => "voicemail_messages/navigation"
+  .content
+    %table
+      - reset_cycle
+      - for voicemail_message in voicemail_messages
+        %tr.voicemail-messages-entry{:class => cycle('odd', 'even'), :id => "message_#{voicemail_message.uuid}"}
+          %td.select_box= check_box_tag("selected_uuids[]", voicemail_message.uuid, false, :uuid => "select_item_#{voicemail_message.uuid}", :class => 'select_item')
+          %td.time
+            .voicemail-received
+              = voicemail_message.format_date(voicemail_message.created_epoch, t("voicemail_messages.index.date_format"), t("voicemail_messages.index.date_today_format"))
+
+            - read_date = voicemail_message.format_date(voicemail_message.read_epoch, t("voicemail_messages.index.date_format"), t("voicemail_messages.index.date_today_format"))
+            - if read_date
+              .voicemail-read
+                = read_date
+          %td.folder
+            = t("voicemail_messages.index.mailbox.#{voicemail_message.in_folder}")
+          %td.user
+            .name= voicemail_message.cid_name
+            .phone= voicemail_message.cid_number
+          %td.status
+            .duration= voicemail_message.display_duration
+          %td
+            - if ! voicemail_message.flags.blank?
+              = t("voicemail_messages.index.flags.#{voicemail_message.flags}")
+          %td.actions
+            - if can?(:show, voicemail_message) && File.readable?(voicemail_message.file_path)
+              = link_to t('voicemail_messages.index.actions.download'), sip_account_voicemail_message_path(@sip_account, voicemail_message, :format => :wav), :method => :get
+          %td.actions  
+            - if @sip_account.registration && can?(:call, voicemail_message)
+              = link_to t('voicemail_messages.index.actions.call'), call_sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :put
+          %td.actions
+            - if can?(:edit, voicemail_message) && voicemail_message.read_epoch > 0
+              = link_to t('voicemail_messages.index.actions.mark_unread'), mark_unread_sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :put
+            - else
+              = link_to t('voicemail_messages.index.actions.mark_read'), mark_read_sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :put
+          %td.actions
+            - if can? :destroy, voicemail_message
+              = link_to t('voicemail_messages.index.actions.destroy'), sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :delete
+
+  %footer.entries-nav= render :partial => "voicemail_messages/navigation"
+  = image_submit_tag('icons/cross-16x.png', :confirm => t("voicemail_messages.index.actions.confirm_selected"))
+  = t("voicemail_messages.index.actions.destroy_multiple")

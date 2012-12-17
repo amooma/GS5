@@ -1,0 +1,35 @@
+#! /usr/bin/env ruby
+
+APP_PATH = File.expand_path('../../config/application',  __FILE__)
+require File.expand_path('../../config/boot',  __FILE__)
+require APP_PATH
+
+begin
+	Rails.application.require_environment!
+rescue ActiveRecord::AdapterNotSpecified => e
+	$stderr.puts "No such Rails environment: \"#{Rails.env}\"."
+	exit 1
+end
+
+begin
+	require 'agi_server'
+	server_instance = AGIServer::server()
+ 
+rescue SignalException => e
+  case e.signo
+  when 1
+    $stderr.puts "Signal 1 caught, exiting"
+  when 2
+    $stderr.puts "Interrupt signal caught, exiting"
+  when 15
+    $stderr.puts "Exit signal caught, exiting"
+  else      
+    $stderr.print "#{e.class.to_s}"
+    $stderr.print " (Signal #{e.signo.to_s})" if e.respond_to?(:signo) && e.signo
+  end
+  $stderr.puts ""
+  exit (e.signo + 128)
+end
+
+exit 0
+

@@ -1,0 +1,9 @@
+- title t("addresses.edit.page_title")
+
+= render "form"
+
+%p
+  - if can? :edit, @address
+    = link_to t('addresses.edit.actions.edit'), @address
+  |
+  = link_to t('addresses.edit.actions.view_all'), addresses_path

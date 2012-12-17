@@ -1,0 +1,6 @@
+# See http://www.robotstxt.org/wc/norobots.html for documentation on how to use the robots.txt file
+#
+# Because it is a PBX we disallow any search engine by default.
+#
+User-Agent: *
+Disallow: /

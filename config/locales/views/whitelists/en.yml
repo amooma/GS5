@@ -1,0 +1,38 @@
+en:
+  whitelists:
+    name: 'Whitelist'
+    controller:
+      successfuly_created: 'Successfully created whitelist.'
+      successfuly_updated: 'Successfully updated whitelist.'
+      successfuly_destroyed: 'Successfully destroyed whitelist.'
+    index:
+      page_title: 'Whitelists'
+      name: 'Name'
+      phone_numbers: 'Phone numbers'
+      actions:
+        confirm: 'Are you sure you want to delete this whitelist?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New whitelist for %{resource}'
+    show:
+      page_title: 'Show whitelist'
+      name: 'Name'
+      actions:
+        confirm: 'Are you sure you want to delete this whitelist?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New whitelist'
+    edit:
+      page_title: 'Editing whitelist'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      phone_numbers:
+        label: 'Phone numbers'
+        hint: ''
+      button: 'Submit'

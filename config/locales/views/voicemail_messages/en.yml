@@ -1,0 +1,35 @@
+en:
+  voicemail_messages:
+    name: 'Voicemail Messages'
+    controller:
+      successfuly_destroyed: 'Successfully destroyed voicemail message.'
+    index:
+      page_title: 'Messages'
+      page_title_read: 'Read Messages'
+      page_title_unread: 'Unread Messages'
+      date_format: '%m/%d/%Y %H:%M'
+      date_today_format: '%H:%M'
+      navigation:
+        read: 'Read: %{count}'
+        unread: 'Unread: %{count}'
+        all: 'All: %{count}'
+      actions:
+        confirm: 'Are you sure you want to delete this message?'
+        confirm_selected: 'Are you sure you want to delete all selected messages?'
+        destroy: 'Delete'
+        destroy_multiple: 'Delete selected messages'
+        call: 'Call'
+        mark_read: 'Mark read'
+        mark_unread: 'Mark unread'
+      mailbox:
+        inbox: 'Inbox'
+      flags:
+        save: 'Saved'
+    call_results:
+      UNSPECIFIED: ''
+      ORIGINATOR_CANCEL: 'Cancelled'
+      UNALLOCATED_NUMBER: 'Unallocated number'
+      NO_USER_RESPONSE: 'No user response'
+      NOANSWER: 'No answer'
+      USER_NOT_REGISTERED: 'Offline'
+      

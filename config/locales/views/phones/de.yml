@@ -1,0 +1,77 @@
+de:
+  phones:
+    name: 'Telefon'
+    controller:
+      successfuly_created: 'Eine neues Telefon wurde in der Datenbank eingetragen.'
+      successfuly_updated: 'Die Daten zum Telefon wurden aktualisiert.'
+      successfuly_destroyed: 'Das Telefon wurde aus dem System entfernt.'
+    index:
+      page_title: 'Telefone'
+      mac_address: 'MAC-Adresse'
+      phone_model_id: 'Telefonmodell'
+      hot_deskable: 'Hot-Desk fähig'
+      ip_address: 'IP-Adresse'
+      last_ip_address: 'Letzte IP-Adresse'
+      http_user: 'http user'
+      http_password: 'http password'
+      nightly_reboot: 'Nachts automatischer Reboot'
+      provisioning_key_active: 'Provisioning Schlüssel aktiv'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neues Telefon für %{resource} anlegen'
+    show:
+      page_title: 'Telefon anzeigen'
+      mac_address: 'MAC-Adresse'
+      phone_model_id: 'Telefonmodell'
+      hot_deskable: 'Hot-Desk fähig'
+      ip_address: 'IP-Adresse'
+      last_ip_address: 'Letzte IP-Adresse'
+      http_user: 'http user'
+      http_password: 'http password'
+      nightly_reboot: 'Nachts automatischer Reboot'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Telefone anzeigen'
+    new:
+      page_title: 'Neues Telefon'
+      actions:
+    edit:
+      page_title: 'Telefondaten bearbeiten'
+    form:
+      mac_address:
+        label: 'MAC-Adresse'
+        hint: ''
+      phone_model_id:
+        label: 'Telefonmodell'
+        hint: ''
+      hot_deskable:
+        label: 'Hot-Desk fähig'
+        hint: ''
+      nightly_reboot: 
+        label: 'Nachts automatischer Reboot'
+        hint: ''
+      ip_address:
+        label: 'IP-Adresse'
+        hint: ''
+      last_ip_address:
+        label: 'Letzte IP-Adresse'
+        hint: ''
+      http_user:
+        label: 'http user'
+        hint: ''
+      http_password:
+        label: 'http password'
+        hint: ''
+      provisioning_key_active:
+        label: 'Provisioning Schlüssel aktiv'
+        hint: ''
+      button: 'Absenden'
+    sip_accounts:
+      title: 'Auf dem Telefon eingetragene SIP-Konten'
+      connect_to_sip_account: 'Neues SIP-Konto auf das Telefon eintragen'
