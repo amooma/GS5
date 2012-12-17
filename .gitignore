@@ -73,6 +73,8 @@ ERD.png
 tmp/sass-cache
 tmp/cache
 
+public/assets
+
 # directory created by "bundle install --path ." (not needed anyway):
 /ruby
 
