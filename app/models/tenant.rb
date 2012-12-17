@@ -223,15 +223,17 @@ class Tenant < ActiveRecord::Base
       amooma = general_phone_book.phone_book_entries.create(
         :organization => 'AMOOMA GmbH',
         :is_organization => true,
-        :description => "Hersteller von Gemeinschaft. Rufen Sie uns an, falls Sie kommerziellen Support oder Consulting für Gemeinschaft benötigen.",
-        :homepage_organization => 'http://www.amooma.de',
+        :description => "Hersteller von Gemeinschaft. Kommerziellen Support und Consulting für Gemeinschaft.",
+        :homepage_organization => 'http://amooma.de',
         :twitter_account => 'amooma_de',
         :facebook_account => 'https://www.facebook.com/AMOOMA.GmbH',
       )
-      amooma.phone_numbers.create(
-        :name => 'Office', 
-        :number => '+492622706480'
-      )
+      # This is the new 2013 phone number.
+      #
+      # amooma.phone_numbers.create(
+      #   :name => 'Office', 
+      #   :number => '+4926228998900'
+      # )
       amooma.addresses.create(
         :street => 'Bachstr. 124', 
         :zip_code => '56566',
