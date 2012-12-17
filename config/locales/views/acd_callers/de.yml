@@ -1,0 +1,70 @@
+de:
+  acd_callers:
+    name: 'Vermittelte Anrufer'
+    controller:
+      successfuly_created: 'Ein neuer vermittelter Anrufer wurde angelegt.'
+      successfuly_updated: 'Der vermittelte Anrufer wurde aktualisiert.'
+      successfuly_destroyed: 'Der vermittelte Anrufer wurde gelöscht.'
+    index:
+      page_title: 'Vermittelte Anrufer auflisten'
+      channel_uuid: 'Kanal UUID'
+      automatic_call_distributor_id: 'Warteschleife'
+      status: 'Status'
+      enter_time: 'Eintrittszeit'
+      agent_answer_time: 'Antwortzeit Agent'
+      callback_number: 'Vermittelte Durchwahl'
+      callback_attempts: 'Vermittlungsversuche'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen vermittelten Anrufer löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neuen vermittelten Anrufer für %{resource} anlegen'
+    show:
+      page_title: 'Vermittelte Anrufer anzeigen'
+      channel_uuid: 'Kanal UUID'
+      automatic_call_distributor_id: 'Warteschleife'
+      status: 'Status'
+      enter_time: 'Eintrittszeit'
+      agent_answer_time: 'Antwortzeit Agent'
+      callback_number: 'Vermittelte Durchwahl'
+      callback_attempts: 'Vermittlungsversuche'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen vermittelten Anrufer löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neuer vermittelter Anrufer'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Vermittelten Anrufer bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      channel_uuid:
+        label: 'Kanal UUID'
+        hint: ''
+      automatic_call_distributor_id:
+        label: 'Warteschleife'
+        hint: ''
+      status:
+        label: 'Status'
+        hint: ''
+      enter_time:
+        label: 'Eintrittszeit'
+        hint: ''
+      agent_answer_time:
+        label: 'Antwortzeit Agent'
+        hint: ''
+      callback_number:
+        label: 'Vermittelte Durchwahl'
+        hint: ''
+      callback_attempts:
+        label: 'Vermittllungsversuche'
+        hint: ''
+      button: 'Absenden'

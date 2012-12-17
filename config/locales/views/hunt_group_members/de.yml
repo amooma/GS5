@@ -1,0 +1,48 @@
+de:
+  hunt_group_members:
+    name: 'Rufgruppen-Teilnehmer'
+    controller:
+      successfuly_created: 'Ein neuer Rufgruppen-Teilnehmer wurde eingetragen.'
+      successfuly_updated: 'Der Rufgruppen-Teilnehmer wurde aktualisiert.'
+      successfuly_destroyed: 'Der Rufgruppen-Teilnehmer wurde entfernt.'
+    index:
+      page_title: 'Rufgruppen-Teilnehmer'
+      name: 'Name'
+      active: 'Aktiv'
+      phone_numbers: 'Telefonnummern'
+      can_switch_status_itself: 'Darf seinen Status selbst ändern'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Rufgruppen-Teilnehmer entfernen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neuen Teilnehmer für %{resource} anlegen'
+    show:
+      page_title: 'Teilnehmer anzeigen'
+      name: 'Name'
+      active: 'Aktiv'
+      can_switch_status_itself: 'Darf seinen Status selber ändern'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Rufgruppen-Teilnehmer entfernen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Rufgruppen-Teilnehmer anzeigen'
+    new:
+      page_title: 'Neuen Teilnehmer anlegen'
+    edit:
+      page_title: 'Teilnehmer bearbeiten'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      active:
+        label: 'Aktiv'
+        hint: ''
+      can_switch_status_itself:
+        label: 'Darf seinen Status selber ändern'
+        hint: 'Diese Funktion geht nur von Nummern innerhalb der Anlage.'
+      phone_numbers:
+        label: 'Telefonnummern'
+        hint: ''
+      button: 'Absenden'

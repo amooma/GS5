@@ -1,0 +1,48 @@
+en:
+  hunt_group_members:
+    name: 'Hunt group member'
+    controller:
+      successfuly_created: 'Successfully created hunt group member.'
+      successfuly_updated: 'Successfully updated hunt group member.'
+      successfuly_destroyed: 'Successfully destroyed hunt group member.'
+    index:
+      page_title: 'Hunt group members'
+      name: 'Name'
+      active: 'Active'
+      phone_numbers: 'Phone numbers'
+      can_switch_status_itself: 'Can switch status itself'
+      actions:
+        confirm: 'Are you sure you want to delete this hunt group member?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New hunt group member for %{resource}'
+    show:
+      page_title: 'Show hunt group member'
+      name: 'Name'
+      active: 'Active'
+      can_switch_status_itself: 'Can switch status itself'
+      actions:
+        confirm: 'Are you sure you want to delete this element?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New hunt group member'
+    edit:
+      page_title: 'Editing hunt group member'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      active:
+        label: 'Active'
+        hint: ''
+      can_switch_status_itself:
+        label: 'Can switch status itself'
+        hint: 'This feature is only accessible from internal extensions.'
+      phone_numbers:
+        label: 'Phone numbers'
+        hint: ''
+      button: 'Submit'

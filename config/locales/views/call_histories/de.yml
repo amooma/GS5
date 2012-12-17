@@ -1,0 +1,66 @@
+de:
+  call_histories:
+    name: 'Anrufliste'
+    controller:
+      successfuly_created: 'Ein neuer Eintrag wurde erstellt.'
+      successfuly_updated: 'Der Eintrag wurde aktualisiert.'
+      successfuly_destroyed: 'Der Eintrag wurde gelöscht.'
+    index:
+      page_title: 'Anrufliste'
+      page_title_missed: 'Verpasste Anrufe'
+      page_title_dialed: 'Gewählte Anrufe'
+      page_title_received: 'Empfangene Anrufe'
+      page_title_forwarded: 'Weitergeleitete Anrufe'
+      count: 'Anzahl der Anruflisteeinträge'
+      missed: 'Verpasst'
+      dialed: 'Gewählt'
+      received: 'Empfangen'
+      forwarded: 'Weitergeleitet'
+      all: 'Alle'
+      date_format: '%d.%m.%Y %H:%M'
+      date_today_format: '%H:%M'
+      forwarded_by: 'via'
+      navigation:
+        missed: 'Verpasst: %{calls}'
+        dialed: 'Gewählt: %{calls}'
+        received: 'Empfangen: %{calls}'
+        forwarded: 'Weitergeleitet: %{calls}'
+        all: 'Alle: %{calls}'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?'
+        confirm_selected: 'Sind Sie sicher, dass Sie die markierten Einträge löschen möchten?'
+        destroy: 'Löschen'
+        destroy_multiple: 'Markierte Einträge löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neuen Eintrag für %{resource} anlegen'
+        call: 'Anrufen'
+    show:
+      page_title: 'Eintrag anzeigen'
+      name: 'Name'
+      description: 'Beschreibung'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Anrufliste anzeigen'
+    new:
+      page_title: 'Neuer Eintrag'
+    edit:
+      page_title: 'Anrufliste "%{resource}" bearbeiten'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      description:
+        label: 'Beschreibung'
+        hint: ''
+      button: 'Absenden'
+    call_results:
+      UNSPECIFIED: ''
+      ORIGINATOR_CANCEL: 'Abgebrochen'
+      UNALLOCATED_NUMBER: 'Rufnummer nicht bekannt'
+      NO_USER_RESPONSE: 'Keine Antwort'
+      NOANSWER: 'Keine Antwort'
+      USER_NOT_REGISTERED: 'Offline'

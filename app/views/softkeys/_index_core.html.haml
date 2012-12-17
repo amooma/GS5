@@ -1,0 +1,14 @@
+%table
+  %tr
+    %th= t('softkeys.index.function')
+    %th= t('softkeys.index.number')
+    %th= t('softkeys.index.label')
+
+  - reset_cycle
+  - for softkey in softkeys.order(:position)
+    %tr{:class => cycle('odd', 'even')}
+      %td
+        =softkey.to_s
+      %td= softkey.number
+      %td= softkey.label
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => softkey.sip_account, :child => softkey}

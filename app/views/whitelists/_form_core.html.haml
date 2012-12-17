@@ -1,0 +1,8 @@
+.inputs
+  = f.input :name, :label => t('whitelists.form.name.label'), :hint => conditional_hint('whitelists.form.name.hint')
+
+  %h3= t('whitelists.form.phone_numbers.label')
+  - if !t('whitelists.form.phone_numbers.hint').blank?
+    %p= t('whitelists.form.phone_numbers.hint')
+  = f.simple_fields_for :phone_numbers do |phone_number|
+    = render "phone_numbers/form_core", :f => phone_number

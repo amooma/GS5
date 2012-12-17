@@ -1,0 +1,49 @@
+de:
+  manufacturers:
+    name: 'Hersteller'
+    controller:
+      successfuly_created: 'Ein neuer Hersteller wurde eingetragen.'
+      successfuly_updated: 'Der Hersteller wurde aktualisiert.'
+      successfuly_destroyed: 'Der Hersteller wurde gelöscht.'
+    index:
+      page_title: 'Hersteller'
+      name: 'Name'
+      ieee_name: 'IEEE name'
+      homepage_url: 'Homepage URL'
+      phone_models: 'Telefonmodelle'
+      state: 'Status'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Hersteller löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+    show:
+      page_title: 'Hersteller anzeigen'
+      name: 'Name'
+      ieee_name: 'IEEE name'
+      homepage_url: 'Homepage URL'
+      state: 'Status'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Hersteller löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neuer Hersteller'
+    edit:
+      page_title: 'Hersteller bearbeiten'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      ieee_name:
+        label: 'IEEE name'
+        hint: ''
+      homepage_url:
+        label: 'Homepage URL'
+        hint: ''
+      state:
+        label: 'Status'
+        hint: ''
+      button: 'Absenden'

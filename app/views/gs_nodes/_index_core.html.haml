@@ -1,0 +1,19 @@
+%table
+  %tr
+    %th= t('gs_nodes.index.name')
+    %th= t('gs_nodes.index.ip_address')
+    %th= t('gs_nodes.index.site')
+    %th= t('gs_nodes.index.element_name')
+    %th= t('gs_nodes.index.push_updates_to')
+    %th= t('gs_nodes.index.accepts_updates_from')
+
+  - reset_cycle
+  - for gs_node in gs_nodes
+    %tr{:class => cycle('odd', 'even')}
+      %td= gs_node.name
+      %td= gs_node.ip_address
+      %td= gs_node.site
+      %td= gs_node.element_name
+      %td= gs_node.push_updates_to
+      %td= gs_node.accepts_updates_from
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gs_node}

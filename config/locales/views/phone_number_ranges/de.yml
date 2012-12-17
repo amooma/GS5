@@ -1,0 +1,51 @@
+de:
+  phone_number_ranges:
+    ranges:
+      internal_extensions:
+        label: 'Durchwahlen (intern)'
+        description: 'Interne Durchwahlen, auch Extensions genannt.'
+      direct_inward_dialing_numbers:
+        label: 'Anschlussnummern des öffentlichen Telefonnetzes (DIDs und MSNs)'
+        description: 'Mit diesen Telefonnummern sind Sie aus dem öffentlichen Telefonnetz erreichbar.'
+      service_numbers:
+        label: 'Service Telefonnummern'
+        description: 'Spezielle Telefonnummern, die nich für interne Durchwahlen benutzt werden sollten (z.B. die Feuerwehr oder Polizei).'
+    name: 'Rufnummernbereich'
+    controller:
+      successfuly_created: 'Ein neuer Rufnummernbereich wurde angelegt.'
+      successfuly_updated: 'Der Rufnummernbereich wurde aktualisiert.'
+      successfuly_destroyed: 'Der Rufnummernbereich wurde gelöscht.'
+    index:
+      page_title: 'Rufnummernbereiche'
+      name: 'Name'
+      description: 'Beschreibung'
+      amount: 'Anzahl von Rufnummern'
+      phone_numbers: 'Telefonnummern'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Rufnummernbereich löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Rufnummernbereich für %{resource} anlegen'
+    show:
+      page_title: 'Rufnummernbereich anzeigen'
+      name: 'Name'
+      description: 'Beschreibung'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Rufnummernbereich löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Rufnummernbereiche anzeigen'
+    new:
+      page_title: 'Neuer Rufnummernbereich'
+    edit:
+      page_title: 'Rufnummernbereich "%{resource}" bearbeiten'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      description:
+        label: 'Beschreibung'
+        hint: ''
+      button: 'Absenden'

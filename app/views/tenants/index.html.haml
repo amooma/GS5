@@ -1,0 +1,6 @@
+- title t("tenants.index.page_title")
+
+- if @tenants.count > 0
+  = render "index_core", :tenants => @tenants
+
+= render :partial => 'shared/create_link', :locals => {:child_class => Tenant}

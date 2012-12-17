@@ -1,0 +1,7 @@
+de:
+  call_forward_cases:
+    always: 'immer'
+    busy: 'besetzt'
+    noanswer: 'keine Antwort'
+    offline: 'offline'
+    assistant: 'Chef-Sekretärin-Schaltung'

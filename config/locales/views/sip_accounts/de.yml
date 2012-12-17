@@ -1,0 +1,83 @@
+de:
+  sip_accounts:
+    name: 'SIP-Konto'
+    controller:
+      successfuly_created: 'Ein SIP-Konto für %{resource} wurde erstellt.'
+      successfuly_updated: 'Das SIP-Konto wurde aktualisiert.'
+      successfuly_destroyed: 'Das SIP-Konto wurde gelöscht.'
+    index:
+      page_title: 'SIP-Konten'
+      auth_name: 'Auth Name'
+      caller_name: 'Caller Name'
+      password: 'Passwort'
+      voicemail_pin: 'Anrufbeantworter PIN'
+      phone_numbers: 'Telefonnummern'
+      call_waiting: 'Anklopfen'
+      clir: 'Rufnummernunterdrückung (CLIR)'
+      clip: 'Rufnummernanzeige (CLIP)'
+      hotdeskable: 'Hot-Desk fähig'
+      clip_no_screening: 'Spezifische Rufnummernanzeige (CLIP -no screening-)'
+      callforward_rules_act_per_sip_account: 'Rufweiterleitungen gelten für das gesamte SIP-Konto'
+      online: 'Online'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen SIP-Konto löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neues SIP-Konto für %{resource} anlegen'
+    show:
+      page_title: 'SIP-Konto anzeigen'
+      auth_name: 'Auth Name'
+      caller_name: 'Caller Name'
+      password: 'Passwort'
+      voicemail_pin: 'Anrufbeantworter PIN'
+      call_waiting: 'Anklopfen'
+      clir: 'Rufnummernunterdrückung (CLIR)'
+      clip: 'Rufnummernanzeige (CLIP)'
+      hotdeskable: 'Hot-Desk fähig'
+      clip_no_screening: 'Spezifische Rufnummernanzeige (CLIP -no screening-)'
+      callforward_rules_act_per_sip_account: 'Rufweiterleitungen gelten für das gesamte SIP-Konto'
+      registration: 'Registrierung'
+      expires: 'Läuft ab'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen SIP-Konto löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle SIP-Konten anzeigen'
+    new:
+      page_title: 'Neues SIP-Konto'
+    edit:
+      page_title: 'SIP-Konto bearbeiten'
+    form:
+      auth_name:
+        label: 'Auth Name'
+        hint: ''
+      caller_name:
+        label: 'Caller Name'
+        hint: ''
+      password:
+        label: 'Passwort'
+        hint: ''
+      voicemail_pin:
+        label: 'Anrufbeantworter PIN'
+        hint: ''
+      call_waiting:
+        label: 'Anklopfen'
+        hint: ''
+      clir:
+        label: 'Rufnummernunterdrückung (CLIR)'
+        hint: ''
+      clip:
+        label: 'Rufnummernanzeige (CLIP)'
+        hint: ''
+      clip_no_screening:
+        label: 'Spezifische Rufnummernanzeige (CLIP -no screening-)'
+        hint: ''
+      hotdeskable: 
+        label: 'Hot-Desk fähig'
+        hint: ''
+      callforward_rules_act_per_sip_account: 
+        label: 'Rufweiterleitungen gelten für das gesamte SIP-Konto'
+        hint: ''
+      button: 'Absenden'

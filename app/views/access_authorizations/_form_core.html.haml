@@ -1,0 +1,11 @@
+.inputs
+  = f.input :name, :label => t('access_authorizations.form.name.label'), :hint => conditional_hint('access_authorizations.form.name.hint')
+  = f.input :login, :label => t('access_authorizations.form.login.label'), :hint => conditional_hint('access_authorizations.form.login.hint')
+  = f.input :pin, :label => t('access_authorizations.form.pin.label'), :hint => conditional_hint('access_authorizations.form.pin.hint')
+  - if SipAccount.count < 50
+    = f.association :sip_account, :label => t('callthroughs.form.sip_account.label'), :hint => conditional_hint('callthroughs.form.sip_account.hint')
+  - else
+    = f.input :sip_account_id, :label => t('callthroughs.form.sip_account_id.label'), :hint => conditional_hint('callthroughs.form.sip_account_id.hint')
+
+  = f.simple_fields_for :phone_numbers do |phone_number|
+    = render "phone_numbers/form_core", :f => phone_number

@@ -1,0 +1,4 @@
+en:
+  notifications:
+    new_pin:
+      subject: 'New PIN'

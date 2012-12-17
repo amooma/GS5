@@ -1,0 +1,22 @@
+- title t("access_authorizations.show.page_title")
+
+%p
+  %strong= t('access_authorizations.show.name') + ":"
+  = @access_authorization.name
+%p
+  %strong= t('access_authorizations.show.login') + ":"
+  = @access_authorization.login
+%p
+  %strong= t('access_authorizations.show.pin') + ":"
+  = @access_authorization.pin
+%p
+  %strong= t('access_authorizations.show.sip_account_id') + ":"
+  = @access_authorization.sip_account || t('access_authorizations.none')
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @parent, :child => @access_authorization }
+
+%h2= t('callthroughs.form.phone_numbers.label')
+- if @access_authorization.phone_numbers.count > 0
+  = render 'phone_numbers/index_core', :phone_numbers => @access_authorization.phone_numbers
+  %br
+= render :partial => 'shared/create_link', :locals => {:parent => @access_authorization, :child_class => PhoneNumber}

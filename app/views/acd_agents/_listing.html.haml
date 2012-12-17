@@ -1,0 +1,8 @@
+- amount_of_acd_agents = acd_agents.count
+- if amount_of_acd_agents > 0
+  - if amount_of_acd_agents < 30
+    = acd_agents.map{|acd_agent| acd_agent}.join(', ')
+  - else
+    = acd_agents.limit(15).map{|acd_agent| acd_agent}.join(', ') + ', '
+    = '[...]'
+    = acd_agents.offset(amount_of_acd_agents - 15).map{|acd_agent| acd_agent}.join(', ')

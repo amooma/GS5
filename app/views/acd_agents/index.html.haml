@@ -1,0 +1,6 @@
+- title t("acd_agents.index.page_title")
+
+- if @acd_agents && @acd_agents.count > 0
+  = render "index_core", :acd_agents => @acd_agents
+
+= render :partial => 'shared/create_link', :locals => {:parent => @automatic_call_distributor, :child_class => AcdAgent}

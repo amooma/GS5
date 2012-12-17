@@ -1,0 +1,50 @@
+de:
+  phone_models:
+    name: 'Telefonmodell'
+    controller:
+      successfuly_created: 'Ein Telefonmodell wurde erstellt.'
+      successfuly_updated: 'Das Telefonmodell wurde aktualisiert.'
+      successfuly_destroyed: 'Das Telefonmodell wurde gelöscht.'
+    index:
+      page_title: 'Telefonmodelle'
+      name: 'Name'
+      manufacturer_id: 'Hersteller'
+      product_manual_homepage_url: 'Betriebsanleitung URL'
+      product_homepage_url: 'Produkt-Homepage URL'
+      number_of_phones: 'Anzahl von Telefonen'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie dieses Telefonmodell löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+    show:
+      page_title: 'Telefonmodell anzeigen'
+      name: 'Name'
+      manufacturer_id: ''
+      manufacturer_id: 'Hersteller'
+      product_manual_homepage_url: 'Betriebsanleitung URL'
+      product_homepage_url: 'Produkt-Homepage URL'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie dieses Telefonmodell löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Telefonmodelle anzeigen'
+    new:
+      page_title: 'Neues Telefonmodell'
+    edit:
+      page_title: 'Telefonmodell bearbeiten'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      manufacturer_id:
+        label: 'Hersteller'
+        hint: ''
+      product_manual_homepage_url:
+        label: 'Betriebsanleitung URL'
+        hint: ''
+      product_homepage_url:
+        label: 'Produkt-Homepage URL'
+        hint: ''
+      button: 'Absenden'

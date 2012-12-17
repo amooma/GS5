@@ -1,0 +1,52 @@
+de:
+  voicemail_settings:
+    name: 'Anrufbeantworter Einstellungen'
+    controller:
+      successfuly_destroyed: 'Einstellungen wurden gelöscht.'
+      successfuly_created: 'Einstellungen wurden erstellt.'
+      successfuly_updated: 'Einstellungen wurden aktuallisiert.'
+    index:
+      page_title: 'Anrufbeantworter Einstellungen'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie die Einstellungen löschen möchten?'
+        destroy: 'Löschen'
+    show:
+      page_title: 'Anrufbeantworter Einstellungen'
+      greeting_path: 'Begrüßung'
+      name_path: 'Name'
+      flags: 'Flags'
+      notify: 'Benachrichtigung'
+      attachment: 'Datei anfügen'
+      mark_read: 'Als gelesen markieren'
+      purge: 'Löschen'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie die Einstellungen löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+    new:
+      page_title: 'Anrufbeantworter Einstellungen'
+    edit:
+      page_title: 'Anrufbeantworter Einstellungen'
+    form:
+      greeting:
+        label: 'Begrüßung'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      pin:
+        label: 'Anrufbeantworter PIN'
+        hint: ''
+      notify:
+        label: 'Benachrichtigung'
+        hint: 'Benachrichtigung per E-Mail'
+      attachment:
+        label: 'Datei anfügen'
+        hint: 'Datei an E-Mail anfügen'
+      mark_read:
+        label: 'Als gelesen markieren'
+        hint: 'Markieren als gelesen'
+      purge:
+        label: 'Löschen'
+        hint: 'Nachricht löschen'
+      button: 'Absenden'

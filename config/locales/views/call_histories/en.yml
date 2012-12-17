@@ -1,0 +1,67 @@
+en:
+  call_histories:
+    name: 'Call History'
+    controller:
+      successfuly_created: 'Successfully created call log entry.'
+      successfuly_updated: 'Successfully updated call log entry.'
+      successfuly_destroyed: 'Successfully destroyed call log entry.'
+    index:
+      page_title: 'Call History'
+      page_title_missed: 'Missed calls'
+      page_title_dialed: 'Placed calls'
+      page_title_received: 'Received calls'
+      page_title_forwarded: 'Forwarded calls'
+      count: 'Number of entries'
+      missed: 'Missed'
+      dialed: 'Placed'
+      received: 'Received'
+      forwarded: 'Forwarded'
+      all: 'All'
+      date_format: '%m/%d/%Y %H:%M'
+      date_today_format: '%H:%M'
+      forwarded_by: 'via'
+      navigation:
+        missed: 'Missed:%{calls}'
+        dialed: 'Placed:%{calls}'
+        received: 'Received:%{calls}'
+        forwarded: 'Forwarded:%{calls}'
+        all: 'All:%{calls}'
+      actions:
+        confirm: 'Are you sure you want to delete this call log entry?'
+        confirm_selected: 'Are you sure you want to delete all selected entries?'
+        destroy: 'Delete'
+        destroy_multiple: 'Delete selected entries'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New call log entry for %{resource}'
+        call: 'Call'
+    show:
+      page_title: 'Call History'
+      name: 'Name'
+      description: 'Description'
+      actions:
+        confirm: 'Are you sure you want to delete this call log entry?'
+        destroy: 'Delete call log entry'
+        edit: 'Edit call log entry'
+        view_all: 'View all call log entries'
+    new:
+      page_title: 'New call log entry'
+    edit:
+      page_title: 'Editing call log "%{resource}"'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      description:
+        label: 'Description'
+        hint: ''
+      button: 'Submit'
+    call_results:
+      UNSPECIFIED: ''
+      ORIGINATOR_CANCEL: 'Cancelled'
+      UNALLOCATED_NUMBER: 'Unallocated number'
+      NO_USER_RESPONSE: 'No user response'
+      NOANSWER: 'No answer'
+      USER_NOT_REGISTERED: 'Offline'
+      

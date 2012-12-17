@@ -1,0 +1,37 @@
+en:
+  phone_sip_accounts:
+    name: "SIP accounts of a phone"
+    controller:
+      successfuly_created: 'Successfully connected a new SIP account to a phone.'
+      successfuly_destroyed: 'Successfully deleted a SIP account on a phone.'
+      no_existing_sip_accounts_warning: 'There are no SIP accounts to connect to. Please create a new SIP account first.'
+    index:
+      page_title: "SIP accounts of a phone"
+      phone_id: 'Phone'
+      sip_account_id: 'SIP account'
+      position: 'Position'
+      actions:
+        confirm: 'Are you sure you want to delete this SIP account on this phone?'
+        destroy: 'Delete'
+        edit: 'Edit' 
+        show: 'View'
+        create: 'New'
+        create_for: 'New SIP account connection for %{resource}'
+    show:
+      page_title: 'Show SIP account of a phone'
+      phone_id: 'Phone'
+      sip_account_id: 'SIP account'
+      position: 'Position'
+      actions:
+        confirm: 'Are you sure you want to delete this SIP account on this phone?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New SIP account on a phone'
+      actions:
+    form:
+      sip_account_id:
+        label: 'SIP account'
+        hint: ''
+      button: 'Submit'

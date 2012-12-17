@@ -1,0 +1,15 @@
+%table
+  %tr
+    %th= t('whitelists.index.name')
+    %th= t('whitelists.index.phone_numbers')
+
+  - reset_cycle
+  - for whitelist in whitelists
+    %tr{:class => cycle('odd', 'even')}
+      %td= whitelist.name || '-'
+      %td
+        = render 'phone_numbers/listing', :phone_numbers => whitelist.phone_numbers
+        %br
+        = render :partial => 'shared/create_link', :locals => {:parent => whitelist, :child_class => PhoneNumber, :short_link => true}
+
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => whitelist.whitelistable, :child => whitelist}

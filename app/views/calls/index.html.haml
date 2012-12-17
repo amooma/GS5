@@ -1,0 +1,6 @@
+- title t("calls.index.page_title")
+
+- if @calls.count > 0
+  = render "index_core", :calls => @calls
+
+= render :partial => 'shared/create_link', :locals => {:parent => @parent, :child_class => Call}

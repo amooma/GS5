@@ -1,0 +1,7 @@
+- title t("softkeys.show.page_title")
+
+%p
+  %strong= t('softkeys.show.function') + ":"
+  =@softkey.to_s
+    
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @softkey.sip_account, :child => @softkey }

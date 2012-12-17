@@ -1,0 +1,65 @@
+de:
+  gs_nodes:
+    name: 'GS Knoten'
+    controller:
+      successfuly_created: 'Ein GS Knoten wurde erstellt.'
+      successfuly_updated: 'Der GS Knoten wurde aktualisiert.'
+      successfuly_destroyed: 'Der GS Knoten wurde gelöscht.'
+    index:
+      page_title: 'GS Knoten auflisten'
+      name: 'Name'
+      ip_address: 'IP-Adresse'
+      push_updates_to: 'Änderungen an diesen Konten senden?'
+      accepts_updates_from: 'Änderungen von diesem Konten akzeptieren?'
+      site: 'Standort'
+      element_name: 'Elementenname'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen GS Knoten löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neuer GS Knoten für %{resource}'
+    show:
+      page_title: 'GS Knoten anzeigen'
+      name: 'Name'
+      ip_address: 'IP-Adresse'
+      push_updates_to: 'Änderungen an diesen Konten senden?'
+      accepts_updates_from: 'Änderungen von diesem Konten akzeptieren?'
+      site: 'Standort'
+      element_name: 'Elementenname'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen GS Knoten löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neuer GS Knoten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'GS Knoten bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      ip_address:
+        label: 'IP-Adresse'
+        hint: ''
+      site:
+        label: 'Standort'
+        hint: 'z.B. http://0.0.0.0:3000/'
+      element_name:
+        label: 'Elementenname'
+        hint: ''
+      push_updates_to:
+        label: 'Änderungen senden'
+        hint: ''
+      accepts_updates_from:
+        label: 'Änderungen empfangen'
+        hint: ''
+      button: 'Absenden'

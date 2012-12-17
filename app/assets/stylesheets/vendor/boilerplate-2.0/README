@@ -1,0 +1,16 @@
+HTML5 ✰ Boilerplate 2.0 (7467f9c0417a0c1f9863e2d000aad73f34836ef2)
+
+style.css contains a reset, font normalization and some base styles.
+
+Credit is left where credit is due.
+Much inspiration was taken from these projects:
+- yui.yahooapis.com/2.8.1/build/base/base.css
+- camendesign.com/design/
+- praegnanz.de/weblog/htmlcssjs-kickstart
+
+Implementation to Compass as part of Survival Kit by Mario "Kuroir" Ricalde.
+
+Notes:
+
+  - Not implementing Non-semantic helper classes. Use Compass builts-in.
+  - 1.0 and 2.0 are very similar. With 2.0 you save a couple of bytes.. maybe not worth the change? 

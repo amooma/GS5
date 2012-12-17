@@ -1,0 +1,58 @@
+de:
+  callthroughs:
+    none: 'keiner'
+    name: 'Callthrough'
+    controller:
+      successfuly_created: 'Ein neuer Callthrough wurde erstellt.'
+      successfuly_updated: 'Der Callthrough wurde aktualisiert.'
+      successfuly_destroyed: 'Der Callthrough wurde gelöscht.'
+    index:
+      page_title: 'Callthrough'
+      name: 'Name'
+      sip_account_id: 'SIP-Konto'
+      phone_numbers: 'Telefonnummern'
+      access_authorized_phone_numbers: 'Zugelassene Telefonnummern'
+      whitelist_phone_numbers: 'Positivliste für Zielrufnummern'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Callthrough löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neuen Callthrough für %{resource} anlegen'
+    show:
+      page_title: 'Callthrough anzeigen'
+      name: 'Name'
+      sip_account_id: 'SIP-Konto'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Callthrough löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Callthrough anzeigen'
+    new:
+      page_title: 'Neuen Callthrough anlegen'
+    edit:
+      page_title: 'Callthrough bearbeiten'
+      actions:
+        edit: 'Bearbeiten'
+        view_all: 'Alle Callthrough anzeigen'
+    form:
+      phone_numbers:
+        label: 'Telefonnummern'
+        hint: 'Unter diesen Telefonnummern ist dieser Callthrough erreichbar.'
+      access_authorizations:
+        label: 'Zugangsberechtigungen'
+        hint: 'Definiert, welche Telefonnummern bzw. Login/PIN Kombinationen diesen Callthrough benuzten dürfen.'
+      whitelists:
+        label: 'Positivliste für Zielrufnummern'
+        hint: "Wenn hier Zielrufnummern gesetzt sind, können nur diese Ziele angerufen werden."
+      name:
+        label: 'Name'
+        hint: ''
+      sip_account:
+        label: 'SIP-Konto'
+        hint: 'Wenn angegeben, werden alle Anrufe dieses Callthrough mit diesem SIP-Konto durchgeführt.'        
+      sip_account_id:
+        label: 'SIP-Konto ID'
+        hint: 'Die SIP-Konto ID finden Sie in der URL des entsprechenden SIP-Kontos.'
+      button: 'Absenden'

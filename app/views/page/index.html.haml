@@ -1,0 +1,16 @@
+- title "Gemeinschaft #{GEMEINSCHAFT_VERSION}"
+
+%div
+  %h3 Current tenant
+  - if current_user && current_user.current_tenant
+    %strong= current_user.current_tenant
+  - else
+    %strong= "(none)"
+
+%div
+  %h3 Current user groups
+  %ul
+    - (current_user.try(:user_groups) || []).each do |group|
+      %li
+        %strong= "#{group.name}"
+        = "(from tenant: %s)" % group.tenant

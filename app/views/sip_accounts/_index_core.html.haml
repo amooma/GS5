@@ -1,0 +1,28 @@
+%table
+  %tr
+    %th= t('sip_accounts.index.online')
+    %th= t('sip_accounts.index.caller_name')
+    %th= t('sip_accounts.index.phone_numbers')
+    %th= t('phones.name')
+
+  - reset_cycle
+  - for sip_account in sip_accounts
+    %tr{:class => cycle('odd', 'even')}
+      %td
+        - if sip_account.registration
+          %img{:src => '/assets/icons/phone-down-green-32x.png'}
+        - else
+          %img{:src => '/assets/icons/phone-down-grey-32x.png'}
+      %td
+        = sip_account.caller_name
+      - phone_numbers = sip_account.phone_numbers
+      %td
+        - if sip_account.phone_numbers.count > 0
+          = render 'phone_numbers/listing', :phone_numbers => sip_account.phone_numbers.order(:number)
+          %br
+        = render :partial => 'shared/create_link', :locals => {:parent => sip_account, :child_class => PhoneNumber, :short_link => true}
+
+      %td
+        - sip_account.phones.each do |phone|
+          = link_to phone.to_s, method( :"#{phone.phoneable_type.underscore}_phone_path" ).( phone.phoneable_id, phone )
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => sip_account.sip_accountable, :child => sip_account}

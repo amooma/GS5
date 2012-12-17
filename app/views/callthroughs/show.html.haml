@@ -1,0 +1,27 @@
+- title t("callthroughs.show.page_title")
+
+%p
+  %strong= t('callthroughs.show.name') + ":"
+  = @callthrough.name
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @callthrough.tenant, :child => @callthrough }
+
+
+%h2= t('callthroughs.form.phone_numbers.label')
+- if @callthrough.phone_numbers.count > 0
+  = render 'phone_numbers/index_core', :phone_numbers => @callthrough.phone_numbers
+  %br
+= render :partial => 'shared/create_link', :locals => {:parent => @callthrough, :child_class => PhoneNumber}
+
+%h2= t('callthroughs.form.access_authorizations.label')
+- if @callthrough.access_authorizations.count > 0
+  = render 'access_authorizations/index_core', :access_authorizations => @callthrough.access_authorizations
+  %br
+= render :partial => 'shared/create_link', :locals => {:parent => @callthrough, :child_class => AccessAuthorization}
+
+- if CALLTHROUGH_HAS_WHITELISTS == true
+  %h2= t('callthroughs.form.whitelists.label')
+  - if @callthrough.whitelisted_phone_numbers.count > 0
+    = render 'whitelists/index_core', :whitelists => @callthrough.whitelists
+    %br
+  = render :partial => 'shared/create_link', :locals => {:parent => @callthrough, :child_class => Whitelist}

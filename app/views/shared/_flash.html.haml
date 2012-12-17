@@ -1,0 +1,19 @@
+- flash.each do |type, msg|
+  .flash{:class => type}
+    .light
+      .sign= resolve_flash_sign(type)
+      .message= msg
+        
+
+-# These are the available types:
+-# 
+-# .flash.notice
+-#   .light
+-#     .sign i
+-#     .message Lorem ipsum dolor sit amet, consectetur adipisicing eli.w
+-# 
+-# .flash.warning
+-#   .light
+-#     .sign !
+-#     .message Lorem ipsum dolor sit amet, consectetur adipisicing eli.w
+

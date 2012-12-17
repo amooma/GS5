@@ -1,0 +1,194 @@
+- title nil
+
+%section.phone-book-entry
+  .content
+    %header
+      %h1.username
+        %a= @phone_book_entry
+      - if !@phone_book_entry.organization.blank?
+        .work
+          %a= @phone_book_entry.organization
+          - if !@phone_book_entry.department.blank?
+            \/
+            = @phone_book_entry.department
+          - if !@phone_book_entry.job_title.blank?
+            \/
+            = @phone_book_entry.job_title
+      .personal
+        - if !@phone_book_entry.nickname.blank?
+          %span.nickname
+            a.k.a
+            %strong= @phone_book_entry.nickname
+        - if @phone_book_entry.birthday    
+          %span.birthday
+            = l(@phone_book_entry.birthday)
+      .tags
+        %a Developer
+        ,
+        %a Worked With
+        ,
+        %a Friend
+    %section.activity
+      %h2 User Log
+      = form_tag '/entry-whatever' do
+        %textarea{ :placeholder => "Leave a comment ..." }
+      .comment
+        = image_tag @phone_book_entry.image_url(:mini).to_s, :class => 'display'
+        .info
+          %span.commenter Random User
+          %span.time at 10:00 of Today
+        .body
+          I'm really tired and I still have to pack part of my baggage... 
+      - 3.times do
+        .entry.voice-message
+          %span.motive
+            Stefan Wintermeyer left you a voice message 4 minutes ago.
+          %span.timestamp
+            10:30 03/11/2011
+        .entry.phone
+          %span.motive
+            Called Stefan Wintermeyer at 
+            %a Work
+            with a duration of 5 minutes.
+          %span.timestamp
+            10:30 03/11/2011
+        .comment
+          = image_tag @phone_book_entry.image_url(:mini).to_s, :class => 'display'
+          .info
+            %span.commenter Random User
+            %span.time at 10:00 of Today
+          .body
+            I'm really tired and I still have to pack part of my baggage...
+        .entry.fax
+          %span.motive
+            Stefan Wintermeyer sent you a fax with 3 pages.
+          %span.timestamp
+            10:30 03/11/2011
+
+        .entry.phone-down
+          %span.motive
+            Missed call from Stephan Wintermeyer.
+          %span.timestamp
+            10:30 03/11/2011
+        
+  .sidebar
+    = image_tag @phone_book_entry.image_url(:profile).to_s, :class => 'display'
+    %p.description
+      = @phone_book_entry.description
+    .widget.phones
+      - @phone_book_entry.phone_numbers.each do |phone_number|
+        - case phone_number.name
+        - when /fax/
+          .fax
+            %a= phone_number
+            %span= phone_number.name
+        - when /home/
+          .home
+            %a= phone_number
+            %span= phone_number.name
+        - when /mobile/
+          .cellphone
+            %a= phone_number
+            %span= phone_number.name  
+        - when /office/
+          .office
+            %a= phone_number
+            %span= phone_number.name
+        - else
+          .phone
+            %a= phone_number
+            %span= phone_number.name
+      = link_to t('phone_book_entries.show.manage_phone_numbers'), phone_book_entry_phone_numbers_path(@phone_book_entry)  
+
+    .widget.adresses
+      - @phone_book_entry.addresses.each do |address|
+        .home
+          %strong
+            - if !address.line1.blank?
+              = address.line1
+              %br
+            - if !address.line2.blank?
+              = address.line1
+              %br
+            - if !address.street.blank?
+              = address.street
+              %br
+            - if !address.city.blank?
+              = "#{address.city} #{address.zip_code}"
+              %br
+            - if !address.country.blank?
+              = address.country.to_s
+              %br
+          / %span Home
+      / .office
+    .widget.social
+      - if !@phone_book_entry.homepage_organization.blank?
+        .home
+          %a= @phone_book_entry.homepage_organization
+          %span www
+      - if !@phone_book_entry.homepage_personal.blank?
+        .home
+          %a= @phone_book_entry.homepage_personal
+          %span www
+      - if !@phone_book_entry.twitter_account.blank?
+        .twitter
+          %a= @phone_book_entry.twitter_account
+          %span Twitter
+      - if !@phone_book_entry.google_plus_account.blank?
+        .google_plus
+          %a= @phone_book_entry.google_plus_account
+          %span Google+
+      - if !@phone_book_entry.facebook_account.blank?
+        .facebook
+          %a= @phone_book_entry.facebook_account
+          %span Facebook
+      - if !@phone_book_entry.xing_account.blank?
+        .xing
+          %a= @phone_book_entry.xing_account
+          %span Xing
+      - if !@phone_book_entry.linkedin_account.blank?
+        .linkedin
+          %a= @phone_book_entry.linkedin_account
+          %span LinkedIn
+      - if !@phone_book_entry.mobileme_account.blank?
+        .mobileme
+          %a= @phone_book_entry.mobileme_account
+          %span MobileMe
+
+/ = debug @phone_book_entry.attributes
+
+
+/ %p
+/   %strong= t('phone_book_entries.show.first_name') + ":"
+/   = @phone_book_entry.first_name
+/ %p
+/   %strong= t('phone_book_entries.show.middle_name') + ":"
+/   = @phone_book_entry.middle_name
+/ %p
+/   %strong= t('phone_book_entries.show.last_name') + ":"
+/   = @phone_book_entry.last_name
+/ %p
+/   %strong= t('phone_book_entries.show.title') + ":"
+/   = @phone_book_entry.title
+/ %p
+/   %strong= t('phone_book_entries.show.nickname') + ":"
+/   = @phone_book_entry.nickname
+/ %p
+/   %strong= t('phone_book_entries.show.organization') + ":"
+/   = @phone_book_entry.organization
+/ %p
+/   %strong= t('phone_book_entries.show.department') + ":"
+/   = @phone_book_entry.department
+/ %p
+/   %strong= t('phone_book_entries.show.job_title') + ":"
+/   = @phone_book_entry.job_title
+/ 
+/ %p
+/   = link_to t('phone_book_entries.show.actions.edit'), edit_phone_book_phone_book_entry_path( @phone_book_entry.phone_book, @phone_book_entry )
+/   |
+/   - if can? :destroy, @phone_book_entry
+/     = link_to t('phone_book_entries.show.actions.destroy'), phone_book_phone_book_entry_path( @phone_book_entry.phone_book, @phone_book_entry ), :confirm => t('phone_book_entries.show.actions.confirm'), :method => :delete
+/ 
+/ - if @phone_book_entry.phone_numbers.count > 0
+/   = render "phone_numbers/index_core", :phone_numbers => @phone_book_entry.phone_numbers
+/ 

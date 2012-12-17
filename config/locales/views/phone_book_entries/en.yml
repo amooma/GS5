@@ -1,0 +1,161 @@
+en:
+  phone_book_entries:
+    name: "Phone Book Entries"
+    controller:
+      successfuly_created: 'Successfully created phone book entry "%{resource}".'
+      successfuly_updated: 'Successfully updated phone book entry "%{resource}".'
+      successfuly_destroyed: 'Successfully destroyed phone book entry.'
+    index:
+      page_title: 'Phone book entries'
+      phone_book_id: 'Phone book'
+      first_name: 'First name'
+      middle_name: 'Middle name'
+      last_name: 'Last name'
+      title: 'Title'
+      nickname: 'Nickname'
+      organization: 'Organization'
+      is_organization: 'Is organization'
+      department: 'Department'
+      job_title: 'Job title'
+      is_male: 'Is male'
+      birthday: 'Birthday'
+      birth_name: 'Birth name'
+      state: 'State'
+      description: 'Description'
+      position: 'Position'
+      homepage_personal: 'Homepage personal'
+      homepage_organization: 'Homepage organization'
+      twitter_account: 'Twitter account'
+      facebook_account: 'Facebook account'
+      google_plus_account: 'Google+ account'
+      xing_account: 'Xing account'
+      linkedin_account: 'LinkedIn account'
+      mobileme_account: 'iCloud account'
+      more_numbers: 'plus %{numbers} more'
+      available_phone_books: 'Available phone books:'
+      create_new_phone_book_entry: 'create a new entry'
+      actions:
+        confirm: 'Are you sure you want to delete this phone book entry?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New phone book entry for %{resource}'
+    show:
+      page_title: 'Phone book entry for "%{resource}"'
+      phone_book_id: 'Phone book'
+      first_name: 'First name'
+      middle_name: 'Middle name'
+      last_name: 'Last name'
+      title: 'Title'
+      nickname: 'Nickname'
+      organization: 'Organization'
+      is_organization: 'Is organization'
+      department: 'Department'
+      job_title: 'Job title'
+      is_male: 'Is male'
+      birthday: 'Birthday'
+      birth_name: 'Birth name'
+      state: 'State'
+      description: 'Description'
+      position: 'Position'
+      homepage_personal: 'Homepage personal'
+      homepage_organization: 'Homepage organization'
+      twitter_account: 'Twitter account'
+      facebook_account: 'Facebook account'
+      google_plus_account: 'Google+ account'
+      xing_account: 'Xing account'
+      linkedin_account: 'LinkedIn account'
+      mobileme_account: 'iCloud account'
+      manage_phone_number: 'Manage phone number.'
+      actions:
+        confirm: 'Are you sure you want to delete this phone book entry?'
+        destroy: 'Delete phone book entry'
+        edit: 'Edit phone book entry'
+        view_all: 'View all phone book entries'
+    new:
+      page_title: 'New entry'
+    edit:
+      page_title: 'Editing phone book entry'
+    form:
+      phone_book_id:
+        label: 'Phone book'
+        hint: ''
+      first_name:
+        label: 'First name'
+        hint: ''
+      middle_name:
+        label: 'Middle name'
+        hint: ''
+      gender:
+        label: 'Gender'
+        hint: ''
+        male: "Male"
+        female: "Female"
+      last_name:
+        label: 'Last name'
+        hint: ''
+      title:
+        label: 'Academic title'
+        hint: 'Dr.'
+      nickname:
+        label: 'Nickname'
+        hint: ''
+      organization:
+        label: 'Company name'
+        hint: 'Organization'
+      is_organization:
+        label: 'Is organization'
+        hint: ''
+      department:
+        label: 'Department'
+        hint: ''
+      job_title:
+        label: 'Job title'
+        hint: 'CEO'
+      is_male:
+        label: 'Is male'
+        hint: ''
+      birthday:
+        label: 'Birthday'
+        hint: ''
+      birth_name:
+        label: 'Name at birth'
+        hint: ''
+      state:
+        label: 'State'
+        hint: ''
+      description:
+        label: 'Description'
+        hint: ''
+      position:
+        label: 'Position'
+        hint: ''
+      homepage_personal:
+        label: 'Personal Home Page'
+        hint: ''
+      homepage_organization:
+        label: 'Organization Home Page'
+        hint: 'http://www.example.com'
+      twitter_account:
+        label: 'Twitter account'
+        hint: '@example'
+      facebook_account:
+        label: 'Facebook account'
+        hint: ''
+      google_plus_account:
+        label: 'Google+ account'
+        hint: ''
+      xing_account:
+        label: 'Xing account'
+        hint: ''
+      linkedin_account:
+        label: 'LinkedIn account'
+        hint: ''
+      mobileme_account:
+        label: 'iCloud account'
+        hint: ''
+      image:
+        label: 'Photo'
+        hint: 'Avatar photo'
+      button: 'Submit'

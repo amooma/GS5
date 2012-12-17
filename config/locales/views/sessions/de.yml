@@ -1,0 +1,15 @@
+de:
+  sessions:
+    controller:
+      successfully_created: 'Sie sind jetzt als Benutzer "%{resource}" angemeldet.'
+      successfully_destroyed: 'Abgemeldet.'
+    new:
+      page_title: 'Anmeldung'
+    form:
+      email: 'E-Mail oder Benutzer-Name'
+      password: 'Passwort'
+      reset_password: 'Ich habe mein Passwort vergessen'
+    flash_messages:
+      invalid_email_or_password: 'Ungültige Anmeldedaten. Bitte versuchen Sie es noch einmal und achten Sie beim Passwort auf Groß- und Kleinschreibung.'
+      password_recovery_successful: 'Ein neues Passwort wurde an Ihre registrierte E-Mail-Addresse gesendet.'
+      password_recovery_failed: 'Fehler beim setzten des Passwortes.'

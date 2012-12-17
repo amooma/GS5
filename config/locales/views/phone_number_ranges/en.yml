@@ -1,0 +1,51 @@
+en:
+  phone_number_ranges:
+    ranges:
+      internal_extensions:
+        label: 'Internal extensions'
+        description: 'These are your internal extensions.'
+      direct_inward_dialing_numbers:
+        label: 'Direct inward dialing numbers (DIDs and MSNs)'
+        description: 'These are the phone numbers which have to be dialed from the PSTN to access your PBX.'
+      service_numbers:
+        label: 'Service numbers'
+        description: 'Numbers for special services (e.g. emergency numbers). It is not possible to use one of these numbers as an internal extension.'
+    name: 'Phone number range'
+    controller:
+      successfuly_created: 'Successfully created phone number range.'
+      successfuly_updated: 'Successfully updated phone number range.'
+      successfuly_destroyed: 'Successfully destroyed phone number range.'
+    index:
+      page_title: 'Phone number ranges'
+      name: 'Name'
+      description: 'Description'
+      amount: 'Amount of numbers'
+      phone_numbers: 'Phone numbers'
+      actions:
+        confirm: 'Are you sure you want to delete this phone number range?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New phone number range for %{resource}'
+    show:
+      page_title: 'Show phone number range'
+      name: 'Name'
+      description: 'Description'
+      actions:
+        confirm: 'Are you sure you want to delete this phone number range?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View'
+    new:
+      page_title: 'New phone number range'
+    edit:
+      page_title: 'Editing phone number range "%{resource}"'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      description:
+        label: 'Description'
+        hint: ''
+      button: 'Submit'

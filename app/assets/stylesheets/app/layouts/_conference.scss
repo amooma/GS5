@@ -1,0 +1,136 @@
+// Conference
+// ----------------------------------------
+
+// The Usual Box with Mute, Cross
+.actor {
+  @include clearfix;
+  @include gradient(#FDFDFD, #EFEFEF);
+  @include size(auto, 50px,6px, 1px 0 1px 0);
+  border-bottom:1px solid #E3E3E8;
+  border-top:1px solid #FFF;
+  img {
+    @extend .ext-bradius-inner;
+    float:left;
+    margin-right:6px;
+  }
+  .info {
+    .name {
+      display:block;
+      font-size:size(15px);
+      width:188px;
+    }
+    .status {
+      color:#818181;
+    }
+    float:left;
+  }
+  .voice-actions {
+    float:right;
+  }
+}
+
+// Audio Controls.
+.voice-actions {
+  padding:10px 0;
+  text-align:right;
+  width:100px;
+  .make.speaker {
+    @include image-replace('icons/microphone-16x.png');
+    display:inline-block;
+  }
+  .make.listener {
+    @include image-replace('icons/headphones-16x.png');
+    display:inline-block;
+  }
+
+  .voice {
+    &.muted {
+      @include image-replace('icons/mute-16x.png');
+      display:inline-block;
+    }
+    &.unmuted {
+      @include image-replace('icons/unmute-16x.png');
+      display:inline-block;
+    }
+  }
+  .remove {
+    @include image-replace('icons/cross-16x.png');
+    display:inline-block;
+  }
+  a {
+    margin:0 5px;
+    opacity:0.6;
+    &:hover { opacity:1.0;}
+  }
+}
+
+
+.conference {
+  @include pie-clearfix();
+  .panel {
+    @include box-shadow(1px 1px 0px #FFF inset, 1px 1px 1px #EDEDED);
+    background:#F7F7F7;
+    border:1px solid #E3E3E8;
+    float:left;
+    margin: 0 10px;
+    width: 303px;
+    &.speakers {
+      header { @include gradient(#FFF, #F3F3DE); }
+      h3 { background:transparent image-url('icons/microphone-32x.png') left top no-repeat; }
+    }
+    &.listeners {
+      header { @include gradient(#FFF, #DCEAF2); }
+      h3 { background:transparent image-url('icons/headphones-32x.png') left top no-repeat; }
+    }
+    &.log {
+      header { @include gradient(#FFF, #E7E7E7); }
+      h3 { background:transparent image-url('icons/clock-32x.png') left top no-repeat; }
+    }
+  }
+  .first { margin-left:0;}
+  .last { margin-right:0;}
+  header {
+    @include box-shadow(1px 1px 0px #FFF inset, 0px 1px 0px #FFF);
+    border-bottom:1px solid #E3E3E8;
+    padding:10px;
+  }
+  h3 {
+    font-size:size(24px);
+    font-weight:normal;
+    margin:0;
+    opacity:0.8;
+    padding:2px 2px 2px 43px;
+  }
+  .message {
+    @include gradient( #EEEEEE, #fff);
+    border-bottom:1px solid #E3E3E8;
+    padding:10px;
+    input {
+      @include input-effects;
+      @include size(283px, auto, 5px, 1px solid #E3E3E8 );
+      color:#696969;
+    }
+  }
+  .actors, .messages {
+    height:290px; // This should be X times the amount of items
+    overflow:auto;
+  }
+}
+
+.log {
+  .messages {
+    color:#484848;
+    div {
+      background:#FFF;
+      border-bottom:1px solid #E3E3E8;
+      border-top:1px solid #FFF;
+      padding:5px 10px;
+    }
+    .status {
+      background:#F5F5F5;
+    }
+    .name {
+      font-weight:bold;
+    }
+  }
+}

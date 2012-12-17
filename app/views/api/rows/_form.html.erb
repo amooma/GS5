@@ -1,0 +1,21 @@
+<%= simple_form_for(@row) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="inputs">
+    <%= f.input :user_name %>
+    <%= f.input :last_name %>
+    <%= f.input :middle_name %>
+    <%= f.input :first_name %>
+    <%= f.input :office_phone_number %>
+    <%= f.input :internal_extension %>
+    <%= f.input :mobile_phone_number %>
+    <%= f.input :fax_phone_number %>
+    <%= f.input :email %>
+    <%= f.input :pin %>
+    <%= f.input :photo_file_name %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

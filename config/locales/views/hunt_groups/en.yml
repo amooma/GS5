@@ -1,0 +1,57 @@
+en:
+  hunt_groups:
+    name: 'Hunt group'
+    strategies:
+      ring_all: 'Ring all'
+      ring_recursively: 'Ring recursively'
+    controller:
+      successfuly_created: 'Successfully created hunt group.'
+      successfuly_updated: 'Successfully updated hunt group.'
+      successfuly_destroyed: 'Successfully destroyed hunt group.'
+    index:
+      page_title: 'Hunt groups'
+      name: 'Name'
+      strategy: 'Strategy'
+      seconds_between_jumps: 'S.b.jumps'
+      phone_numbers: 'Phone numbers'
+      hunt_group_members: 'Members'
+      actions:
+        confirm: 'Are you sure you want to delete this hunt group?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New hunt group for %{resource}'
+    show:
+      page_title: 'Show hunt group'
+      name: 'Name'
+      strategy: 'Strategy'
+      seconds_between_jumps: 'Seconds between jumps'
+      phone_numbers: 'Phone numbers'
+      hunt_group_members: 'Members'
+      actions:
+        confirm: 'Are you sure you want to delete this hunt group?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New hunt group'
+    edit:
+      page_title: 'Editing hunt group'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      strategy:
+        label: 'Strategy'
+        hint: ''
+      seconds_between_jumps:
+        label: 'Seconds between jumps'
+        hint: 'Set when the strategy is not "Ring all".'
+      phone_numbers:
+        label: 'Phone numbers'
+        hint: ''
+      hunt_group_members:
+        label: 'Members of this hunt group'
+        hint: ''
+      button: 'Submit'

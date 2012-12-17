@@ -1,0 +1,19 @@
+- title t("hunt_group_members.show.page_title")
+
+%p
+  %strong= t('hunt_group_members.show.name') + ":"
+  = @hunt_group_member.name
+%p
+  %strong= t('hunt_group_members.show.active') + ":"
+  = @hunt_group_member.active
+%p
+  %strong= t('hunt_group_members.show.can_switch_status_itself') + ":"
+  = @hunt_group_member.can_switch_status_itself
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @hunt_group, :child => @hunt_group_member }
+
+%h2= t('hunt_group_members.form.phone_numbers.label')
+- if @hunt_group_member.phone_numbers.count > 0
+  = render 'phone_numbers/index_core', :phone_numbers => @hunt_group_member.phone_numbers
+  %br
+= render :partial => 'shared/create_link', :locals => {:parent => @hunt_group_member, :child_class => PhoneNumber}

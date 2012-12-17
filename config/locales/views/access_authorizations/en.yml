@@ -1,0 +1,48 @@
+en:
+  access_authorizations:
+    name: 'Access authorization'
+    controller:
+      successfuly_created: 'Successfully created access authorization.'
+      successfuly_updated: 'Successfully updated access authorization.'
+      successfuly_destroyed: 'Successfully destroyed access authorization.'
+    index:
+      page_title: 'Access authorizations'
+      name: 'Name'
+      login: 'Login'
+      pin: 'PIN'
+      actions:
+        confirm: 'Are you sure you want to delete this access authorization?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New access authorization for %{resource}'
+    show:
+      page_title: 'Show access authorization'
+      name: 'Name'
+      login: 'Login'
+      pin: 'PIN'
+      index_phone_numbers: 'Phone numbers'
+      actions:
+        confirm: 'Are you sure you want to delete this access authorization?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New access authorization'
+    edit:
+      page_title: 'Editing access authorization'
+      actions:
+        edit: 'Edit'
+        view_all: 'View All'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      login:
+        label: 'Login'
+        hint: ''
+      pin:
+        label: 'PIN'
+        hint: ''
+      button: 'Submit'

@@ -1,0 +1,88 @@
+!!! XML
+%gemeinschaft_sync{ :date => Time.now, :newer_as => @newer_as, :class => @request_class }
+  %node{ :id => @node.id, :ip_address => @node.ip_address, :name => @node.name }
+
+  - if !@tenants.blank?
+    %tenants
+      - @tenants.each do |tenant|
+        %tenant{ :name => tenant.name }
+
+  - if !@user_groups.blank?
+    %user_groups
+      - @user_groups.each do |user_group|
+        %user_group{ :name => user_group.name, :description => user_group.description, :position => user_group.position, :tenant => user_group.tenant.try(:name), :created_at => user_group.created_at, :updated_at => user_group.updated_at }
+
+  - if !@users.blank?
+    %users
+      - @users.each do |user|
+        %user{ :user_name => user.user_name, :first_name => user.first_name, :middle_name => user.middle_name, :last_name => user.last_name, :password_digest => user.password_digest, :pin_salt => user.pin_salt, :pin_hash => user.pin_hash, :male => user.male.to_s, :send_voicemail_as_email_attachment => user.send_voicemail_as_email_attachment.to_s, :uuid => user.uuid, :language => user.language.try(:code), :importer_checksum => user.importer_checksum, :email => user.email, :created_at => user.created_at, :updated_at => user.updated_at, :current_tenant => user.current_tenant.try(:name), :gs_node => user.gs_node.try(:name) }
+
+  - if !@user_group_memberships.blank?        
+    %user_group_memberships
+      - @user_group_memberships.each do |membership|
+        %user_group_membership{ :user_group => membership.user_group.try(:name), :user_uuid => membership.user.try(:uuid), :state => membership.state, :created_at => membership.created_at, :updated_at => membership.updated_at }
+
+  - if !@sip_accounts.blank?
+    %sip_accounts
+      - @sip_accounts.each do |sip_account|
+        %sip_account{ :sip_accountable_type => sip_account.sip_accountable_type, :sip_accountable_uuid => sip_account.sip_accountable.try(:uuid), :uuid => sip_account.uuid, :auth_name => sip_account.auth_name, :caller_name => sip_account.caller_name, :password => sip_account.password, :voicemail_pin => sip_account.voicemail_pin, :created_at => sip_account.created_at, :updated_at => sip_account.updated_at, :tenant => sip_account.tenant.try(:name), :sip_domain => sip_account.sip_domain.try(:host), :call_waiting => sip_account.call_waiting.to_s, :clir => sip_account.clir.to_s, :clip_no_screening => sip_account.clip_no_screening, :clip => sip_account.clip.to_s, :description => sip_account.description, :callforward_rules_act_per_sip_account => sip_account.callforward_rules_act_per_sip_account.to_s, :hotdeskable => sip_account.hotdeskable.to_s, :gs_node => sip_account.gs_node.try(:name) }
+
+  - if !@conferences.blank?
+    %conferences
+      - @conferences.each do |conference|
+        %conference{ :uuid => conference.uuid, :name => conference.name,  :start => conference.start, :end => conference.end, :conferenceable_type => conference.conferenceable_type, :conferenceable_uuid => conference.conferenceable.try(:uuid), :description => conference.description, :pin => conference.pin, :state => conference.state, :open_for_anybody => conference.open_for_anybody.to_s, :max_members => conference.max_members, :announce_new_member_by_name => conference.announce_new_member_by_name.to_s, :announce_left_member_by_name => conference.announce_left_member_by_name.to_s, :created_at => conference.created_at, :updated_at => conference.updated_at }
+
+  - if !@fax_accounts.blank?
+    %fax_accounts
+      - @fax_accounts.each do |fax_account|
+        %fax_account{ :uuid => fax_account.uuid, :name => fax_account.name,  :email => fax_account.email, :tenant => fax_account.tenant.try(:name), :fax_accountable_type => fax_account.fax_accountable_type, :fax_accountable_uuid => fax_account.fax_accountable.try(:uuid), :station_id => fax_account.station_id, :days_till_auto_delete => fax_account.days_till_auto_delete, :retries => fax_account.retries, :created_at => fax_account.created_at, :updated_at => fax_account.updated_at }
+
+  - if !@phone_books.blank?
+    %phone_books
+      - @phone_books.each do |phone_book|
+        %phone_book{ :uuid => phone_book.uuid, :name => phone_book.name,  :description => phone_book.description, :state => phone_book.state, :phone_bookable_type => phone_book.phone_bookable_type, :phone_bookable_uuid => phone_book.phone_bookable.try(:uuid), :created_at => phone_book.created_at, :updated_at => phone_book.updated_at }
+
+  - if !@phone_book_entries.blank?
+    %phone_book_entries
+      - @phone_book_entries.each do |phone_book_entry|
+        %phone_book_entry{ :uuid => phone_book_entry.uuid, :phone_book_uuid => phone_book_entry.phone_book.try(:uuid), :created_at => phone_book_entry.created_at, :updated_at => phone_book_entry.updated_at, :first_name => phone_book_entry.first_name, :middle_name => phone_book_entry.middle_name, :last_name => phone_book_entry.last_name, :title => phone_book_entry.title, :nickname => phone_book_entry.nickname, :organization => phone_book_entry.organization, :is_organization => phone_book_entry.is_organization.to_s, :department => phone_book_entry.department, :job_title => phone_book_entry.job_title, :is_male => phone_book_entry.is_male.to_s, :birthday => phone_book_entry.birthday, :birth_name => phone_book_entry.birth_name, :state => phone_book_entry.state, :description => phone_book_entry.description, :position => phone_book_entry.position, :homepage_personal => phone_book_entry.homepage_personal, :homepage_organization => phone_book_entry.homepage_organization, :twitter_account => phone_book_entry.twitter_account, :facebook_account => phone_book_entry.facebook_account, :google_plus_account => phone_book_entry.google_plus_account, :xing_account => phone_book_entry.xing_account, :linkedin_account => phone_book_entry.linkedin_account, :mobileme_account => phone_book_entry.mobileme_account, :created_at => phone_book_entry.created_at, :updated_at => phone_book_entry.updated_at, :first_name_phonetic => phone_book_entry.first_name_phonetic, :last_name_phonetic => phone_book_entry.last_name_phonetic, :organization_phonetic => phone_book_entry.organization_phonetic }
+
+  - if !@phone_numbers.blank?
+    %phone_numbers
+      - @phone_numbers.each do |phone_number|
+        %phone_number{ :uuid => phone_number.uuid, :name => phone_number.name,  :number => phone_number.number, :phone_numberable_type => phone_number.phone_numberable_type, :phone_numberable_uuid => phone_number.phone_numberable.try(:uuid), :position => phone_number.position, :gs_node => phone_number.gs_node.try(:name), :created_at => phone_number.created_at, :updated_at => phone_number.updated_at }
+
+  - if !@call_forwards.blank?
+    %call_forwards
+      - @call_forwards.each do |call_forward|
+        %call_forward{ :uuid => call_forward.uuid, :service => call_forward.call_forward_case.try(:value), :timeout => call_forward.timeout, :destination => call_forward.destination, :source => call_forward.source, :active => call_forward.active.to_s, :created_at => call_forward.created_at, :updated_at => call_forward.updated_at, :phone_number_uuid => call_forward.phone_number.try(:uuid), :depth => call_forward.depth, :call_forwardable_type => call_forward.call_forwardable_type, :call_forwardable_uuid => call_forward.call_forwardable.try(:uuid), :position => call_forward.position}
+
+  - if !@softkeys.blank?
+    %softkeys
+      - @softkeys.each do |softkey|
+        %softkey{ :uuid => softkey.uuid, :function => softkey.softkey_function.try(:name), :number => softkey.number, :label => softkey.label, :position => softkey.position, :created_at => softkey.created_at, :updated_at => softkey.updated_at, :sip_account_uuid => softkey.sip_account.try(:uuid), :call_forward_uuid => softkey.call_forward.try(:uuid) }
+
+  - if !@ringtones.blank?
+    %ringtones
+      - @ringtones.each do |ringtone|
+        %ringtone{ :bellcore_id => ringtone.bellcore_id, :ringtoneable_type => ringtone.ringtoneable_type, :ringtoneable_uuid => ringtone.ringtoneable.try(:uuid), :created_at => ringtone.created_at, :updated_at => ringtone.updated_at }
+
+  - if !@conference_invitees.blank?
+    %conference_invitees
+      - @conference_invitees.each do |conference_invitee|
+        %conference_invitee{ :uuid => conference_invitee.uuid, :conference_uuid => conference_invitee.conference.try(:uuid), :phone_number_uuid => conference_invitee.phone_number.try(:uuid), :pin => conference_invitee.pin, :speaker => conference_invitee.speaker.to_s, :moderator => conference_invitee.moderator.to_s, :phone_book_entry_uuid => conference_invitee.phone_book_entry.try(:uuid), :created_at => conference_invitee.created_at, :updated_at => conference_invitee.updated_at }
+
+  - if !@fax_documents.blank?
+    %fax_documents
+      - @fax_documents.each do |fax_document|
+        %fax_document{ :inbound => fax_document.inbound.to_s, :state => fax_document.state, :transmission_time => fax_document.transmission_time, :sent_at => fax_document.sent_at, :document_total_pages => fax_document.document_total_pages, :document_transferred_pages => fax_document.document_transferred_pages, :ecm_requested => fax_document.ecm_requested.to_s, :ecm_used => fax_document.ecm_used.to_s, :image_resolution => fax_document.image_resolution, :image_size => fax_document.image_size, :local_station_id => fax_document.local_station_id, :result_code => fax_document.result_code, :remote_station_id => fax_document.remote_station_id, :success => fax_document.success.to_s, :transfer_rate => fax_document.transfer_rate, :document => fax_document.document, :created_at => fax_document.created_at, :updated_at => fax_document.updated_at, :fax_account_uuid => fax_document.fax_account.try(:uuid), :caller_id_number => fax_document.caller_id_number, :caller_id_name => fax_document.caller_id_name, :retry_counter => fax_document.retry_counter, :tiff => fax_document.tiff, :fax_resolution => fax_document.fax_resolution.try(:resolution_value), :document => fax_document.document.to_s,:uuid => fax_document.uuid }
+
+  - if !@call_histories.blank?
+    %call_histories
+      - @call_histories.each do |call_history|
+        %call_history{ :call_historyable_type => call_history.call_historyable_type, :call_historyable_uuid => call_history.call_historyable_uuid, :entry_type => call_history.entry_type, :caller_account_type => call_history.caller_account_type, :caller_account_uuid => call_history.caller_account_uuid, :caller_id_number => call_history.caller_id_number, :caller_id_name => call_history.caller_id_name, :caller_channel_uuid => call_history.caller_channel_uuid, :callee_account_type => call_history.callee_account_type, :callee_account_uuid => call_history.callee_account_uuid, :callee_id_number => call_history.callee_id_number, :callee_id_name => call_history.callee_id_name, :auth_account_type => call_history.auth_account_type, :auth_account_uuid => call_history.auth_account_uuid, :forwarding_service => call_history.forwarding_service, :destination_number => call_history.destination_number, :start_stamp => call_history.start_stamp, :duration => call_history.duration, :result => call_history.result, :read_flag => call_history.read_flag.to_s, :returned_flag => call_history.returned_flag.to_s, :created_at => call_history.created_at, :updated_at => call_history.updated_at } 
+
+  - if !@deleted_items.blank?
+    %deleted_items
+      - @deleted_items.each do |deleted_item|
+        %deleted_item{ :class_name => deleted_item['class_name'], :uuid => deleted_item['uuid'] }

@@ -1,0 +1,43 @@
+- title t("conferences.show.page_title")
+
+%p
+  %strong= t('conferences.show.name') + ":"
+  = @conference.name
+- if @conference.start
+  %p
+    %strong= t('conferences.show.start') + ":"
+    = @conference.start
+  %p
+    %strong= t('conferences.show.end') + ":"
+    = @conference.end
+- if !@conference.description.blank?
+  %p
+    %strong= t('conferences.show.description') + ":"
+    = @conference.description
+- if !@conference.pin.blank?
+  %p
+    %strong= t('conferences.show.pin') + ":"
+    = @conference.pin
+%p
+  %strong= t('conferences.show.open_for_anybody') + ":"
+  = @conference.open_for_anybody
+%p
+  %strong= t('conferences.show.announce_new_member_by_name') + ":"
+  = @conference.announce_new_member_by_name
+%p
+  %strong= t('conferences.show.announce_left_member_by_name') + ":"
+  = @conference.announce_left_member_by_name
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @parent, :child => @conference }
+
+%h2= t('phone_numbers.index.page_title')
+- if @phone_numbers.count > 0
+  = render "phone_numbers/index_core", :phone_numbers => @phone_numbers
+
+= render :partial => 'shared/create_link', :locals => {:parent => @conference, :child_class => PhoneNumber}
+
+%h2= t("conference_invitees.index.page_title")
+- if @conference.conference_invitees.count > 0
+  = render "conference_invitees/index_core", :conference_invitees => @conference.conference_invitees
+
+= render :partial => 'shared/create_link', :locals => {:parent => @conference, :child_class => ConferenceInvitee}

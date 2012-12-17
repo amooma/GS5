@@ -1,0 +1,31 @@
+- title t("phones.show.page_title")
+
+%p
+  %strong= t('phones.show.mac_address') + ":"
+  = @phone.pretty_mac_address
+%p
+  %strong= t('phones.show.phone_model_id') + ":"
+  = @phone.phone_model
+%p
+  %strong= t('phones.show.hot_deskable') + ":"
+  = @phone.hot_deskable
+- if defined? NIGHTLY_REBOOT_OF_PHONES && NIGHTLY_REBOOT_OF_PHONES == true
+  %p
+    %strong= t('phones.show.nightly_reboot') + ":"
+    = @phone.nightly_reboot
+
+- if defined? PROVISIONING_KEY_LENGTH && PROVISIONING_KEY_LENGTH > 0
+  %p
+    %strong= t('phones.show.provisioning_key_active') + ":"
+    = @phone.provisioning_key_active
+%p
+  %strong= t('phones.show.ip_address') + ":"
+  = @phone.ip_address
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone.phoneable, :child => @phone }
+
+%h2= t("phones.sip_accounts.title")
+- if @phone.phone_sip_accounts.count > 0
+  = render "phone_sip_accounts/index_core", :phone_sip_accounts => @phone.phone_sip_accounts
+
+= render :partial => 'shared/create_link', :locals => {:parent => @phone, :child_class => PhoneSipAccount}

@@ -1,0 +1,6 @@
+- title t("fax_accounts.index.page_title")
+
+- if @fax_accounts.count > 0
+  = render "index_core", {:fax_accounts => @fax_accounts, :fax_accountable => @parent}
+
+= render :partial => 'shared/create_link', :locals => {:parent => @parent, :child_class => FaxAccount}

@@ -1,0 +1,6 @@
+- title t("ringtones.index.page_title")
+
+- if @ringtones.count > 0
+  = render "index_core", :ringtones => @ringtones
+
+= render :partial => 'shared/create_link', :locals => {:parent => @parent, :child_class => Ringtone}

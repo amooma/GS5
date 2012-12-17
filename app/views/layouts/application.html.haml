@@ -1,0 +1,46 @@
+!!! 5
+<!--[if lt IE 7]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if gt IE 8]><!-->
+%html.no-js{ :lang => "en" }
+  ~#OPTIMIZE Make html lang attribute reflect the actual language.
+  <!--<![endif]-->
+  %header
+    %meta{ :charset => "utf-8" }/
+    ~#OPTIMIZE "/" seems to be supposed to make an empty element tag, but it doesn't work. HAML bug?
+    %title
+      = content_for?(:title) ? yield(:title) : "Untitled"
+    %meta{ :name => "viewport", :content => "width=device-width, initial-scale=1.0" }/
+    = stylesheet_link_tag    "application"
+    = javascript_include_tag "application"
+    = csrf_meta_tag
+    = yield(:head)
+
+  %body
+    #container
+      = render :partial => "shared/header"
+      = render :partial => "shared/system_message"
+      = render :partial => "shared/flash", :locals => { :flash => flash}
+
+      #content{:role => 'main'}
+        .light
+          %header.main
+            .breadcrumbs= render_breadcrumbs :separator => ' » '
+            - if show_title?
+              %h1= yield(:title)
+          = yield
+
+      %footer#main
+        %ul
+          - if GuiFunction.display?('amooma_commercial_support_link_in_footer', current_user)
+            %li
+              %a{:href => "http://www.amooma.de"} Kommerzieller Support und Consulting
+          - if GuiFunction.display?('gemeinschaft_mailinglist_link_in_footer', current_user)
+            %li
+              %a{:href => "https://groups.google.com/group/gs5-users/"} Kostenlose Mailingliste
+
+        .amooma-logo
+          %span brought to you by
+          %a{ :target => '_blank', :href => "http://www.amooma.de/" } Amooma
+

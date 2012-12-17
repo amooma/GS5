@@ -1,0 +1,17 @@
+!!! XML
+%SnomIPPhoneMenu{:speedselect => 'off'}
+  %Title= @phone_xml_object[:title]
+  - @phone_xml_object[:entries].each do |entry|
+    %MenuItem{:sel => entry[:selected].to_s}
+      %Name= entry[:text]
+      %URL= entry[:url]
+
+  - if @phone_xml_object[:softkeys]
+    - @phone_xml_object[:softkeys].each do |softkey|
+      %SoftKeyItem
+        %Name=  softkey[:name]
+        %Label= softkey[:label]
+        - if ! softkey[:url].blank?
+          %URL= softkey[:url]
+        - if ! softkey[:softkey].blank?
+          %URL= softkey[:softkey]

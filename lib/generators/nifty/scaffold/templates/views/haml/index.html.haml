@@ -1,0 +1,6 @@
+- title t("<%= plural_name %>.index.page_title")
+
+- if @<%= instances_name %> && @<%= instances_name %>.count > 0
+  = render "index_core", :<%= instances_name %> => @<%= instances_name %>
+
+= render :partial => 'shared/create_link', :locals => {:child_class => <%= instances_name.classify %>}

@@ -1,0 +1,11 @@
+.inputs
+  = f.input :name, :label => t('fax_accounts.form.name.label'), :hint => conditional_hint('fax_accounts.form.name.hint')
+  = f.input :station_id, :label => t('fax_accounts.form.station_id.label'), :hint => conditional_hint('fax_accounts.form.station_id.hint')
+  = f.input :retries, :label => t('fax_accounts.form.retries.label'), :hint => conditional_hint('fax_accounts.form.retries.hint')
+  = f.input :email, :label => t('fax_accounts.form.email.label'), :hint => conditional_hint('fax_accounts.form.email.hint')
+
+  = f.input :days_till_auto_delete, :label => t('fax_accounts.form.days_till_auto_delete.label'), :hint => conditional_hint('fax_accounts.form.days_till_auto_delete.hint')
+  
+  %h2= t('phone_numbers.name')
+  = f.simple_fields_for :phone_numbers, @fax_account.phone_numbers do |phone_number|
+    = render "phone_numbers/form_core", :f => phone_number

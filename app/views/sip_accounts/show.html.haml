@@ -1,0 +1,50 @@
+- title t("sip_accounts.show.page_title")
+
+%p
+  %strong= t('sip_accounts.show.auth_name') + ":"
+  = @sip_account.auth_name
+%p
+  %strong= t('sip_accounts.show.caller_name') + ":"
+  = @sip_account.caller_name
+%p
+  %strong= t('sip_accounts.show.password') + ":"
+  = @sip_account.password
+%p
+  %strong= t('sip_accounts.show.call_waiting') + ":"
+  = @sip_account.call_waiting
+%p
+  %strong= t('sip_accounts.show.clir') + ":"
+  = @sip_account.clir
+%p
+  %strong= t('sip_accounts.show.clip_no_screening') + ":"
+  = @sip_account.clip_no_screening
+%p
+  %strong= t('sip_accounts.show.hotdeskable') + ":"
+  = @sip_account.hotdeskable
+%p
+  %strong= t('sip_accounts.show.callforward_rules_act_per_sip_account') + ":"
+  = @sip_account.callforward_rules_act_per_sip_account
+- if @sip_account.registration.try(:network_ip) && @sip_account.registration.try(:network_port)
+  %p
+    %strong= t('sip_accounts.show.registration') + ":"
+    = "#{@sip_account.registration.network_ip}:#{@sip_account.registration.network_port}"
+- if @sip_account.registration.try(:expires)
+  %p
+    %strong= t('sip_accounts.show.expires') + ":"
+    = "#{@sip_account.registration.try(:expires) - Time.now.to_i} s"
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @sip_account.sip_accountable, :child => @sip_account }
+
+- if @sip_account.phone_numbers.count > 0 || can?(:create, @sip_account.phone_numbers.build)
+  %h2= t('phone_numbers.index.page_title')
+  - if @sip_account.phone_numbers.count > 0
+    = render "phone_numbers/index_core", :phone_numbers => @sip_account.phone_numbers
+    %br
+  = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => PhoneNumber }
+
+- if @sip_account.softkeys.count > 0 || can?(:create, @sip_account.softkeys.build)
+  %h2= t("softkeys.index.page_title")
+  - if @sip_account.softkeys.count > 0
+    = render "softkeys/index_core", :softkeys => @sip_account.softkeys
+    %br
+  = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => Softkey }

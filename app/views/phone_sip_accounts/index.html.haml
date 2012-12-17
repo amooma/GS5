@@ -1,0 +1,6 @@
+- title t("phone_sip_accounts.index.page_title")
+
+- if @phone_sip_accounts.count > 0
+  =render "index_core", :phone_sip_accounts => @phone_sip_accounts
+
+= render :partial => 'shared/create_link', :locals => {:parent => @phone, :child_class => PhoneSipAccount}

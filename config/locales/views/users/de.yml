@@ -1,0 +1,95 @@
+de:
+  users:
+    name: "Benutzer"
+    controller:
+      successfuly_created: 'Der Benutzer %{resource} wurde erstellt.'
+      successfuly_created_and_login: 'Der Benutzer %{resource} wurde erstellt. Sie sind jetzt als dieser Benutzer angemeldet.'
+      successfuly_updated: 'Benutzer-Daten aktualisiert.'
+      successfuly_destroyed: 'Der Benutzer wurde gelöscht.'
+      avatar_destroyed: 'Der Avatar wurde gelöscht.'
+    index:
+      page_title: 'Benutzer'
+      user_name: 'Benutzer-Name'
+      email: 'E-Mail Adresse'
+      first_name: 'Vorname'
+      middle_name: 'Zweiter Vorname'
+      last_name: 'Nachname'
+      male: 'männlich'
+      gemeinschaft_unique_id: 'Eindeutige Bezeichnung'
+      state: 'Status'
+      language_id: 'Sprache'
+      send_voicemail_as_email_attachment: 'Sprachnachrichten per E-Mail'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neuen Benutzer anlegen'
+        create_for: 'Neuen Benutzer für %{resource} anlegen'
+    show:
+      page_title: 'Benutzer anzeigen'
+      user_name: 'Benutzer-Name'
+      email: 'E-Mail Adresse'
+      first_name: 'Vorname'
+      middle_name: 'Zweiter Vorname'
+      last_name: 'Nachname'
+      male: 'männlich'
+      gemeinschaft_unique_id: 'Eindeutige Bezeichnung'
+      state: 'Status'
+      language_id: 'Sprache'
+      send_voicemail_as_email_attachment: 'Sprachnachrichten per E-Mail'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Benutzer anzeigen'
+    new:
+      page_title: 'Neuen Benutzer anlegen'
+    edit:
+      page_title: 'Benutzer %{resource} bearbeiten'
+    form:
+      user_name:
+        label: 'Benutzer-Name'
+        hint: ''
+      email:
+        label: 'E-Mail Adresse'
+        hint: ''
+      password:
+        label: 'Passwort'
+        hint: 'Mit diesem Passwort können Sie sich später in dieser Web-Oberfläche anmelden.'
+      password_confirmation:
+        label: 'Wiederholung des Passwortes'
+        hint: ''
+      new_pin:
+        label: 'PIN'
+        hint: 'Mit dieser PIN können Sie sich in Hot-Desk Umgebungen am Telefon anmelden.'
+      new_pin_confirmation:
+        label: 'Wiederholung der PIN'
+        hint: ''
+      first_name:
+        label: 'Vorname'
+        hint: ''
+      middle_name:
+        label: 'Zweiter Vorname'
+        hint: ''
+      last_name:
+        label: 'Nachname'
+        hint: ''
+      gender:
+        label: 'Geschlecht'
+        hint: ''
+        male: "Männlich"
+        female: "Weiblich"
+      gemeinschaft_unique_id:
+        label: 'Eindeutige Bezeichnung'
+        hint: ''
+      image:
+        label: 'Avatar Foto'
+        hint: ''
+      language_id:
+        label: 'Sprache'
+        hint: ''
+      send_voicemail_as_email_attachment:
+        label: 'Sprachnachrichten per E-Mail verschicken'
+        hint: ''
+      button: 'Absenden'

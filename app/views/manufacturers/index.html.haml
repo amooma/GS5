@@ -1,0 +1,5 @@
+- title t("manufacturers.index.page_title")
+
+= render "index_core", :manufacturers => @manufacturers
+
+= render :partial => 'shared/create_link', :locals => {:child_class => Manufacturer}

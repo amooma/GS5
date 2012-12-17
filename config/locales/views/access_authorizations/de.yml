@@ -1,0 +1,45 @@
+de:
+  access_authorizations:
+    name: 'Zugangsberechtigung'
+    controller:
+      successfuly_created: 'Eine neue Zugangsberechtigung wurde erstellt.'
+      successfuly_updated: 'Die Zugangsberechtigung wurde aktualisiert.'
+      successfuly_destroyed: 'Die Zugangsberechtigung wurde gelöscht.'
+    index:
+      page_title: 'Zugangsberechtigungen'
+      name: 'Name'
+      login: 'Login'
+      pin: 'PIN'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Zugangsberechtigung löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neue Zugangsberechtigung für %{resource} anlegen'
+    show:
+      page_title: 'Zugangsberechtigung anzeigen'
+      name: 'Name'
+      login: 'Login'
+      pin: 'PIN'
+      index_phone_numbers: 'Telefonnummern'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Zugangsberechtigung löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Zugangsberechtigungen anzeigen.'
+    new:
+      page_title: 'Neue Zugangsberechtigung anlegen'
+    edit:
+      page_title: 'Zugangsberechtigung bearbeiten'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      login:
+        label: 'Login'
+        hint: ''
+      pin:
+        label: 'PIN'
+        hint: ''
+      button: 'Absenden'

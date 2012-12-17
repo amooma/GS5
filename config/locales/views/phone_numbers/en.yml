@@ -1,0 +1,64 @@
+en:
+  phone_numbers:
+    name: "Phone numbers"
+    controller:
+      successfuly_created: 'Successfully created phone number.'
+      successfuly_updated: 'Successfully updated phone number.'
+      successfuly_destroyed: 'Successfully destroyed phone number.'
+    index:
+      page_title: 'Phone numbers'
+      phone_book_id: 'Phone book'
+      name: 'Name'
+      number: 'Number'
+      country_code: 'Country code'
+      area_code: 'Area code'
+      subscriber_number: 'Subscriber number'
+      extension: 'Extension'
+      actions:
+        confirm: 'Are you sure you want to delete this phone number?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New phone number for %{resource}'
+    show:
+      page_title: 'Show Phone number'
+      phone_book_id: 'Phone book'
+      name: 'Name'
+      number: 'Number'
+      country_code: 'Country code'
+      area_code: 'Area code'
+      subscriber_number: 'Subscriber number'
+      extension: 'Extension'
+      actions:
+        confirm: 'Are you sure you want to delete this phone number?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View all phone numbers'
+    new:
+      page_title: 'New Phone number'
+    edit:
+      page_title: 'Editing Phone number'
+    form:
+      phone_book_id:
+        label: 'Phone book'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      number:
+        label: 'Phone number'
+        hint: 'Format: +49-30-2270 for a normal phone number or 42 for an internal extension.'
+      country_code:
+        label: 'Country code'
+        hint: ''
+      area_code:
+        label: 'Area code'
+        hint: ''
+      subscriber_number:
+        label: 'Subscriber number'
+        hint: ''
+      extension:
+        label: 'Extension'
+        hint: ''
+      button: 'Submit'

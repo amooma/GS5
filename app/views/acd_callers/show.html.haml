@@ -1,0 +1,25 @@
+- title t("acd_callers.show.page_title")
+
+%p
+  %strong= t('acd_callers.show.channel_uuid') + ":"
+  = @acd_caller.channel_uuid
+%p
+  %strong= t('acd_callers.show.automatic_call_distributor_id') + ":"
+  = @acd_caller.automatic_call_distributor_id
+%p
+  %strong= t('acd_callers.show.status') + ":"
+  = @acd_caller.status
+%p
+  %strong= t('acd_callers.show.enter_time') + ":"
+  = @acd_caller.enter_time
+%p
+  %strong= t('acd_callers.show.agent_answer_time') + ":"
+  = @acd_caller.agent_answer_time
+%p
+  %strong= t('acd_callers.show.callback_number') + ":"
+  = @acd_caller.callback_number
+%p
+  %strong= t('acd_callers.show.callback_attempts') + ":"
+  = @acd_caller.callback_attempts
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @acd_caller }

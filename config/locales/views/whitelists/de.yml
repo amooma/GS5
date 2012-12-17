@@ -1,0 +1,38 @@
+de:
+  whitelists:
+    name: 'Positivliste'
+    controller:
+      successfuly_created: 'Eine Positivliste wurde erstellt.'
+      successfuly_updated: 'Die Positivliste wurde aktualisiert.'
+      successfuly_destroyed: 'Die Positivliste wurde gelöscht.'
+    index:
+      page_title: 'Positivlisten'
+      name: 'Name'
+      phone_numbers: 'Telefonnummern'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Positivliste löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neue Positivliste für %{resource} anlegen'
+    show:
+      page_title: 'Positivliste anzeigen'
+      name: 'Name'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Positivliste löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neue Positivliste'
+    edit:
+      page_title: 'Positivliste bearbeiten'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      phone_numbers:
+        label: 'Telefonnummern'
+        hint: ''
+      button: 'Absenden'

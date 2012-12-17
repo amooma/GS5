@@ -1,0 +1,161 @@
+de:
+  phone_book_entries:
+    name: "Telefonbucheintrag"
+    controller:
+      successfuly_created: 'Der Telefonbucheintrag "%{resource}" wurde erstellt.'
+      successfuly_updated: 'Der Telefonbucheintrag "%{resource}" wurde aktualisiert.'
+      successfuly_destroyed: 'Der Telefonbucheintrag wurde gelöscht.'
+    index:
+      page_title: 'Telefonbucheinträge'
+      phone_book_id: 'Telefonbuch'
+      first_name: 'Vorname'
+      middle_name: 'Zweiter Vorname'
+      last_name: 'Nachname'
+      title: 'Akademischer Titel'
+      nickname: 'Spitzname'
+      organization: 'Organisation'
+      is_organization: 'Ist eine Organisation'
+      department: 'Abteilung'
+      job_title: 'Position (Berufsbezeichnung)'
+      is_male: 'männlich'
+      birthday: 'Geburtstag'
+      birth_name: 'Mädchenname'
+      state: 'Status'
+      description: 'Beschreibung'
+      position: 'Position'
+      homepage_personal: 'Persönliche Homepage'
+      homepage_organization: 'Homepage der Organisation'
+      twitter_account: 'Twitter Konto'
+      facebook_account: 'Facebook Konto'
+      google_plus_account: 'Google+ Konto'
+      xing_account: 'Xing Konto'
+      linkedin_account: 'LinkedIn Konto'
+      mobileme_account: 'iCloud Konto'
+      more_numbers: 'und %{numbers} weitere'
+      available_phone_books: 'Verfügbare Telefonbücher:'
+      create_new_phone_book_entry: 'Einen neuen Eintrag anlegen'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Telefonbucheintrag löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neuen Telefonbucheintrag für %{resource} anlegen'
+    show:
+      page_title: 'Telefonbucheinträge für "%{resource}"'
+      phone_book_id: 'Telefonbuch'
+      first_name: 'Vorname'
+      middle_name: 'Zweiter Vorname'
+      last_name: 'Nachname'
+      title: 'Akademischer Titel'
+      nickname: 'Spitzname'
+      organization: 'Organisation'
+      is_organization: 'Ist eine Organisation'
+      department: 'Abteilung'
+      job_title: 'Position (Berufsbezeichnung)'
+      is_male: 'männlich'
+      birthday: 'Geburtstag'
+      birth_name: 'Mädchenname'
+      state: 'Status'
+      description: 'Beschreibung'
+      position: 'Position'
+      homepage_personal: 'Persönliche Homepage'
+      homepage_organization: 'Homepage der Organisation'
+      twitter_account: 'Twitter Konto'
+      facebook_account: 'Facebook Konto'
+      google_plus_account: 'Google+ Konto'
+      xing_account: 'Xing Konto'
+      linkedin_account: 'LinkedIn Konto'
+      mobileme_account: 'iCloud Konto'
+      manage_phone_number: 'Telefonnummern verwalten.'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Telefonbucheintrag löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Telefonbucheinträge anzeigen'
+    new:
+      page_title: 'Neuer Telefonbucheintrag'
+    edit:
+      page_title: 'Telefonbucheintrag bearbeiten'
+    form:
+      phone_book_id:
+        label: 'Tefonbuch'
+        hint: ''
+      first_name:
+        label: 'Vorname'
+        hint: ''
+      middle_name:
+        label: 'Zweiter Vorname'
+        hint: ''
+      gender:
+        label: 'Geschlecht'
+        hint: ''
+        male: "männlich"
+        female: "weiblich"
+      last_name:
+        label: 'Nachname'
+        hint: ''
+      title:
+        label: 'Akademischer Titel'
+        hint: 'z.B. Dr.'
+      nickname:
+        label: 'Spitzname'
+        hint: ''
+      organization:
+        label: 'Firmenname'
+        hint: 'Organisation'
+      is_organization:
+        label: 'Ist eine Organisation'
+        hint: ''
+      department:
+        label: 'Abteilung'
+        hint: ''
+      job_title:
+        label: 'Position'
+        hint: 'z.B. Geschäftsführer'
+      is_male:
+        label: 'Ist männlich'
+        hint: ''
+      birthday:
+        label: 'Geburtstag'
+        hint: ''
+      birth_name:
+        label: 'Mädchenname'
+        hint: ''
+      state:
+        label: 'Status'
+        hint: ''
+      description:
+        label: 'Beschreibung'
+        hint: ''
+      position:
+        label: 'Position'
+        hint: ''
+      homepage_personal:
+        label: 'Persönliche Homepage'
+        hint: ''
+      homepage_organization:
+        label: 'Firmen Homepage'
+        hint: 'http://www.example.com'
+      twitter_account:
+        label: 'Twitter Konto'
+        hint: '@example'
+      facebook_account:
+        label: 'Facebook Konto'
+        hint: ''
+      google_plus_account:
+        label: 'Google+ Konto'
+        hint: ''
+      xing_account:
+        label: 'Xing Konto'
+        hint: ''
+      linkedin_account:
+        label: 'LinkedIn Konto'
+        hint: ''
+      mobileme_account:
+        label: 'iCloud Konto'
+        hint: ''
+      image:
+        label: 'Avatar Foto'
+        hint: ''
+      button: 'Absenden'

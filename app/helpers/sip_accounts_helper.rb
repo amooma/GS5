@@ -1,0 +1,2 @@
+module SipAccountsHelper
+end

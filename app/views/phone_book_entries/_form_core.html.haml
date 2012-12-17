@@ -1,0 +1,27 @@
+.inputs
+  = f.input :is_male, :collection => [[true, t('phone_book_entries.form.gender.male')], [false, t('phone_book_entries.form.gender.female')]], :label_method => :last, :value_method => :first, :label => t('phone_book_entries.form.male.label'), :hint => conditional_hint('phone_book_entries.form.gender.hint'), :label => t('phone_book_entries.form.gender.label'), :as => :radio
+  = f.input :first_name, :label => t('phone_book_entries.form.first_name.label'), :hint => conditional_hint('phone_book_entries.form.first_name.hint')
+  = f.input :middle_name, :label => t('phone_book_entries.form.middle_name.label'), :hint => conditional_hint('phone_book_entries.form.middle_name.hint')
+  = f.input :last_name, :label => t('phone_book_entries.form.last_name.label'), :hint => conditional_hint('phone_book_entries.form.last_name.hint')
+  = f.input :birth_name, :label => t('phone_book_entries.form.birth_name.label'), :hint => conditional_hint('phone_book_entries.form.birth_name.hint')
+  = f.input :title, :label => t('phone_book_entries.form.title.label'), :hint => conditional_hint('phone_book_entries.form.title.hint')
+  = f.input :nickname, :label => t('phone_book_entries.form.nickname.label'), :hint => conditional_hint('phone_book_entries.form.nickname.hint')
+  = f.input :organization, :label => t('phone_book_entries.form.organization.label'), :hint => conditional_hint('phone_book_entries.form.organization.hint')
+  / = f.input :is_organization, :label => t('phone_book_entries.form.is_organization.label'), :hint => conditional_hint('phone_book_entries.form.is_organization.hint')
+  = f.input :department, :label => t('phone_book_entries.form.department.label'), :hint => conditional_hint('phone_book_entries.form.department.hint')
+  = f.input :job_title, :label => t('phone_book_entries.form.job_title.label'), :hint => conditional_hint('phone_book_entries.form.job_title.hint')
+
+  = f.input :birthday, :label => t('phone_book_entries.form.birthday.label'), :hint => conditional_hint('phone_book_entries.form.birthday.hint'), :start_year => Date.today.year - 100, :end_year => Date.today.year - 0, :order => [:day, :month, :year], :include_blank => true
+
+  = f.input :description, :label => t('phone_book_entries.form.description.label'), :hint => conditional_hint('phone_book_entries.form.description.hint')
+  
+  = f.input :image, { :as => :file, :label => t('phone_book_entries.form.image.label'), :hint => conditional_hint('phone_book_entries.form.image.hint') }
+
+  = f.input :homepage_organization, :label => t('phone_book_entries.form.homepage_organization.label'), :hint => conditional_hint('phone_book_entries.form.homepage_organization.hint')
+  = f.input :homepage_personal, :label => t('phone_book_entries.form.homepage_personal.label'), :hint => conditional_hint('phone_book_entries.form.homepage_personal.hint')
+  / = f.input :twitter_account, :label => t('phone_book_entries.form.twitter_account.label'), :hint => conditional_hint('phone_book_entries.form.twitter_account.hint')
+  / = f.input :facebook_account, :label => t('phone_book_entries.form.facebook_account.label'), :hint => conditional_hint('phone_book_entries.form.facebook_account.hint')
+  / = f.input :google_plus_account, :label => t('phone_book_entries.form.google_plus_account.label'), :hint => conditional_hint('phone_book_entries.form.google_plus_account.hint')
+  / = f.input :xing_account, :label => t('phone_book_entries.form.xing_account.label'), :hint => conditional_hint('phone_book_entries.form.xing_account.hint')
+  / = f.input :linkedin_account, :label => t('phone_book_entries.form.linkedin_account.label'), :hint => conditional_hint('phone_book_entries.form.linkedin_account.hint')
+

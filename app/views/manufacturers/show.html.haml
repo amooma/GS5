@@ -1,0 +1,18 @@
+- title t("manufacturers.show.page_title")
+
+%p
+  %strong= t('manufacturers.show.name') + ":"
+  = @manufacturer.name
+%p
+  %strong= t('manufacturers.show.ieee_name') + ":"
+  = @manufacturer.ieee_name
+%p
+  %strong= t('manufacturers.show.homepage_url') + ":"
+  - if @manufacturer.homepage_url
+    =link_to @manufacturer.homepage_url, @manufacturer.homepage_url
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @manufacturer }
+
+%h2=t("phone_models.index.page_title")
+
+=render 'phone_models/index_core', :phone_models => @manufacturer.phone_models

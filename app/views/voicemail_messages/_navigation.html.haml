@@ -1,0 +1,9 @@
+%nav
+  %ol.abc
+    %li
+      %a{ :href => "?type=" }= t('voicemail_messages.index.navigation.all', :count => @messages_count)
+      %a{ :href => "?type=read" }= t('voicemail_messages.index.navigation.read', :count => @messages_read_count)
+      %a{ :href => "?type=unread" }= t('voicemail_messages.index.navigation.unread', :count => @messages_unread_count)
+
+.pagination
+  = will_paginate @voicemail_messages

@@ -1,0 +1,25 @@
+header.tabular-nav { @extend .ext-bradius-t; }
+footer.tabular-nav { @extend .ext-bradius-b; }
+
+.tabular-nav {
+  @include clearfix;
+  line-height: 41px;
+  padding: 0 14px;
+  @include gradient(#69ABFB, #75AAEC);
+  .pagination {
+    float:right;
+  }
+  nav {
+    float:left;
+    margin-top: 1px;
+    @include size(395px, auto);
+    ol {
+      @include inline-list;
+      a {
+        font-weight:bold;
+        color:#fff;
+        font-size: 14px;
+      }
+    }
+  }
+}

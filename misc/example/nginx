@@ -1,0 +1,73 @@
+#!/bin/sh
+
+#####################################################################
+# nginx
+# Start Script
+# (c) AMOOMA GmbH 2012
+#####################################################################
+
+### BEGIN INIT INFO
+# Provides:          nginx 
+# Required-Start:    freeswitch 
+# Required-Stop:     freeswitch
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts nginx
+# Description:       starts nginx
+#
+### END INIT INFO
+
+DAEMON=/opt/nginx/sbin/nginx
+EXECUTABLE=`basename 'nginx'`
+NAME=nginx
+DESC=nginx
+ARGS=""
+
+if ! [ -x $DAEMON ] ; then
+	echo "ERROR: $DAEMON not found"
+	exit 1
+fi
+
+set -e
+
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+    echo -n "Starting $DESC: "
+    start-stop-daemon --start --quiet --pidfile /opt/nginx/logs/$NAME.pid \
+        --exec $DAEMON -- $DAEMON_OPTS
+    echo "$NAME."
+    ;;
+  stop)
+    echo -n "Stopping $DESC: "
+    start-stop-daemon --stop --quiet --pidfile /opt/nginx/logs/$NAME.pid \
+        --exec $DAEMON
+    echo "$NAME."
+    ;;
+  restart|force-reload)
+    echo -n "Restarting $DESC: "
+    start-stop-daemon --stop --quiet --pidfile \
+        /opt/nginx/logs/$NAME.pid --exec $DAEMON
+    sleep 1
+    start-stop-daemon --start --quiet --pidfile \
+        /opt/nginx/logs/$NAME.pid --exec $DAEMON -- $DAEMON_OPTS
+    echo "$NAME."
+    ;;
+  reload)
+      echo -n "Reloading $DESC configuration: "
+      start-stop-daemon --stop --signal HUP --quiet --pidfile /opt/nginx/logs/$NAME.pid \
+          --exec $DAEMON
+      echo "$NAME."
+      ;;
+  status)
+      status_of_proc -p /opt/nginx/logs/$NAME.pid "$DAEMON" nginx
+      ;;
+  *)
+    N=/etc/init.d/$NAME
+    echo "Usage: $N {start|stop|restart|reload|force-reload|status}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0

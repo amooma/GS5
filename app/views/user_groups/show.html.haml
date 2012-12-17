@@ -1,0 +1,20 @@
+- title t("user_groups.show.page_title")
+
+%p
+  %strong= t('user_groups.show.name') + ":"
+  = @user_group.name
+%p
+  %strong= t('user_groups.show.description') + ":"
+  = @user_group.description
+%p
+  %strong= t('user_groups.show.tenant_id') + ":"
+  = @user_group.tenant
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @user_group.tenant, :child => @user_group }
+
+%h2=t("user_group_memberships.index.page_title")
+
+- if @user_group.user_group_memberships.count > 0
+  = render "user_group_memberships/index_core", :user_group_memberships => @user_group.user_group_memberships
+
+= render :partial => 'shared/create_link', :locals => {:parent => @user_group, :child_class => UserGroupMembership}

@@ -1,0 +1,2 @@
+module HuntGroupsHelper
+end

@@ -1,0 +1,8 @@
+- title t("sessions.new.page_title")
+
+= simple_form_for :sessions, :url => sessions_path do |t|
+  = t.input :login_data, :label => t('sessions.form.email'), :autofocus => true
+  = t.input :password, :label => t('sessions.form.password'), :required => false
+  = t.input :reset_password, :label => t('sessions.form.reset_password'), :as => :boolean
+  .actions
+    = t.button :submit, :value => 'Login'

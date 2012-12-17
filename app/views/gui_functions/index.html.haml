@@ -1,0 +1,6 @@
+- title t("gui_functions.index.page_title")
+
+- if @gui_functions && @gui_functions.count > 0
+  = render "index_core", :gui_functions => @gui_functions
+
+= render :partial => 'shared/create_link', :locals => {:child_class => GuiFunction}

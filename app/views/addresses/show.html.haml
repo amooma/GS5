@@ -1,0 +1,28 @@
+- title t("addresses.show.page_title")
+
+%p
+  %strong= t('addresses.show.phone_book_entry_id') + ":"
+  = @address.phone_book_entry_id
+%p
+  %strong= t('addresses.show.line1') + ":"
+  = @address.line1
+%p
+  %strong= t('addresses.show.line2') + ":"
+  = @address.line2
+%p
+  %strong= t('addresses.show.street') + ":"
+  = @address.street
+%p
+  %strong= t('addresses.show.zip_code') + ":"
+  = @address.zip_code
+%p
+  %strong= t('addresses.show.city') + ":"
+  = @address.city
+%p
+  %strong= t('addresses.show.country_id') + ":"
+  = @address.country_id
+%p
+  %strong= t('addresses.show.position') + ":"
+  = @address.position
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @address }

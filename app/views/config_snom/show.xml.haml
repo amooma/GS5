@@ -1,0 +1,151 @@
+!!! XML
+%settings
+  %phone-settings
+    %auto_reboot_on_setting_change{:perm => 'RW'}= 'off'
+    - if !@phone_settings[:setting_server].blank?
+      %setting_server{:perm => 'RW'}= @phone_settings[:setting_server]
+    %web_language{:perm => 'RW'}= 'English'
+    %language{:perm => 'RW'}= @phone_settings[:language]
+    %timezone{:perm => 'RW'}= 'GER+1'
+    %date_us_format{:perm => 'RW'}= 'off'
+    %time_24_format{:perm => 'RW'}= 'on'
+    %reset_settings{:perm => 'RW'}= ''
+    %update_policy{:perm => 'RW'}= 'settings_only'
+    %settings_refresh_timer{:perm => 'RW'}= '0'
+    %firmware_status{:perm => 'RW'}= ''
+    %webserver_type{:perm => 'R'}= 'http_https'
+    %http_scheme{:perm => 'RW'}= 'off'
+    %http_port{:perm => 'R'}= '80'
+    %https_port{:perm => 'R'}= '443'
+    %http_user{:perm => 'R'}= @phone_settings[:http_user]
+    %http_pass{:perm => 'R'}= @phone_settings[:http_pass]
+    %admin_mode_password{:perm => 'R'}= @phone_settings[:admin_mode_password]
+    %tone_scheme{:perm => 'RW'}= @phone_settings[:tone_scheme]
+    %keytones{:perm => 'RW'}= 'off'
+    %dtmf_speaker_phone{:perm => 'RW'}= 'off'
+    %disable_redirection_menu{:perm => 'R'}= 'on'
+    %retry_after_failed_register{:perm => 'RW'}= '70'
+    %encode_display_name{:perm => 'R'}= 'on'
+    %dtmf_payload_type{:perm => 'RW'}= '101'
+    %ignore_security_warning{:perm => 'R'}= 'on'
+    %call_completion{:perm => 'RW'}= 'on'
+    %block_url_dialing{:perm => 'RW'}= 'on'
+    %redirect_ringing{:perm => 'RW'}= 'on'
+    %goto_virtual_keys_state_on_activity{:perm => 'RW'}= 'off'
+    %goto_monitor_state_on_line_activity{:perm => 'RW'}= 'on'
+    %ringer_animation{:perm => 'RW'}= 'on'
+    %display_method{:perm => 'RW'}= 'display_name_number'
+    %callpickup_dialoginfo{:perm => 'RW'}= 'on'
+    %show_local_line{:perm => 'RW'}= 'off'
+    %mwi_notification{:perm => 'RW'}= 'silent'
+    %mwi_dialtone{:perm => 'RW'}= 'normal'
+    %prefer_saved_over_received_photo{:perm => 'RW'}= 'off'
+    %no_dnd{:perm => 'RW'}= 'on'
+    %logon_wizard{:perm => 'RW'}= 'off'
+    %disable_deflection{:perm => 'RW'}= 'off'
+    %csta_control{:perm => 'RW'}= 'on'
+    %save_latest_callrecords_to_flash{:perm => 'RW'}= 'off'
+    %use_proxy_number_guessing{:perm => 'RW'}= 'off'
+    %guess_number{:perm => 'RW'}= 'off'
+    %guess_start_length{:perm => 'RW'}= '3'
+    %ieee8021x_eap_md5_username{:perm => 'RW'}= PROVISIONING_IEEE8021X_EAP_USERNAME
+    %ieee8021x_eap_md5_password{:perm => 'RW'}= PROVISIONING_IEEE8021X_EAP_PASSWORD
+
+    - 0.upto(9) do |ringer_idx|
+      %internal_ringer_text{:idx => ringer_idx, :perm => 'RW'}= "Ringer#{(ringer_idx+1)}"
+      %internal_ringer_file{:idx => ringer_idx, :perm => 'RW'}= "Ringer#{(ringer_idx+1)}"
+
+    %internal_ringer_text{:idx => 10, :perm => 'RW'}= "Ringer0"
+    %internal_ringer_file{:idx => 10, :perm => 'RW'}= "Silent"
+
+    %gui_fkey1{:perm => 'R'}= 'none'
+    %gui_fkey2{:perm => 'R'}= 'none'
+    %gui_fkey3{:perm => 'R'}= 'none'
+    %gui_fkey4{:perm => 'R'}= 'none'
+
+    %dkey_menu{:perm => 'RW'}= @dkeys[:menu]
+    %dkey_retrieve{:perm => 'RW'}= @dkeys[:retrieve]
+    %dkey_conf{:perm => 'RW'}= @dkeys[:conf]
+    %dkey_redial{:perm => 'RW'}= @dkeys[:redial]
+    %dkey_directory{:perm => 'RW'}= @dkeys[:directory]
+
+    %idle_ok_key_action{:perm => 'RW'}= @dkeys[:idle_ok]
+    %idle_cancel_key_action{:perm => 'RW'}= @dkeys[:idle_cancel]
+    %idle_up_key_action{:perm => 'RW'}= @dkeys[:idle_up]
+    %idle_down_key_action{:perm => 'RW'}= @dkeys[:idle_down]
+    %idle_left_key_action{:perm => 'RW'}= @dkeys[:idle_left]
+    %idle_right_key_action{:perm => 'RW'}= @dkeys[:idle_right]
+
+    != "\<!-- sip accounts: #{@sip_accounts.count} --\>"
+    - @sip_accounts.each_with_index do |sip_account, array_index|
+      - index = array_index + 1 
+      != "\<!-- sip account #{array_index}: #{sip_account[:idle_text]}, #{sip_account[:active]} --\>"
+      %user_active{:idx => index, :perm => 'R'}= sip_account[:active]
+      %user_pname{:idx => index, :perm => 'R'}= sip_account[:pname]
+      %user_pass{:idx => index, :perm => 'R'}= sip_account[:pass]
+      %user_host{:idx => index, :perm => 'R'}= sip_account[:host]
+      %user_outbound{:idx => index, :perm => 'R'}= sip_account[:outbound]
+      %user_name{:idx => index, :perm => 'R'}= sip_account[:name]
+      %user_realname{:idx => index, :perm => 'R'}= sip_account[:realname]
+      %user_idle_text{:idx => index, :perm => 'R'}= sip_account[:idle_text]
+      %user_mailbox{:idx => index, :perm => 'R'}= sip_account[:mailbox]
+      %user_expiry{:idx => index, :perm => 'R'}= ''
+      %user_server_type{:idx => index, :perm => 'R'}= 'default'
+      %user_send_local_name{:idx => index, :perm => 'RW'}= 'on'
+      %user_dtmf_info{:idx => index, :perm => 'RW'}= 'off'
+      %user_dp_exp{:idx => index, :perm => 'RW'}= ''
+      %user_dp_str{:idx => index, :perm => 'RW'}= ''
+      %user_dp{:idx => index, :perm => 'RW'}= ''
+      %user_q{:idx => index, :perm => 'RW'}= '1.0'
+      %user_failover_identity{:idx => index, :perm => 'RW'}= 'none'
+      %user_full_sdp_answer{:idx => index, :perm => 'RW'}= 'on'
+      %user_dynamic_payload{:idx => index, :perm => 'RW'}= 'on'
+      %user_g726_packing_order{:idx => index, :perm => 'R'}= 'on'
+      %user_srtp{:idx => index, :perm => 'RW'}= 'off'
+      %user_savp{:idx => index, :perm => 'RW'}= 'off'
+      %codec_size{:idx => index, :perm => 'RW'}= '20'
+      %codec1_name{:idx => index, :perm => 'RW'}= "0"
+      %codec2_name{:idx => index, :perm => 'RW'}= "8"
+      %codec3_name{:idx => index, :perm => 'RW'}= "3"
+      %codec4_name{:idx => index, :perm => 'RW'}= "9"
+      %codec5_name{:idx => index, :perm => 'RW'}= "2"
+      %codec6_name{:idx => index, :perm => 'RW'}= "18"
+      %codec7_name{:idx => index, :perm => 'RW'}= "4"
+      %record_missed_calls{:idx => index, :perm => 'RW'}= 'on'
+      %record_received_calls{:idx => index, :perm => 'RW'}= 'off'
+      %record_missed_calls_cwi_off{:idx => index, :perm => 'RW'}= 'off'
+      %record_dialed_calls{:idx => index, :perm => 'RW'}= 'off'
+
+    / all sip accounts done
+
+  %functionKeys
+    - @softkeys.each_with_index do |softkey, index|
+      - if softkey[:data]
+        %fkey{:idx => index, :context => (softkey[:context] ? softkey[:context].to_s : 'active'), :label => softkey[:label], :perm => 'RW'}= softkey[:data]
+      - elsif softkey[:general_type]
+        %fkey{:idx => index, :context => (softkey[:context] ? softkey[:context].to_s : 'active'), :label => softkey[:label], :perm => 'RW'}
+          %general{:type => softkey[:general_type]}
+            %default_state{:name => 'initial'}
+          %appearance
+            %line_info_layer
+              %line_format{:line => '0'}= '$state $type'
+              %line_format{:line => '1'}= '$continue $name'
+          - if softkey[:subscription]
+            %subscription{:type => 'dialog', :to => softkey[:subscription][:to], :for => softkey[:subscription][:for]}
+              %NotifyParsingRules{:type => 'applies'}
+                %level1{:translates_to => 'OK'}= "/dialog-info[@entity=\"sip:#{softkey[:subscription][:to]}\"]"
+              %NotifyParsingRules{:type => 'state'}
+                %level1{:translates_to => 'available'}= '/dialog-info/dialog/state[.="terminated"]'
+                %level2{:translates_to => 'ringing'}= '/dialog-info/dialog/state[.="early"]'
+                %level3{:translates_to => 'active'}= '/dialog-info/dialog/state[.="confirmed"]'
+                %level4{:fetch_content => 'true'}= '/dialog-info/dialog/state'
+                %default{:translates_to => 'unknown'}
+          - if softkey[:actions]
+            %action
+              - softkey[:actions].each do |action|
+                - if action[:type] == :url
+                  %url{:target => action[:target], :when => action[:when]}
+
+  %uploads
+    - if @state_settings_url
+      %file{:url => @state_settings_url, :type => "gui_xml_state_settings"}

@@ -1,0 +1,146 @@
+- title nil
+
+%section.phone-book-entry
+  .content
+    %header
+      %h1.username
+        %a= @phone_book_entry
+      - if !@phone_book_entry.organization.blank?
+        .work
+          %a= @phone_book_entry.organization
+          - if !@phone_book_entry.department.blank?
+            \/
+            = @phone_book_entry.department
+          - if !@phone_book_entry.job_title.blank?
+            \/
+            = @phone_book_entry.job_title
+      .personal
+        - if !@phone_book_entry.nickname.blank?
+          %span.nickname
+            a.k.a
+            %strong= @phone_book_entry.nickname
+        - if @phone_book_entry.birthday    
+          %span.birthday
+            = l(@phone_book_entry.birthday)
+      .tags
+        %a= l @phone_book_entry.created_at.utc.getlocal, :format => :short
+        ,
+        %a= l @phone_book_entry.updated_at.utc.getlocal, :format => :short
+    %section.activity
+      - if @user_log
+        %h2 User Log
+        - @user_log.each do |log_entry|
+          - if log_entry[:type] == 'voicemail'
+            .entry.voice-message
+              %span.motive
+                = log_entry[:text]
+              %span.timestamp
+                = log_entry[:timestamp]
+          - if log_entry[:type] == 'fax_document'
+            .entry.fax
+              %span.motive
+                = log_entry[:text]
+              %span.timestamp
+                = log_entry[:timestamp]
+          - if log_entry[:type] == 'call_placed'
+            .entry.phone
+              %span.motive
+                log_entry[:text]
+              %span.timestamp
+                = log_entry[:timestamp]
+          - elsif log_entry[:type] == 'call_received'
+            .entry.phone
+              %span.motive
+                = log_entry[:text]
+              %span.timestamp
+                = log_entry[:timestamp]
+          - elsif log_entry[:type] == 'call_missed'
+            .entry.phone-down
+              %span.motive
+                = log_entry[:text]
+              %span.timestamp
+                = log_entry[:timestamp]
+
+  .sidebar
+    = image_tag @phone_book_entry.image_url(:profile).to_s, :class => 'display'
+    %p.description
+      = @phone_book_entry.description
+    .widget.phones
+      - @phone_book_entry.phone_numbers.each do |phone_number|
+        - case phone_number.name
+        - when /fax/
+          .fax
+            %a= phone_number
+            %span= phone_number.name
+        - when /home/
+          .home
+            %a= phone_number
+            %span= phone_number.name
+        - when /mobile/
+          .cellphone
+            %a= phone_number
+            %span= phone_number.name  
+        - when /office/
+          .office
+            %a= phone_number
+            %span= phone_number.name
+        - else
+          .phone
+            %a= phone_number
+            %span= phone_number.name
+      = link_to t('phone_book_entries.show.manage_phone_numbers'), phone_book_entry_phone_numbers_path(@phone_book_entry)  
+
+    .widget.adresses
+      - @phone_book_entry.addresses.each do |address|
+        .home
+          %strong
+            - if !address.line1.blank?
+              = address.line1
+              %br
+            - if !address.line2.blank?
+              = address.line1
+              %br
+            - if !address.street.blank?
+              = address.street
+              %br
+            - if !address.city.blank?
+              = "#{address.city} #{address.zip_code}"
+              %br
+            - if !address.country.blank?
+              = address.country.to_s
+              %br
+          / %span Home
+      / .office
+    .widget.social
+      - if !@phone_book_entry.homepage_organization.blank?
+        .home
+          %a= @phone_book_entry.homepage_organization
+          %span www
+      - if !@phone_book_entry.homepage_personal.blank?
+        .home
+          %a= @phone_book_entry.homepage_personal
+          %span www
+      - if !@phone_book_entry.twitter_account.blank?
+        .twitter
+          %a= @phone_book_entry.twitter_account
+          %span Twitter
+      - if !@phone_book_entry.google_plus_account.blank?
+        .google_plus
+          %a= @phone_book_entry.google_plus_account
+          %span Google+
+      - if !@phone_book_entry.facebook_account.blank?
+        .facebook
+          %a= @phone_book_entry.facebook_account
+          %span Facebook
+      - if !@phone_book_entry.xing_account.blank?
+        .xing
+          %a= @phone_book_entry.xing_account
+          %span Xing
+      - if !@phone_book_entry.linkedin_account.blank?
+        .linkedin
+          %a= @phone_book_entry.linkedin_account
+          %span LinkedIn
+      - if !@phone_book_entry.mobileme_account.blank?
+        .mobileme
+          %a= @phone_book_entry.mobileme_account
+          %span MobileMe

@@ -1,0 +1,8 @@
+%nav
+  %ol.abc
+    - %w{# A B C D E F G H I J K L M N O P Q R S T U V W X Y Z}.each do |char|
+      %li
+        %a{ :href => "?name=#{char}" }= char
+
+.pagination
+  = will_paginate @phone_book_entries

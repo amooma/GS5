@@ -1,0 +1,6 @@
+- title t("call_forwards.index.page_title")
+
+- if @call_forwards.count > 0
+  = render "index_core", :call_forwards => @call_forwards
+
+= render :partial => 'shared/create_link', :locals => {:parent => @phone_number, :child_class => CallForward}

@@ -1,0 +1,49 @@
+!!! XML
+%SnomIPPhoneMenu{:state => 'relevant', :title => "Gemeinschaft #{GEMEINSCHAFT_VERSION}"}
+  %MenuItem{:name => '$(lang:menu100_phone_book)'}
+    %URL= "#{@base_url}/#{@sip_account_ids.first}/phone_book.xml"
+  %Menu{:name => '$(lang:menu100_call_lists)'}
+    %MenuItem{:name => '$(lang:list_missed)'}
+      - @sip_account_ids.each_with_index do |id, index|
+        %If{:condition => "$(current_line)==#{index+1}"}
+          %URL= "#{@base_url}/#{id}/call_history_missed.xml"
+    %MenuItem{:name => '$(lang:list_taken)'}
+      - @sip_account_ids.each_with_index do |id, index|
+        %If{:condition => "$(current_line)==#{index+1}"}
+          %URL= "#{@base_url}/#{id}/call_history_received.xml"
+    %MenuItem{:name => '$(lang:list_dialed)'}
+      - @sip_account_ids.each_with_index do |id, index|
+        %If{:condition => "$(current_line)==#{index+1}"}
+          %URL= "#{@base_url}/#{id}/call_history_dialed.xml"
+  %MenuItem{:name => '$(lang:sel100_activeline)'}
+    %Action= 'active_line'
+    
+  - if @enable_login
+    %MenuItem{:name => 'Log in'}
+      %URL= "#{@base_url}/log_in.xml"
+  - if @enable_logout
+    %MenuItem{:name => 'Log out'}
+      %URL= "#{@base_url}/log_out.xml"
+
+  %Menu{:name => '$(lang:preferences_settings)'}
+    %MenuItem{:name => '$(lang:menu_gen_contrast)'}
+      %Action= 'contrast'
+    %MenuItem{:name => '$(lang:use_backlight)'}
+      %Action= 'use_backlight'
+    %MenuItem{:name => '$(lang:use_backlight) $(lang:backlight_when_active)'}
+      %Action= 'backlight_active'
+    %MenuItem{:name => '$(lang:use_backlight) $(lang:backlight_when_idle)'}
+      %Action= 'backlight_idle'
+    %MenuItem{:name => '$(lang:menu_equalizer)'}
+      %Action= 'equalizer'
+  %Menu{:name => '$(lang:maintenance_settings)'}
+    %MenuItem{:name => '$(lang:system_information_menu)'}
+      %Action= 'sysinfo'
+    %MenuItem{:name => '$(lang:sel100_reboot)'}
+      %Action= 'reboot'
+    %If{:condition => '$(set:admin_mode)'}
+      %MenuItem{:name => '$(lang:reset_settings)'}
+        %Action= 'reset_settings'
+    %If{:condition => '$(update_available)'}
+      %MenuItem{:name => '$(lang:update_header)'}
+        %Action= 'software_update'

@@ -1,0 +1,95 @@
+en:
+  users:
+    name: "Users"
+    controller:
+      successfuly_created: 'Successfully created user %{resource}.'
+      successfuly_created_and_login: 'Successfully created user %{resource}. You are now logged in.'
+      successfuly_updated: 'Successfully updated user.'
+      successfuly_destroyed: 'Successfully destroyed user.'
+      avatar_destroyed: 'The avatar was deleted.'
+    index:
+      page_title: 'Users'
+      user_name: 'Username'
+      email: 'E-mail address'
+      first_name: 'First name'
+      middle_name: 'Middle name'
+      last_name: 'Last name'
+      male: 'Male'
+      gemeinschaft_unique_id: 'Unique identifier'
+      state: 'State'
+      language_id: 'Language'
+      send_voicemail_as_email_attachment: 'Send voicemails by e-mail'
+      actions:
+        confirm: 'Are you sure you want to delete this user?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'Create a new user'
+        create_for: 'Create a new user for %{resource}'
+    show:
+      page_title: 'Show User'
+      user_name: 'Username'
+      email: 'E-mail address'
+      first_name: 'First name'
+      middle_name: 'Middle name'
+      last_name: 'Last name'
+      male: 'Male'
+      gemeinschaft_unique_id: 'Unique identifier'
+      state: 'State'
+      language_id: 'Language'
+      send_voicemail_as_email_attachment: 'Send voicemails by e-mail'
+      actions:
+        confirm: 'Are you sure you want to delete this user?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View all users'
+    new:
+      page_title: 'New User'
+    edit:
+      page_title: 'Editing user %{resource}'
+    form:
+      user_name:
+        label: 'Username'
+        hint: ''
+      email:
+        label: 'E-mail address'
+        hint: ''
+      password:
+        label: 'Password'
+        hint: 'This password needs to be entered in the WebGUI.'
+      password_confirmation:
+        label: 'Password (confirmation)'
+        hint: ''
+      new_pin:
+        label: 'PIN'
+        hint: 'This PIN is needed in hotdesking environments to log into a phone.'
+      new_pin_confirmation:
+        label: 'PIN (confirmation)'
+        hint: ''
+      first_name:
+        label: 'First name'
+        hint: ''
+      middle_name:
+        label: 'Middle name'
+        hint: ''
+      last_name:
+        label: 'Last name'
+        hint: ''
+      gender:
+        label: 'Gender'
+        hint: ''
+        male: "Male"
+        female: "Female"
+      gemeinschaft_unique_id:
+        label: 'Unique identifier'
+        hint: ''
+      image:
+        label: 'Avatar photo'
+        hint: ''
+      language_id:
+        label: 'Language'
+        hint: ''
+      send_voicemail_as_email_attachment:
+        label: 'Send voicemails as e-mail attachments'
+        hint: ''
+      button: 'Submit'

@@ -1,0 +1,54 @@
+en:
+  conference_invitees:
+    name: 'Conference invitee'
+    controller:
+      successfuly_created: 'Successfully created conference invitee.'
+      successfuly_updated: 'Successfully updated conference invitee.'
+      successfuly_destroyed: 'Successfully destroyed conference invitee.'
+    index:
+      page_title: 'Conference invitees'
+      conference_id: 'Conference'
+      phone_book_entry_id: 'Phone book entry'
+      pin: 'PIN'
+      speaker: 'Speaker'
+      moderator: 'Moderator'
+      actions:
+        confirm: 'Are you sure you want to delete this invitee?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New conference invitee for %{resource}'
+    show:
+      page_title: 'Show conference invitee'
+      conference_id: 'Conference'
+      phone_book_entry_id: 'Phone book entry'
+      pin: 'PIN'
+      speaker: 'Speaker'
+      moderator: 'Moderator'
+      actions:
+        confirm: 'Are you sure you want to delete this invitee?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View all conference invitees'
+    new:
+      page_title: 'New conference invitee'
+    edit:
+      page_title: 'Editing Conference invitee'
+    form:
+      conference_id:
+        label: 'Conference'
+        hint: ''
+      phone_book_entry_id:
+        label: 'Phone book entry'
+        hint: ''
+      pin:
+        label: 'PIN'
+        hint: ''
+      speaker:
+        label: 'Speaker'
+        hint: ''
+      moderator:
+        label: 'Moderator'
+        hint: ''
+      button: 'Submit'

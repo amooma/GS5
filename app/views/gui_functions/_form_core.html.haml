@@ -1,0 +1,10 @@
+.inputs
+  = f.input :category, :label => t('gui_functions.form.category.label'), :hint => conditional_hint('gui_functions.form.category.hint')
+  = f.input :name, :label => t('gui_functions.form.name.label'), :hint => conditional_hint('gui_functions.form.name.hint')
+  = f.input :description, :label => t('gui_functions.form.description.label'), :hint => conditional_hint('gui_functions.form.description.hint')
+
+  - counter = 0
+  = f.fields_for :gui_function_memberships do |gui_function_membership|
+    = gui_function_membership.hidden_field :user_group_id
+    = gui_function_membership.input :activated, :label => @user_groups[counter], :hint => conditional_hint('gui_functions.form.activated.hint')
+    - counter = counter + 1

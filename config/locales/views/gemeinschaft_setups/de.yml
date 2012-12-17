@@ -1,0 +1,28 @@
+de:
+  gemeinschaft_setups:
+    name: 'Gemeinschaft Installations-Assistent'
+    initial_setup:
+      tenant_name_default: 'Beispiel-Firma GmbH'
+      access_denied_only_available_on_a_new_system:  'Zugriff verweigert! Der Installations-Assistent ist nur auf einem frisch installierten System verfügbar.'
+      successful_setup:  'Ihr Admin-Konto wurde erstellt. Als nächsten Schritt müssen Sie einen Mandant anlegen.'
+      admin_name: 'admin'
+      super_tenant_description: 'Die Benutzer dieses Mandanten haben besondere Rechte. Sie können andere Mandanten anlegen und löschen.'
+      admin_group_name: 'Admins'
+      user_group_name: 'Benutzer'
+      super_admin_group_name: 'Super-Admins'
+    new:
+      page_title: 'Gemeinschaft Setup'
+    form:
+      user_id:
+        label: 'Benutzer'
+        hint: ''
+      sip_domain_id:
+        label: 'SIP-Domain'
+        hint: ''
+      country_id:
+        label: 'Land'
+        hint: ''
+      language_id:
+        label: 'Sprache'
+        hint: ''
+      button: 'Absenden'

@@ -1,0 +1,13 @@
+- title @phone_book
+- if ! @phone_book.description.blank?
+  %p
+    %strong= t('phone_books.show.description') + ":"
+    = @phone_book.description
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone_book.phone_bookable, :child => @phone_book }
+
+%h2= t("phone_book_entries.index.page_title")
+- if @phone_book_entries.count > 0
+  = render "phone_book_entries/index_core", :phone_book_entries => @phone_book_entries
+
+= render :partial => 'shared/create_link', :locals => {:parent => @phone_book, :child_class => PhoneBookEntry}

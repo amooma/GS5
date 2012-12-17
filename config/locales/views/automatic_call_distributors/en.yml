@@ -1,0 +1,136 @@
+en:
+  automatic_call_distributors:
+    name: 'ACD'
+    controller:
+      successfuly_created: 'Successfully created ACD.'
+      successfuly_updated: 'Successfully updated ACD.'
+      successfuly_destroyed: 'Successfully destroyed ACD.'
+    index:
+      page_title: 'ACDs'
+      uuid: 'UUID'
+      name: 'Name'
+      strategy: 'Strategy'
+      automatic_call_distributorable_type: 'Automatic call distributorable type'
+      automatic_call_distributorable_id: 'Automatic call distributorable'
+      max_callers: 'Max callers'
+      agent_timeout: 'Agent timeout'
+      retry_timeout: 'Retry timeout'
+      join: 'Join'
+      leave: 'Leave'
+      phone_numbers: 'Phone numbers'
+      acd_agents: 'Agents'
+      gs_node_id: 'Gs node'
+      announce_position: 'Announce position'
+      announce_call_agents: 'Accounce calling'
+      greeting: 'Greeting'
+      goodbye: 'Goodbye'
+      music: 'Music'
+      actions:
+        confirm: 'Are you sure you want to delete this ACD?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New ACD for %{resource}'
+    show:
+      page_title: 'Show ACD'
+      uuid: 'UUID'
+      name: 'Name'
+      strategy: 'Strategy'
+      automatic_call_distributorable_type: 'Automatic call distributorable type'
+      automatic_call_distributorable_id: 'Automatic call distributorable'
+      max_callers: 'Max callers'
+      agent_timeout: 'Agent timeout'
+      retry_timeout: 'Retry timeout'
+      join: 'Join'
+      leave: 'Leave'
+      gs_node_id: 'Gs node'
+      announce_position: 'Announce position'
+      announce_call_agents: 'Accounce call'
+      greeting: 'Greeting'
+      goodbye: 'Goodbye'
+      music: 'Music'
+      actions:
+        confirm: 'Are you sure you want to delete this element?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New ACD'
+      actions:
+        back_to_list: 'Back to Index'
+    edit:
+      page_title: 'Editing ACD'
+      actions:
+        back_to_list: 'Back to Index'
+        edit: 'Edit'
+        view_all: 'View All'
+    form:
+      uuid:
+        label: 'UUID'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      strategy:
+        label: 'Strategy'
+        hint: ''
+      automatic_call_distributorable_type:
+        label: 'Automatic call distributorable type'
+        hint: ''
+      automatic_call_distributorable_id:
+        label: 'Automatic call distributorable'
+        hint: ''
+      max_callers:
+        label: 'Max callers'
+        hint: ''
+      agent_timeout:
+        label: 'Agent timeout'
+        hint: ''
+      retry_timeout:
+        label: 'Retry timeout'
+        hint: ''
+      join:
+        label: 'Join'
+        hint: ''
+      leave:
+        label: 'Leave'
+        hint: ''
+      gs_node_id:
+        label: 'Gs node'
+        hint: ''
+      announce_position: 
+        label: 'Announce position'
+        hint: ''      
+      announce_call_agents: 
+        label: 'Accounce calling'
+        hint: ''      
+      greeting: 
+        label: 'Greeting'
+        hint: '' 
+      goodbye: 
+        label: 'Goodbye'
+        hint: '' 
+      music: 
+        label: 'Music'
+        hint: '' 
+      button: 'Submit'
+    strategies:
+      round_robin: 'Round robin'
+      ring_all: 'Ring all'
+    join_on:
+      agents_available: 'Agents available'
+      agents_active: 'Agents active'
+      always: 'Always'
+    leave_on:
+      no_agents_available_timeout: 'No agents available or timeout'
+      no_agents_active_timeout: 'No agents active or timeout'
+      no_agents_available: 'No agents available'
+      no_agents_active: 'No agents active'
+      timeout: 'Timeout'
+      never: 'Never'
+    announce_position:
+      never: 'Never'
+      on_change_only: 'After a position update'
+      every_x_seconds: "Every %{x_seconds} seconds and after each position update"
+

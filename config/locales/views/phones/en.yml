@@ -1,0 +1,77 @@
+en:
+  phones:
+    name: 'Phone'
+    controller:
+      successfuly_created: 'Successfully created phone.'
+      successfuly_updated: 'Successfully updated phone.'
+      successfuly_destroyed: 'Successfully destroyed phone.'
+    index:
+      page_title: 'Phones'
+      mac_address: 'Mac address'
+      phone_model_id: 'Phone model'
+      hot_deskable: 'Hot-deskable'
+      ip_address: 'IP address'
+      last_ip_address: 'Last IP address'
+      http_user: 'http user'
+      http_password: 'http password'
+      nightly_reboot: 'Nightly reboot'
+      actions:
+        confirm: 'Are you sure you want to delete this phone?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New phone for %{resource}'
+    show:
+      page_title: 'Show phone'
+      mac_address: 'Mac address'
+      phone_model_id: 'Phone model'
+      hot_deskable: 'Hot-deskable'
+      ip_address: 'IP address'
+      last_ip_address: 'Last IP address'
+      http_user: 'http user'
+      http_password: 'http password'
+      nightly_reboot: 'Nightly reboot'
+      provisioning_key_active: 'Provisioning key active'
+      actions:
+        confirm: 'Are you sure you want to delete this phone?'
+        destroy: 'Delete phone'
+        edit: 'Edit phone'
+        view_all: 'View all phones'
+    new:
+      page_title: 'New phone'
+      actions:
+    edit:
+      page_title: 'Editing Phone'
+    form:
+      mac_address:
+        label: 'Mac address'
+        hint: ''
+      phone_model_id:
+        label: 'Phone model'
+        hint: ''
+      hot_deskable:
+        label: 'Hot-deskable'
+        hint: ''
+      nightly_reboot: 
+        label: 'Nightly reboot'
+        hint: ''
+      ip_address:
+        label: 'IP address'
+        hint: ''
+      last_ip_address:
+        label: 'Last IP address'
+        hint: ''
+      http_user:
+        label: 'GUI user'
+        hint: 'Phone GUI user name'
+      http_password:
+        label: 'GUI password'
+        hint: 'Phone GUI password'
+      provisioning_key_active:
+        label: 'Provisioning key active'
+        hint: ''
+      button: 'Submit'
+    sip_accounts:
+      title: 'Listing of connected SIP accounts'
+      connect_to_sip_account: 'Connect to an existing SIP account'

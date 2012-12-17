@@ -1,0 +1,60 @@
+de:
+  fax_accounts:
+    name: 'Software-Fax-Konto'
+    controller:
+      successfuly_created: 'Eine neues Software-Fax-Konto wurde erstellt.'
+      successfuly_updated: 'Das Software-Fax-Konto wurde aktualisiert.'
+      successfuly_destroyed: 'Das Software-Fax-Konto wurde gelöscht.'
+    index:
+      page_title: 'Software-Fax-Konten'
+      name: 'Name'
+      station_id: 'Stations-ID'
+      email: 'E-Mail'
+      phone_numbers: 'Telefonnummern'
+      days_till_auto_delete: 'Anzahl der Tage bis Faxe gelöscht werden'
+      thumbnails: 'Vorschaubilder'
+      received: 'Empfangen'
+      sent: 'Gesendet'
+      retries: 'Max. Anzahl von Sendeversuchen'
+      last_update: 'Letzter Eintrag'
+      send_a_fax: 'Fax versenden'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie dieses Software-Fax-Konto löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neues Fax-Konto für %{resource} anlegen'
+    show:
+      page_title: 'Software-Fax-Konto anzeigen'
+      name: 'Name'
+      station_id: 'Stations-ID'
+      email: 'E-Mail'
+      days_till_auto_delete: 'Anzahl der Tage bis Faxe gelöscht werden'
+      retries: 'Max. Anzahl von Sendeversuchen'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie dieses Software-Fax-Konto löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neues Software-Fax-Konto'
+    edit:
+      page_title: 'Software-Fax-Konto bearbeiten'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      station_id: 
+        label: 'Stations-ID'
+        hint: 'Die "Stations-ID" wird in der Kopfzeile eines Faxes als Absender angezeigt.'
+      email:
+        label: 'E-Mail'
+        hint: 'Ein PDF eines empfangenen Faxes wird an diese E-Mail Adresse verschickt.'
+      days_till_auto_delete: 
+        label: 'Anzahl der Tage bis Faxe gelöscht werden'
+        hint: ''
+      retries: 
+        label: 'Max. Anzahl von Sendeversuchen'
+        hint: ''
+      button: 'Absenden'

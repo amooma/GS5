@@ -1,0 +1,57 @@
+de:
+  hunt_groups:
+    name: 'Rufgruppe'
+    strategies:
+      ring_all: 'Alle Rufgruppen-Teilnehmer klingeln parallel'
+      ring_recursively: 'Die Rufgruppen-Teilnehmer klingeln rekursiv'
+    controller:
+      successfuly_created: 'Eine neue Rufgruppe wurde angelegt.'
+      successfuly_updated: 'Die Rufgruppe wurde aktualisiert.'
+      successfuly_destroyed: 'Die Rufgruppe wurde gelöscht.'
+    index:
+      page_title: 'Rufgruppen'
+      name: 'Name'
+      strategy: 'Verteilungs-Strategie'
+      seconds_between_jumps: 'Sekunden zwischen Sprüngen'
+      phone_numbers: 'Telefonnummern'
+      hunt_group_members: 'Rufgruppen-Teilnehmer'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Rufgruppe löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neue Rufgruppe für %{resource} anlegen'
+    show:
+      page_title: 'Rufgruppe anzeigen'
+      name: 'Name'
+      strategy: 'Verteilungs-Strategie'
+      seconds_between_jumps: 'Sekunden zwischen Sprüngen'
+      phone_numbers: 'Telefonnummern'
+      hunt_group_members: 'Rufgruppen-Teilnehmer'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Rufgruppe löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Rufgruppen anzeigen'
+    new:
+      page_title: 'Neue Rufgruppe'
+    edit:
+      page_title: 'Rufgruppe bearbeiten'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      strategy:
+        label: 'Verteilungs-Strategie'
+        hint: ''
+      seconds_between_jumps:
+        label: 'Sekunden zwischen Sprüngen'
+        hint: ''
+      phone_numbers:
+        label: 'Telefonnummern'
+        hint: ''
+      hunt_group_members:
+        label: 'Rufgruppen-Teilnehmer'
+        hint: ''
+      button: 'Absenden'

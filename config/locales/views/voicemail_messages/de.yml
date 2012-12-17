@@ -1,0 +1,34 @@
+de:
+  voicemail_messages:
+    name: 'Sprachnachrichten'
+    controller:
+      successfuly_destroyed: 'Die Nachricht wurde gelöscht.'
+    index:
+      page_title: 'Nachrichten'
+      page_title_read: 'Gelesene Nachrichten'
+      page_title_unread: 'Ungelesene Nachrichten'
+      date_format: '%d.%m.%Y %H:%M'
+      date_today_format: '%H:%M'
+      navigation:
+        read: 'Gelesen: %{count}'
+        unread: 'Ungelesen: %{count}'
+        all: 'Alle: %{count}'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Nachricht löschen möchten?'
+        confirm_selected: 'Sind Sie sicher, dass Sie die markierten Nachrichten löschen möchten?'
+        destroy: 'Löschen'
+        destroy_multiple: 'Markierte Nachrichten löschen'
+        call: 'Anrufen'
+        mark_read: 'gelesen'
+        mark_unread: 'ungelesen'
+      mailbox:
+        inbox: 'Eingang'
+      flags:
+        save: 'Gespeichert'
+    call_results:
+      UNSPECIFIED: ''
+      ORIGINATOR_CANCEL: 'Abgebrochen'
+      UNALLOCATED_NUMBER: 'Rufnummer nicht bekannt'
+      NO_USER_RESPONSE: 'Keine Antwort'
+      NOANSWER: 'Keine Antwort'
+      USER_NOT_REGISTERED: 'Offline'

@@ -1,0 +1,81 @@
+de:
+  conferences:
+    name: 'Telefonkonferenz'
+    new_name_scaffold: 'Telefonkonferenz Nr. %{counter}'
+    controller:
+      successfuly_created: 'Eine neue Telefonkonferenz wurde erstellt.'
+      successfuly_updated: 'Die Telefonkonferenz wurde aktualisiert.'
+      successfuly_destroyed: 'Die Telefonkonferenz wurde gelöscht.'
+    index:
+      page_title: 'Telefonkonferenzen'
+      name: 'Name'
+      start: 'Start'
+      end: 'Ende'
+      description: 'Beschreibung'
+      phone_numbers: 'Telefonnummern'
+      pin: 'PIN'
+      max_members: 'Maximale Teilnehmeranzahl'
+      number_of_invitees: 'Teilnehmeranzahl'
+      flags: 'Flags'
+      open_for_anybody: 'Offen für alle'
+      announce_new_member_by_name: 'Betreten ankündigen'
+      announce_left_member_by_name: 'Verlassen ankündigen'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Telefonkonferenz löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neue Telefonkonferenz für %{resource} anlegen'
+    show:
+      page_title: 'Telefonkonferenz anzeigen'
+      name: 'Name'
+      start: 'Start'
+      end: 'Ende'
+      description: 'Beschreibung'
+      pin: 'PIN'
+      max_members: 'Maximale Teilnehmeranzahl'
+      open_for_anybody: 'Für jeden offen?'
+      announce_new_member_by_name: 'Neue Teilnehmer werden angekündigt'
+      announce_left_member_by_name: 'Die Konferenz verlassende Teilnehmer werden angekündigt'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diese Telefonkonferenz löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Telefonkonferenzen anzeigen'
+        view_all_of: 'Alle Telefonkonferenzen von %{resource} anzeigen'
+    new:
+      page_title: 'Neue Telefonkonferenz'
+      name: "Telefonkonferenz von %{resource}"
+      actions:
+    edit:
+      page_title: 'Telefonkonferenz bearbeiten'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      start:
+        label: 'Start'
+        hint: 'Bitte eine Start-Zeit eintragen, falls diese Telefonkonferenz zeitlich begrenzt ist.'
+      end:
+        label: 'Ende'
+        hint: 'Bitte eine Ende-Zeit eintragen, falls diese Telefonkonferenz zeitlich begrenzt ist.'
+      description:
+        label: 'Beschreibung'
+        hint: ''
+      max_members:
+        label: 'Maximale Teilnehmeranzahl'
+        hint: 'Die maximale Anzahl von Teilnehmern in dieser Telefonkonferenz. Der Inhaber der Konferenz kann immer eintreten (auch wenn die Konferenz bereits voll ist).'
+      pin:
+        label: 'PIN'
+        hint: ''
+      open_for_anybody:
+        label: 'Für jeden offen?'
+        hint: 'Jeder kann an dieser Konferenz teilnehmen.'
+      announce_new_member_by_name:
+        label: 'Neue Teilnehmer werden angekündigt'
+        hint: 'Ein neuer Teilnehmer wird bei Eintritt in die Konferenz vorgestellt.'
+      announce_left_member_by_name:
+        label: 'Die Konferenz verlassende Teilnehmer werden angekündigt'
+        hint: ''
+      button: 'Absenden'

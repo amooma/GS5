@@ -1,0 +1,148 @@
+en:
+  fax_documents:
+    name: 'Fax'
+    controller:
+      successfuly_created: 'Successfully created fax.'
+      successfuly_updated: 'Successfully updated fax.'
+      successfuly_destroyed: 'Successfully destroyed fax.'
+    states:
+      queued_for_sending: 'Queued for sending'
+      sending: 'Currently sending'
+      unsuccessful: 'Unsuccessful'
+      successful: 'Successful'
+      inbound: 'Inbound'
+    result_codes:
+      code_0: 'OK'
+      code_2: 'Timed out waiting for initial communication'
+      code_3: 'Timed out waiting for the first message'
+      code_5: 'The HDLC carrier did not stop in a timely manner'
+      code_6: 'Failed to train with any of the compatible modems'
+      code_13: 'Unexpected message received'
+      code_14: 'Received bad response to DCS or training'
+      code_15: 'Received a DCN from remote after sending a page'
+      code_17: 'Received a DCN while waiting for a DIS'
+      code_20: 'Received no response to DCS or TCF'
+      code_23: 'Invalid ECM response received from transmitter'
+      code_31: 'Timer T2 expired while waiting for fax page'
+      code_32: 'Timer T2 expired while waiting for next fax page'
+      code_48: 'Disconnected after permitted retries'
+      code_49: 'The call dropped prematurely'
+    index:
+      page_title: 'Faxes'
+      inbound: 'Inbound'
+      state: 'State'
+      transmission_time: 'Transmission time'
+      sent_at: 'Sent at'
+      document_total_pages: 'Document total pages'
+      document_transferred_pages: 'Document transferred pages'
+      ecm_requested: 'ECM requested'
+      ecm_used: 'ECM used'
+      image_resolution: 'Image resolution'
+      image_size: 'Image size'
+      local_station_id: 'Local station'
+      result_code: 'Result code'
+      result_text: 'Result text'
+      remote_station_id: 'Remote station ID'
+      success: 'Success'
+      transfer_rate: 'Transfer rate'
+      fax_resolution: 'Resolution'
+      document: 'Document'
+      destination_phone_number: 'Destination phone number'
+      actions:
+        confirm: 'Are you sure you want to delete this fax?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New fax document'
+        download_pdf: 'Download PDF'
+    show:
+      page_title: 'Show Fax'
+      inbound: 'Inbound'
+      state: 'State'
+      transmission_time: 'Transmission time'
+      sent_at: 'Sent at'
+      document_total_pages: 'Document total pages'
+      document_transferred_pages: 'Document transferred pages'
+      ecm_requested: 'ECM requested'
+      ecm_used: 'ECM used'
+      image_resolution: 'Image resolution'
+      image_size: 'Image size'
+      local_station_id: 'Local station'
+      result_code: 'Result code'
+      result_text: 'Result text'
+      remote_station_id: 'Remote station ID'
+      success: 'Success'
+      transfer_rate: 'Transfer rate'
+      document: 'Document'
+      fax_resolution: 'Resolution'
+      destination_phone_number: 'Destination phone number'
+      actions:
+        confirm: 'Are you sure you want to delete this fax?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View all'
+        view_all_for: 'View all faxes of %{resource}'
+    new:
+      page_title: 'New Fax'
+    edit:
+      page_title: 'Editing Fax'
+    form:
+      inbound:
+        label: 'Inbound'
+        hint: ''
+      state:
+        label: 'State'
+        hint: ''
+      transmission_time:
+        label: 'Transmission time'
+        hint: ''
+      sent_at:
+        label: 'Sent at'
+        hint: ''
+      document_total_pages:
+        label: 'Document total pages'
+        hint: ''
+      document_transferred_pages:
+        label: 'Document transferred pages'
+        hint: ''
+      ecm_requested:
+        label: 'ECM requested'
+        hint: ''
+      ecm_used:
+        label: 'ECM used'
+        hint: ''
+      image_resolution:
+        label: 'Image resolution'
+        hint: ''
+      image_size:
+        label: 'Image size'
+        hint: ''
+      local_station_id:
+        label: 'Local station'
+        hint: ''
+      result_code:
+        label: 'Result code'
+        hint: ''
+      result_text:
+        label: 'Result text'
+        hint: ''
+      remote_station_id:
+        label: 'Remote station ID'
+        hint: ''
+      success:
+        label: 'Success'
+        hint: ''
+      transfer_rate:
+        label: 'Transfer rate'
+        hint: ''
+      document:
+        label: 'Document'
+        hint: ''
+      fax_resolution:
+        label: 'Resolution'
+        hint: ''
+      destination_phone_number: 
+        label: 'Destination phone number'
+        hint: ''
+      button: 'Submit'
+

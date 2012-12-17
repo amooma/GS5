@@ -1,0 +1,19 @@
+- title t("gs_cluster_sync_log_entries.show.page_title")
+
+%p
+  %strong= t('gs_cluster_sync_log_entries.show.gs_node_id') + ":"
+  = @gs_cluster_sync_log_entry.gs_node_id
+%p
+  %strong= t('gs_cluster_sync_log_entries.show.class_name') + ":"
+  = @gs_cluster_sync_log_entry.class_name
+%p
+  %strong= t('gs_cluster_sync_log_entries.show.action') + ":"
+  = @gs_cluster_sync_log_entry.action
+%p
+  %strong= t('gs_cluster_sync_log_entries.show.content') + ":"
+  = @gs_cluster_sync_log_entry.content
+%p
+  %strong= t('gs_cluster_sync_log_entries.show.status') + ":"
+  = @gs_cluster_sync_log_entry.status
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @gs_cluster_sync_log_entry }

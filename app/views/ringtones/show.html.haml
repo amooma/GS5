@@ -1,0 +1,12 @@
+- title t("ringtones.show.page_title")
+
+- if 1 == 2
+  %p
+    %strong= t('ringtones.show.audio') + ":"
+    = @ringtone.audio
+
+%p
+  %strong= t('ringtones.show.bellcore_id') + ":"
+  = @ringtone.bellcore_id
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @ringtone.ringtoneable, :child => @ringtone }

@@ -1,0 +1,33 @@
+!!! XML
+%screen_description
+  - if @phone_xml_object[:image]
+    %Image
+      %Data{:encoding => 'base64'}= @phone_xml_object[:image][:data]
+      %LocationX= @phone_xml_object[:image][:location_x]
+      %LocationY= @phone_xml_object[:image][:location_y]
+      %Invert= @phone_xml_object[:image][:invert]
+  - if @phone_xml_object[:clock]
+    %Clock
+      %LocationX= @phone_xml_object[:clock][:location_x]
+      %LocationY= @phone_xml_object[:clock][:location_y]
+  - if @phone_xml_object[:digital_clock]
+    %DigitalClock
+      %LocationX= @phone_xml_object[:digital_clock][:location_x]
+      %LocationY= @phone_xml_object[:digital_clock][:location_y]
+  - if @phone_xml_object[:date]
+    %Date
+      %LocationX= @phone_xml_object[:date][:location_x]
+      %LocationY= @phone_xml_object[:date][:location_y]
+  - if @phone_xml_object[:line]
+    %Line
+      %Account
+        %LocationX= @phone_xml_object[:line][:location_x]
+        %LocationY= @phone_xml_object[:line][:location_y]
+  - if @phone_xml_object[:status]
+    %Status
+      %LocationX= @phone_xml_object[:status][:location_x]
+      %LocationY= @phone_xml_object[:status][:location_y]
+  - if @phone_xml_object[:softkeys]
+    %Softkeys
+      %LocationX= @phone_xml_object[:softkeys][:location_x]
+      %LocationY= @phone_xml_object[:softkeys][:location_y]

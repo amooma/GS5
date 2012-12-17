@@ -1,0 +1,33 @@
+%table
+  %tr
+    %th= t('fax_documents.index.sent_at')
+    %th= t('fax_documents.index.state')
+    %th= t('fax_documents.index.result')
+    %th
+      = t('fax_documents.index.phone_number')
+      %br
+      = t('fax_documents.index.remote_station_id')
+    %th= t('fax_documents.index.thumbnails')
+
+  - reset_cycle
+  - for fax_document in fax_documents
+    %tr{:class => cycle('odd', 'even'), :id => "fax_document_#{fax_document.id}"}
+      - if fax_document.sent_at
+        %td= "#{fax_document.inbound ? '&#8680;' : '&#8678;'} #{fax_document.sent_at}".html_safe
+        %td= t("fax_documents.states.#{fax_document.state}")
+        %td= t("fax_documents.result_codes.code_#{fax_document.result_code}") + " (#{fax_document.result_code})"
+      - else
+        %td{ :colspan => 3 }= t("fax_documents.states.#{fax_document.state}")
+      %td
+        - if fax_document.inbound
+          = "#{fax_document.caller_id_number} #{fax_document.caller_id_name}"
+        - else
+          = fax_document.destination_phone_number
+        %br
+        = fax_document.remote_station_id
+      %td 
+        - fax_document.fax_thumbnails.limit(5).each do |fax_thumbnail|
+          =image_tag fax_thumbnail.thumbnail_url(:mini), :class => 'FaxThumbnail', :alt => "Thumbnail of page \##{fax_thumbnail.position}"
+        - if can?(:show, fax_document) && !fax_document.document.blank? && File.readable?(fax_document.document.path)
+          = link_to t('fax_documents.index.actions.download'), fax_account_fax_document_path(@fax_account, fax_document, :format => :pdf), :method => :get
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => fax_document.fax_account, :child => fax_document}

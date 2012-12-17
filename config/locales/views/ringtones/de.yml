@@ -1,0 +1,39 @@
+de:
+  ringtones:
+    name: 'Klingelton'
+    controller:
+      successfuly_created: 'Ein neuer Klingelton wurde eingetragen.'
+      successfuly_updated: 'Der Klingelton wurde aktualisiert.'
+      successfuly_destroyed: 'Der Klingelton wurde gelöscht.'
+    index:
+      page_title: 'Klingeltöne'
+      audio: 'Audio'
+      bellcore_id: 'Bellcore-ID'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Klingelton löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+    show:
+      page_title: 'Klingelton'
+      audio: 'Audio'
+      bellcore_id: 'Bellcore-ID'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Klingelton löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neuer Klingelton'
+    edit:
+      page_title: 'Klingelton bearbeiten'
+    form:
+      audio:
+        label: 'Audio'
+        hint: ''
+      bellcore_id:
+        label: 'Bellcore-ID'
+        hint: 'Im Telefon eingebaute Klingeltöne. "0" bedeutet lautlos.'
+      button: 'Absenden'
+    set_a_ringtone: 'Klingelton einstellen'

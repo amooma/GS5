@@ -1,0 +1,13 @@
+- title t("phone_sip_accounts.show.page_title")
+
+%p
+  %strong= t('phone_sip_accounts.show.phone_id') + ":"
+  = @phone_sip_account.phone
+%p
+  %strong= t('phone_sip_accounts.show.sip_account_id') + ":"
+  = @phone_sip_account.sip_account
+%p
+  %strong= t('phone_sip_accounts.show.position') + ":"
+  = @phone_sip_account.position
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone, :child => @phone_sip_account }

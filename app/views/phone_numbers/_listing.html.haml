@@ -1,0 +1,8 @@
+- amount_of_phone_numbers = phone_numbers.count
+- if amount_of_phone_numbers > 0
+  - if amount_of_phone_numbers < 110
+    = phone_numbers.map{|number| number}.join(', ')
+  - else
+    = phone_numbers.limit(30).map{|number| number}.join(', ') + ', '
+    = '[...]'
+    = phone_numbers.offset(amount_of_phone_numbers - 30).map{|number| number}.join(', ')

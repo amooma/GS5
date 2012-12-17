@@ -1,0 +1,24 @@
+.inputs
+  = f.input :name, :label => t('callthroughs.form.name.label'), :hint => conditional_hint('callthroughs.form.name.hint')
+
+  %h2= t('callthroughs.form.phone_numbers.label')
+  - if !t('callthroughs.form.phone_numbers.hint').blank?
+    %p= t('callthroughs.form.phone_numbers.hint')
+  = f.simple_fields_for :phone_numbers do |phone_number|
+    = render "phone_numbers/form_core", :f => phone_number
+    %p
+
+  - if @callthrough && @callthrough.access_authorizations.size > 0
+    %h2= t('callthroughs.form.access_authorizations.label')
+    - if !t('callthroughs.form.access_authorizations.hint').blank?
+      %p= t('callthroughs.form.access_authorizations.hint')
+    = f.simple_fields_for :access_authorizations do |access_authorization|
+      = render "access_authorizations/form_core", :f => access_authorization
+
+  - if CALLTHROUGH_HAS_WHITELISTS == true
+    - if @callthrough && @callthrough.whitelists.size > 0
+      %h2= t('callthroughs.form.whitelists.label')
+      - if !t('callthroughs.form.whitelists.hint').blank?
+        %p= t('callthroughs.form.whitelists.hint')
+      = f.simple_fields_for :whitelists do |whitelist|
+        = render "whitelists/form_core", :f => whitelist

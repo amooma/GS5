@@ -1,0 +1,68 @@
+de:
+  softkeys:
+    functions:
+      speed_dial: 'Kurzwahl'
+      blf: 'Besetzt-Lampe'
+      dtmf: 'DTMF'
+      log_in: 'Anmelden'
+      log_out: 'Abmelden'
+      conference: 'Konferenz'
+      call_forwarding: 'Rufumleitung ein/aus'
+      hold: 'Halten'
+      hunt_group_membership: 'Rufgruppen-Mitgliedschaft'
+      deactivated: 'Deaktiviert'
+      acd_membership: 'Warteschleife'
+    name: 'Softkey'
+    controller:
+      successfuly_created: 'Ein neuer Softkey wurde erstellt.'
+      successfuly_updated: 'Der Softkey wurde aktualisiert.'
+      successfuly_destroyed: 'Der Softkey wurde gelöscht.'
+    index:
+      page_title: 'Tastenbelegungen'
+      phone_id: 'Telefon'
+      function: 'Funktion'
+      number: 'Nummer'
+      label: 'Beschriftung'
+      position: 'Position'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Softkey löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neuer Softkey'
+        create_for: 'Neuer Softkey für %{resource}'
+    show:
+      page_title: 'Softkey anzeigen'
+      phone_id: 'Telefon'
+      function: 'Funktion'
+      number: 'Nummer'
+      label: 'Beschriftung'
+      position: 'Position'
+      call_forward: 'Rufumleitung'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie diesen Softkey löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Neuer Softkey'
+      actions:
+    edit:
+      page_title: 'Softkey bearbeiten'
+      actions:
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      function:
+        label: 'Funktion'
+        hint: ''
+      call_forward:
+        label: 'Rufumleitung'
+        hint: ''
+      number:
+        label: 'Nummer'
+        hint: ''
+      label:
+        label: 'Beschriftung'
+        hint: 'Je nach Telefonmodell gibt es die Möglichkeit eine Beschriftung bzw. eine Beschreibung auf dem Telefon anzuzeigen.'
+      button: 'Absenden'

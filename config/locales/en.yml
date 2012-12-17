@@ -1,0 +1,6 @@
+# Don't add anything here!
+en:
+  dont_use_me: "NO ME USES!"
+  # Temporal, just till we create the Voice Mail stuff.
+  voice_mail: "Voice Mail"
+  fax: "Fax"

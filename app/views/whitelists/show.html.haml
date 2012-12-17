@@ -1,0 +1,7 @@
+- title t("whitelists.show.page_title")
+
+%p
+  %strong= t('whitelists.show.name') + ":"
+  = @whitelist.name
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @parent, :child => @whitelist }

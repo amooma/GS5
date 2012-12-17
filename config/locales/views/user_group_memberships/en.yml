@@ -1,0 +1,35 @@
+en:
+  user_group_memberships:
+    name: "User group membership"
+    controller:
+      successfuly_created: 'Successfully created user group membership.'
+      successfuly_updated: 'Successfully updated user group membership.'
+      successfuly_destroyed: 'Successfully destroyed user group membership.'
+      no_more_user_to_add: 'There are no more users to add to this user group.'
+    index:
+      page_title: 'User group memberships'
+      user: 'User'
+      actions:
+        confirm: 'Are you sure you want to delete this user group membership?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New user group membership for %{resource}'
+    show:
+      page_title: 'Show user group membership'
+      user: 'User'
+      actions:
+        confirm: 'Are you sure you want to delete this user group membership?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View all user group memberships'
+    new:
+      page_title: 'New user group membership'
+    edit:
+      page_title: 'Editing user group membership "%{resource}"'
+    form:
+      name:
+        user: 'User'
+        hint: ''
+      button: 'Submit'

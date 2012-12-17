@@ -1,0 +1,33 @@
+!!! XML
+%IppPhone
+  %IppDisplay
+    %IppScreen{:ID => '1', :HiddenCount => (@phone_xml_object[:hidden] ? @phone_xml_object[:hidden].length : '0'), :CommandCount => (@phone_xml_object[:commands] ? @phone_xml_object[:commands].length : '0')}
+      - if @phone_xml_object[:make_call]
+        %IppAction{:Type => 'MAKECALL'}
+          %Number= @phone_xml_object[:make_call]
+      - if @phone_xml_object[:led] != nil
+        %IppAction{:Type => (@phone_xml_object[:led] ? 'TURNLEDON' : 'TURNLEDOFF')}
+      %IppKey{:Keypad => 'YES', :SendKeys => 'YES', :BufferKeys => 'NO', :BufferLength => '0', :TermKey => '', :UrlKey => 'key'}
+      - if @phone_xml_object[:entries]
+        %IppList{:Type => 'IMPLICIT', :Count => @phone_xml_object[:entries].length, :Columns => @phone_xml_object[:columns]}
+          - if @phone_xml_object[:title]
+            %Title= @phone_xml_object[:title]
+          %Url= @phone_xml_object[:url]
+          - @phone_xml_object[:entries].each_with_index do |entry, index| 
+            %Option{:ID => index+1, :Selected => (entry[:selected] ? 'TRUE' : 'FALSE'), :Key =>  (entry[:key] ? entry[:key] : 'item'), :Value => entry[:value]}
+              - if entry[:image]
+                %Image= entry[:image]
+              %OptionText= entry[:text].to_s
+              - if entry[:text_center]
+                %OptionText= entry[:text_center].to_s
+              - if entry[:text_right]
+                %OptionText= entry[:text_right].to_s
+      - if @phone_xml_object[:hidden]
+        - @phone_xml_object[:hidden].each do |key, value|
+          %IppHidden{:Type => 'VALUE', :Key => key}
+            %Value= value
+      - if @phone_xml_object[:commands]
+        - @phone_xml_object[:commands].each_with_index do |command, index|
+          %IppCommand{:Type => command[:type], :DisplayOn => command[:display], :Priority => index, :Key => command[:key], :Value => command[:value], :DisplayOn => command[:display_on], :Select => command[:select], :Default => command[:default], :Auto => command[:auto]}
+            %Label= command[:label]
+            %Screen= "1"

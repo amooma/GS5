@@ -1,0 +1,27 @@
+.inputs
+  - if GuiFunction.display?('name_data_fields_in_user_edit_form', current_user)
+    = f.input :male, :collection => [[true, t('users.form.gender.male')], [false, t('users.form.gender.female')]], :label_method => :last, :value_method => :first, :label => t('users.form.male.label'), :hint => conditional_hint('users.form.gender.hint'), :label => t('users.form.gender.label'), :as => :radio
+    = f.input :first_name, :label => t('users.form.first_name.label'), :hint => conditional_hint('users.form.first_name.hint'), :autofocus => true
+    = f.input :middle_name, :label => t('users.form.middle_name.label'), :hint => conditional_hint('users.form.middle_name.hint')
+    = f.input :last_name, :label => t('users.form.last_name.label'), :hint => conditional_hint('users.form.last_name.hint')
+  - if GuiFunction.display?('user_name_field_in_user_edit_form', current_user)
+    = f.input :user_name, :label => t('users.form.user_name.label'), :hint => conditional_hint('users.form.user_name.hint')
+  - if GuiFunction.display?('email_field_in_user_edit_form', current_user)
+    = f.input :email, :label => t('users.form.email.label'), :hint => conditional_hint('users.form.email.hint')
+  
+  - if GuiFunction.display?('password_fields_in_user_edit_form', current_user)
+    = f.input :password, :label => t('users.form.password.label'), :hint => conditional_hint('users.form.password.hint'), :as => :password
+    = f.input :password_confirmation, :label => t('users.form.password_confirmation.label'), :hint => conditional_hint('users.form.password_confirmation.hint'), :as => :password
+  
+  - if GuiFunction.display?('pin_fields_in_user_edit_form', current_user)
+    = f.input :new_pin, :label => t('users.form.new_pin.label'), :hint => conditional_hint('users.form.new_pin.hint'), :as => :password
+    = f.input :new_pin_confirmation, :label => t('users.form.new_pin_confirmation.label'), :hint => conditional_hint('users.form.new_pin_confirmation.hint'), :as => :password
+  
+  = f.input :image, { :as => :file, :label => t('users.form.image.label'), :hint => conditional_hint('users.form.image.hint') }
+  - if @user && @user.image?
+    %p
+      =link_to 'Destroy avatar', tenant_user_destroy_avatar_path(@tenant, @user)
+
+  = f.input :language_id, :collection => Language.all, :label => t('users.form.language_id.label'), :hint => conditional_hint('users.form.language_id.hint'), :include_blank => false
+
+  /= f.input :send_voicemail_as_email_attachment, :label => t('users.form.send_voicemail_as_email_attachment.label'), :hint => conditional_hint('users.form.send_voicemail_as_email_attachment.hint')
