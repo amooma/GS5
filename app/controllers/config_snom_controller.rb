@@ -2,17 +2,17 @@ class ConfigSnomController < ApplicationController
 	MAX_SIP_ACCOUNTS_COUNT = 11
 	MAX_SOFTKEYS_COUNT = 12 + (42 * 3) - 1
   MAX_DIRECTORY_ENTRIES = 20
-  KEYPAD_TO_CHAR = {
-    '0' => [' ','-','.',',','0'],
-    '1' => [' ','-','.',',','1'],
-    '2' => ['a','b','c','2'],
-    '3' => ['d','e','f','3'],
-    '4' => ['g','h','i','4'],
-    '5' => ['j','k','l','5'],
-    '6' => ['m','n','o','6'],
-    '7' => ['p','q','r','s','7'],
-    '8' => ['t','u','v','8'],
-    '9' => ['w','x','y','z','9'],
+  KEY_REGEXP = {
+    '0' => "[ -.,_0]+",
+    '1' => "[ -.,_1]+",
+    '2' => "[abc2]",
+    '3' => "[def3]",
+    '4' => "[ghi4]",
+    '5' => "[jkl5]",
+    '6' => "[mno6]",
+    '7' => "[pqrs7]",
+    '8' => "[tuv8]",
+    '9' => "[wxyz9]",
   }
 
 	skip_authorization_check
@@ -727,6 +727,14 @@ AAAA'
       :softkeys => [],
     }
 
+    key_regexp = ''
+    if !@dialpad_keys.blank?
+      @dialpad_keys.to_s.each_char do |dialpad_key|
+        key_regexp.concat(KEY_REGEXP[dialpad_key].to_s)
+      end
+      key_regexp = '^' + key_regexp
+    end
+
     phone_books = Array.new()
     phone_books = phone_books + @sip_account.sip_accountable.try(:phone_books).all
     if @sip_account.sip_accountable.class == User
@@ -738,7 +746,13 @@ AAAA'
       phone_book_ids << phone_book.id
     end
 
-    PhoneBookEntry.where(:phone_book_id => phone_book_ids).order(:last_name).order(:first_name).limit(MAX_DIRECTORY_ENTRIES).each do |phone_book_entry|
+    if key_regexp.blank?
+      phone_book_entries = PhoneBookEntry.where(:phone_book_id => phone_book_ids).order(:last_name).order(:first_name).limit(MAX_DIRECTORY_ENTRIES)
+    else
+      phone_book_entries = PhoneBookEntry.where(:phone_book_id => phone_book_ids).order(:last_name).order(:first_name).where('last_name REGEXP ? OR first_name REGEXP ? OR organization REGEXP ?', key_regexp, key_regexp, key_regexp).limit(MAX_DIRECTORY_ENTRIES)
+    end
+
+    phone_book_entries.each do |phone_book_entry|
       if phone_book_entry.phone_numbers.count > 1
         @phone_xml_object[:entries] << { :text => phone_book_entry.to_s, :number => phone_book_entry.phone_numbers.first }
       end
