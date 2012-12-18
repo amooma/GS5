@@ -31,9 +31,7 @@ tmp/
 nbproject
 Thumbs.db
 
-
 # Extra
-.sass-cache
 .livereload
 
 # Dreamweaver added files
@@ -60,20 +58,17 @@ tmp/**/*
 # Ignore fixtures. We use factory_girl.
 /test/fixtures/*.yml
 
-ERD.pdf
-ERD.png
-
 /vendor/cache
 /vendor/bundle
 .settings/*
 /.idea
 
 # ignore Sass cache:
-/.sass-cache
-tmp/sass-cache
-tmp/cache
+.sass-cache
+/tmp/sass-cache
+/tmp/cache
 
-public/assets
+/public/assets
 
 # directory created by "bundle install --path ." (not needed anyway):
 /ruby
@@ -84,7 +79,7 @@ public/assets
 /tmp
 
 # Images
-public/uploads
+/public/uploads
 # Freeswitch
-misc/freeswitch/conf/freeswitch.serial
-misc/freeswitch/scripts/ini/gateway_gateway1.ini
+/misc/freeswitch/conf/freeswitch.serial
+/misc/freeswitch/scripts/ini/gateway_gateway1.ini
