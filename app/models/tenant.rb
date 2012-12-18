@@ -228,12 +228,10 @@ class Tenant < ActiveRecord::Base
         :twitter_account => 'amooma_de',
         :facebook_account => 'https://www.facebook.com/AMOOMA.GmbH',
       )
-      # This is the new 2013 phone number.
-      #
-      # amooma.phone_numbers.create(
-      #   :name => 'Office', 
-      #   :number => '+4926228998900'
-      # )
+      amooma.phone_numbers.create(
+        :name => 'Office', 
+        :number => '+492622983440'
+      )
       amooma.addresses.create(
         :street => 'Bachstr. 124', 
         :zip_code => '56566',
