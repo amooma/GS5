@@ -15,7 +15,17 @@ class AutomaticCallDistributor < ActiveRecord::Base
   JOIN_ON = ['agents_available', 'agents_active', 'always']
   LEAVE_ON = ['no_agents_available_timeout', 'no_agents_active_timeout', 'no_agents_available', 'no_agents_active', 'timeout', 'never']
 
+  after_initialize :set_defaults
+
   def to_s
     self.name
+  end
+
+  private
+  def set_defaults 
+    self.announce_call_agents ||= 'ivr/ivr-stay_on_line_call_answered_momentarily.wav'
+    self.greeting ||= 'ivr/ivr-thank_you_for_calling.wav'
+    self.goodbye ||= 'ivr/ivr-thank_you_for_calling.wav'
+    self.music ||= 'local_stream://mohl'
   end
 end
