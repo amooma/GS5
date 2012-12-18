@@ -28,7 +28,11 @@
           %td.extra
             - if !entry.description.blank?
               %strong Beschreibung:
-              %div= entry.description
+              %div
+                = entry.description
+                - if !entry.homepage_organization.blank?
+                  %br
+                  =link_to entry.homepage_organization, entry.homepage_organization
           - if can? :edit, entry
             %td= link_to t('phone_book_entries.index.actions.edit'), edit_phone_book_phone_book_entry_path( entry.phone_book, entry )
           - if can? :destroy, entry

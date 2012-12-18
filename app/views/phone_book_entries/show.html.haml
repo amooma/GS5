@@ -114,33 +114,17 @@
     .widget.social
       - if !@phone_book_entry.homepage_organization.blank?
         .home
-          %a= @phone_book_entry.homepage_organization
+          =link_to @phone_book_entry.homepage_organization, @phone_book_entry.homepage_organization
           %span www
       - if !@phone_book_entry.homepage_personal.blank?
         .home
-          %a= @phone_book_entry.homepage_personal
+          =link_to @phone_book_entry.homepage_personal, @phone_book_entry.homepage_personal
           %span www
       - if !@phone_book_entry.twitter_account.blank?
         .twitter
-          %a= @phone_book_entry.twitter_account
+          =link_to @phone_book_entry.twitter_account, "https://twitter.com/#{@phone_book_entry.twitter_account}"
           %span Twitter
-      - if !@phone_book_entry.google_plus_account.blank?
-        .google_plus
-          %a= @phone_book_entry.google_plus_account
-          %span Google+
       - if !@phone_book_entry.facebook_account.blank?
         .facebook
-          %a= @phone_book_entry.facebook_account
+          =link_to @phone_book_entry.facebook_account, "https://www.facebook.com/#{@phone_book_entry.facebook_account}"
           %span Facebook
-      - if !@phone_book_entry.xing_account.blank?
-        .xing
-          %a= @phone_book_entry.xing_account
-          %span Xing
-      - if !@phone_book_entry.linkedin_account.blank?
-        .linkedin
-          %a= @phone_book_entry.linkedin_account
-          %span LinkedIn
-      - if !@phone_book_entry.mobileme_account.blank?
-        .mobileme
-          %a= @phone_book_entry.mobileme_account
-          %span MobileMe
