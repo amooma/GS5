@@ -2,6 +2,10 @@ GS5
 ===
 Gemeinschaft 5 by [AMOOMA GmbH](http://amooma.de) in Germany. It is a FreeSWITCH and Ruby on Rails based PBX. This Github repository is our development environment.
 
+Documentation
+=============
+Please have a look at our [Wiki](https://github.com/amooma/GS5/wiki).
+
 Bug reports
 ===========
 Please open a new issue to report a bug. Please don't forget to include the URL in case you report a view related problem.
