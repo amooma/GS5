@@ -10,9 +10,9 @@
     %tr{:class => cycle('odd', 'even')}
       %td
         - if sip_account.registration
-          %img{:src => '/assets/icons/phone-down-green-32x.png'}
+          =image_tag 'icons/phone-down-green-32x.png'
         - else
-          %img{:src => '/assets/icons/phone-down-grey-32x.png'}
+          =image_tag 'icons/phone-down-grey-32x.png'
       %td
         = sip_account.caller_name
       - phone_numbers = sip_account.phone_numbers
