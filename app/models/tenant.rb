@@ -226,7 +226,7 @@ class Tenant < ActiveRecord::Base
         :description => "Hersteller von Gemeinschaft. Kommerziellen Support und Consulting für Gemeinschaft.",
         :homepage_organization => 'http://amooma.de',
         :twitter_account => 'amooma_de',
-        :facebook_account => 'https://www.facebook.com/AMOOMA.GmbH',
+        :facebook_account => 'AMOOMA.GmbH',
       )
       amooma.phone_numbers.create(
         :name => 'Office', 
