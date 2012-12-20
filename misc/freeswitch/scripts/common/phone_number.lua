@@ -95,7 +95,7 @@ function PhoneNumber.list_by_same_owner(self, number, owner_types)
 end
 
 -- Retrieve call forwarding
-function PhoneNumber.call_forwarding(self, sources)
+function PhoneNumber.call_forwarding(self, caller_ids)
   require 'common.str'
 
   sources = sources or {};
@@ -106,21 +106,40 @@ function PhoneNumber.call_forwarding(self, sources)
     `a`.`call_forwardable_id` AS `id`, \
     `a`.`call_forwardable_type` AS `type`, \
     `a`.`timeout`, `a`.`depth`, \
+    `a`.`source`, \
     `b`.`value` AS `service` \
     FROM `call_forwards` `a` JOIN `call_forward_cases` `b` ON `a`.`call_forward_case_id` = `b`.`id` \
     WHERE `a`.`phone_number_id`= ' .. tonumber(self.record.id) .. ' \
-    AND `a`.`active` IS TRUE \
-    AND (`a`.`source` IS NULL OR `a`.`source` IN ("' .. table.concat( sources, '","') .. '"))';
+    AND `a`.`active` IS TRUE';
 
   local call_forwarding = {}
 
   self.database:query(sql_query, function(forwarding_entry)
-    call_forwarding[forwarding_entry.service] = forwarding_entry;
-    self.log:debug('CALL_FORWARDING_GET - PhoneNumber=', self.record.id, '/', self.record.uuid, '@', self.record.gs_node_id, 
-      ', number: ', self.record.number, 
-      ', service: ', forwarding_entry.service, 
-      ', destination: ',forwarding_entry.type, '=', forwarding_entry.id, 
-      ', number: ', forwarding_entry.number);
+    local entry_match = false;
+
+    if common.str.blank(forwarding_entry.source) then
+      entry_match = true;
+    else
+      local sources = common.str.strip_to_a(forwarding_entry.source, ',')
+      for index, source in ipairs(sources) do
+        for index, caller_id in ipairs(caller_ids) do
+          if caller_id:match(source) then
+            entry_match = true;
+            self.log:debug('CALL_FORWARDING_GET - source match: ', source, ' ~ ', caller_id );
+            break;
+          end
+        end
+      end
+    end
+
+    if entry_match then
+      call_forwarding[forwarding_entry.service] = forwarding_entry;
+      self.log:debug('CALL_FORWARDING_GET - PhoneNumber=', self.record.id, '/', self.record.uuid, '@', self.record.gs_node_id, 
+        ', number: ', self.record.number, 
+        ', service: ', forwarding_entry.service, 
+        ', destination: ',forwarding_entry.type, '=', forwarding_entry.id, 
+        ', number: ', forwarding_entry.number);
+    end
   end)
 
   return call_forwarding;
