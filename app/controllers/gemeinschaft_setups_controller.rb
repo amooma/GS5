@@ -26,6 +26,11 @@ class GemeinschaftSetupsController < ApplicationController
                                     :language_id => @gemeinschaft_setup.language_id,
                                     :description => t('gemeinschaft_setups.initial_setup.super_tenant_description'),
                                   )
+
+      # GsNode
+      GsNode.create(:name => 'Homebase', :ip_address => @gemeinschaft_setup.sip_domain.host, 
+                    :push_updates_to => false, :accepts_updates_from => false, 
+                    :site => 'Homebase', :element_name => 'Homebase')
       
       # Admin
       user = @gemeinschaft_setup.user
@@ -35,7 +40,7 @@ class GemeinschaftSetupsController < ApplicationController
       # Create the Super-Tenant's group:
       super_tenant_super_admin_group = super_tenant.user_groups.create(:name => t('gemeinschaft_setups.initial_setup.super_admin_group_name'))
       super_tenant_super_admin_group.user_group_memberships.create(:user_id => user.id)
-            
+
       # Auto-Login:
       session[:user_id] = user.id
       
