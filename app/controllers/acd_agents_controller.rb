@@ -28,6 +28,8 @@ class AcdAgentsController < ApplicationController
     @acd_agent.name = "#{t('acd_agents.name')} #{i}"
     @acd_agent.status = 'active'
     @acd_agent.calls_answered = 0
+
+    @available_sip_accounts = SipAccount.all - @automatic_call_distributor.acd_agents.where(:destination_type => 'SipAccount').map{|acd_agent| acd_agent.destination}
   end
 
   def create
@@ -41,6 +43,8 @@ class AcdAgentsController < ApplicationController
 
   def edit
     @acd_agent = AcdAgent.find(params[:id])
+
+    @available_sip_accounts = SipAccount.all
   end
 
   def update
