@@ -1,7 +1,9 @@
 .inputs
   = f.input :name, :label => t('acd_agents.form.name.label'), :hint => conditional_hint('acd_agents.form.name.hint')
   = f.input :status, :label => t('acd_agents.form.status.label'), :hint => conditional_hint('acd_agents.form.status.hint'), :include_blank => false, :collection => AcdAgent::STATUSES
-  = f.input :last_call, :label => t('acd_agents.form.last_call.label'), :hint => conditional_hint('acd_agents.form.last_call.hint')
-  = f.input :calls_answered, :label => t('acd_agents.form.calls_answered.label'), :hint => conditional_hint('acd_agents.form.calls_answered.hint')
-  = f.input :destination_type, :label => t('acd_agents.form.destination_type.label'), :hint => conditional_hint('acd_agents.form.destination_type.hint'), :include_blank => false, :collection => AcdAgent::DESTINATION_TYPES
-  = f.input :destination_id, :label => t('acd_agents.form.destination_id.label'), :hint => conditional_hint('acd_agents.form.destination_id.hint')
+  - if AcdAgent::DESTINATION_TYPES.count == 1 && AcdAgent::DESTINATION_TYPES.first == 'SipAccount' && @available_sip_accounts && @available_sip_accounts.count < 30
+    = f.hidden_field :destination_type, :value => AcdAgent::DESTINATION_TYPES.first
+    = f.input :destination_id, :collection => @available_sip_accounts.map { |r| [r.to_s, r.id] }, :include_blank => false
+  - else
+    = f.input :destination_type, :label => t('acd_agents.form.destination_type.label'), :hint => conditional_hint('acd_agents.form.destination_type.hint'), :include_blank => false, :collection => AcdAgent::DESTINATION_TYPES
+    = f.input :destination_id, :label => t('acd_agents.form.destination_id.label'), :hint => conditional_hint('acd_agents.form.destination_id.hint')

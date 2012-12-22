@@ -3,12 +3,18 @@ class AcdAgent < ActiveRecord::Base
   STATUSES = ['active', 'inactive']
   
   attr_accessible :uuid, :name, :status, :automatic_call_distributor_id, :last_call, :calls_answered, :destination_type, :destination_id
-  
+
   belongs_to :automatic_call_distributor
   
   belongs_to :destination, :polymorphic => true
 
   after_save :set_presence
+
+  # Validations:
+  #
+  validates_presence_of :name
+  validates_presence_of :destination
+  validates_presence_of :destination_id
 
   def to_s
     self.name || I18n.t('acd_agents.name') + ' ID ' + self.id.to_s
