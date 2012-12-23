@@ -80,20 +80,6 @@ function Phone.find_hot_deskable_by_account(self, account_id)
 end
 
 
-function Phone.tenant_id_get(self)
-  local sql_query = 'SELECT `c`.`sip_accountable_id` \
-    FROM `phones` `a` LEFT JOIN `phone_sip_accounts` `b` ON `a`.`id` = `b`.`phone_id` \
-    JOIN `sip_accounts` `c` ON `b`.`sip_account_id` = `c`.`id` AND `sip_accountable_type` = "Tenant" \
-    WHERE `a`.`id` = ' .. tonumber(self.record.id) .. ' LIMIT 1';
-
-  local tenant_id = nil;
-  self.database:query(sql_query, function(tenant_entry)
-    tenant_id = tenant_entry.sip_accountable_id;
-  end)
-
-  return tenant_id;
-end
-
 function Phone.phoneable_set(self, phoneable_id, phoneable_type)
   sql_query = 'UPDATE `phones` SET `phoneable_type` = "' .. phoneable_type ..'", `phoneable_id` = ' .. phoneable_id .. ' \
     WHERE `id` = ' .. tonumber(self.record.id);
