@@ -64,4 +64,4 @@ en:
       NO_USER_RESPONSE: 'No user response'
       NOANSWER: 'No answer'
       USER_NOT_REGISTERED: 'Offline'
-      
+      USER_BUSY: 'Busy'

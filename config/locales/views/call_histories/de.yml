@@ -64,3 +64,4 @@ de:
       NO_USER_RESPONSE: 'Keine Antwort'
       NOANSWER: 'Keine Antwort'
       USER_NOT_REGISTERED: 'Offline'
+      USER_BUSY: 'Besetzt'
