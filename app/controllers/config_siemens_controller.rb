@@ -80,6 +80,7 @@ class ConfigSiemensController < ApplicationController
         @phone.mac_address = mac_address
         @phone.hot_deskable = true
         @phone.phone_model = PhoneModel.where('name LIKE ?', "#{phone_type}").first
+        @phone.tenant = tenant
         if ! @phone.save
           render(
             :status => 500,
@@ -128,16 +129,13 @@ class ConfigSiemensController < ApplicationController
           return
         end
 
-        phone_sip_account = PhoneSipAccount.new()
-        phone_sip_account.phone_id = @phone.id
-        phone_sip_account.sip_account_id = @sip_account.id
-
-        if ! phone_sip_account.save
+        @phone.fallback_sip_account = @sip_account
+        if ! @phone.save
           render(
             :status => 500,
             :layout => false,
             :content_type => 'text/plain',
-            :text => "<!-- #{phone_sip_account.errors.messages.inspect} -->",
+            :text => "<!-- #{@phone.errors.messages.inspect} -->",
           )
           return
         end
@@ -152,13 +150,17 @@ class ConfigSiemensController < ApplicationController
       @sip_account = @phone.sip_accounts.where(:sip_accountable_type => @phone.phoneable_type,
                                      :sip_accountable_id => @phone.phoneable_id).first
 
+      if !@sip_account
+        @sip_account = @phone.fallback_sip_account
+      end
+
+      tenant = @phone.tenant
+
       if @phone.phoneable
         if @phone.phoneable_type == 'Tenant'
-          tenant = @phone.phoneable
           language = tenant.language.code
         elsif @phone.phoneable_type == 'User'
           language = @phone.phoneable.language.code
-          tenant = @phone.phoneable.current_tenant
         end
       end
 

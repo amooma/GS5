@@ -14,6 +14,9 @@ class Phone < ActiveRecord::Base
   has_many :phone_sip_accounts, :dependent => :destroy, :uniq => true, :order => :position
   has_many :sip_accounts, :through => :phone_sip_accounts
   
+  belongs_to :tenant
+  belongs_to :fallback_sip_account, :class_name => "SipAccount"
+
   # Validations
   #
   before_validation :sanitize_mac_address
@@ -138,6 +141,8 @@ class Phone < ActiveRecord::Base
       end
     end
 
+    PhoneSipAccount.where(:phone_id => self.id).destroy_all
+
     self.phoneable = user
     sip_accounts.each do |sip_account|
       if ! self.sip_accounts.where(:id => sip_account.id).first
@@ -163,35 +168,19 @@ class Phone < ActiveRecord::Base
 
   # OPTIMIZE i18n translations
   def user_logout
-    if ! self.hot_deskable or self.phoneable_type == 'Tenant'
+    if ! self.hot_deskable
       errors.add(:hot_deskable, "Phone not hot-deskable")
       return false
     end
 
     sip_account = self.sip_accounts.where(:sip_accountable_type => self.phoneable_type).first
 
-    tenant_sip_account = self.sip_accounts.where(:sip_accountable_type => 'Tenant').first
-    if tenant_sip_account 
-      tenant = tenant_sip_account.sip_accountable
-    end
-
-    sip_account_ids = Array.new()
-    self.sip_accounts.where(:sip_accountable_type => 'User', :hotdeskable => true).each do |sip_account|
-      sip_account_ids.push(sip_account.id)
-    end
-
-    if tenant 
-      self.phoneable = tenant
-      @not_destroy_phones_sip_accounts = true
+    if self.tenant
+      self.phoneable = self.tenant
       if ! self.save
         errors.add(:phoneable, "Could not change owner")
         return false
       end
-    end
-
-    if ! PhoneSipAccount.destroy_all(:sip_account_id => sip_account_ids)
-      errors.add(:sip_accounts, "Could not delete sip_accounts")
-      return false
     end
 
     sleep(0.5)

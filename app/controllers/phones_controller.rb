@@ -14,7 +14,6 @@ class PhonesController < ApplicationController
 
   def new
     @phone = @phoneable.phones.build()
-    
     # Use the last phone.phone_model as the default.
     #
     @phone.phone_model_id = Phone.last.try(:phone_model).try(:id)
@@ -22,6 +21,10 @@ class PhonesController < ApplicationController
 
   def create
     @phone = @phoneable.phones.build(params[:phone])
+    if !@tenant
+      @tenant = @user.current_tenant
+    end
+    @phone.tenant = @tenant
     if @phone.save
       m = method( :"#{@phoneable.class.name.underscore}_phone_path" )
       redirect_to m.( @phoneable, @phone ), :notice => t('phones.controller.successfuly_created')

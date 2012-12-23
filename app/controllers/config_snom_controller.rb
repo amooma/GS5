@@ -49,6 +49,7 @@ class ConfigSnomController < ApplicationController
         @phone = tenant.phones.build
         @phone.mac_address = @mac_address
         @phone.hot_deskable = true
+        @phone.tenant = tenant
 
         mac_address_to_model = {
           '00041325' => 'Snom 300',
@@ -130,20 +131,16 @@ class ConfigSnomController < ApplicationController
           return
         end
 
-        phone_sip_account = PhoneSipAccount.new()
-        phone_sip_account.phone_id = @phone.id
-        phone_sip_account.sip_account_id = @sip_account.id
-
-        if ! phone_sip_account.save
+        @phone.fallback_sip_account = @sip_account
+        if ! @phone.save
           render(
             :status => 500,
             :layout => false,
             :content_type => 'text/plain',
-            :text => "<!-- #{phone_sip_account.errors.messages.inspect} -->",
+            :text => "<!-- #{@phone.errors.messages.inspect} -->",
           )
           return
         end
-
       end
     elsif ! params[:phone].blank? then
       @phone = Phone.where({ :id => params[:phone].to_i }).first
@@ -238,9 +235,15 @@ class ConfigSnomController < ApplicationController
 
     @softkeys = Array.new()
 		@sip_accounts = Array.new()
+    phone_sip_accounts = Array.new()
 
     if send_sensitve
-      @phone.sip_accounts.each do |sip_account|
+      if @phone.sip_accounts && @phone.sip_accounts.count > 0
+        phone_sip_accounts = @phone.sip_accounts
+      elsif @phone.fallback_sip_account
+        phone_sip_accounts.push( @phone.fallback_sip_account )
+      end
+      phone_sip_accounts.each do |sip_account|
         if (sip_account.sip_accountable_type == @phone.phoneable_type) and (sip_account.sip_accountable_id == @phone.phoneable_id)
         	snom_sip_account = {
             :id         => sip_account.id,
