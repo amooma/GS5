@@ -905,9 +905,8 @@ function Dialplan.run(self, destination)
     end
   end
 
-  self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name,'"', 
-    ', number: ', destination.number);
-  
+  self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name, ', number: ', destination.number);
+
   local result = { continue = false };
   local loop = self.caller.loop_count;
   while self.caller:ready() and loop < self.max_loops do
@@ -918,6 +917,7 @@ function Dialplan.run(self, destination)
     ' - destination: ', destination.type, '=', destination.id, '/', destination.uuid,'@', destination.node_id, 
     ', number: ', destination.number);
 
+    self.caller:set_variable('gs_clir', self.caller.clir);
     self.caller:set_variable('gs_destination_type', destination.type);
     self.caller:set_variable('gs_destination_id', destination.id);
     self.caller:set_variable('gs_destination_uuid', destination.uuid);
