@@ -905,7 +905,7 @@ function Dialplan.run(self, destination)
     end
   end
 
-  self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name, ', number: ', destination.number);
+  self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name, '" , number: ', destination.number);
 
   local result = { continue = false };
   local loop = self.caller.loop_count;
