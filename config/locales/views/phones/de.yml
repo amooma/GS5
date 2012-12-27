@@ -33,6 +33,7 @@ de:
       http_user: 'http user'
       http_password: 'http password'
       nightly_reboot: 'Nachts automatischer Reboot'
+      fallback_sip_account_id: 'Fallback SIP Account'
       actions:
         confirm: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
         destroy: 'Löschen'
@@ -70,6 +71,9 @@ de:
         hint: ''
       provisioning_key_active:
         label: 'Provisioning Schlüssel aktiv'
+        hint: ''
+      fallback_sip_account_id:
+        label: 'Fallback SIP Account'
         hint: ''
       button: 'Absenden'
     sip_accounts:

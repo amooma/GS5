@@ -13,6 +13,8 @@ class PhonesController < ApplicationController
   end
 
   def new
+    used_sip_account_ids = Phone.where('fallback_sip_account_id IS NOT NULL').collect {|r| r.fallback_sip_account }
+    @fallback_sip_accounts = SipAccount.where('sip_accountable_type = "Tenant" AND id NOT IN (?)', used_sip_account_ids).all
     @phone = @phoneable.phones.build()
     # Use the last phone.phone_model as the default.
     #
@@ -34,6 +36,8 @@ class PhonesController < ApplicationController
   end
 
   def edit
+    used_sip_account_ids = Phone.where('fallback_sip_account_id IS NOT NULL AND id != ?', @phone.id).collect {|r| r.fallback_sip_account_id }
+    @fallback_sip_accounts = SipAccount.where('sip_accountable_type = "Tenant" AND id NOT IN (?)', used_sip_account_ids).all
   end
 
   def update

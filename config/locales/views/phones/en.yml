@@ -33,6 +33,7 @@ en:
       http_password: 'http password'
       nightly_reboot: 'Nightly reboot'
       provisioning_key_active: 'Provisioning key active'
+      fallback_sip_account_id: 'Fallback SIP Account'
       actions:
         confirm: 'Are you sure you want to delete this phone?'
         destroy: 'Delete phone'
@@ -70,6 +71,9 @@ en:
         hint: 'Phone GUI password'
       provisioning_key_active:
         label: 'Provisioning key active'
+        hint: ''
+      fallback_sip_account_id:
+        label: 'Fallback SIP Account'
         hint: ''
       button: 'Submit'
     sip_accounts:

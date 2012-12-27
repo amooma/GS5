@@ -4,7 +4,7 @@ class Phone < ActiveRecord::Base
   
   attr_accessible :mac_address, :ip_address, :http_user, :http_password, 
                   :phone_model_id, :hot_deskable, :nightly_reboot,
-                  :provisioning_key, :provisioning_key_active
+                  :provisioning_key, :provisioning_key_active, :fallback_sip_account_id, :tenant
   
   # Associations
   #
