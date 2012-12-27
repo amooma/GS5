@@ -872,6 +872,8 @@ function Dialplan.run(self, destination)
   self.caller:set_variable('gs_save_cdr', true);
   self.caller:set_variable('gs_call_service', 'dial');
   self.caller.session:setAutoHangup(false);
+  self.caller.date = os.date('%y%m%d%w');
+  self.caller.time = os.date('%H%M%S');
 
   self.routes = common.configuration_file.get('/opt/freeswitch/scripts/ini/routes.ini');
   self.caller.domain_local = self.domain;
