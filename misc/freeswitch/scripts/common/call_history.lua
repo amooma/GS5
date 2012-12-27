@@ -114,7 +114,7 @@ function CallHistory.insert_forwarded(self, uuid, account_type, account_id, call
   call_history.result = common.str.to_sql(result.cause or 'UNSPECIFIED');
   call_history.start_stamp = 'FROM_UNIXTIME(' .. math.floor(caller:to_i('created_time') / 1000000) .. ')';
 
-  if caller.account and not common.str.to_b(event:getHeader('variable_gs_clir')) then
+  if caller.account and not caller.clir then
     call_history.caller_account_type = common.str.to_sql(camelize_type(caller.account.class));
     call_history.caller_account_id = common.str.to_sql(caller.account.id);
   end
