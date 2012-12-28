@@ -33,6 +33,7 @@ de:
       http_user: 'http user'
       http_password: 'http password'
       nightly_reboot: 'Nachts automatischer Reboot'
+      fallback_sip_account_id: 'Fallback SIP Account'
       actions:
         confirm: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
         destroy: 'Löschen'
@@ -41,6 +42,7 @@ de:
     new:
       page_title: 'Neues Telefon'
       actions:
+      you_need_to_have_at_least_one_available_fallback_sip_account_for_hotdesking: 'Sie benötigen mindestens einen nicht benutzen und hotdeskfähigen SIP-Account, damit die Option für Hotdesking in diesem Formular angezeigt wird. '
     edit:
       page_title: 'Telefondaten bearbeiten'
     form:
@@ -70,6 +72,9 @@ de:
         hint: ''
       provisioning_key_active:
         label: 'Provisioning Schlüssel aktiv'
+        hint: ''
+      fallback_sip_account_id:
+        label: 'Fallback SIP Account'
         hint: ''
       button: 'Absenden'
     sip_accounts:

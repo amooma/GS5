@@ -872,6 +872,8 @@ function Dialplan.run(self, destination)
   self.caller:set_variable('gs_save_cdr', true);
   self.caller:set_variable('gs_call_service', 'dial');
   self.caller.session:setAutoHangup(false);
+  self.caller.date = os.date('%y%m%d%w');
+  self.caller.time = os.date('%H%M%S');
 
   self.routes = common.configuration_file.get('/opt/freeswitch/scripts/ini/routes.ini');
   self.caller.domain_local = self.domain;
@@ -905,9 +907,8 @@ function Dialplan.run(self, destination)
     end
   end
 
-  self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name,'"', 
-    ', number: ', destination.number);
-  
+  self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name, '" , number: ', destination.number);
+
   local result = { continue = false };
   local loop = self.caller.loop_count;
   while self.caller:ready() and loop < self.max_loops do
@@ -918,6 +919,7 @@ function Dialplan.run(self, destination)
     ' - destination: ', destination.type, '=', destination.id, '/', destination.uuid,'@', destination.node_id, 
     ', number: ', destination.number);
 
+    self.caller:set_variable('gs_clir', self.caller.clir);
     self.caller:set_variable('gs_destination_type', destination.type);
     self.caller:set_variable('gs_destination_id', destination.id);
     self.caller:set_variable('gs_destination_uuid', destination.uuid);

@@ -20,7 +20,6 @@
   %body
     #container
       = render :partial => "shared/header"
-      = render :partial => "shared/system_message"
       = render :partial => "shared/flash", :locals => { :flash => flash}
 
       #content{:role => 'main'}
@@ -33,14 +32,16 @@
 
       %footer#main
         %ul
+          %li
+            %a{:href => "http://amooma.de/gemeinschaft/gs5"} Gemeinschaft #{GEMEINSCHAFT_VERSION}
           - if GuiFunction.display?('amooma_commercial_support_link_in_footer', current_user)
             %li
-              %a{:href => "http://www.amooma.de"} Kommerzieller Support und Consulting
+              %a{:href => "http://amooma.de"} Kommerzieller Support und Consulting
           - if GuiFunction.display?('gemeinschaft_mailinglist_link_in_footer', current_user)
             %li
               %a{:href => "https://groups.google.com/group/gs5-users/"} Kostenlose Mailingliste
 
         .amooma-logo
           %span brought to you by
-          %a{ :target => '_blank', :href => "http://www.amooma.de/" } Amooma
+          %a{ :target => '_blank', :href => "http://amooma.de/" } Amooma
 

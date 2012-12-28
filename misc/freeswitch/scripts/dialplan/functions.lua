@@ -31,7 +31,7 @@ function Functions.dialplan_function(self, caller, dialed_number)
   local fid = tostring(parameters[2]);
   local result = { continue = false, code = 404, phrase = 'Function not found', no_cdr = true };
 
-  self.log:debug('DIALPLAN_DUNCTION - execute: ', dialed_number);
+  self.log:debug('DIALPLAN_FUNCTION - execute: ', dialed_number);
 
   if fid == "ta" then
     result = self:transfer_all(caller, parameters[3]);
