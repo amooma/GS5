@@ -42,6 +42,7 @@ en:
     new:
       page_title: 'New phone'
       actions:
+      you_need_to_have_at_least_one_available_fallback_sip_account_for_hotdesking: 'You need to have at least one unconnected SIP account to see a hotdesking option in this form. '
     edit:
       page_title: 'Editing Phone'
     form:
