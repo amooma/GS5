@@ -13,8 +13,7 @@ class PhonesController < ApplicationController
   end
 
   def new
-    used_sip_account_ids = Phone.where(:fallback_sip_account_id => SipAccount.pluck(:id)).pluck(:fallback_sip_account_id) 
-    @fallback_sip_accounts = SipAccount.where(:sip_accountable_type => 'Tenant').where(:hotdeskable => true) - SipAccount.where(:id => used_sip_account_ids)
+    set_fallback_sip_accounts
 
     @phone = @phoneable.phones.build()
     
@@ -33,13 +32,13 @@ class PhonesController < ApplicationController
       m = method( :"#{@phoneable.class.name.underscore}_phone_path" )
       redirect_to m.( @phoneable, @phone ), :notice => t('phones.controller.successfuly_created')
     else
+      set_fallback_sip_accounts
       render :new
     end
   end
 
   def edit
-    used_sip_account_ids = Phone.where('fallback_sip_account_id IS NOT NULL AND id != ?', @phone.id).collect {|r| r.fallback_sip_account_id }
-    @fallback_sip_accounts = SipAccount.where('sip_accountable_type = "Tenant" AND id NOT IN (?)', used_sip_account_ids).all
+    set_fallback_sip_accounts
   end
 
   def update
@@ -76,6 +75,11 @@ class PhonesController < ApplicationController
     if @phone && !@phone.new_record?
       add_breadcrumb @phone, method( :"#{@phone.phoneable.class.name.underscore}_phone_path" ).(@phone.phoneable, @phone)
     end
+  end
+
+  def set_fallback_sip_accounts
+    used_sip_account_ids = Phone.where(:fallback_sip_account_id => SipAccount.pluck(:id)).pluck(:fallback_sip_account_id) 
+    @fallback_sip_accounts = SipAccount.where(:sip_accountable_type => 'Tenant').where(:hotdeskable => true) - SipAccount.where(:id => used_sip_account_ids)
   end
   
 end

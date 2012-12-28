@@ -42,7 +42,7 @@ de:
     new:
       page_title: 'Neues Telefon'
       actions:
-      you_need_to_have_at_least_one_available_fallback_sip_account_for_hotdesking: 'Sie benötigen mindestens einen nicht benutzen SIP-Account, damit die Option für Hotdesking in diesem Formular angezeigt wird. '
+      you_need_to_have_at_least_one_available_fallback_sip_account_for_hotdesking: 'Sie benötigen mindestens einen nicht benutzen und hotdeskfähigen SIP-Account, damit die Option für Hotdesking in diesem Formular angezeigt wird. '
     edit:
       page_title: 'Telefondaten bearbeiten'
     form:
