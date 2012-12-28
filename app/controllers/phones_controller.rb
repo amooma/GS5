@@ -13,9 +13,11 @@ class PhonesController < ApplicationController
   end
 
   def new
-    used_sip_account_ids = Phone.where('fallback_sip_account_id IS NOT NULL').collect {|r| r.fallback_sip_account }
-    @fallback_sip_accounts = SipAccount.where('sip_accountable_type = "Tenant" AND id NOT IN (?)', used_sip_account_ids).all
+    used_sip_account_ids = Phone.where(:fallback_sip_account_id => SipAccount.pluck(:id)).pluck(:fallback_sip_account_id) 
+    @fallback_sip_accounts = SipAccount.where(:sip_accountable_type => 'Tenant').where(:hotdeskable => true) - SipAccount.where(:id => used_sip_account_ids)
+
     @phone = @phoneable.phones.build()
+    
     # Use the last phone.phone_model as the default.
     #
     @phone.phone_model_id = Phone.last.try(:phone_model).try(:id)
