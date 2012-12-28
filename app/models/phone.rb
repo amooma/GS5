@@ -32,6 +32,8 @@ class Phone < ActiveRecord::Base
   
   validates_presence_of     :phone_model
   validates_presence_of     :phoneable
+
+  validates_uniqueness_of   :fallback_sip_account_id
   
   before_save :save_last_ip_address
   before_save :destroy_phones_sip_accounts_if_phoneable_changed
