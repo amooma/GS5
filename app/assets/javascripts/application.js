@@ -10,4 +10,5 @@
 //= require vendor/modernizr-2.0.6.min.js
 //= require vendor/jquery.condom.js
 //= require vendor/jquery.survival-kit
+//= require phones
 //= require softkeys

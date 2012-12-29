@@ -1,8 +1,11 @@
 .inputs
-  = f.input :mac_address, :label => t('phones.form.mac_address.label'), :hint => conditional_hint('phones.form.mac_address.hint')
-  = f.association :phone_model, :label => t('phones.form.phone_model_id.label'), :hint => conditional_hint('phones.form.phone_model_id.hint')
-  = f.input :hot_deskable, :label => t('phones.form.hot_deskable.label'), :hint => conditional_hint('phones.form.hot_deskable.hint')
-  = f.association :fallback_sip_account, :collection => @fallback_sip_accounts, :label => t('phones.form.fallback_sip_account_id.label'), :hint => conditional_hint('phones.form.fallback_sip_account_id.hint'), :include_blank => true
+  = f.input :mac_address, :label => t('phones.form.mac_address.label'), :hint => conditional_hint('phones.form.mac_address.hint'), :autofocus => true
+  = f.association :phone_model, :label => t('phones.form.phone_model_id.label'), :hint => conditional_hint('phones.form.phone_model_id.hint'), :include_blank => false
+  - if @fallback_sip_accounts.any?
+    = f.input :hot_deskable, :label => t('phones.form.hot_deskable.label'), :hint => conditional_hint('phones.form.hot_deskable.hint')
+    .fallback_sip_account_dropdown
+      = f.association :fallback_sip_account, :collection => @fallback_sip_accounts, :label => t('phones.form.fallback_sip_account_id.label'), :hint => conditional_hint('phones.form.fallback_sip_account_id.hint'), :include_blank => false
+
   - if defined? NIGHTLY_REBOOT_OF_PHONES && NIGHTLY_REBOOT_OF_PHONES == true
     = f.input :nightly_reboot, :label => t('phones.form.nightly_reboot.label'), :hint => conditional_hint('phones.form.nightly_reboot.hint')
   - if defined? PROVISIONING_KEY_LENGTH && PROVISIONING_KEY_LENGTH > 0

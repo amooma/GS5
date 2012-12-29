@@ -1,6 +1,6 @@
 # Use this file to set generic parameters for Gemeinschaft
 
-GEMEINSCHAFT_VERSION = '5.0'
+GEMEINSCHAFT_VERSION = '5.0.1'
 SUPER_TENANT_NAME = 'Super-Tenant'
 
 # System defaults

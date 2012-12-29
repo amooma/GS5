@@ -1,3 +1,9 @@
 - title t("phones.new.page_title")
 
+- if !@fallback_sip_accounts.any? && can?(:create, current_user.current_tenant.sip_accounts.build)
+  %p
+    = t("phones.new.you_need_to_have_at_least_one_available_fallback_sip_account_for_hotdesking")
+    = link_to t("sip_accounts.index.actions.create_for", :resource => current_user.current_tenant), new_tenant_sip_account_path(current_user.current_tenant)
+
 = render "form"
+

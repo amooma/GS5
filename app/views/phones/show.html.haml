@@ -6,13 +6,13 @@
 %p
   %strong= t('phones.show.phone_model_id') + ":"
   = @phone.phone_model
-%p
-  %strong= t('phones.show.hot_deskable') + ":"
-  = @phone.hot_deskable
-
-%p
-  %strong= t('phones.show.fallback_sip_account_id') + ":"
-  = @phone.fallback_sip_account
+- if @phone.hot_deskable == true
+  %p
+    %strong= t('phones.show.hot_deskable') + ":"
+    = @phone.hot_deskable
+  %p
+    %strong= t('phones.show.fallback_sip_account_id') + ":"
+    = @phone.fallback_sip_account
 
 - if defined? NIGHTLY_REBOOT_OF_PHONES && NIGHTLY_REBOOT_OF_PHONES == true
   %p
