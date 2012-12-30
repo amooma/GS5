@@ -3,7 +3,7 @@ require 'test_helper'
 class PhonesSipAccountsControllerTest < ActionController::TestCase
   
   setup do
-    @phones_sip_account = Factory.create(:phones_sip_account)
+    @phones_sip_account = FactoryGirl.create(:phones_sip_account)
   end
 
 #   test "should get index" do

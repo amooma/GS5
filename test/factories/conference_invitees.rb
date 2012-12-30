@@ -1,8 +1,10 @@
 # Read about factories at http://github.com/thoughtbot/factory_girl
 
-Factory.define :conference_invitee do |f|
-  f.phone_number { Factory.build(:phone_number) }
-  f.association :conference
-  f.speaker true
-  f.moderator false
+FactoryGirl.define do
+  factory :conference_invitee do
+    phone_number { FactoryGirl.build(:phone_number) }
+    association :conference
+    speaker true
+    moderator false
+  end
 end

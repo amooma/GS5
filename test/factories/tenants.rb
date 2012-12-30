@@ -1,8 +1,9 @@
 # Read about factories at http://github.com/thoughtbot/factory_girl
 
-Factory.define :tenant do |f|
-  f.sequence(:name) { |n| "Tenant #{n}" }
-  f.association :country
-  f.association :language
-#  f.association :sip_domain
+FactoryGirl.define do
+  factory :tenant do
+    sequence(:name) { |n| "Tenant #{n}" }
+    association :country
+    association :language
+  end
 end

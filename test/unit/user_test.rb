@@ -3,21 +3,21 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   
   def test_should_have_a_valid_factory
-    assert Factory.build(:user).valid?
+    assert FactoryGirl.build(:user).valid?
   end
   
   def test_should_have_a_unique_email_address
-    user = Factory.create(:user)
-    assert !Factory.build(:user, :email => user.email).valid?
-    assert Factory.build(:user, :email => "different_#{user.email}").valid?
+    user = FactoryGirl.create(:user)
+    assert !FactoryGirl.build(:user, :email => user.email).valid?
+    assert FactoryGirl.build(:user, :email => "different_#{user.email}").valid?
   end
   
   def test_can_not_move_to_a_current_tenant_without_a_membership_relation
-    super_tenant = Factory.create(:tenant)
-    good_tenant = Factory.create(:tenant)
-    evil_tenant = Factory.create(:tenant)
+    super_tenant = FactoryGirl.create(:tenant)
+    good_tenant = FactoryGirl.create(:tenant)
+    evil_tenant = FactoryGirl.create(:tenant)
     
-    user = Factory.create(:user)
+    user = FactoryGirl.create(:user)
     super_tenant.tenant_memberships.create(:user_id => user.id)
     good_tenant.tenant_memberships.create(:user_id => user.id)
     
@@ -27,7 +27,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "should be possible to modify the user without changing the PIN" do
-    user = Factory.create(:user)
+    user = FactoryGirl.create(:user)
     pin_salt = user.pin_salt
     pin_hash = user.pin_hash
     user.middle_name = "#{user.middle_name} Foo"
@@ -39,7 +39,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "should be possible to change the PIN" do
-    user = Factory.create(:user)
+    user = FactoryGirl.create(:user)
     pin_salt = user.pin_salt
     pin_hash = user.pin_hash
     new_pin = '453267'
@@ -52,7 +52,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "should not be possible to change the PIN if the confirmation does not match" do
-    user = Factory.create(:user)
+    user = FactoryGirl.create(:user)
     pin_salt = user.pin_salt
     pin_hash = user.pin_hash
     user.new_pin              = '123001'
@@ -67,7 +67,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "PIN must be numeric" do
-    user = Factory.create(:user)
+    user = FactoryGirl.create(:user)
     new_pin = 'xxxx'
     user.new_pin              = new_pin
     user.new_pin_confirmation = new_pin

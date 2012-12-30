@@ -3,10 +3,10 @@ require 'test_helper'
 class SipAccountsControllerTest < ActionController::TestCase
   
   setup do
-    @tenant = Factory.create(:tenant)
-    @user = Factory.create(:user)
+    @tenant = FactoryGirl.create(:tenant)
+    @user = FactoryGirl.create(:user)
     @tenant.tenant_memberships.create(:user_id => @user.id)
-    @sip_account    = @user.sip_accounts.create( Factory.build(:sip_account).attributes )
+    @sip_account    = @user.sip_accounts.create( FactoryGirl.build(:sip_account).attributes )
     
     @parent_param = @sip_account.sip_accountable_type.foreign_key.to_sym
     @parent_id    = @sip_account.sip_accountable.id
@@ -32,7 +32,7 @@ class SipAccountsControllerTest < ActionController::TestCase
     assert_difference('SipAccount.count') do
       post :create,
         @parent_param => @parent_id,
-        sip_account: Factory.attributes_for(:sip_account)
+        sip_account: FactoryGirl.attributes_for(:sip_account)
     end
   end
   

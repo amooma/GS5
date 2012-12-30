@@ -2,23 +2,23 @@ require 'test_helper'
 
 class UserGroupTest < ActiveSupport::TestCase
   def test_should_have_a_valid_factory
-    assert Factory.build(:user_group).valid?
+    assert FactoryGirl.build(:user_group).valid?
   end
   
   def test_should_have_unique_name_on_same_tenant
-    tenant1 = Factory.create(:tenant)
-    tenant2 = Factory.create(:tenant)
-    group = Factory.create(:user_group, :tenant_id => tenant1.id)
-    assert !Factory.build(:user_group, :name => group.name, :tenant_id => tenant1.id).valid?
-    assert Factory.build(:user_group, :name => group.name, :tenant_id => tenant2.id).valid?
-    assert Factory.build(:user_group, :name => "different_#{group.name}", :tenant_id => tenant1.id).valid?
+    tenant1 = FactoryGirl.create(:tenant)
+    tenant2 = FactoryGirl.create(:tenant)
+    group = FactoryGirl.create(:user_group, :tenant_id => tenant1.id)
+    assert !FactoryGirl.build(:user_group, :name => group.name, :tenant_id => tenant1.id).valid?
+    assert FactoryGirl.build(:user_group, :name => group.name, :tenant_id => tenant2.id).valid?
+    assert FactoryGirl.build(:user_group, :name => "different_#{group.name}", :tenant_id => tenant1.id).valid?
   end
   
   test "user_group_membership only available for tenant_memberships" do
-    good_tenant = Factory.create(:tenant)
-    evil_tenant = Factory.create(:tenant)
+    good_tenant = FactoryGirl.create(:tenant)
+    evil_tenant = FactoryGirl.create(:tenant)
 
-    user = Factory.create(:user)
+    user = FactoryGirl.create(:user)
     good_tenant.tenant_memberships.create(:user_id => user.id)
     
     good_user_group = good_tenant.user_groups.create(:name => 'Example')

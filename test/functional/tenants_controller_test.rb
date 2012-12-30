@@ -4,7 +4,7 @@ class TenantsControllerTest < ActionController::TestCase
   # TODO Create tests which test that a login user has specific rights.
   
   # setup do
-  #   @tenant = Factory.create(:tenant)
+  #   @tenant = FactoryGirl.create(:tenant)
   # end
   # 
   # test "should get index" do
@@ -20,7 +20,7 @@ class TenantsControllerTest < ActionController::TestCase
   # 
   # test "should create tenant" do
   #   assert_difference('Tenant.count') do
-  #     post :create, tenant: Factory.build(:tenant).attributes
+  #     post :create, tenant: FactoryGirl.build(:tenant).attributes
   #   end
   # 
   #   assert_redirected_to tenant_path(assigns(:tenant))

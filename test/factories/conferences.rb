@@ -1,8 +1,10 @@
 # Read about factories at http://github.com/thoughtbot/factory_girl
 
-Factory.define :conference do |f|
-  f.sequence(:name) { |n| "Conference room #{n}" }
-  f.open_for_anybody true
-  f.association :conferenceable, :factory => :tenant 
-  f.max_members 10
+FactoryGirl.define do
+  factory :conference do
+    sequence(:name) { |n| "Conference room #{n}" }
+    open_for_anybody true
+    association :conferenceable, :factory => :tenant 
+    max_members 10
+  end
 end
