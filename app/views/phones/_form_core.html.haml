@@ -5,6 +5,9 @@
     = f.input :hot_deskable, :label => t('phones.form.hot_deskable.label'), :hint => conditional_hint('phones.form.hot_deskable.hint')
     .fallback_sip_account_dropdown
       = f.association :fallback_sip_account, :collection => @fallback_sip_accounts, :label => t('phones.form.fallback_sip_account_id.label'), :hint => conditional_hint('phones.form.fallback_sip_account_id.hint'), :include_blank => false
+    - if !@phone.hot_deskable?
+      :javascript
+        $(".fallback_sip_account_dropdown").hide()  
 
   - if defined? NIGHTLY_REBOOT_OF_PHONES && NIGHTLY_REBOOT_OF_PHONES == true
     = f.input :nightly_reboot, :label => t('phones.form.nightly_reboot.label'), :hint => conditional_hint('phones.form.nightly_reboot.hint')
