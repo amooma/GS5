@@ -1,0 +1,33 @@
+- title "First steps with Gemeinschaft #{GEMEINSCHAFT_VERSION}!"
+
+%p
+  You have to create at least two new SIP accounts. You have the choice of two different versions:
+
+%ul
+  %li
+    %strong
+      Personalized SIP accounts
+    %br
+    They are linked to a user. In a normal Gemeinschaft installation the majority of accounts are personlized.
+    %br
+    =link_to "Create a SIP account for #{current_user}.", new_user_sip_account_path(current_user)
+  %li
+    %strong
+      Company SIP accounts
+    %br
+    These are for phones which are not linked to a specific person (e.g. phones in conference rooms).
+    %br
+    =link_to "Create a SIP account for #{current_user.current_tenant}.", new_tenant_sip_account_path(current_user.current_tenant)
+
+%h2 Phone numbers
+
+%p
+  You can use your SIP accounts to make internal calls. But before that you have to add phone numbers to each SIP account (e.g. 20 and 21). After you did that you can configure any SIP phone with the SIP account configuration and start using your new PBX.
+
+%h2 Phones
+
+%p
+  More comfortable is the use of auto provisioned phones. They can be linked to SIP accounts. After creating them in the WebGUI you have to set the Provisioning URL in the phone or setup your DHCP server to give them this data. You'll find help in our #{link_to 'Wiki', 'https://github.com/amooma/GS5/wiki'} or in our #{link_to 'mailinglist', 'https://groups.google.com/group/gs5-users/'}.
+%p
+  In version #{GEMEINSCHAFT_VERSION} the following phones can be used for provisioning: 
+  = nicely_joined_with_commata(PhoneModel.order(:name).map{|phone_model| "#{phone_model.to_s}"})

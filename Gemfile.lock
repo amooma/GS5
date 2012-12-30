@@ -84,7 +84,7 @@ GEM
     faye-websocket (0.4.1)
       eventmachine (>= 0.12.0)
     fssm (0.2.8.1)
-    haml (3.1.4)
+    haml (3.1.7)
     hike (1.2.1)
     hirb (0.6.1)
     http_accept_language (1.0.2)

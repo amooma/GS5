@@ -13,9 +13,9 @@ class PhonesController < ApplicationController
   end
 
   def new
-    set_fallback_sip_accounts
-
     @phone = @phoneable.phones.build()
+
+    set_fallback_sip_accounts
     
     # Use the last phone.phone_model as the default.
     #
@@ -80,6 +80,9 @@ class PhonesController < ApplicationController
   def set_fallback_sip_accounts
     used_sip_account_ids = Phone.where(:fallback_sip_account_id => SipAccount.pluck(:id)).pluck(:fallback_sip_account_id) 
     @fallback_sip_accounts = SipAccount.where(:sip_accountable_type => 'Tenant').where(:hotdeskable => true) - SipAccount.where(:id => used_sip_account_ids)
+    if @phone && !@phone.fallback_sip_account_id.blank? && SipAccount.exists?(@phone.fallback_sip_account_id)
+      @fallback_sip_accounts << SipAccount.where(:id => @phone.fallback_sip_account_id).first
+    end
   end
   
 end
