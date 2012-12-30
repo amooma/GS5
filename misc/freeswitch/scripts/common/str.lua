@@ -7,6 +7,7 @@ module(...,package.seeall)
 function try(array, arguments)
   local argument = arguments:match('^(.-)%.') or arguments;
   local remaining_arguments = arguments:match('%.(.-)$');
+  argument = tonumber(argument) or argument;
   
   if argument and type(array) == 'table' then
     if remaining_arguments then
