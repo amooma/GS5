@@ -199,6 +199,7 @@ Gemeinschaft42c::Application.routes.draw do
   
   get "page/index"
   get "page/conference"
+  get "page/beginners_intro"
   
   root :to => "page#index"
   

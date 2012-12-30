@@ -1,0 +1,33 @@
+- title "Erste Schritte mit Gemeinschaft #{GEMEINSCHAFT_VERSION}!"
+
+%p
+  Sie müssen als erstes mindestens zwei neue SIP-Accounts anlegen. Dabei haben Sie die Wahl zwischen folgenden Varianten:
+
+%ul
+  %li
+    %strong
+      Personalisierter SIP-Accounts 
+    %br
+    Dieser wird einer bestimmten Person zugeordnet. In einer normalen Gemeinschaft-Installation sind die meisten SIP-Accounts personalisiert.
+    %br
+    =link_to "SIP-Account für #{current_user} anlegen.", new_user_sip_account_path(current_user)
+  %li
+    %strong
+      Firmen SIP-Accounts
+    %br
+    Es gibt bestimmte SIP-Account, die keiner bestimmten Person zugeordnet werden können (z.B. für Telefone in einem Konferenzraum). Dafür gibt es Firmen SIP-Accounts.
+    %br
+    =link_to "SIP-Account für #{current_user.current_tenant} anlegen.", new_tenant_sip_account_path(current_user.current_tenant)
+
+%h2 Rufnummern
+
+%p
+  Mit denen von Ihnen angelegten SIP-Accounts können Sie schon intern telefonieren. Dazu müssen Sie den SIP-Accounts jeweils eine interne Telefonnummer zuweisen (z.B. 20 und 21) und ein SIP Soft- oder Hardphone mit den Account-Daten konfigurieren.
+
+%h2 Telefone
+
+%p
+  Komfortabler ist der Betrieb von im Provisioning unterstützen Telefone. Diese können Sie beim Anlegen direkt mit einem bestimmten SIP-Account verknüpfen. Danach müssen Sie nur noch die Provisioningdaten per Hand ins Telefon eintragen oder ein paar Einstellungen in Ihrem DHCP-Server vornehmen. Hilfe dazu finden Sie im #{link_to 'Wiki', 'https://github.com/amooma/GS5/wiki'} und der #{link_to 'Mailingliste', 'https://groups.google.com/group/gs5-users/'}.
+%p
+  Folgende Telefone werden in der Version #{GEMEINSCHAFT_VERSION} vom automatischen Provisioning unterstützt: 
+  = nicely_joined_with_commata(PhoneModel.order(:name).map{|phone_model| "#{phone_model.to_s}"})
