@@ -34,6 +34,7 @@ de:
       http_password: 'http password'
       nightly_reboot: 'Nachts automatischer Reboot'
       fallback_sip_account_id: 'Fallback SIP Account'
+      manual: 'Handbuch'
       actions:
         confirm: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
         destroy: 'Löschen'
