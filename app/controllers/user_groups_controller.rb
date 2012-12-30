@@ -19,7 +19,7 @@ class UserGroupsController < ApplicationController
   def create
     @user_group = @parent.user_groups.build(params[:user_group])
     if @user_group.save
-      redirect_to @user_group, :notice => t('user_groups.controller.successfuly_created')
+      redirect_to [@parent, @user_group], :notice => t('user_groups.controller.successfuly_created')
     else
       render :new
     end
