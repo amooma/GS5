@@ -1,4 +1,4 @@
-= simple_form_for(@user_group) do |f|
+= simple_form_for([@parent, @user_group]) do |f|
   = f.error_notification
 
   = render "form_core", :f => f
