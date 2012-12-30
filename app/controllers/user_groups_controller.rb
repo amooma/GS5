@@ -30,7 +30,7 @@ class UserGroupsController < ApplicationController
 
   def update
     if @user_group.update_attributes(params[:user_group])
-      redirect_to @user_group, :notice  => t('user_groups.controller.successfuly_updated')
+      redirect_to [@parent, @user_group], :notice  => t('user_groups.controller.successfuly_updated')
     else
       render :edit
     end
@@ -38,7 +38,7 @@ class UserGroupsController < ApplicationController
 
   def destroy
     @user_group.destroy
-    redirect_to user_groups_url, :notice => t('user_groups.controller.successfuly_destroyed')
+    redirect_to method( :"#{@parent.class.name.underscore}_user_groups_path" ).(@parent), :notice => t('user_groups.controller.successfuly_destroyed')
   end
   
   private
