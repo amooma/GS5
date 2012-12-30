@@ -4,7 +4,7 @@ class UserGroupsControllerTest < ActionController::TestCase
   # TODO Create tests which test that a login user has specific rights.
   
   # setup do
-  #   @user_group = Factory.create(:user_group)
+  #   @user_group = FactoryGirl.create(:user_group)
   # end
   # 
   # test "should get index" do
@@ -20,7 +20,7 @@ class UserGroupsControllerTest < ActionController::TestCase
   # 
   # test "should create user_group" do
   #   assert_difference('UserGroup.count') do
-  #     post :create, user_group: Factory.build(:user_group).attributes
+  #     post :create, user_group: FactoryGirl.build(:user_group).attributes
   #   end
   # 
   #   assert_redirected_to user_group_path(assigns(:user_group))

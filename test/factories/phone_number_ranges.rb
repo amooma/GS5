@@ -1,6 +1,8 @@
 # Read about factories at http://github.com/thoughtbot/factory_girl
 
-Factory.define :phone_number_range do |f|
-  f.name INTERNAL_EXTENSIONS
-  f.association :phone_number_rangeable, :factory => :tenant
+FactoryGirl.define do
+  factory :phone_number_range do
+    name INTERNAL_EXTENSIONS
+    association :phone_number_rangeable, :factory => :tenant
+  end
 end

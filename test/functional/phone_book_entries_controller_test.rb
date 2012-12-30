@@ -3,9 +3,9 @@ require 'test_helper'
 class PhoneBookEntriesControllerTest < ActionController::TestCase
   
   setup do
-    @user1 = Factory.create(:user)
+    @user1 = FactoryGirl.create(:user)
     pb = @user1.phone_books.first
-    @user1_phone_book_entry = Factory.create(
+    @user1_phone_book_entry = FactoryGirl.create(
       :phone_book_entry,
       :phone_book_id => pb.id
     )

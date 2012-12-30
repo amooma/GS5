@@ -11,8 +11,8 @@ class PageControllerTest < ActionController::TestCase
   
   
   test "a logged in user should get index" do
-    @tenant = Factory.create(:tenant)
-    @user  = Factory.create(:user)
+    @tenant = FactoryGirl.create(:tenant)
+    @user  = FactoryGirl.create(:user)
     
     @tenant.users << @user
     
@@ -22,8 +22,8 @@ class PageControllerTest < ActionController::TestCase
   end
 
   test "a logged out user should be redirected to the login" do
-    @tenant = Factory.create(:tenant)
-    @user  = Factory.create(:user)
+    @tenant = FactoryGirl.create(:tenant)
+    @user  = FactoryGirl.create(:user)
     
     @tenant.users << @user
     
