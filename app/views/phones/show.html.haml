@@ -6,6 +6,8 @@
 %p
   %strong= t('phones.show.phone_model_id') + ":"
   = @phone.phone_model
+  - if !@phone.phone_model.product_manual_homepage_url.blank?
+    (#{link_to t('phones.show.manual'), @phone.phone_model.product_manual_homepage_url})
 - if @phone.hot_deskable == true
   %p
     %strong= t('phones.show.hot_deskable') + ":"
