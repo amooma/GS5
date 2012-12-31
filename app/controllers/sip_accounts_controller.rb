@@ -20,7 +20,9 @@ class SipAccountsController < ApplicationController
     @sip_account.clip = DEFAULT_CLIP_SETTING
     @sip_account.voicemail_pin = random_pin
     @sip_account.callforward_rules_act_per_sip_account = CALLFORWARD_RULES_ACT_PER_SIP_ACCOUNT_DEFAULT
-    @sip_account.hotdeskable = true
+    if @parent.class == User
+      @sip_account.hotdeskable = true
+    end
 
     # Make sure that we don't use an already taken auth_name
     #  
