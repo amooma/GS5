@@ -2,8 +2,8 @@ require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
   setup do
-    @tenant = Factory.create(:tenant)
-    @user  = Factory.create(:user)
+    @tenant = FactoryGirl.create(:tenant)
+    @user  = FactoryGirl.create(:user)
     
     @tenant.tenant_memberships.create(:user_id => @user.id)
     
@@ -30,7 +30,7 @@ class UsersControllerTest < ActionController::TestCase
   # test "should create user" do
   #   session[:user_id] = nil
   #   assert_difference('User.count') do
-  #     post :create, user: Factory.build(:user).attributes
+  #     post :create, user: FactoryGirl.build(:user).attributes
   #   end
   # 
   # #  assert_redirected_to user_path(assigns(:user))

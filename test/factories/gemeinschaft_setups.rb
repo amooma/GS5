@@ -1,8 +1,10 @@
 # Read about factories at http://github.com/thoughtbot/factory_girl
 
-Factory.define :gemeinschaft_setup do |f|
-  f.association :user
-  f.association :sip_domain
-  f.association :country
-  f.association :language
+FactoryGirl.define do
+  factory :gemeinschaft_setup do
+    association :user
+    association :sip_domain
+    association :country
+    association :language
+  end
 end

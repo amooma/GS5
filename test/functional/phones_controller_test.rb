@@ -6,7 +6,7 @@ class PhonesControllerTest < ActionController::TestCase
   #TODO Uncomment tests once the route has been implemented.
   
 #   setup do
-#     @phone = Factory.create(:phone)
+#     @phone = FactoryGirl.create(:phone)
 #   end
 # 
 #   test "should get index" do
@@ -24,7 +24,7 @@ class PhonesControllerTest < ActionController::TestCase
 #   #
 #   # test "should create phone" do
 #   #   assert_difference('Phone.count') do
-#   #     post :create, phone: Factory.build(:phone, :phone_model_id => @phone.phone_model_id).attributes
+#   #     post :create, phone: FactoryGirl.build(:phone, :phone_model_id => @phone.phone_model_id).attributes
 #   #   end
 #   # 
 #   #   assert_redirected_to phone_path(assigns(:phone))

@@ -3,8 +3,8 @@ require 'test_helper'
 class PhoneNumbersControllerTest < ActionController::TestCase
   
   setup do
-    @tenant = Factory.create(:tenant)
-    @user   = Factory.create(:user)
+    @tenant = FactoryGirl.create(:tenant)
+    @user   = FactoryGirl.create(:user)
     
     @tenant.tenant_memberships.create(:user_id => @user.id)
     
@@ -12,11 +12,11 @@ class PhoneNumbersControllerTest < ActionController::TestCase
     
     @private_phone_book = @user.phone_books.first
 
-    @private_phone_book_entry = Factory.create(
+    @private_phone_book_entry = FactoryGirl.create(
       :phone_book_entry,
       :phone_book => @private_phone_book
     )
-    @phone_number = Factory.create(
+    @phone_number = FactoryGirl.create(
       :phone_number,
       :phone_numberable => @private_phone_book_entry
     )

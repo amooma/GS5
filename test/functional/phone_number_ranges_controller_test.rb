@@ -5,7 +5,7 @@ class PhoneNumberRangesControllerTest < ActionController::TestCase
   #TODO Uncomment tests once the views are implemented.
   
   setup do
-    @phone_number_range = Factory.create(:phone_number_range)
+    @phone_number_range = FactoryGirl.create(:phone_number_range)
   end
   
   test "should get index" do

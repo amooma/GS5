@@ -2,19 +2,19 @@ require 'test_helper'
 
 class PhoneBooksControllerTest < ActionController::TestCase
   setup do
-    @tenant = Factory.create(:tenant)
+    @tenant = FactoryGirl.create(:tenant)
     @admins = @tenant.user_groups.find_or_create_by_name('Admins')
     @users = @tenant.user_groups.find_or_create_by_name('Users')
-    @user  = Factory.create(:user)
+    @user  = FactoryGirl.create(:user)
     
     @tenant.users << @user
     @users.users << @user
         
-    @personal_phone_book = Factory.create(:phone_book,
+    @personal_phone_book = FactoryGirl.create(:phone_book,
     	:phone_bookable_type => @user.class.to_s,
     	:phone_bookable_id   => @user.id
     )
-    phone_book_entry = Factory.create(:phone_book_entry)
+    phone_book_entry = FactoryGirl.create(:phone_book_entry)
     @personal_phone_book.phone_book_entries << phone_book_entry
 
     @expected_status_if_not_authorized = :redirect
@@ -34,7 +34,7 @@ class PhoneBooksControllerTest < ActionController::TestCase
   end
 
   test "should create phone_book" do
-    phone_book2 = Factory.build(:phone_book,
+    phone_book2 = FactoryGirl.build(:phone_book,
       :phone_bookable_type => @user.class.to_s,
       :phone_bookable_id   => @user.id
     )

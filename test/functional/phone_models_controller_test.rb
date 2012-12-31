@@ -4,21 +4,21 @@ class PhoneModelsControllerTest < ActionController::TestCase
   
   setup do
     # Create a tenant:
-    @tenant = Factory.create(:tenant)
+    @tenant = FactoryGirl.create(:tenant)
     
     # Create a User who is member of the Tenant but has no special rights:
-    @user   = Factory.create(:user)
+    @user   = FactoryGirl.create(:user)
     @tenant.tenant_memberships.create(:user_id => @user.id)
     @user.update_attributes!(:current_tenant_id => @tenant.id)
     
     # Create a User who is member of the Tenant and has super admin rights:
-    @super_admin = Factory.create(:user)
+    @super_admin = FactoryGirl.create(:user)
     @tenant.tenant_memberships.create(:user_id => @super_admin.id)
     @super_admin.update_attributes!(:current_tenant_id => @tenant.id)
     
     # Create a PhoneModel
     #
-    @phone_model = Factory.create(:phone_model)
+    @phone_model = FactoryGirl.create(:phone_model)
   end
   
   [ '@user.id', '' ].each do |user_id_code|
@@ -44,7 +44,7 @@ class PhoneModelsControllerTest < ActionController::TestCase
       session[:user_id] = eval( user_id_code )
       
       assert_no_difference('PhoneModel.count') do
-        post :create, manufacturer_id: @phone_model.manufacturer_id, phone_model: Factory.build(:phone_model,
+        post :create, manufacturer_id: @phone_model.manufacturer_id, phone_model: FactoryGirl.build(:phone_model,
           :manufacturer_id => @phone_model.manufacturer_id).attributes
       end
     end
@@ -106,7 +106,7 @@ class PhoneModelsControllerTest < ActionController::TestCase
   # # add routes first.
   # test "should create phone_model as super admin" do
   #   assert_difference('PhoneModel.count') do
-  #     post :create, phone_model: Factory.build(:phone_model,
+  #     post :create, phone_model: FactoryGirl.build(:phone_model,
   #       :manufacturer_id => @phone_model.manufacturer_id).attributes
   #   end
   # 

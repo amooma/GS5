@@ -34,6 +34,7 @@ en:
       nightly_reboot: 'Nightly reboot'
       provisioning_key_active: 'Provisioning key active'
       fallback_sip_account_id: 'Fallback SIP Account'
+      manual: 'Manual'
       actions:
         confirm: 'Are you sure you want to delete this phone?'
         destroy: 'Delete phone'

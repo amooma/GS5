@@ -58,14 +58,27 @@ class TenantsController < ApplicationController
       end
        
       if Delayed::Job.count > 0
-        redirect_to @tenant, :notice => t('tenants.controller.successfuly_created_plus_delayed_jobs', 
+        if SipAccount.any? || Phone.any?
+          redirect_to @tenant, :notice => t('tenants.controller.successfuly_created_plus_delayed_jobs', 
                                           :resource => @tenant, 
                                           :amount_of_numbers => @tenant.array_of_internal_extension_numbers.count + @tenant.array_of_dids.count
                                           )
-      else
-        redirect_to @tenant, :notice => t('tenants.controller.successfuly_created', 
-                                          :resource => @tenant
+        else
+          redirect_to page_beginners_intro_path, :notice => t('tenants.controller.successfuly_created_plus_delayed_jobs', 
+                                          :resource => @tenant, 
+                                          :amount_of_numbers => @tenant.array_of_internal_extension_numbers.count + @tenant.array_of_dids.count
                                           )
+        end
+      else
+        if SipAccount.any? || Phone.any?
+          redirect_to @tenant, :notice => t('tenants.controller.successfuly_created', 
+                                            :resource => @tenant
+                                            )
+        else
+          redirect_to page_beginners_intro_path, :notice => t('tenants.controller.successfuly_created', 
+                                            :resource => @tenant
+                                            )
+        end
       end
     else
       render :new

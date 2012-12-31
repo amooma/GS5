@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SipDomainsControllerTest < ActionController::TestCase
   setup do
-    @sip_domain = Factory.create(:sip_domain)
+    @sip_domain = FactoryGirl.create(:sip_domain)
   end
 
   test "should get index" do
@@ -18,7 +18,7 @@ class SipDomainsControllerTest < ActionController::TestCase
 
   test "should create sip_domain" do
     assert_difference('SipDomain.count') do
-      post :create, sip_domain: Factory.build(:sip_domain).attributes
+      post :create, sip_domain: FactoryGirl.build(:sip_domain).attributes
     end
 
     assert_redirected_to sip_domain_path(assigns(:sip_domain))

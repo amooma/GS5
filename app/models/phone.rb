@@ -20,6 +20,7 @@ class Phone < ActiveRecord::Base
   # Validations
   #
   before_validation :sanitize_mac_address
+  before_validation :destroy_fallback_sip_account_if_not_hot_deskable
   
   validates_presence_of     :mac_address
   validate_mac_address      :mac_address
@@ -225,6 +226,12 @@ class Phone < ActiveRecord::Base
     if self.mac_address_changed?
       self.ip_address = nil
       self.last_ip_address = nil
+    end
+  end
+
+  def destroy_fallback_sip_account_if_not_hot_deskable
+    if !self.hot_deskable?
+      self.fallback_sip_account_id = nil
     end
   end
   

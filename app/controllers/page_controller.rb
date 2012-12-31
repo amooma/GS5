@@ -7,6 +7,7 @@ class PageController < ApplicationController
   
   def index;end
   def conference;end
+  def beginners_intro;end
   
   private
   def if_fresh_system_then_go_to_wizard

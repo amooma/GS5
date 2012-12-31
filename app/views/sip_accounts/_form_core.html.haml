@@ -1,7 +1,7 @@
 .inputs
   = f.input :auth_name, :as => :string, :label => t('sip_accounts.form.auth_name.label'), :hint => conditional_hint('sip_accounts.form.auth_name.hint')
   = f.input :password, :as => :string, :label => t('sip_accounts.form.password.label'), :hint => conditional_hint('sip_accounts.form.password.hint')
-  = f.input :caller_name, :as => :string, :label => t('sip_accounts.form.caller_name.label'), :hint => conditional_hint('sip_accounts.form.caller_name.hint')
+  = f.input :caller_name, :as => :string, :label => t('sip_accounts.form.caller_name.label'), :hint => conditional_hint('sip_accounts.form.caller_name.hint'), :autofocus => true
   = f.input :voicemail_pin, :as => :string, :label => t('sip_accounts.form.voicemail_pin.label'), :hint => conditional_hint('sip_accounts.form.voicemail_pin.hint')
   = f.input :call_waiting, :label => t('sip_accounts.form.call_waiting.label'), :hint => conditional_hint('sip_accounts.form.call_waiting.hint')
   = f.input :clir, :label => t('sip_accounts.form.clir.label'), :hint => conditional_hint('sip_accounts.form.clir.hint')

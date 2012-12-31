@@ -3,27 +3,27 @@ require 'test_helper'
 class CallForwardsControllerTest < ActionController::TestCase
   
   setup do
-    @user = Factory.create(:user)
+    @user = FactoryGirl.create(:user)
     
-    #@tenant = Factory.create(:tenant)
+    #@tenant = FactoryGirl.create(:tenant)
     #@tenant.tenant_memberships.create(:user_id => @user.id)
     #@user.update_attributes!(:current_tenant_id => @tenant.id)
     
-    @sip_account = Factory.create(
+    @sip_account = FactoryGirl.create(
       :sip_account,
       :sip_accountable => @user,
     )
     @user.sip_accounts << @sip_account
     @sip_account = @user.sip_accounts.last
     
-    @phone_number = Factory.create(
+    @phone_number = FactoryGirl.create(
       :phone_number,
       :phone_numberable => @sip_account,
     )
     @sip_account.phone_numbers << @phone_number
     @phone_number = @sip_account.phone_numbers.last
     
-    @call_forward = Factory.create(
+    @call_forward = FactoryGirl.create(
       :call_forward,
       :phone_number => @phone_number,
     )
@@ -50,7 +50,7 @@ class CallForwardsControllerTest < ActionController::TestCase
 #     assert_difference('CallForward.count') do
 #       post :create,
 #         :phone_number_id => @phone_number.to_param,
-#         :call_forward => Factory.attributes_for(
+#         :call_forward => FactoryGirl.attributes_for(
 #           :call_forward
 #         )
 #     end
