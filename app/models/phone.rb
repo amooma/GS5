@@ -162,7 +162,6 @@ class Phone < ActiveRecord::Base
 
     if ! self.resync(true, sip_account_resync)
       errors.add(:resync, "Resync failed")
-      return false
     end
 
     return true
