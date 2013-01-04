@@ -55,6 +55,10 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:dial_clir_off(caller, parameters[3]);
   elseif fid == "dcliron" then
     result = self:dial_clir_on(caller, parameters[3]);
+  elseif fid == "cliron" then
+    result = self:clir_on(caller);
+  elseif fid == "cliroff" then
+    result = self:clir_off(caller);
   elseif fid == "clipon" then
     result = self:clip_on(caller);
   elseif fid == "clipoff" then
@@ -565,6 +569,48 @@ function Functions.callwaiting_off(self, caller)
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
 
+function Functions.clir_on(self, caller)
+  -- Find caller's SipAccount
+  local caller_sip_account = self:ensure_caller_sip_account(caller);
+  if not caller_sip_account then
+    return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
+  end
+
+  local sql_query = 'UPDATE `sip_accounts` SET `clir` = TRUE WHERE `id` = ' .. caller_sip_account.record.id;
+  
+  if not self.database:query(sql_query) then
+    self.log:notice("CLIR could not be set");
+    return { continue = false, code = 500, phrase = 'CLIR could not be set', no_cdr = true }
+    
+  end
+
+  caller:answer();
+  caller:send_display('CLIR on');
+  caller:sleep(1000);
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
+function Functions.clir_off(self, caller)
+  -- Find caller's SipAccount
+  local caller_sip_account = self:ensure_caller_sip_account(caller);
+  if not caller_sip_account then
+    return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
+  end
+
+  local sql_query = 'UPDATE `sip_accounts` SET `clir` = FALSE WHERE `id` = ' .. caller_sip_account.record.id;
+  
+  if not self.database:query(sql_query) then
+    self.log:notice("CLIR could not be set");
+    return { continue = false, code = 500, phrase = 'CLIR could not be set', no_cdr = true }
+    
+  end
+
+  caller:answer();
+  caller:send_display('CLIR off');
+  caller:sleep(1000);
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
 function Functions.clip_on(self, caller)
   -- Find caller's SipAccount
   local caller_sip_account = self:ensure_caller_sip_account(caller);
@@ -586,6 +632,7 @@ function Functions.clip_on(self, caller)
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
 
+
 function Functions.clip_off(self, caller)
   -- Find caller's SipAccount
   local caller_sip_account = self:ensure_caller_sip_account(caller);
@@ -606,7 +653,6 @@ function Functions.clip_off(self, caller)
   caller:sleep(1000);
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
-
 
 function Functions.call_forwarding_off(self, caller, call_forwarding_service, delete)
   local defaults = {log = self.log, database = self.database, domain = caller.domain}
