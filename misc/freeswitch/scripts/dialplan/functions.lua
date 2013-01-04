@@ -51,6 +51,8 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:user_auto_logout(caller, true);
   elseif fid == "loaoff" then
     result = self:user_auto_logout(caller, false);
+  elseif fid == "redial" then
+    result = self:redial(caller);
   elseif fid == "dcliroff" then
     result = self:dial_clir_off(caller, parameters[3]);
   elseif fid == "dcliron" then
@@ -505,6 +507,24 @@ function Functions.user_auto_logout(self, caller, auto_logout)
   caller:answer();
   caller:send_display('Logout successful');
   caller:sleep(1000);
+end
+
+function Functions.redial(self, caller)
+  -- Ensure a valid sip account
+  local caller_sip_account = self:ensure_caller_sip_account(caller);
+  if not caller_sip_account then
+    return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
+  end
+
+  local sql_query = 'SELECT `destination_number` FROM `call_histories` WHERE `entry_type` = "dialed" AND `call_historyable_type` = "SipAccount" AND `call_historyable_id` = ' .. caller_sip_account.record.id;
+  local phone_number = self.database:query_return_value(sql_query);
+
+  common_str = require 'common.str';
+  if common_str.blank(phone_number) then
+    return { continue = false, code = 404, phrase = 'No phone number saved', no_cdr = true }
+  end
+
+  return { continue = true, number = phone_number }
 end
 
 function Functions.dial_clir_off(self, caller, phone_number)
