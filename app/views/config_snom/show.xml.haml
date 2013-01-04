@@ -68,6 +68,11 @@
     %dkey_conf{:perm => 'RW'}= @dkeys[:conf]
     %dkey_redial{:perm => 'RW'}= @dkeys[:redial]
     %dkey_directory{:perm => 'RW'}= @dkeys[:directory]
+    %dkey_touch_idle_adr_book{:perm => 'RW'}= @dkeys[:touch_idle_adr_book]
+    %dkey_touch_idle_list_missed{:perm => 'RW'}= @dkeys[:touch_idle_list_missed]
+    %dkey_touch_idle_list_taken{:perm => 'RW'}= @dkeys[:touch_idle_list_taken]
+    %dkey_touch_idle_redial{:perm => 'RW'}= @dkeys[:touch_idle_redial]
+    %dkey_touch_idle_dialog{:perm => 'RW'}= @dkeys[:touch_idle_dialog]
 
     %idle_ok_key_action{:perm => 'RW'}= @dkeys[:idle_ok]
     %idle_cancel_key_action{:perm => 'RW'}= @dkeys[:idle_cancel]
@@ -75,6 +80,29 @@
     %idle_down_key_action{:perm => 'RW'}= @dkeys[:idle_down]
     %idle_left_key_action{:perm => 'RW'}= @dkeys[:idle_left]
     %idle_right_key_action{:perm => 'RW'}= @dkeys[:idle_right]
+
+    / Display
+    %backlight{:perm => 'RW'}= '15'
+    %backlight_idle{:perm => 'RW'}= '0'
+    %dim_timer{:perm => 'RW'}= '300'
+
+    - if @phone.phone_model.name == 'Snom 870'
+      / Snom 870 idle icons
+      %idle_icon_01{:perm => 'RW'}= '9'
+      %idle_icon_02{:perm => 'RW'}= '20'
+      %idle_icon_03{:perm => 'RW'}= '4'
+      %idle_icon_04{:perm => 'RW'}= '-1'
+      %idle_icon_05{:perm => 'RW'}= '6'
+      %idle_icon_06{:perm => 'RW'}= '-1'
+      %idle_icon_07{:perm => 'RW'}= '-1'
+      %idle_icon_08{:perm => 'RW'}= '-1'
+      %idle_icon_09{:perm => 'RW'}= '-1'
+      %idle_icon_10{:perm => 'RW'}= '-1'
+      %idle_icon_11{:perm => 'RW'}= '15'
+      %idle_icon_12{:perm => 'RW'}= '-1'
+      %idle_icon_13{:perm => 'RW'}= '-1'
+      %idle_icon_14{:perm => 'RW'}= '13'
+      %idle_icon_15{:perm => 'RW'}= '12'
 
     != "\<!-- sip accounts: #{@sip_accounts.count} --\>"
     - @sip_accounts.each_with_index do |sip_account, array_index|
@@ -148,4 +176,5 @@
 
   %uploads
     - if @state_settings_url
+      / Phone menu
       %file{:url => @state_settings_url, :type => "gui_xml_state_settings"}

@@ -503,6 +503,11 @@ class ConfigSnomController < ApplicationController
       :idle_down => "keyevent F_NEXT_ID",
       :idle_left => "url #{xml_applications_url}/call_history.xml?type=received",
       :idle_right => "url #{xml_applications_url}/call_history.xml?type=missed",
+      :touch_idle_adr_book => "url #{xml_applications_url}/phone_book.xml",
+      :touch_idle_list_missed => "url #{xml_applications_url}/call_history.xml?type=missed",
+      :touch_idle_list_taken => "url #{xml_applications_url}/call_history.xml?type=received",
+      :touch_idle_redial => "url #{xml_applications_url}/call_history.xml?type=dialed",
+      :touch_idle_dialog => "url #{xml_applications_url}/call_history.xml",
     }
     
     # Remap conference key to first conference if found
