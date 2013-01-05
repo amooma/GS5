@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @gs_parameter.name %>
+</p>
+
+<p>
+  <b>Section:</b>
+  <%= @gs_parameter.section %>
+</p>
+
+<p>
+  <b>Value:</b>
+  <%= @gs_parameter.value %>
+</p>
+
+<p>
+  <b>Class type:</b>
+  <%= @gs_parameter.class_type %>
+</p>
+
+
+<%= link_to 'Edit', edit_gs_parameter_path(@gs_parameter) %> |
+<%= link_to 'Back', gs_parameters_path %>

@@ -1,0 +1,14 @@
+<%= simple_form_for(@gs_parameter) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="inputs">
+    <%= f.input :name %>
+    <%= f.input :section %>
+    <%= f.input :value %>
+    <%= f.input :class_type %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

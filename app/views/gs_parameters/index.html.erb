@@ -1,0 +1,29 @@
+<h1>Listing gs_parameters</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Section</th>
+    <th>Value</th>
+    <th>Class type</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @gs_parameters.each do |gs_parameter| %>
+  <tr>
+    <td><%= gs_parameter.name %></td>
+    <td><%= gs_parameter.section %></td>
+    <td><%= gs_parameter.value %></td>
+    <td><%= gs_parameter.class_type %></td>
+    <td><%= link_to 'Show', gs_parameter %></td>
+    <td><%= link_to 'Edit', edit_gs_parameter_path(gs_parameter) %></td>
+    <td><%= link_to 'Destroy', gs_parameter, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Gs parameter', new_gs_parameter_path %>

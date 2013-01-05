@@ -1,4 +1,6 @@
 Gemeinschaft42c::Application.routes.draw do
+  resources :gs_parameters
+
   resources :automatic_call_distributors
 
   resources :gs_cluster_sync_log_entries
