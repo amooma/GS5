@@ -10,19 +10,19 @@ class GsParameter < ActiveRecord::Base
             :presence => true,
             :inclusion => { :in => ['String', 'Integer', 'Boolean', 'YAML'] }
 
-  def generate_contant
-	  Kernel.const_set(self.name, self.value.to_i) if self.class_type == 'Integer'
-	  Kernel.const_set(self.name, self.value.to_s) if self.class_type == 'String'
+  def generate_constant
+    Kernel.const_set(self.name, self.value.to_i) if self.class_type == 'Integer'
+    Kernel.const_set(self.name, self.value.to_s) if self.class_type == 'String'
 
-	  if self.class_type == 'Boolean'
-		  Kernel.const_set(self.name, true) if self.value == 'true'
-		  Kernel.const_set(self.name, false) if self.value == 'false'
-	  end
+    if self.class_type == 'Boolean'
+      Kernel.const_set(self.name, true) if self.value == 'true'
+      Kernel.const_set(self.name, false) if self.value == 'false'
+    end
 
-	  Kernel.const_set(self.name, YAML.load(self.value)) if self.class_type == 'YAML'
+    Kernel.const_set(self.name, YAML.load(self.value)) if self.class_type == 'YAML'
   end
 
   def to_s
-  	name
+    name
   end
 end
