@@ -18,8 +18,8 @@ class PhoneNumber < ActiveRecord::Base
   before_save :save_value_of_to_s
   after_create :copy_existing_call_forwards_if_necessary
   before_validation :'parse_and_split_number!'
-  validate :validate_number, :if => Proc.new { |phone_number| STRICT_INTERNAL_EXTENSION_HANDLING && STRICT_DID_HANDLING }
-  validate :check_if_number_is_available, :if => Proc.new { |phone_number| STRICT_INTERNAL_EXTENSION_HANDLING && STRICT_DID_HANDLING }
+  validate :validate_number, :if => Proc.new { |phone_number| GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') && GsParameter.get('STRICT_DID_HANDLING') }
+  validate :check_if_number_is_available, :if => Proc.new { |phone_number| GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') && GsParameter.get('STRICT_DID_HANDLING') }
   
   acts_as_list :scope => [:phone_numberable_id, :phone_numberable_type]
 
@@ -95,7 +95,7 @@ class PhoneNumber < ActiveRecord::Base
     else
       # Check if the number is an internal extension.
       if tenant
-        internal_extension_range = tenant.phone_number_ranges.where(:name => INTERNAL_EXTENSIONS).first
+        internal_extension_range = tenant.phone_number_ranges.where(:name => GsParameter.get('INTERNAL_EXTENSIONS')).first
         if internal_extension_range
           if internal_extension_range.phone_numbers.where(:number => number).length > 0
             parts[:extension] = number
@@ -192,8 +192,8 @@ class PhoneNumber < ActiveRecord::Base
   end
   
   def parse_and_split_number!
-    if self.phone_numberable_type == 'PhoneNumberRange' && self.phone_numberable.name == INTERNAL_EXTENSIONS
-      # The parent is the PhoneNumberRange INTERNAL_EXTENSIONS. Therefor it must be an extensions.
+    if self.phone_numberable_type == 'PhoneNumberRange' && self.phone_numberable.name == GsParameter.get('INTERNAL_EXTENSIONS')
+      # The parent is the PhoneNumberRange GsParameter.get('INTERNAL_EXTENSIONS'). Therefor it must be an extensions.
       #
       self.country_code = nil
       self.area_code = nil
@@ -202,8 +202,8 @@ class PhoneNumber < ActiveRecord::Base
       self.extension = self.number.to_s.strip
     else
       if self.tenant &&
-         self.tenant.phone_number_ranges.exists?(:name => INTERNAL_EXTENSIONS) && 
-         self.tenant.phone_number_ranges.where(:name => INTERNAL_EXTENSIONS).first.phone_numbers.exists?(:number => self.number)
+         self.tenant.phone_number_ranges.exists?(:name => GsParameter.get('INTERNAL_EXTENSIONS')) && 
+         self.tenant.phone_number_ranges.where(:name => GsParameter.get('INTERNAL_EXTENSIONS')).first.phone_numbers.exists?(:number => self.number)
         self.country_code = nil
         self.area_code = nil
         self.subscriber_number = nil
@@ -263,7 +263,7 @@ class PhoneNumber < ActiveRecord::Base
     if self.phone_numberable_type != 'PhoneBookEntry' && self.tenant
 
       phone_number_ranges = self.tenant.phone_number_ranges.where(
-                              :name => [INTERNAL_EXTENSIONS, DIRECT_INWARD_DIALING_NUMBERS]
+                              :name => [GsParameter.get('INTERNAL_EXTENSIONS'), GsParameter.get('DIRECT_INWARD_DIALING_NUMBERS')]
                             )
       if !phone_number_ranges.empty?                           
         if !PhoneNumber.where(:phone_numberable_type => 'PhoneNumberRange').

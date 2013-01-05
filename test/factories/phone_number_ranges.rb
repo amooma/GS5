@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :phone_number_range do
-    name INTERNAL_EXTENSIONS
+    name 'internal_extensions'
     association :phone_number_rangeable, :factory => :tenant
   end
 end

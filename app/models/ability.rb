@@ -70,7 +70,7 @@ class Ability
 
           # Dirty hack to disable PhoneNumberRange in the GUI
           #
-          if STRICT_INTERNAL_EXTENSION_HANDLING == false
+          if GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') == false
             cannot :manage, PhoneNumberRange
           end
         else

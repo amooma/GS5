@@ -54,8 +54,8 @@ class ApplicationController < ActionController::Base
   # Generate a new random PIN
   #
   def random_pin
-    if MINIMUM_PIN_LENGTH > 0
-      (1..MINIMUM_PIN_LENGTH).map{|i| (0 .. 9).to_a.sample}.join
+    if GsParameter.get('MINIMUM_PIN_LENGTH') > 0
+      (1..GsParameter.get('MINIMUM_PIN_LENGTH')).map{|i| (0 .. 9).to_a.sample}.join
     end
   end
   

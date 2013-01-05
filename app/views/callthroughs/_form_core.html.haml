@@ -15,7 +15,7 @@
     = f.simple_fields_for :access_authorizations do |access_authorization|
       = render "access_authorizations/form_core", :f => access_authorization
 
-  - if CALLTHROUGH_HAS_WHITELISTS == true
+  - if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
     - if @callthrough && @callthrough.whitelists.size > 0
       %h2= t('callthroughs.form.whitelists.label')
       - if !t('callthroughs.form.whitelists.hint').blank?

@@ -1,15 +1,15 @@
 namespace :gs_cluster do
   desc "Sync local data to other gs cluster nodes."
   task :push_waiting_data_to_other_nodes => :environment do
-    infinity_loop_protection_counter = GsClusterSyncLogEntry.where(:homebase_ip_address => HOMEBASE_IP_ADDRESS, 
+    infinity_loop_protection_counter = GsClusterSyncLogEntry.where(:homebase_ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS'), 
     	                                                           :waiting_to_be_synced => true).count + 10
 
     # One bite at a time.
     #
-    while GsClusterSyncLogEntry.where(:homebase_ip_address => HOMEBASE_IP_ADDRESS, 
+    while GsClusterSyncLogEntry.where(:homebase_ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS'), 
     	                                :waiting_to_be_synced => true).any? && 
                                       infinity_loop_protection_counter > 0
-      GsClusterSyncLogEntry.where(:homebase_ip_address => HOMEBASE_IP_ADDRESS, 
+      GsClusterSyncLogEntry.where(:homebase_ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS'), 
       	                          :waiting_to_be_synced => true).first.populate_other_cluster_nodes
       infinity_loop_protection_counter -= 1
     end
@@ -38,7 +38,7 @@ namespace :gs_cluster do
 
   desc "Pull objects from nodes."
   task :pull => :environment do
-    local_node = GsNode.where(:ip_address => HOMEBASE_IP_ADDRESS).first
+    local_node = GsNode.where(:ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS')).first
     GsNode.where(:accepts_updates_from => true).each do |remote_node|
       if remote_node.id == local_node.id
         next

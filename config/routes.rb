@@ -55,7 +55,7 @@ Gemeinschaft42c::Application.routes.draw do
     end
   end
 
-  if CALLTHROUGH_HAS_WHITELISTS == true
+  if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
     resources :whitelists, :only => [] do
       resources :phone_numbers do
         member do
@@ -239,7 +239,7 @@ Gemeinschaft42c::Application.routes.draw do
     resources :conferences
     resources :phone_number_ranges
     resources :callthroughs
-    if CALLTHROUGH_HAS_WHITELISTS == true
+    if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
       resources :whitelists
     end
     resources :hunt_groups
@@ -254,7 +254,7 @@ Gemeinschaft42c::Application.routes.draw do
         put 'move_lower'
       end
     end
-    if CALLTHROUGH_HAS_WHITELISTS == true
+    if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
       resources :whitelists
     end
   end

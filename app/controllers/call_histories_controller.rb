@@ -22,7 +22,7 @@ class CallHistoriesController < ApplicationController
     
     @call_histories = calls.paginate(
       :page => @pagination_page_number,
-      :per_page => DEFAULT_PAGINATION_ENTRIES_PER_PAGE
+      :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
     )
 
     @calls_count = calls.count

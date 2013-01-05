@@ -9,7 +9,7 @@
       :javascript
         $(".fallback_sip_account_dropdown").hide()  
 
-  - if defined? NIGHTLY_REBOOT_OF_PHONES && NIGHTLY_REBOOT_OF_PHONES == true
+  - if defined? GsParameter.get('NIGHTLY_REBOOT_OF_PHONES') && GsParameter.get('NIGHTLY_REBOOT_OF_PHONES') == true
     = f.input :nightly_reboot, :label => t('phones.form.nightly_reboot.label'), :hint => conditional_hint('phones.form.nightly_reboot.hint')
   - if defined? PROVISIONING_KEY_LENGTH && PROVISIONING_KEY_LENGTH > 0
     = f.input :provisioning_key_active, :label => t('phones.form.provisioning_key_active.label'), :hint => conditional_hint('phones.form.provisioning_key_active.hint')

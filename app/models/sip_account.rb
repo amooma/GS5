@@ -71,7 +71,7 @@ class SipAccount < ActiveRecord::Base
   after_update :log_out_phone_if_not_local
 
   def to_s
-    truncate((self.caller_name || "SipAccount ID #{self.id}"), :length => TO_S_MAX_CALLER_NAME_LENGTH) + " (#{truncate(self.auth_name, :length => TO_S_MAX_LENGTH_OF_AUTH_NAME)}@...#{self.host.split(/\./)[2,3].to_a.join('.') if self.host })"
+    truncate((self.caller_name || "SipAccount ID #{self.id}"), :length => GsParameter.get('TO_S_MAX_CALLER_NAME_LENGTH')) + " (#{truncate(self.auth_name, :length => GsParameter.get('TO_S_MAX_LENGTH_OF_AUTH_NAME'))}@...#{self.host.split(/\./)[2,3].to_a.join('.') if self.host })"
   end
   
   def call_forwarding_toggle( call_forwarding_service, to_voicemail = nil )
@@ -200,7 +200,7 @@ class SipAccount < ActiveRecord::Base
 
   # log out phone if sip_account is not on this node
   def log_out_phone_if_not_local
-    if self.gs_node_id && ! GsNode.where(:ip_address => HOMEBASE_IP_ADDRESS, :id => self.gs_node_id).first
+    if self.gs_node_id && ! GsNode.where(:ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS'), :id => self.gs_node_id).first
       self.phones.each do |phone|
         phone.user_logout;
       end

@@ -13,7 +13,7 @@ class ConferenceInvitee < ActiveRecord::Base
                                   :greater_than => 0,
                                   :allow_nil => true,
                                   :allow_blank => true
-  validates_length_of       :pin, :minimum => MINIMUM_PIN_LENGTH,
+  validates_length_of       :pin, :minimum => (GsParameter.get('MINIMUM_PIN_LENGTH').nil? ? 4 : GsParameter.get('MINIMUM_PIN_LENGTH')),
                                   :allow_nil => true,
                                   :allow_blank => true
                                   

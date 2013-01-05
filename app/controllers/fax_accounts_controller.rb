@@ -15,8 +15,8 @@ class FaxAccountsController < ApplicationController
   def new
     @fax_account = @parent.fax_accounts.build
     @fax_account.name = generate_a_new_name(@parent, @fax_account)
-    @fax_account.days_till_auto_delete = DAYS_TILL_AUTO_DELETE
-    @fax_account.retries = DEFAULT_NUMBER_OF_RETRIES
+    @fax_account.days_till_auto_delete = GsParameter.get('DAYS_TILL_AUTO_DELETE')
+    @fax_account.retries = GsParameter.get('DEFAULT_NUMBER_OF_RETRIES')
     @fax_account.station_id = @parent.to_s
     @fax_account.phone_numbers.build
     if @parent.class == User && !@parent.email.blank?

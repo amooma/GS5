@@ -16,7 +16,7 @@ class ActiveRecord::Base
   #
   def populate_gs_node_id
     if self.attribute_names.include?('gs_node_id') && self.gs_node_id.blank? 
-      self.gs_node_id = GsNode.where(:ip_address => HOMEBASE_IP_ADDRESS).first.try(:id)
+      self.gs_node_id = GsNode.where(:ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS')).first.try(:id)
     end 
   end
 
@@ -47,7 +47,7 @@ class ActiveRecord::Base
       logger.error "Couldn't #{action} #{self.class} with the ID #{self.id} on other GsNodes because #{self.class} doesn't have a is_native attribute."
     else
       if self.is_native != false
-        if defined? WRITE_GS_CLUSTER_SYNC_LOG && WRITE_GS_CLUSTER_SYNC_LOG == true
+        if defined? GsParameter.get('WRITE_GS_CLUSTER_SYNC_LOG') && GsParameter.get('WRITE_GS_CLUSTER_SYNC_LOG') == true
           if !(defined? $gs_cluster_loop_protection) || $gs_cluster_loop_protection != true
             begin
               GsClusterSyncLogEntry.create(
@@ -55,7 +55,7 @@ class ActiveRecord::Base
                                           :action => action,
                                           :content => content,
                                           :history => history,
-                                          :homebase_ip_address => HOMEBASE_IP_ADDRESS,
+                                          :homebase_ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS'),
                                           :waiting_to_be_synced => true,
                                           :association_method => association_method,
                                           :association_uuid => association_uuid

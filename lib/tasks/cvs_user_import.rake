@@ -24,14 +24,14 @@ namespace :user_import do
 
     # Read the CSV data and store them in the new_users hash.
     #
-    csv_data    = CSV.read(IMPORT_CSV_FILE, encoding: IMPORT_CSV_ENCODING)
+    csv_data    = CSV.read(GsParameter.get('IMPORT_CSV_FILE'), encoding: GsParameter.get('IMPORT_CSV_ENCODING'))
     headers     = csv_data.shift.map {|i| i.to_s }
     string_data = csv_data.map {|row| row.map {|cell| cell.to_s } }
     new_users   = string_data.map {|row| Hash[*headers.zip(row).flatten] }
-    gs_node_id  = GsNode.where(:ip_address => HOMEBASE_IP_ADDRESS).first.try(:id)
+    gs_node_id  = GsNode.where(:ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS')).first.try(:id)
 
-    if File.exists?(DOUBLE_CHECK_POSITIVE_USERS_CSV)
-      csv_data    = CSV.read(DOUBLE_CHECK_POSITIVE_USERS_CSV, encoding: IMPORT_CSV_ENCODING)
+    if File.exists?(GsParameter.get('DOUBLE_CHECK_POSITIVE_USERS_CSV'))
+      csv_data    = CSV.read(GsParameter.get('DOUBLE_CHECK_POSITIVE_USERS_CSV'), encoding: GsParameter.get('IMPORT_CSV_ENCODING'))
       if csv_data.blank?
         double_checked_user_names = []
       else
@@ -45,13 +45,13 @@ namespace :user_import do
       double_checked_user_names = new_users.map{|user| user['UserName']}
     end
 
-    tenant = Tenant.find(DEFAULT_API_TENANT_ID)
+    tenant = Tenant.find(GsParameter.get('DEFAULT_API_TENANT_ID'))
 
     # Destroy deleted user by making a diff of where(:importer_checksum)
     # and users in the CSV file.
     #
-    if defined?(USER_NAME_PREFIX) && !USER_NAME_PREFIX.blank?
-      new_users_user_names = new_users.map{|x| USER_NAME_PREFIX.to_s + x['UserName'].to_s}
+    if defined?(GsParameter.get('USER_NAME_PREFIX')) && !GsParameter.get('USER_NAME_PREFIX').blank?
+      new_users_user_names = new_users.map{|x| GsParameter.get('USER_NAME_PREFIX').to_s + x['UserName'].to_s}
     else
       new_users_user_names = new_users.map{|x| x['UserName']}
     end
@@ -67,8 +67,8 @@ namespace :user_import do
     new_users.each do |csv_user|
       if !(csv_user['UserName'].blank? || csv_user['Email'].blank?) && double_checked_user_names.include?(csv_user['UserName'])
         csv_user['Email'] = csv_user['Email'].downcase
-        if defined?(USER_NAME_PREFIX) && !USER_NAME_PREFIX.blank?
-          csv_user['UserName'] = USER_NAME_PREFIX.to_s + csv_user['UserName']
+        if defined?(GsParameter.get('USER_NAME_PREFIX')) && !GsParameter.get('USER_NAME_PREFIX').blank?
+          csv_user['UserName'] = GsParameter.get('USER_NAME_PREFIX').to_s + csv_user['UserName']
         end
 
         md5_sum = Digest::MD5.hexdigest(csv_user.to_yaml)
@@ -177,7 +177,7 @@ namespace :user_import do
               if phone_numbers_count < sip_account.phone_numbers.count
                 call_forward_case_offline = CallForwardCase.find_by_value('offline')
                 if call_forward_case_offline
-                  sip_account.phone_numbers.first.call_forwards.create(:call_forward_case_id => call_forward_case_offline.id, :call_forwardable_type => 'Voicemail', :active => true, :depth => DEFAULT_CALL_FORWARD_DEPTH)
+                  sip_account.phone_numbers.first.call_forwards.create(:call_forward_case_id => call_forward_case_offline.id, :call_forwardable_type => 'Voicemail', :active => true, :depth => GsParameter.get('DEFAULT_CALL_FORWARD_DEPTH'))
                 end
               end
             else
@@ -280,8 +280,8 @@ namespace :user_import do
               conference.start = nil
               conference.end = nil
               conference.open_for_anybody = true
-              conference.max_members = DEFAULT_MAX_CONFERENCE_MEMBERS
-              conference.pin = (1..MINIMUM_PIN_LENGTH).map{|i| (0 .. 9).to_a.sample}.join
+              conference.max_members = GsParameter.get('DEFAULT_MAX_CONFERENCE_MEMBERS')
+              conference.pin = (1..GsParameter.get('MINIMUM_PIN_LENGTH')).map{|i| (0 .. 9).to_a.sample}.join
               conference.save
             end
 
@@ -314,7 +314,7 @@ namespace :user_import do
           cell_phone_number = csv_user['CellPhone'].to_s.gsub(/[^0-9\+]/, '')
 
           if !cell_phone_number.blank?
-            callthrough = tenant.callthroughs.find_or_create_by_name(CALLTHROUGH_NAME_TO_BE_USED_FOR_DEFAULT_ACTIVATION)
+            callthrough = tenant.callthroughs.find_or_create_by_name(GsParameter.get('CALLTHROUGH_NAME_TO_BE_USED_FOR_DEFAULT_ACTIVATION'))
 
             access_authorization = callthrough.access_authorizations.find_or_create_by_name('Cellphones')
 

@@ -11,13 +11,13 @@
   = f.input :from_field_voicemail_email, :label => t('tenants.form.from_field_voicemail_email.label'), :hint => conditional_hint('tenants.form.from_field_voicemail_email.hint')
   = f.input :from_field_pin_change_email, :label => t('tenants.form.from_field_pin_change_email.label'), :hint => conditional_hint('tenants.form.from_field_pin_change_email.hint')
 
-  - if STRICT_INTERNAL_EXTENSION_HANDLING == true || STRICT_DID_HANDLING == true 
+  - if GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') == true || GsParameter.get('STRICT_DID_HANDLING') == true 
     %h2= t('tenants.form.phone_numbers')
     %p= t('tenants.form.intro')
     
-    - if STRICT_INTERNAL_EXTENSION_HANDLING == true  
+    - if GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') == true  
       = f.input :internal_extension_ranges, :label => t('tenants.form.internal_extension_ranges.label'), :hint => conditional_hint('tenants.form.internal_extension_ranges.hint')
-    - if STRICT_DID_HANDLING == true
+    - if GsParameter.get('STRICT_DID_HANDLING') == true
       = f.input :did_list, :label => t('tenants.form.did_list.label'), :hint => conditional_hint('tenants.form.did_list.hint')
 
   .actions

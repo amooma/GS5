@@ -3,11 +3,11 @@
 class Tenant < ActiveRecord::Base
   attr_accessible :name, :description, :sip_domain_id, :country_id, :language_id, :from_field_pin_change_email, :from_field_voicemail_email
 
-  if STRICT_INTERNAL_EXTENSION_HANDLING == true
+  if GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') == true
     attr_accessible :internal_extension_ranges
   end
 
-  if STRICT_DID_HANDLING == true
+  if GsParameter.get('STRICT_DID_HANDLING') == true
     attr_accessible :did_list
   end
 
@@ -93,7 +93,7 @@ class Tenant < ActiveRecord::Base
     name
   end
   
-  if STRICT_INTERNAL_EXTENSION_HANDLING == true
+  if GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') == true
     def array_of_internal_extension_numbers
       ranges = self.internal_extension_ranges.gsub(/[^0-9\-,]/,'').gsub(/[\-]+/,'-').gsub(/[,]+/,',').split(/,/)
       output = []
@@ -112,7 +112,7 @@ class Tenant < ActiveRecord::Base
     # Generate the internal_extensions
     #
     def generate_internal_extensions
-      internal_extensions = self.phone_number_ranges.find_or_create_by_name(INTERNAL_EXTENSIONS, :description => 'A list of all available internal extensions.')
+      internal_extensions = self.phone_number_ranges.find_or_create_by_name(GsParameter.get('INTERNAL_EXTENSIONS'), :description => 'A list of all available internal extensions.')
       
       phone_number_list = Array.new
 
@@ -122,7 +122,7 @@ class Tenant < ActiveRecord::Base
         elsif 
           # Don't create extensions like 911, 110 or 112 (at least by default)
           #
-          phone_number_list = (self.array_of_internal_extension_numbers - self.country.phone_number_ranges.where(:name => SERVICE_NUMBERS).first.phone_numbers.map{|entry| entry.number})
+          phone_number_list = (self.array_of_internal_extension_numbers - self.country.phone_number_ranges.where(:name => GsParameter.get('SERVICE_NUMBERS')).first.phone_numbers.map{|entry| entry.number})
         end
       end
 
@@ -133,7 +133,7 @@ class Tenant < ActiveRecord::Base
       
   end
 
-  if STRICT_DID_HANDLING == true
+  if GsParameter.get('STRICT_DID_HANDLING') == true
     def array_of_dids_generated_from_did_list
       numbers = self.did_list.downcase.gsub(/[^0-9,x\+]/,'').gsub(/[,]+/,',').split(/,/)
       array_of_all_external_numbers = []
@@ -152,7 +152,7 @@ class Tenant < ActiveRecord::Base
     # Generate the external numbers (DIDs)
     #
     def generate_dids
-      dids = self.phone_number_ranges.find_or_create_by_name(DIRECT_INWARD_DIALING_NUMBERS, :description => 'A list of all available DIDs.')
+      dids = self.phone_number_ranges.find_or_create_by_name(GsParameter.get('DIRECT_INWARD_DIALING_NUMBERS'), :description => 'A list of all available DIDs.')
       self.array_of_dids_generated_from_did_list.each do |number|
         dids.phone_numbers.find_or_create_by_name_and_number('DID', number)
       end
@@ -167,7 +167,7 @@ class Tenant < ActiveRecord::Base
     @internal_extensions_and_dids ||= self.phone_number_ranges_phone_numbers.
          where(:phone_numberable_type => 'PhoneNumberRange').
          where(:phone_numberable_id => self.phone_number_ranges.
-         where(:name => [INTERNAL_EXTENSIONS, DIRECT_INWARD_DIALING_NUMBERS]).
+         where(:name => [GsParameter.get('INTERNAL_EXTENSIONS'), GsParameter.get('DIRECT_INWARD_DIALING_NUMBERS')]).
          map{|pnr| pnr.id })
   end
 
@@ -175,7 +175,7 @@ class Tenant < ActiveRecord::Base
     @array_of_internal_extensions ||= self.phone_number_ranges_phone_numbers.
          where(:phone_numberable_type => 'PhoneNumberRange').
          where(:phone_numberable_id => self.phone_number_ranges.
-         where(:name => INTERNAL_EXTENSIONS).
+         where(:name => GsParameter.get('INTERNAL_EXTENSIONS')).
          map{|pnr| pnr.id }).
          map{|phone_number| phone_number.number }.
          sort.uniq
@@ -184,7 +184,7 @@ class Tenant < ActiveRecord::Base
   def array_of_dids
     @array_of_dids ||= self.phone_number_ranges_phone_numbers.
          where(:phone_numberable_type => 'PhoneNumberRange').
-         where(:phone_numberable_id => self.phone_number_ranges.where(:name => DIRECT_INWARD_DIALING_NUMBERS).map{|pnr| pnr.id }).
+         where(:phone_numberable_id => self.phone_number_ranges.where(:name => GsParameter.get('DIRECT_INWARD_DIALING_NUMBERS')).map{|pnr| pnr.id }).
          map{|phone_number| phone_number.to_s }.
          sort.uniq
   end
@@ -215,7 +215,7 @@ class Tenant < ActiveRecord::Base
   
   # Create a public phone book for this tenant
   def create_a_default_phone_book
-    if self.name != SUPER_TENANT_NAME
+    if self.name != GsParameter.get('SUPER_TENANT_NAME')
       general_phone_book = self.phone_books.find_or_create_by_name_and_description(
         I18n.t('phone_books.general_phone_book.name'),
         I18n.t('phone_books.general_phone_book.description', :resource => self.to_s)

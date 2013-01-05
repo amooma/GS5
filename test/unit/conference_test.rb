@@ -29,16 +29,16 @@ class ConferenceTest < ActiveSupport::TestCase
     
     assert conference.valid?
     
-    (MINIMUM_PIN_LENGTH - 1).times do |i|
+    (GsParameter.get('MINIMUM_PIN_LENGTH') - 1).times do |i|
       pin = "#{10**i}"
       conference.pin = pin
       assert !conference.valid?      
     end
     
-    conference.pin = "#{10**(MINIMUM_PIN_LENGTH - 1)}"
+    conference.pin = "#{10**(GsParameter.get('MINIMUM_PIN_LENGTH') - 1)}"
     assert conference.valid? 
 
-    conference.pin = "-#{10**(MINIMUM_PIN_LENGTH - 1)}"
+    conference.pin = "-#{10**(GsParameter.get('MINIMUM_PIN_LENGTH') - 1)}"
     assert !conference.valid?     
     
     conference.pin = 'Teststring'

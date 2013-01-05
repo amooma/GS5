@@ -12,16 +12,23 @@ class GsParameter < ActiveRecord::Base
             :presence => true,
             :inclusion => { :in => ['String', 'Integer', 'Boolean', 'YAML'] }
 
-  def generate_constant
-    Kernel.const_set(self.name, self.value.to_i) if self.class_type == 'Integer'
-    Kernel.const_set(self.name, self.value.to_s) if self.class_type == 'String'
-
-    if self.class_type == 'Boolean'
-      Kernel.const_set(self.name, true) if self.value == 'true'
-      Kernel.const_set(self.name, false) if self.value == 'false'
+  def self.get(wanted_variable)
+    if GsParameter.table_exists?
+      item = GsParameter.where(:name => wanted_variable).first
+      if item.nil?
+        return nil
+      else
+        return item.value.to_i if item.class_type == 'Integer'
+        return item.value.to_s if item.class_type == 'String'
+        if item.class_type == 'Boolean'
+          return true if item.value == 'true'
+          return false if item.value == 'false'
+        end
+        return YAML.load(item.value) if item.class_type == 'YAML'
+      end
+    else
+      nil
     end
-
-    Kernel.const_set(self.name, YAML.load(self.value)) if self.class_type == 'YAML'
   end
 
   def to_s

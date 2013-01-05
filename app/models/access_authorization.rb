@@ -18,7 +18,9 @@ class AccessAuthorization < ActiveRecord::Base
                       :allow_nil => true, :allow_blank => true,
                       :message => "must be numeric."
 
-  validates_length_of :pin, :minimum => MINIMUM_PIN_LENGTH, :maximum => MAXIMUM_PIN_LENGTH,
+  validates_length_of :pin, 
+                      :minimum => (GsParameter.get('MINIMUM_PIN_LENGTH').nil? ? 4 : GsParameter.get('MINIMUM_PIN_LENGTH')), 
+                      :maximum => (GsParameter.get('MAXIMUM_PIN_LENGTH').nil? ? 10 : GsParameter.get('MAXIMUM_PIN_LENGTH')),
                       :allow_nil => true, :allow_blank => true
 
   has_many :phone_numbers, :as => :phone_numberable, :dependent => :destroy

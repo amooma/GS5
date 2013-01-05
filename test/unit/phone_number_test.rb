@@ -200,7 +200,7 @@ class PhoneNumberTest < ActiveSupport::TestCase
       # create a tenant
       tenant = FactoryGirl.create(:tenant, :country_id => germany.id)
       # create some extensions
-      internal_extension_range = tenant.phone_number_ranges.create(:name => INTERNAL_EXTENSIONS)
+      internal_extension_range = tenant.phone_number_ranges.create(:name => GsParameter.get('INTERNAL_EXTENSIONS'))
       ['2000', '2001', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '5', '99'].each do |extension|
         internal_extension_range.phone_numbers.create(:name => "Extension #{extension}", :number => extension)
       end
