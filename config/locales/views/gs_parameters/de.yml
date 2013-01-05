@@ -1,0 +1,60 @@
+de:
+  gs_parameters:
+    name: 'Gsparameter'
+    controller:
+      successfuly_created: 'Gsparameter wurde angelegt.'
+      successfuly_updated: 'Gsparameter wurde aktualisiert.'
+      successfuly_destroyed: 'Gsparameter wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von Gsparameter'
+      name: 'Name'
+      section: 'Section'
+      value: 'Value'
+      class_type: 'Class type'
+      description: 'Description'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Gsparameter'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Gsparameter neu anlegen für %{resource}'
+    show:
+      page_title: 'Gsparameter bearbeiten'
+      name: 'Name'
+      section: 'Section'
+      value: 'Value'
+      class_type: 'Class type'
+      description: 'Description'
+      actions:
+        confirm: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Gsparameter neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Gsparameter bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      section:
+        label: 'Section'
+        hint: ''
+      value:
+        label: 'Value'
+        hint: ''
+      class_type:
+        label: 'Class type'
+        hint: ''
+      description:
+        label: 'Description'
+        hint: ''
+      button: 'Absenden'

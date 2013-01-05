@@ -1,0 +1,6 @@
+- title t("gs_parameters.index.page_title")
+
+- if @gs_parameters && @gs_parameters.count > 0
+  = render "index_core", :gs_parameters => @gs_parameters
+
+= render :partial => 'shared/create_link', :locals => {:child_class => GsParameter}

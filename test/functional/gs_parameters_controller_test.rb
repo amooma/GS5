@@ -25,23 +25,23 @@ class GsParametersControllerTest < ActionController::TestCase
   end
 
   test "should show gs_parameter" do
-    get :show, id: @gs_parameter
+    get :show, id: @gs_parameter.to_param
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: @gs_parameter
+    get :edit, id: @gs_parameter.to_param
     assert_response :success
   end
 
   test "should update gs_parameter" do
-    put :update, id: @gs_parameter, gs_parameter: @gs_parameter.attributes
+    put :update, id: @gs_parameter.to_param, gs_parameter: @gs_parameter.attributes
     assert_redirected_to gs_parameter_path(assigns(:gs_parameter))
   end
 
   test "should destroy gs_parameter" do
     assert_difference('GsParameter.count', -1) do
-      delete :destroy, id: @gs_parameter
+      delete :destroy, id: @gs_parameter.to_param
     end
 
     assert_redirected_to gs_parameters_path

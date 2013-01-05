@@ -1,4 +1,6 @@
 class GsParameter < ActiveRecord::Base
+  attr_accessible :name, :section, :value, :class_type, :description
+
   validates :name,
             :presence => true,
             :uniqueness => true
