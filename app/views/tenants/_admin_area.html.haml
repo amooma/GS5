@@ -102,15 +102,15 @@
     = render "phone_books/index_core", :phone_books => @tenant.phone_books
     = render :partial => 'shared/create_link', :locals => {:parent => @tenant, :child_class => PhoneBook} 
 
-- if STRICT_INTERNAL_EXTENSION_HANDLING == true
+- if GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') == true
   %h3= t('phone_number_ranges.index.page_title')
 
-  - if @tenant.created_at > (Time.now - 15.minutes) && Delayed::Job.count > 0 && @tenant.phone_number_ranges.find_by_name(INTERNAL_EXTENSIONS).try(:phone_numbers).try(:count).to_i == 0
+  - if @tenant.created_at > (Time.now - 15.minutes) && Delayed::Job.count > 0 && @tenant.phone_number_ranges.find_by_name(GsParameter.get('INTERNAL_EXTENSIONS')).try(:phone_numbers).try(:count).to_i == 0
     This tenant was created 
     = distance_of_time_in_words_to_now(@tenant.created_at)
     ago. There are still 
     = pluralize(Delayed::Job.count, 'background job')
     not finished. This can take a couple of minutes. Please reload this page later.
   - else
-    =render 'phone_number_ranges/index_core', :phone_number_ranges => (@tenant.phone_number_ranges + @tenant.country.phone_number_ranges.where(:name => SERVICE_NUMBERS))
+    =render 'phone_number_ranges/index_core', :phone_number_ranges => (@tenant.phone_number_ranges + @tenant.country.phone_number_ranges.where(:name => GsParameter.get('SERVICE_NUMBERS')))
     =render :partial => 'shared/create_link', :locals => {:parent => @tenant, :child_class => PhoneNumberRange}

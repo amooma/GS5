@@ -33,7 +33,7 @@
       %footer#main
         %ul
           %li
-            %a{:href => "http://amooma.de/gemeinschaft/gs5"} Gemeinschaft #{GEMEINSCHAFT_VERSION}
+            %a{:href => "http://amooma.de/gemeinschaft/gs5"} Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}
           - if GuiFunction.display?('amooma_commercial_support_link_in_footer', current_user)
             %li
               %a{:href => "http://amooma.de"} Kommerzieller Support und Consulting

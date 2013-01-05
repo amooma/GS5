@@ -16,7 +16,7 @@
     %strong= t('phones.show.fallback_sip_account_id') + ":"
     = @phone.fallback_sip_account
 
-- if defined? NIGHTLY_REBOOT_OF_PHONES && NIGHTLY_REBOOT_OF_PHONES == true
+- if defined? GsParameter.get('NIGHTLY_REBOOT_OF_PHONES') && GsParameter.get('NIGHTLY_REBOOT_OF_PHONES') == true
   %p
     %strong= t('phones.show.nightly_reboot') + ":"
     = @phone.nightly_reboot

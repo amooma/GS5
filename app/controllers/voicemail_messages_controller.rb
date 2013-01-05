@@ -24,17 +24,17 @@ class VoicemailMessagesController < ApplicationController
     if @type == 'read'
       @voicemail_messages = @sip_account.voicemail_messages.where('read_epoch > 0').order('created_epoch DESC').paginate(
                             :page => @pagination_page_number,
-                            :per_page => DEFAULT_PAGINATION_ENTRIES_PER_PAGE
+                            :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
                           )
     elsif @type == 'unread'
       @voicemail_messages = @sip_account.voicemail_messages.where(:read_epoch => 0).order('created_epoch DESC').paginate(
                             :page => @pagination_page_number,
-                            :per_page => DEFAULT_PAGINATION_ENTRIES_PER_PAGE
+                            :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
                           )
     else
       @voicemail_messages = @sip_account.voicemail_messages.order('created_epoch DESC').paginate(
                             :page => @pagination_page_number,
-                            :per_page => DEFAULT_PAGINATION_ENTRIES_PER_PAGE
+                            :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
                           )
     end
   end

@@ -27,7 +27,8 @@ class User < ActiveRecord::Base
   }
   
   validates_length_of [:new_pin, :new_pin_confirmation],
-    :minimum => MINIMUM_PIN_LENGTH, :maximum => MAXIMUM_PIN_LENGTH,
+    :minimum => (GsParameter.get('MINIMUM_PIN_LENGTH').nil? ? 4 : GsParameter.get('MINIMUM_PIN_LENGTH')), 
+    :maximum => (GsParameter.get('MAXIMUM_PIN_LENGTH').nil? ? 10 : GsParameter.get('MAXIMUM_PIN_LENGTH')),
     :allow_blank => true, :allow_nil => true
   validates_format_of [:new_pin, :new_pin_confirmation],
     :with => /^[0-9]+$/,

@@ -37,7 +37,7 @@ task :import_inbound_fax, [
     -o \"#{pdf_file}\" \\
     -p #{paper_size} \\
     -a \"#{fax_arguments[:remote_station_id]}\" \\
-    -c \"AMOOMA Gemeinschaft version #{GEMEINSCHAFT_VERSION}\" \\
+    -c \"AMOOMA Gemeinschaft version #{GsParameter.get('GEMEINSCHAFT_VERSION')}\" \\
     -t \"#{fax_arguments[:remote_station_id]}\" \"#{tiff_file}\""
 
   if !File.exists?( pdf_file ) 

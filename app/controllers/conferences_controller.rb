@@ -19,7 +19,7 @@ class ConferencesController < ApplicationController
     @conference.start = nil
     @conference.end = nil
     @conference.open_for_anybody = true
-    @conference.max_members = DEFAULT_MAX_CONFERENCE_MEMBERS
+    @conference.max_members = GsParameter.get('DEFAULT_MAX_CONFERENCE_MEMBERS')
     @conference.pin = random_pin
 
     @conference.open_for_anybody = true

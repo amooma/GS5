@@ -28,7 +28,7 @@ class Api::Row < ActiveRecord::Base
   end
 
   def create_a_new_gemeinschaft_user
-    tenant = Tenant.find(DEFAULT_API_TENANT_ID)
+    tenant = Tenant.find(GsParameter.get('DEFAULT_API_TENANT_ID'))
 
     # Find or create the user
     #

@@ -48,8 +48,8 @@
     %use_proxy_number_guessing{:perm => 'RW'}= 'off'
     %guess_number{:perm => 'RW'}= 'off'
     %guess_start_length{:perm => 'RW'}= '3'
-    %ieee8021x_eap_md5_username{:perm => 'RW'}= PROVISIONING_IEEE8021X_EAP_USERNAME
-    %ieee8021x_eap_md5_password{:perm => 'RW'}= PROVISIONING_IEEE8021X_EAP_PASSWORD
+    %ieee8021x_eap_md5_username{:perm => 'RW'}= GsParameter.get('PROVISIONING_IEEE8021X_EAP_USERNAME')
+    %ieee8021x_eap_md5_password{:perm => 'RW'}= GsParameter.get('PROVISIONING_IEEE8021X_EAP_PASSWORD')
 
     - 0.upto(9) do |ringer_idx|
       %internal_ringer_text{:idx => ringer_idx, :perm => 'RW'}= "Ringer#{(ringer_idx+1)}"

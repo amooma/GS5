@@ -70,7 +70,7 @@ class GsNodesController < ApplicationController
       @request_class = '';
     end
 
-    @node = GsNode.where(:ip_address => HOMEBASE_IP_ADDRESS).first
+    @node = GsNode.where(:ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS')).first
     
     if @request_class.blank? || @request_class == "tenants"
       @tenants = Tenant.where('updated_at > ?', @newer_as)

@@ -36,7 +36,7 @@ class SessionsController < ApplicationController
 
   private
   def redirect_to_https
-    if GUI_REDIRECT_HTTPS and ! request.ssl?
+    if GsParameter.get('GUI_REDIRECT_HTTPS') and ! request.ssl?
       redirect_to :protocol => "https://"
     end
   end

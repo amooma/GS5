@@ -9,7 +9,7 @@
 
   = f.input :source, :label => t('call_forwards.form.source.label'), :hint => conditional_hint('call_forwards.form.source.hint')
   - if GuiFunction.display?('depth_field_in_call_forward_form', current_user)
-    = f.input :depth, :collection => 1..MAX_CALL_FORWARD_DEPTH, :label => t('call_forwards.form.depth.label'), :hint => conditional_hint('call_forwards.form.depth.hint')
+    = f.input :depth, :collection => 1..GsParameter.get('MAX_CALL_FORWARD_DEPTH'), :label => t('call_forwards.form.depth.label'), :hint => conditional_hint('call_forwards.form.depth.hint')
   - else
     = f.hidden_field :depth
   = f.input :active, :label => t('call_forwards.form.active.label'), :hint => conditional_hint('call_forwards.form.active.hint')

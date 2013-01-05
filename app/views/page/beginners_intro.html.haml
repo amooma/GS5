@@ -1,4 +1,4 @@
-- title "First steps with Gemeinschaft #{GEMEINSCHAFT_VERSION}!"
+- title "First steps with Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}!"
 
 %p
   You have to create at least two new SIP accounts. You have the choice of two different versions:
@@ -29,5 +29,5 @@
 %p
   More comfortable is the use of auto provisioned phones. They can be linked to SIP accounts. After creating them in the WebGUI you have to set the Provisioning URL in the phone or setup your DHCP server to give them this data. You'll find help in our #{link_to 'Wiki', 'https://github.com/amooma/GS5/wiki'} or in our #{link_to 'mailinglist', 'https://groups.google.com/group/gs5-users/'}.
 %p
-  In version #{GEMEINSCHAFT_VERSION} the following phones can be used for provisioning: 
+  In version #{GsParameter.get('GEMEINSCHAFT_VERSION')} the following phones can be used for provisioning: 
   = nicely_joined_with_commata(PhoneModel.order(:name).map{|phone_model| "#{phone_model.to_s}"})

@@ -21,10 +21,10 @@ class CallForwardsController < ApplicationController
 
   def new
     @call_forward = @phone_number.call_forwards.build
-    @call_forward.depth = DEFAULT_CALL_FORWARD_DEPTH
+    @call_forward.depth = GsParameter.get('DEFAULT_CALL_FORWARD_DEPTH')
     @call_forward.active = true
     @call_forwarding_destinations = call_forwarding_destination_types()
-    @call_forward.destination = CALLFORWARD_DESTINATION_DEFAULT.to_s if defined?(CALLFORWARD_DESTINATION_DEFAULT)
+    @call_forward.destination = GsParameter.get('CALLFORWARD_DESTINATION_DEFAULT').to_s if defined?(GsParameter.get('CALLFORWARD_DESTINATION_DEFAULT'))
 
     @available_call_forward_cases = []
     CallForwardCase.all.each do |available_call_forward_case|

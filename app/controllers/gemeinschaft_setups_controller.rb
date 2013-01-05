@@ -21,7 +21,7 @@ class GemeinschaftSetupsController < ApplicationController
   def create
     if @gemeinschaft_setup.save
       super_tenant = Tenant.create(
-                                    :name => SUPER_TENANT_NAME,
+                                    :name => GsParameter.get('SUPER_TENANT_NAME'),
                                     :country_id  => @gemeinschaft_setup.country.id, 
                                     :language_id => @gemeinschaft_setup.language_id,
                                     :description => t('gemeinschaft_setups.initial_setup.super_tenant_description'),
