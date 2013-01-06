@@ -1,42 +1,42 @@
 de:
   gs_parameters:
-    name: 'Gsparameter'
+    name: 'Gemeinschaft Parameter'
     controller:
-      successfuly_created: 'Gsparameter wurde angelegt.'
-      successfuly_updated: 'Gsparameter wurde aktualisiert.'
-      successfuly_destroyed: 'Gsparameter wurde gelöscht.'
+      successfuly_created: 'Ein Gemeinschaft Parameter wurde angelegt.'
+      successfuly_updated: 'Ein Gemeinschaft Parameter wurde aktualisiert. Bitte rebooten Sie Ihr System jetzt!'
+      successfuly_destroyed: 'Ein Gemeinschaft Parameter wurde gelöscht.'
     index:
-      page_title: 'Übersicht von Gsparameter'
+      page_title: 'Übersicht aller Gemeinschaft Parameter'
       name: 'Name'
       section: 'Section'
-      value: 'Value'
+      value: 'Wert'
       class_type: 'Class type'
-      description: 'Description'
+      description: 'Beschreibung'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Gsparameter'
+        confirm: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Gemeinschaft Parmeter'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
         create: 'Neu anlegen'
-        create_for: 'Gsparameter neu anlegen für %{resource}'
+        create_for: 'Gemeinschaft Parmeter neu anlegen für %{resource}'
     show:
-      page_title: 'Gsparameter bearbeiten'
+      page_title: 'Gemeinschaft Parmeter bearbeiten'
       name: 'Name'
       section: 'Section'
-      value: 'Value'
+      value: 'Wert'
       class_type: 'Class type'
-      description: 'Description'
+      description: 'Beschreibung'
       actions:
         confirm: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     new:
-      page_title: 'Gsparameter neu anlegen'
+      page_title: 'Gemeinschaft Parmeter neu anlegen'
       actions:
         back_to_list: 'Zurück zur Übersicht'
     edit:
-      page_title: 'Gsparameter bearbeiten'
+      page_title: 'Gemeinschaft Parmeter bearbeiten'
       actions:
         back_to_list: 'Zurück zur Übersicht'
         edit: 'Bearbeiten'
@@ -49,12 +49,12 @@ de:
         label: 'Section'
         hint: ''
       value:
-        label: 'Value'
+        label: 'Wert'
         hint: ''
       class_type:
         label: 'Class type'
         hint: ''
       description:
-        label: 'Description'
+        label: 'Beschreibung'
         hint: ''
       button: 'Absenden'

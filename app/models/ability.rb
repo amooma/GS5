@@ -73,6 +73,10 @@ class Ability
           if GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') == false
             cannot :manage, PhoneNumberRange
           end
+
+          # GsParameter can't be created or deleted via the GUI
+          #
+          cannot [:create, :destroy], GsParameter
         else
           # Any user can do the following stuff.
           #

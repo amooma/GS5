@@ -1,5 +1,5 @@
 Gemeinschaft42c::Application.routes.draw do
-  resources :gs_parameters
+  resources :gs_parameters, :only => [:show, :index, :update, :edit]
 
   resources :automatic_call_distributors
 
