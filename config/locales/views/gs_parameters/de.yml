@@ -20,7 +20,7 @@ de:
         create: 'Neu anlegen'
         create_for: 'Gemeinschaft Parameter neu anlegen für %{resource}'
     show:
-      page_title: 'Gemeinschaft Parameter bearbeiten'
+      page_title: 'Gemeinschaft Parameter anzeigen'
       name: 'Name'
       section: 'Section'
       value: 'Wert'
