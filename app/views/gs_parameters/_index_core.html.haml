@@ -1,17 +1,14 @@
-%table
-  %tr
-    %th= t('gs_parameters.index.name')
+%tr
+  %th= t('gs_parameters.index.name')
+  - if !@sections
     %th= t('gs_parameters.index.section')
-    %th= t('gs_parameters.index.value')
-    %th= t('gs_parameters.index.class_type')
-    %th= t('gs_parameters.index.description')
+  %th= t('gs_parameters.index.value')
 
-  - reset_cycle
-  - for gs_parameter in gs_parameters
-    %tr{:class => cycle('odd', 'even')}
-      %td= gs_parameter.name
+- reset_cycle
+- for gs_parameter in gs_parameters
+  %tr{:class => cycle('odd', 'even')}
+    %td= gs_parameter.name
+    - if !@sections
       %td= gs_parameter.section
-      %td= gs_parameter.value
-      %td= gs_parameter.class_type
-      %td= gs_parameter.description
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gs_parameter}
+    %td= gs_parameter.value
+    =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gs_parameter}

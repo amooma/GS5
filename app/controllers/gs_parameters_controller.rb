@@ -1,6 +1,7 @@
 class GsParametersController < ApplicationController
   def index
-    @gs_parameters = GsParameter.all
+    @gs_parameters = GsParameter.order([:section, :name])
+    @sections = @gs_parameters.pluck(:section).uniq.sort
   end
 
   def show
@@ -9,15 +10,6 @@ class GsParametersController < ApplicationController
 
   def new
     @gs_parameter = GsParameter.new
-  end
-
-  def create
-    @gs_parameter = GsParameter.new(params[:gs_parameter])
-    if @gs_parameter.save
-      redirect_to @gs_parameter, :notice => t('gs_parameters.controller.successfuly_created')
-    else
-      render :new
-    end
   end
 
   def edit
@@ -31,11 +23,5 @@ class GsParametersController < ApplicationController
     else
       render :edit
     end
-  end
-
-  def destroy
-    @gs_parameter = GsParameter.find(params[:id])
-    @gs_parameter.destroy
-    redirect_to gs_parameters_url, :notice => t('gs_parameters.controller.successfuly_destroyed')
   end
 end
