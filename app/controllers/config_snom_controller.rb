@@ -199,19 +199,19 @@ class ConfigSnomController < ApplicationController
       end
     end
 
-    if defined?(PROVISIONING_SET_HTTP_USER) && @phone.http_user.blank?
-      if PROVISIONING_SET_HTTP_USER.class == Fixnum
-        @phone.update_attributes({ :http_user => SecureRandom.hex(PROVISIONING_SET_HTTP_USER) })
-      elsif PROVISIONING_SET_HTTP_USER.class == String
-        @phone.update_attributes({ :http_user => PROVISIONING_SET_HTTP_USER })
+    if !GsParameter.get('PROVISIONING_SET_HTTP_USER').nil? && @phone.http_user.blank?
+      if GsParameter.get('PROVISIONING_SET_HTTP_USER').class == Fixnum
+        @phone.update_attributes({ :http_user => SecureRandom.hex(GsParameter.get('PROVISIONING_SET_HTTP_USER')) })
+      elsif GsParameter.get('PROVISIONING_SET_HTTP_USER').class == String
+        @phone.update_attributes({ :http_user => GsParameter.get('PROVISIONING_SET_HTTP_USER') })
       end
     end
 
-    if defined?(PROVISIONING_SET_HTTP_PASSWORD) && @phone.http_password.blank?
-      if PROVISIONING_SET_HTTP_PASSWORD.class == Fixnum
-        @phone.update_attributes({ :http_password => SecureRandom.hex(PROVISIONING_SET_HTTP_PASSWORD) })
-      elsif PROVISIONING_SET_HTTP_PASSWORD.class == String
-        @phone.update_attributes({ :http_password => PROVISIONING_SET_HTTP_PASSWORD })
+    if !GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD').nil? && @phone.http_password.blank?
+      if GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD').class == Fixnum
+        @phone.update_attributes({ :http_password => SecureRandom.hex(GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD')) })
+      elsif GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD').class == String
+        @phone.update_attributes({ :http_password => GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD') })
       end
     end
 
