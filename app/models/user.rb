@@ -203,6 +203,7 @@ class User < ActiveRecord::Base
       else
         phone.destroy
       end
+      phone.resync
     end
   end
 
