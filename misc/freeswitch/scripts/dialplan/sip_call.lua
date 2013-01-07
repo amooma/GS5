@@ -65,11 +65,11 @@ end
 function SipCall.call_waiting_busy(self, sip_account)
   require 'common.str'
   if common.str.to_b(sip_account.record.call_waiting) then
-    self.log:info('GsParameter.get('CALL_WAITING') - status: enabled');
+    self.log:info('CALL_WAITING - status: enabled');
     return false;
   else
     local state = sip_account:call_state();
-    self.log:info('GsParameter.get('CALL_WAITING') - status: disabled, sip_account state: ', state);
+    self.log:info('CALL_WAITING - status: disabled, sip_account state: ', state);
     return state;
   end
 end
