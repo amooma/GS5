@@ -2,7 +2,7 @@
 -- (c) AMOOMA GmbH 2012
 -- 
 
-local FAX_FILE_PATH = "/opt/gemeinschaft/public/uploads/fax_document/tiff/";
+local FAX_FILE_PATH = "/opt/GS5/public/uploads/fax_document/tiff/";
 local FAX_ANSWERING_TIMEOUT = 20;
 
 -- Set logger
