@@ -304,6 +304,7 @@ Gemeinschaft42c::Application.routes.draw do
       member do
         put 'move_higher'
         put 'move_lower'
+        put 'call'
       end
     end
   end

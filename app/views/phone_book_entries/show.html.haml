@@ -67,27 +67,28 @@
       = @phone_book_entry.description
     .widget.phones
       - @phone_book_entry.phone_numbers.each do |phone_number|
-        - case phone_number.name
+        - case phone_number.name.to_s.downcase
         - when /fax/
           .fax
-            %a= phone_number
+            = link_to phone_number, call_phone_book_entry_phone_number_path(@phone_book_entry, phone_number), :method => :put, :title => t('phone_numbers.show.actions.call')
             %span= phone_number.name
         - when /home/
           .home
-            %a= phone_number
-            %span= phone_number.name
+            = link_to phone_number, call_phone_book_entry_phone_number_path(@phone_book_entry, phone_number), :method => :put, :title => t('phone_numbers.show.actions.call')
+            %span
         - when /mobile/
           .cellphone
-            %a= phone_number
+            = link_to phone_number, call_phone_book_entry_phone_number_path(@phone_book_entry, phone_number), :method => :put, :title => t('phone_numbers.show.actions.call')
             %span= phone_number.name  
         - when /office/
           .office
-            %a= phone_number
+            = link_to phone_number, call_phone_book_entry_phone_number_path(@phone_book_entry, phone_number), :method => :put, :title => t('phone_numbers.show.actions.call')
             %span= phone_number.name
         - else
           .phone
-            %a= phone_number
+            = link_to phone_number, call_phone_book_entry_phone_number_path(@phone_book_entry, phone_number), :method => :put, :title => t('phone_numbers.show.actions.call')
             %span= phone_number.name
+ 
       = link_to t('phone_book_entries.show.manage_phone_numbers'), phone_book_entry_phone_numbers_path(@phone_book_entry)  
 
     .widget.adresses

@@ -77,6 +77,23 @@ class PhoneNumbersController < ApplicationController
     redirect_to :back
   end
 
+  def call
+    sip_account = nil
+    current_user.sip_accounts.each do |user_sip_account|
+      if user_sip_account.registration 
+        sip_account = user_sip_account
+        break
+      end
+    end
+    
+    if can?(:call, @phone_number) && sip_account
+      if ! @phone_number.number.blank? 
+        sip_account.call(@phone_number.number)
+      end
+    end
+    redirect_to(:back)
+  end
+
   private
   def set_and_authorize_parent
     @parent = @phone_book_entry || @sip_account || @conference || @fax_account || 

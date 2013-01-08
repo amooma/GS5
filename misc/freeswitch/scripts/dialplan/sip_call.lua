@@ -79,6 +79,8 @@ function SipCall.fork(self, destinations, arg )
   local dial_strings = {}
 
   require 'common.sip_account'
+  require 'common.str'
+
   local sip_account_class = common.sip_account.SipAccount:new{ log = self.log, database = self.database };
 
   local call_result = { code = 404, phrase = 'No destination' };
@@ -88,6 +90,11 @@ function SipCall.fork(self, destinations, arg )
     local origination_variables = { 'gs_fork_index=' .. index }
 
     self.log:info('FORK ', index, '/', #destinations, ' - ', destination.type, '=', destination.id, '/', destination.gateway or destination.uuid, '@', destination.node_id, ', number: ', destination.number);
+    
+    if not common.str.to_b(arg.update_callee_display) then
+      table.insert(origination_variables, 'ignore_display_updates=true');
+    end
+
     if not destination.node_local or destination.type == 'node' then
       require 'common.node'
       local node = nil;

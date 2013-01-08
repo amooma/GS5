@@ -476,6 +476,7 @@ function Dialplan.dial(self, destination)
     { timeout =  self.dial_timeout_active, 
       send_ringing = ( self.send_ringing_to_gateways and self.caller.from_gateway ),
       bypass_media_network = self.config.parameters.bypass_media_network,
+      update_callee_display = self.config.parameters.update_callee_display,
     }
   );
 end
