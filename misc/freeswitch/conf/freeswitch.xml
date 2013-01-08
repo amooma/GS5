@@ -636,7 +636,7 @@
         <param name="disable-v17" value="false"/>
         <param name="ident" value=""/>
         <param name="header" value="GS4"/>
-        <param name="spool-dir" value="/opt/GS5/misc/fax"/>
+        <param name="spool-dir" value="/opt/gemeinschaft/misc/fax"/>
         <param name="file-prefix" value="fax_in_"/>
       </settings>
     </configuration>

@@ -76,7 +76,7 @@ def main():
   option_parser.add_option("-p", "--port", "--ami-port",       action="store", type="int",    dest="ami_port",    default=5038)
 
   # User database
-  option_parser.add_option("--user-db-name",         action="store", type="string", dest="user_db_name",         default='/opt/GS5/db/development.sqlite3')
+  option_parser.add_option("--user-db-name",         action="store", type="string", dest="user_db_name",         default='/opt/gemeinschaft/db/development.sqlite3')
   option_parser.add_option("--user-db-table",        action="store", type="string", dest="user_db_table",        default='sip_accounts')
   option_parser.add_option("--user-db-name-row",     action="store", type="string", dest="user_db_name_row",     default='auth_name')
   option_parser.add_option("--user-db-password-row", action="store", type="string", dest="user_db_password_row", default='password')
