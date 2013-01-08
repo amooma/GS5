@@ -80,7 +80,7 @@ class ConfigSnomController < ApplicationController
           '00041345' => 'Snom 821',
           '00041348' => 'Snom 821',
           '00041341' => 'Snom 870',
-          '00041332' => 'snom MeetingPoint',
+          '00041332' => 'Snom meetingPoint',
         }
 
         @phone.phone_model = PhoneModel.where(:name => mac_address_to_model[@mac_address[0, 8]]).first
