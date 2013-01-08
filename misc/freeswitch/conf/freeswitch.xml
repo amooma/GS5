@@ -635,8 +635,8 @@
         <param name="verbose" value="true"/>
         <param name="disable-v17" value="false"/>
         <param name="ident" value=""/>
-        <param name="header" value="GS4"/>
-        <param name="spool-dir" value="/opt/gemeinschaft/misc/fax"/>
+        <param name="header" value="Gemeinschaft"/>
+        <param name="spool-dir" value="/var/spool/freeswitch"/>
         <param name="file-prefix" value="fax_in_"/>
       </settings>
     </configuration>
