@@ -22,6 +22,7 @@ function nodes(database, local_node_id)
 end
 
 function gateways(profile_name)
+  require 'common.configuration_file'
   local gateways_xml = '';
   local gateways  = common.configuration_file.get('/opt/freeswitch/scripts/ini/gateways.ini', false);
 
@@ -69,31 +70,32 @@ end
 
 -- generate sofia.conf
 function conf_sofia(database)
+  require 'common.configuration_table'
   local sofia_profile = "gemeinschaft";
 
-  require 'common.configuration_file'
-  local sofia_ini = common.configuration_file.get('/opt/freeswitch/scripts/ini/sofia.ini');
-  local dialplan_parameters = common.configuration_file.get('/opt/freeswitch/scripts/ini/dialplan.ini', 'parameters');
+  local sofia_ini = common.configuration_table.get(database, 'sofia');
+  local dialplan_parameters = common.configuration_table.get(database, 'dialplan', 'parameters');
 
-  local local_node_id = tonumber(dialplan_parameters['node_id']) or 1;
+  local local_node_id = tonumber(dialplan_parameters.node_id) or 1;
   
   require 'configuration.sip'
   local domains = configuration.sip.Sip:new{ log = log, database = database}:domains();
 
   sofia_profiles_xml = '';
-  for index, profile_name in ipairs(sofia_ini.profiles) do
-    sofia_profiles_xml = sofia_profiles_xml .. profile(database, sofia_ini, profile_name, index, domains, local_node_id);
+  for profile_name, index in pairs(sofia_ini.profiles) do
+    if tonumber(index) and tonumber(index) > 0  then
+      sofia_profiles_xml = sofia_profiles_xml .. profile(database, sofia_ini, profile_name, tonumber(index), domains, local_node_id);
+    end
   end
 
   XML_STRING = xml:document(xml:sofia(sofia_ini.parameters, sofia_profiles_xml))
 end
 
 function conf_conference(database)
+  require 'common.configuration_table'
   XML_STRING = xml:document(xml:conference());
 
-  require 'common.configuration_file'
-  local conference_ini = common.configuration_file.get('/opt/freeswitch/scripts/ini/conferences.ini');
-  local conference_parameters = conference_ini.parameters;
+  local conference_parameters = common.configuration_table.get(database, 'conferences', 'parameters');
 
   local event_name = params:getHeader("Event-Name")
   if event_name == 'COMMAND' then
@@ -140,15 +142,18 @@ function directory_sip_account(database)
         log:debug('DIRECTORY_GATEWAY - gateway not found - name: ', gateway_name, ', auth_name: ', auth_name);
       end
     else
+      require 'common.configuration_table'
+      local user_params = common.configuration_table.get(database, 'sip_accounts', 'parameters');
+
       require 'common.sip_account'
       local sip_account = common.sip_account.SipAccount:new{ log = log, database = database}:find_by_auth_name(auth_name, domain);
       if sip_account ~= nil then
         if tostring(purpose) == 'publish-vm' then
           log:debug('DIRECTORY_SIP_ACCOUNT - purpose: VoiceMail, auth_name: ', sip_account.record.auth_name, ', caller_name: ', sip_account.record.caller_name, ', domain: ', domain);
-          XML_STRING = xml:document(xml:directory(xml:group_default(xml:user(sip_account.record)), domain));
+          XML_STRING = xml:document(xml:directory(xml:group_default(xml:user(sip_account.record, user_params)), domain));
         else
           log:debug('DIRECTORY_SIP_ACCOUNT - auth_name: ', sip_account.record.auth_name, ', caller_name: ', sip_account.record.caller_name, ', domain: ', domain);
-          XML_STRING = xml:document(xml:directory(xml:user(sip_account.record), domain));
+          XML_STRING = xml:document(xml:directory(xml:user(sip_account.record, user_params), domain));
         end
       else
         log:debug('DIRECTORY_SIP_ACCOUNT - sip account not found - auth_name: ', auth_name, ', domain: ', domain);
@@ -164,7 +169,7 @@ function directory_sip_account(database)
               sip_accountable_type  = 'none',
               sip_accountable_id    = 0,   
         }
-        XML_STRING = xml:document(xml:directory(xml:user(sip_account), domain))
+        XML_STRING = xml:document(xml:directory(xml:user(sip_account, user_params), domain))
       end
     end
   elseif tostring(XML_REQUEST.key_name) == 'name' and tostring(XML_REQUEST.key_value) ~= '' then

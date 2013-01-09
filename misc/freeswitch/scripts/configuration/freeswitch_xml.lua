@@ -13,11 +13,11 @@ function FreeSwitchXml.new(self, object)
 end
 
 function FreeSwitchXml.param(self, name, value)
-  return '<param name="' .. name .. '" value="' .. value .. '"/>'
+  return '<param name="' .. tostring(name) .. '" value="' .. tostring(value) .. '"/>'
 end
 
 function FreeSwitchXml.variable(self, name, value)
-  return '<variable name="' .. name .. '" value="' .. value .. '"/>'
+  return '<variable name="' .. tostring(name) .. '" value="' .. tostring(value) .. '"/>'
 end
 
 function FreeSwitchXml.document(self, sections_xml)
@@ -78,9 +78,8 @@ function FreeSwitchXml.group_default(self, entries_xml)
   return xml_string
 end
 
-function FreeSwitchXml.user(self, user)
-  require 'common.configuration_file'
-  local params = common.configuration_file.get('/opt/freeswitch/scripts/ini/sip_accounts.ini', 'parameters');
+function FreeSwitchXml.user(self, user, params)
+  params = params or {};
 
   params['password'] = user.password;
   params['vm-password'] = user.voicemail_pin;
