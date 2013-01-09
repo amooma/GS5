@@ -62,9 +62,9 @@ class PopulateGsParameterWithDialplanDefaults < ActiveRecord::Migration
     GsParameter.create(:entity => 'sofia', :section => 'profile:gemeinschaft', :name => 'odbc-dsn',  :value => 'gemeinschaft:gemeinschaft:gemeinschaft', :class_type => 'String')
 
     # event manager defaults
-    GsParameter.create(:entity => 'events', :section => 'modules', :name => 'cdr_save',  :value => 'true', :class_type => 'Boolean')
-    GsParameter.create(:entity => 'events', :section => 'modules', :name => 'call_history_save',  :value => 'true', :class_type => 'Boolean')
-    GsParameter.create(:entity => 'events', :section => 'modules', :name => 'presence_update',  :value => 'true', :class_type => 'Boolean')
+    GsParameter.create(:entity => 'events', :section => 'modules', :name => 'cdr_save',  :value => 1, :class_type => 'Integer')
+    GsParameter.create(:entity => 'events', :section => 'modules', :name => 'call_history_save',  :value => 2, :class_type => 'Integer')
+    GsParameter.create(:entity => 'events', :section => 'modules', :name => 'presence_update',  :value => 3, :class_type => 'Integer')
 
     # perimeter defaults
     GsParameter.create(:entity => 'perimeter', :section => 'general', :name => 'malicious_contact_count',  :value => 20, :class_type => 'Integer')
