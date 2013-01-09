@@ -7,7 +7,7 @@ class PopulateGsParameterWithDialplanDefaults < ActiveRecord::Migration
     GsParameter.create(:entity => 'sip_accounts', :section => 'parameters', :name => 'vm-mailto',  :value => '', :class_type => 'String')
 
     #sofia defaults
-    GsParameter.create(:entity => 'sofia', :section => 'profiles', :name => 'gemeinschaft',  :value => 'true', :class_type => 'Boolean')
+    GsParameter.create(:entity => 'sofia', :section => 'profiles', :name => 'gemeinschaft',  :value => 1, :class_type => 'Integer')
     GsParameter.create(:entity => 'sofia', :section => 'parameters', :name => 'log-level',  :value => 3, :class_type => 'Integer')
     GsParameter.create(:entity => 'sofia', :section => 'parameters', :name => 'debug-presence',  :value => 0, :class_type => 'Integer')
     GsParameter.create(:entity => 'sofia', :section => 'profile:gemeinschaft', :name => 'user-agent-string',  :value => 'Gemeinschaft5', :class_type => 'String')
