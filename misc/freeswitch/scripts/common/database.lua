@@ -24,13 +24,13 @@ function Database.connect(self, database_name, user_name, password, host_name)
   local database_driver = nil;
   if not (database_name and user_name and password) then
     require 'common.configuration_file'
-    local config = common.configuration_file.get('/opt/freeswitch/scripts/ini/database.ini');
+    local config = common.configuration_file.get('/var/lib/freeswitch/.odbc.ini');
     if config then
-      database_driver = config[true].driver
-      database_name = config[database_driver].database
-      user_name = config[database_driver].user
-      password = config[database_driver].password
-      host_name = config[database_driver].host
+      database_driver = config.gemeinschaft.driver
+      database_name = config.gemeinschaft.DATABASE
+      user_name = config.gemeinschaft.USER
+      password = config.gemeinschaft.PASSWORD
+      host_name = config.gemeinschaft.HOST
     end
   end
 
