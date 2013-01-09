@@ -5,6 +5,7 @@ class PopulateGsParameterWithDialplanDefaults < ActiveRecord::Migration
     GsParameter.create(:entity => 'sip_accounts', :section => 'parameters', :name => 'vm-email-all-messages',  :value => 'false', :class_type => 'Boolean')
     GsParameter.create(:entity => 'sip_accounts', :section => 'parameters', :name => 'vm-attach-file', :value => 'false', :class_type => 'Boolean')
     GsParameter.create(:entity => 'sip_accounts', :section => 'parameters', :name => 'vm-mailto',  :value => '', :class_type => 'String')
+    GsParameter.create(:entity => 'sip_accounts', :section => 'parameters', :name => 'sip-force-contact',  :value => '', :class_type => 'String')
 
     #sofia defaults
     GsParameter.create(:entity => 'sofia', :section => 'profiles', :name => 'gemeinschaft',  :value => 1, :class_type => 'Integer')
@@ -54,6 +55,10 @@ class PopulateGsParameterWithDialplanDefaults < ActiveRecord::Migration
     GsParameter.create(:entity => 'sofia', :section => 'profile:gemeinschaft', :name => 'outbound-use-callid-as-uuid',  :value => 'false', :class_type => 'Boolean')
     GsParameter.create(:entity => 'sofia', :section => 'profile:gemeinschaft', :name => 'context',  :value => 'default', :class_type => 'String')
     GsParameter.create(:entity => 'sofia', :section => 'profile:gemeinschaft', :name => 'record-template',  :value => '${user_name}_${uuid}_${strftime(%Y-%m-%d-%H-%M-%S)}.wav', :class_type => 'String')
+    GsParameter.create(:entity => 'sofia', :section => 'profile:gemeinschaft', :name => 'all-reg-options-ping',  :value => 'true', :class_type => 'Boolean')
+    GsParameter.create(:entity => 'sofia', :section => 'profile:gemeinschaft', :name => 'mark-dead-on-options-fail',  :value => 'true', :class_type => 'Boolean')
+    GsParameter.create(:entity => 'sofia', :section => 'profile:gemeinschaft', :name => 'registration-thread-frequency',  :value => 300, :class_type => 'Integer')
+    GsParameter.create(:entity => 'sofia', :section => 'profile:gemeinschaft', :name => 'NDLB-force-rport',  :value => 'false', :class_type => 'Boolean')
     GsParameter.create(:entity => 'sofia', :section => 'profile:gemeinschaft', :name => 'odbc-dsn',  :value => 'gemeinschaft:gemeinschaft:gemeinschaft', :class_type => 'String')
 
     # event manager defaults
