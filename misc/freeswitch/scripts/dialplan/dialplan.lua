@@ -74,22 +74,22 @@ function Dialplan.domain_get(self, domain)
 end
 
 
-function Dialplan.configuration_read(self, file_name)
+function Dialplan.configuration_read(self)
   require 'common.str'
-  require 'common.configuration_file'
+  require 'common.configuration_table'
 
   -- dialplan configuration
-  self.config  = common.configuration_file.get(file_name or CONFIG_FILE_NAME);
+  self.config  = common.configuration_table.get(self.database, 'dialplan');
   self.node_id = common.str.to_i(self.config.parameters.node_id);
   self.domain =  self:domain_get(self.config.parameters.domain);
   self.dial_timeout = tonumber(self.config.parameters.dial_timeout) or DIAL_TIMEOUT;
   self.max_loops = tonumber(self.config.parameters.max_loops) or MAX_LOOPS;
   self.user_image_url = common.str.to_s(self.config.parameters.user_image_url);
   self.phone_book_entry_image_url = common.str.to_s(self.config.parameters.phone_book_entry_image_url);
-  self.phonebook_number_lookup = common.str.to_b(self.config.parameters.phonebook_number_lookup);
-  self.geo_number_lookup = common.str.to_b(self.config.parameters.geo_number_lookup);
+  self.phonebook_number_lookup = self.config.parameters.phonebook_number_lookup;
+  self.geo_number_lookup = self.config.parameters.geo_number_lookup;
   self.default_language = self.config.parameters.default_language or 'en';
-  self.send_ringing_to_gateways = common.str.to_b(self.config.parameters.send_ringing_to_gateways);
+  self.send_ringing_to_gateways = self.config.parameters.send_ringing_to_gateways;
   
   if tonumber(self.config.parameters.default_ringtone) then
     self.default_ringtone = 'http://amooma.de;info=Ringer' .. self.config.parameters.default_ringtone .. ';x-line-id=0';
