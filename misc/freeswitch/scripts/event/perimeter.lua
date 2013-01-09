@@ -40,7 +40,8 @@ end
 
 
 function Perimeter.init(self)
-  local config = common.configuration_file.get('/opt/freeswitch/scripts/ini/perimeter.ini');
+  require 'common.configuration_table';
+  local config = common.configuration_table.get(self.database, 'perimeter');
   if config and config.general then
     self.malicious_contact_count = tonumber(config.general.malicious_contact_count) or MALICIOUS_CONTACT_COUNT;
     self.malicious_contact_time_span = tonumber(config.general.malicious_contact_time_span) or MALICIOUS_CONTACT_TIME_SPAN;
