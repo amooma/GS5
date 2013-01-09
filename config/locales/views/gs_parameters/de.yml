@@ -42,6 +42,9 @@ de:
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     form:
+      entity:
+        label: 'Instanz'
+        hint: ''
       name:
         label: 'Name'
         hint: ''

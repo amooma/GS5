@@ -43,6 +43,9 @@ en:
         edit: 'Edit'
         view_all: 'View All'
     form:
+      entity:
+        label: 'Entity'
+        hint: ''
       name:
         label: 'Name'
         hint: ''
