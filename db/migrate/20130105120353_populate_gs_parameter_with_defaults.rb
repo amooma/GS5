@@ -1,5 +1,6 @@
 class PopulateGsParameterWithDefaults < ActiveRecord::Migration
   def up
+    add_column :gs_parameters, :entity, :string, :after => :id
     # Generic
     #
     GsParameter.create(:name => 'GEMEINSCHAFT_VERSION', :section => 'Generic', :value => '5.0.2-nightly-build', :class_type => 'String')
