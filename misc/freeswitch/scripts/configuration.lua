@@ -47,6 +47,11 @@ function profile(database, sofia_ini, profile_name, index, domains, node_id)
     log:error('SOFIA_PROFILE ', index,' - name: ', profile_name, ' - no parameters');
     return '';
   end
+
+  if tostring(profile_parameters['odbc-dsn']) == 'default' then
+    profile_parameters['odbc-dsn'] = 'gemeinschaft:' .. tostring(database.user_name) .. ':' .. tostring(database.password);
+  end
+
   -- set local bind address
   if domains[index] then
     profile_parameters['sip-ip'] = domains[index]['host'];
