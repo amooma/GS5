@@ -5,9 +5,6 @@ class GsParameter < ActiveRecord::Base
             :presence => true,
             :uniqueness => { :scope => [ :entity, :section ] }
 
-  validates :value,
-            :presence => true
-
   validates :class_type,
             :presence => true,
             :inclusion => { :in => ['String', 'Integer', 'Boolean', 'YAML'] }
