@@ -28,10 +28,8 @@ end
 
 
 function EventManager.load_event_modules(self)
-  local CONFIG_FILE_NAME = '/opt/freeswitch/scripts/ini/events.ini';
-
-  require 'common.configuration_file'
-  self.config = common.configuration_file.get(CONFIG_FILE_NAME);
+  require 'common.configuration_table'
+  self.config = common.configuration_table.get(self.database, 'events');
 
   return self.config.modules;
 end
@@ -40,7 +38,7 @@ end
 function EventManager.load_event_handlers(self, event_modules)
   event_handlers = {}
 
-  for index, event_module_name in ipairs(event_modules) do
+  for event_module_name, index in pairs(event_modules) do
     event_module = require('event.' .. event_module_name);
     if event_module then
       self.log:info('[event] EVENT_MANAGER - loading handler module: ', event_module_name);
