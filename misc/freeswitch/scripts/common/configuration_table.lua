@@ -35,5 +35,9 @@ function get(database, entity, section)
     end
   end)
 
+  if section then
+    return root[section];
+  end
+  
   return root;
 end
