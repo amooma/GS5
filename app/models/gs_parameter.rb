@@ -1,9 +1,9 @@
 class GsParameter < ActiveRecord::Base
-  attr_accessible :name, :section, :value, :class_type, :description
+  attr_accessible :entity, :name, :section, :value, :class_type, :description
 
   validates :name,
             :presence => true,
-            :uniqueness => true
+            :uniqueness => { :scope => [ :entity, :section ] }
 
   validates :value,
             :presence => true
