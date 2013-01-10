@@ -21,17 +21,20 @@ function get(database, entity, section)
   local parameter_class = '';
 
   database:query(sql_query, function(parameters)
-    if not root[parameters.section] then
-      root[parameters.section] = {};
-    end
-    parameter_class = tostring(parameters.class_type):lower();
+    local p_section = common.str.strip(parameters.section):lower();
+    local p_class_type = common.str.strip(parameters.class_type):lower();
+    local p_name = common.str.strip(parameters.name);
 
-    if parameter_class == 'boolean' then
-      root[parameters.section][parameters.name] = common.str.to_b(parameters.value);
-    elseif parameter_class == 'integer' then
-      root[parameters.section][parameters.name] = common.str.to_i(parameters.value);
+    if not root[p_section] then
+      root[p_section] = {};
+    end
+
+    if p_class_type == 'boolean' then
+      root[p_section][p_name] = common.str.to_b(parameters.value);
+    elseif p_class_type == 'integer' then
+      root[p_section][p_name] = common.str.to_i(parameters.value);
     else
-      root[parameters.section][parameters.name] = tostring(parameters.value);
+      root[p_section][p_name] = tostring(parameters.value);
     end
   end)
 
