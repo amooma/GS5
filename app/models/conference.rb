@@ -3,7 +3,7 @@ class Conference < ActiveRecord::Base
                   :open_for_anybody, :max_members, :announce_new_member_by_name,
                   :announce_left_member_by_name
   
-  belongs_to :conferenceable, :polymorphic => true
+  belongs_to :conferenceable, :polymorphic => true, :touch => true
   has_many :conference_invitees, :dependent => :destroy
   has_many :phone_numbers, :as => :phone_numberable, :dependent => :destroy
 

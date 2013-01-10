@@ -1,93 +1,34 @@
-%p
-  You belong to the 
-  = link_to 'admin group', tenant_user_group_path(@tenant, @tenant.user_groups.find_by_name('Admins'))
-  and therefore have super powers. But always remember Peter Parker's: "With great power comes great responsibility."
+- cache([I18n.locale, @tenant, UserGroup.count, UserGroup.order(:updated_at).last, User.count, User.order(:updated_at).last, Manufacturer.count, Manufacturer.order(:updated_at).last, PhoneModel.count]) do
+  %p
+    You belong to the 
+    = link_to 'admin group', tenant_user_group_path(@tenant, @tenant.user_groups.find_by_name('Admins'))
+    and therefore have super powers. But always remember Peter Parker's: "With great power comes great responsibility."
 
-%p
-  = succeed '.' do
-    This tenant has 
-    = link_to pluralize(@tenant.user_groups.count, 'user group'), tenant_user_groups_path(@tenant)
-    - if @tenant.user_groups.count < 5
-      = "(#{@tenant.user_groups.order(:name).map{|group| group.to_s }.join(', ')})"
-    which handle a total of 
-    = link_to pluralize(@tenant.users.count, 'user'), tenant_users_path(@tenant)
-  This system can setup 
-  = PhoneModel.count
-  different phone models from the manufacturers 
-  - Manufacturer.all.each do |manufacturer|
-    - if manufacturer != Manufacturer.last && manufacturer != Manufacturer.limit(Manufacturer.count - 1).last
-      = succeed ', ' do
-        =link_to manufacturer, manufacturer_path(manufacturer)
-    - elsif manufacturer == Manufacturer.limit(Manufacturer.count - 1).last
-      = succeed ' and ' do
-        =link_to manufacturer, manufacturer_path(manufacturer)
-    - else
-      = succeed '.' do
-        =link_to manufacturer, manufacturer_path(manufacturer)
+  %p
+    = succeed '.' do
+      This tenant has 
+      = link_to pluralize(@tenant.user_groups.count, 'user group'), tenant_user_groups_path(@tenant)
+      - if @tenant.user_groups.count < 5
+        = "(#{@tenant.user_groups.order(:name).map{|group| group.to_s }.join(', ')})"
+      which handle a total of 
+      = link_to pluralize(@tenant.users.count, 'user'), tenant_users_path(@tenant)
+    This system can setup 
+    = PhoneModel.count
+    different phone models from the manufacturers 
+    - Manufacturer.all.each do |manufacturer|
+      - if manufacturer != Manufacturer.last && manufacturer != Manufacturer.limit(Manufacturer.count - 1).last
+        = succeed ', ' do
+          =link_to manufacturer, manufacturer_path(manufacturer)
+      - elsif manufacturer == Manufacturer.limit(Manufacturer.count - 1).last
+        = succeed ' and ' do
+          =link_to manufacturer, manufacturer_path(manufacturer)
+      - else
+        = succeed '.' do
+          =link_to manufacturer, manufacturer_path(manufacturer)
 
 = render :partial => 'tenants/sip_accounts_and_phones', :locals => {:tenant => @tenant}
 
-%h3 Misc
+= render :partial => 'tenants/table_of_functions', :locals => {:tenant => @tenant}
 
-%table
-  %tr{:class => 'even'}
-    %th
-      Feature
-    %th
-      Counter
-    %th
-  %tr{:class => 'odd'}
-    %td
-      Callthroughs
-    %td
-      = link_to @tenant.callthroughs.count.to_s, tenant_callthroughs_path(@tenant)
-    %td
-      = render :partial => 'shared/create_link', :locals => {:parent => @tenant, :child_class => Callthrough}
-  %tr{:class => 'even'}
-    %td
-      Conferences
-    %td
-      = link_to @tenant.conferences.count.to_s, tenant_conferences_path(@tenant)
-    %td
-      = render :partial => 'shared/create_link', :locals => {:parent => @tenant, :child_class => Conference}
-  %tr{:class => 'odd'}
-    %td
-      Hunt groups
-    %td
-      = link_to @tenant.hunt_groups.count.to_s, tenant_hunt_groups_path(@tenant)
-    %td
-      = render :partial => 'shared/create_link', :locals => {:parent => @tenant, :child_class => HuntGroup}
-  %tr{:class => 'even'}
-    %td
-      ACDs
-    %td
-      = link_to @tenant.automatic_call_distributors.count.to_s, tenant_automatic_call_distributors_path(@tenant)
-    %td
-      = render :partial => 'shared/create_link', :locals => {:parent => @tenant, :child_class => AutomaticCallDistributor}
-  %tr{:class => 'odd'}
-    %td
-      GUI functions
-    %td
-      = link_to GuiFunction.count.to_s, gui_functions_path
-    %td
+= render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => @tenant}
 
--# Phone books
--#
-- if GuiFunction.display?('show_phone_books_in_user_show_view', current_user)
-  - if can?( :index, PhoneBook )
-    %h2=t("phone_books.index.page_title")
-    = render "phone_books/index_core", :phone_books => @tenant.phone_books
-    = render :partial => 'shared/create_link', :locals => {:parent => @tenant, :child_class => PhoneBook} 
-
-- if GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') == true
-  %h3= t('phone_number_ranges.index.page_title')
-
-  - if @tenant.created_at > (Time.now - 15.minutes) && Delayed::Job.count > 0 && @tenant.phone_number_ranges.find_by_name(GsParameter.get('INTERNAL_EXTENSIONS')).try(:phone_numbers).try(:count).to_i == 0
-    This tenant was created 
-    = distance_of_time_in_words_to_now(@tenant.created_at)
-    ago. There are still 
-    = pluralize(Delayed::Job.count, 'background job')
-    not finished. This can take a couple of minutes. Please reload this page later.
-  - else
-    =render 'phone_number_ranges/index_core', :phone_number_ranges => (@tenant.phone_number_ranges + @tenant.country.phone_number_ranges.where(:name => GsParameter.get('SERVICE_NUMBERS')))
-    =render :partial => 'shared/create_link', :locals => {:parent => @tenant, :child_class => PhoneNumberRange}

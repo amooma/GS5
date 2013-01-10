@@ -5,7 +5,7 @@ class Callthrough < ActiveRecord::Base
 
   # Validations and Associations
   #
-  belongs_to :tenant
+  belongs_to :tenant, :touch => true
 
   validates_presence_of :tenant_id
   validates_presence_of :tenant
