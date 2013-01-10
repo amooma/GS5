@@ -252,6 +252,20 @@ function FreeSwitchXml.conference(self, profiles_xml, speaker, moderator)
     profiles_xml = { "" }
   end
 
+  local speaker_xml = {}
+  if speaker then
+    for name, value in pairs(speaker) do
+      speaker_xml[#speaker_xml+1] = self:to_tag{ tag_name = 'control', action = name, digits = value };
+    end
+  end
+
+  local moderator_xml = {}
+  if moderator then
+    for name, value in pairs(speaker) do
+      moderator_xml[#moderator_xml+1] = self:to_tag{ tag_name = 'control', action = name, digits = value };
+    end
+  end
+
   local xml_string =
 [[
 <section name="configuration" description="FreeSwitch configuration for Sofia Profile">
@@ -260,32 +274,12 @@ function FreeSwitchXml.conference(self, profiles_xml, speaker, moderator)
 </advertise>
 <caller-controls>
 <group name="speaker">
-<control action="mute"/>
-<control action="deaf mute" digits="*"/>
-<control action="energy up" digits="9"/>
-<control action="energy equ" digits="8"/>
-<control action="energy dn" digits="7"/>
-<control action="vol talk up" digits="3"/>
-<control action="vol talk zero" digits="2"/>
-<control action="vol talk dn" digits="1"/>
-<control action="vol listen up" digits="6"/>
-<control action="vol listen zero" digits="5"/>
-<control action="vol listen dn" digits="4"/>
-<control action="hangup" digits="#"/>
+]] .. table.concat(speaker_xml, "\n") .. [[
+
 </group>
 <group name="moderator">
-<control action="mute" digits="0"/>
-<control action="deaf mute" digits="*"/>
-<control action="energy up" digits="9"/>
-<control action="energy equ" digits="8"/>
-<control action="energy dn" digits="7"/>
-<control action="vol talk up" digits="3"/>
-<control action="vol talk zero" digits="2"/>
-<control action="vol talk dn" digits="1"/>
-<control action="vol listen up" digits="6"/>
-<control action="vol listen zero" digits="5"/>
-<control action="vol listen dn" digits="4"/>
-<control action="hangup" digits="#"/>
+]] .. table.concat(moderator_xml, "\n") .. [[
+
 </group>
 </caller-controls>
 <profiles>

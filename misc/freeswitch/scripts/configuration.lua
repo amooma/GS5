@@ -100,7 +100,7 @@ function conf_conference(database)
   require 'common.configuration_table'
   XML_STRING = xml:document(xml:conference());
 
-  local conference_parameters = common.configuration_table.get(database, 'conferences', 'parameters');
+  local config = common.configuration_table.get(database, 'conferences');
 
   local event_name = params:getHeader("Event-Name")
   if event_name == 'COMMAND' then
@@ -112,8 +112,8 @@ function conf_conference(database)
       conference = common.conference.Conference:new{log=log, database=database}:find_by_id(conf_name);
       if conference then
         log:debug('CONFIG_CONFERENCE ', conf_name, ' name: ', conference.record.name, ', profile: ', profile_name);
-        conference_parameters['caller-id-name'] = conference.record.name or '';
-        XML_STRING = xml:document(xml:conference(xml:conference_profile(profile_name, conference_parameters)));
+        config.parameters['caller-id-name'] = conference.record.name or '';
+        XML_STRING = xml:document(xml:conference(xml:conference_profile(profile_name, config.parameters), config.controls_speaker, config.controls_moderator));
       else
         log:error('CONFIG_CONFERENCE ', conf_name, ' - conference not found');
       end
