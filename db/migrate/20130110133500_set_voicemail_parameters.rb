@@ -1,0 +1,45 @@
+class SetVoicemailParameters < ActiveRecord::Migration
+  def up
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'file-extension',  :value => 'wav', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'terminator-key',  :value => '#', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'max-login-attempts',  :value => '3', :class_type => 'Integer')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'digit-timeout',  :value => '10000', :class_type => 'Integer')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'min-record-len',  :value => '3', :class_type => 'Integer')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'max-record-len',  :value => '300', :class_type => 'Integer')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'max-retries',  :value => '3', :class_type => 'Integer')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'tone-spec',  :value => '%(1000, 0, 640)', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'callback-dialplan',  :value => 'XML', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'callback-context',  :value => 'default', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'play-new-messages-key',  :value => '1', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'play-saved-messages-key',  :value => '2', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'login-keys',  :value => '0', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'main-menu-key',  :value => '0', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'config-menu-key',  :value => '5', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'record-greeting-key',  :value => '1', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'choose-greeting-key',  :value => '2', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'change-pass-key',  :value => '6', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'record-name-key',  :value => '3', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'record-file-key',  :value => '3', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'listen-file-key',  :value => '1', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'save-file-key',  :value => '2', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'delete-file-key',  :value => '7', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'undelete-file-key',  :value => '8', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'email-key',  :value => '4', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'pause-key',  :value => '0', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'restart-key',  :value => '1', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'ff-key',  :value => '6', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'rew-key',  :value => '4', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'skip-greet-key',  :value => '#', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'record-silence-threshold',  :value => '200', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'record-silence-hits',  :value => '2', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'operator-extension',  :value => 'operator XML default', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'operator-key',  :value => '9', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'vmain-extension',  :value => 'vmain XML default', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'vmain-key',  :value => '*', :class_type => 'String')
+    GsParameter.create(:entity => 'voicemail', :section => 'parameters', :name => 'odbc-dsn',  :value => 'default', :class_type => 'String')
+  end
+
+  def down
+  	GsParameter.where(:entity => 'voicemail', :section => 'parameters').destroy_all
+  end
+end
