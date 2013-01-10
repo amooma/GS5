@@ -12,8 +12,19 @@ function FreeSwitchXml.new(self, object)
   return object
 end
 
-function FreeSwitchXml.nv_tag(self, name, value, tag)
-  return '<' .. tostring(tag) .. ' name="' .. tostring(name) .. '" value="' .. tostring(value) .. '"/>'
+function FreeSwitchXml.to_tag(self, arg)
+  if not arg.tag_name then
+    return '';
+  end
+
+  local xml_tag = '<' .. tostring(arg.tag_name);
+  for key, value in pairs(arg) do
+    if tostring(key) ~= 'tag_name' then
+      xml_tag = xml_tag .. ' ' ..  tostring(key) .. '="' .. tostring(value) .. '"';
+    end
+  end
+
+  return xml_tag .. '/>';
 end
 
 function FreeSwitchXml.document(self, sections_xml)
@@ -94,12 +105,12 @@ function FreeSwitchXml.user(self, user, params)
 
   local params_xml = {}
   for name, value in pairs(params) do
-    params_xml[#params_xml+1] = self:nv_tag(name, value, 'param')
+    params_xml[#params_xml+1] = self:to_tag{ tag_name = 'param', name = name, value = value };
   end
 
   local variables_xml = {}
   for name, value in pairs(variables) do
-    variables_xml[#variables_xml+1] = self:nv_tag(name, value, 'variable')
+    variables_xml[#variables_xml+1] = self:to_tag{ tag_name = 'variable', name = name, value = value };
   end
 
   local xml_string =
@@ -133,12 +144,12 @@ function FreeSwitchXml.gateway_user(self, user, gateway_name, auth_name)
 
   local params_xml = {}
   for name, value in pairs(params) do
-    params_xml[#params_xml+1] = self:nv_tag(name, value, 'param')
+    params_xml[#params_xml+1] = self:to_tag{ tag_name = 'param', name = name, value = value };
   end
 
   local variables_xml = {}
   for name, value in pairs(variables) do
-    variables_xml[#variables_xml+1] = self:nv_tag(name, value, 'variable')
+    variables_xml[#variables_xml+1] = self:to_tag{ tag_name = 'variable', name = name, value = value };
   end
 
   local xml_string =
@@ -165,7 +176,7 @@ function FreeSwitchXml.sofia(self, parameters, profiles_xml)
 
   local params_xml = {}
   for name, value in pairs(parameters) do
-    params_xml[#params_xml+1] = self:nv_tag(name, value, 'param')
+    params_xml[#params_xml+1] = self:to_tag{ tag_name = 'param', name = name, value = value };
   end
 
   local xml_string =
@@ -188,7 +199,7 @@ end
 function FreeSwitchXml.sofia_profile(self, profile_name, parameters, gateways_xml)
   params_xml = {}
   for name, value in pairs(parameters) do
-    params_xml[#params_xml+1] = self:nv_tag(name, value, 'param')
+    params_xml[#params_xml+1] = self:to_tag{ tag_name = 'param', name = name, value = value };
   end
 
   if type(gateways_xml) == "string" then
@@ -221,7 +232,7 @@ function FreeSwitchXml.gateway(self, gateway_name, parameters)
   local params_xml = {}
   if parameters then    
     for name, value in pairs(parameters) do
-      params_xml[#params_xml+1] = self:nv_tag(name, value, 'param')
+      params_xml[#params_xml+1] = self:to_tag{ tag_name = 'param', name = name, value = value };
     end
   end
 
@@ -234,7 +245,7 @@ function FreeSwitchXml.gateway(self, gateway_name, parameters)
   return xml_string
 end
 
-function FreeSwitchXml.conference(self, profiles_xml)
+function FreeSwitchXml.conference(self, profiles_xml, speaker, moderator)
   if type(profiles_xml) == "string" then
     profiles_xml = { profiles_xml }
   elseif type(profiles_xml) == "nil" then
@@ -289,7 +300,7 @@ end
 function FreeSwitchXml.conference_profile(self, profile_name, parameters)
   local params_xml = {}
   for name, value in pairs(parameters) do
-    params_xml[#params_xml+1] = self:nv_tag(name, value, 'param')
+    params_xml[#params_xml+1] = self:to_tag{ tag_name = 'param', name = name, value = value };
   end
 
   local xml_string =
@@ -308,7 +319,7 @@ function FreeSwitchXml.generic(self, arg)
   
   if arg.parameters then
     for name, value in pairs(arg.parameters) do
-      params_xml[#params_xml+1] = self:nv_tag(name, value, parameter_tag)
+      params_xml[#params_xml+1] = self:to_tag{ tag_name = parameter_tag, name = name, value = value };
     end
   end
 
