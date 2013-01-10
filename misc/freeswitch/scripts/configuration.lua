@@ -98,9 +98,9 @@ end
 
 function conf_conference(database)
   require 'common.configuration_table'
-  XML_STRING = xml:document(xml:conference());
-
+  
   local config = common.configuration_table.get(database, 'conferences');
+  XML_STRING = xml:document(xml:conference(nil, config.controls_speaker, config.controls_moderator));
 
   local event_name = params:getHeader("Event-Name")
   if event_name == 'COMMAND' then
@@ -123,6 +123,41 @@ function conf_conference(database)
   else
     log:debug('CONFIG_CONFERENCE ', conf_name, ' - event: ', event_name);
   end
+end
+
+function conf_voicemail(database)
+  require 'common.configuration_table';
+  local parameters = common.configuration_table.get(database, 'voicemail', 'parameters');
+
+  if tostring(parameters['odbc-dsn']) == 'default' then
+    parameters['odbc-dsn'] = 'gemeinschaft:' .. tostring(database.user_name) .. ':' .. tostring(database.password);
+  end
+
+  local params_xml = {};
+  for name, value in pairs(parameters) do
+    params_xml[#params_xml+1] = xml:tag{ _name = 'param', name = name, value = value };
+  end
+
+  XML_STRING = xml:document(
+    xml:tag{
+      _name = 'section',
+      name = 'configuration',
+      description = 'Gemeinschaft 5 FreeSWITCH configuration',
+      _data = xml:tag{
+        _name = 'configuration',
+        name = 'voicemail.conf',
+        description = 'Voicemail configuration',
+        _data = xml:tag{
+          _name = 'profiles',
+          _data = xml:tag{
+            _name = 'profile',
+            name = 'default',
+            _data = table.concat(params_xml, '\n'),
+          },
+        },
+      },
+    }
+  );
 end
 
 function conf_post_switch(database)
@@ -220,6 +255,8 @@ if XML_REQUEST.section == 'configuration' and XML_REQUEST.tag_name == 'configura
     conf_sofia(database);
   elseif XML_REQUEST.key_value == "conference.conf" then
     conf_conference(database);
+  elseif XML_REQUEST.key_value == "voicemail.conf" then
+    conf_voicemail(database);
   elseif XML_REQUEST.key_value == "post_load_switch.conf" then
     conf_post_switch(database);
   end
