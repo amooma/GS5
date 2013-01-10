@@ -1,19 +1,20 @@
-- title t("gs_parameters.show.page_title")
+- cache(@gs_parameter) do 
+  - title t("gs_parameters.show.page_title")
 
-%p
-  %strong= t('gs_parameters.show.name') + ":"
-  = @gs_parameter.name
-%p
-  %strong= t('gs_parameters.show.section') + ":"
-  = @gs_parameter.section
-%p
-  %strong= t('gs_parameters.show.value') + ":"
-  = @gs_parameter.value
-%p
-  %strong= t('gs_parameters.show.class_type') + ":"
-  = @gs_parameter.class_type
-%p
-  %strong= t('gs_parameters.show.description') + ":"
-  = @gs_parameter.description
+  %p
+    %strong= t('gs_parameters.show.name') + ":"
+    = @gs_parameter.name
+  %p
+    %strong= t('gs_parameters.show.section') + ":"
+    = @gs_parameter.section
+  %p
+    %strong= t('gs_parameters.show.value') + ":"
+    = @gs_parameter.value
+  %p
+    %strong= t('gs_parameters.show.class_type') + ":"
+    = @gs_parameter.class_type
+  %p
+    %strong= t('gs_parameters.show.description') + ":"
+    = @gs_parameter.description
 
-= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @gs_parameter }
+  = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @gs_parameter }

@@ -14,7 +14,10 @@ gem 'state_machine'
 
 gem 'acts_as_list'
 
+# Useful Rails 4 stuff
+#
 gem 'strong_parameters'
+gem 'cache_digests'
 
 # Nicer console output:
 gem "hirb"

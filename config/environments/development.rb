@@ -11,7 +11,10 @@ Gemeinschaft42c::Application.configure do
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+
+  # Enable caching for development
+  config.action_controller.perform_caching = true
+  CacheDigests::TemplateDigestor.cache = ActiveSupport::Cache::NullStore.new
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false

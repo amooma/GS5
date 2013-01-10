@@ -34,6 +34,8 @@ GEM
     bcrypt-ruby (3.0.1)
     breadcrumbs_on_rails (2.2.0)
     builder (3.0.0)
+    cache_digests (0.2.0)
+      actionpack (>= 3.2)
     cancan (1.6.7)
     carrierwave (0.5.8)
       activesupport (~> 3.0)
@@ -176,6 +178,7 @@ DEPENDENCIES
   acts_as_list
   bcrypt-ruby
   breadcrumbs_on_rails
+  cache_digests
   cancan
   carrierwave
   coffee-rails (~> 3.2.1)
