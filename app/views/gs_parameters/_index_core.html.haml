@@ -1,6 +1,6 @@
 - cache([gs_parameters.first.section, gs_parameters.reorder(:updated_at).last, gs_parameters.pluck(:id)]) do
   %tr
-    %th= t('gs_parameters.index.name') + 'asd'
+    %th= t('gs_parameters.index.name')
     - if !@sections
       %th= t('gs_parameters.index.section')
     %th= t('gs_parameters.index.value')

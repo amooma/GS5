@@ -8,7 +8,7 @@
           %tr
             %td{:colspan => 3}
               %h3= section
-          / Template Dependency: gs_parameters/index_core
+          -# Template Dependency: gs_parameters/_index_core 
           = render "index_core", :gs_parameters => @gs_parameters.where(:section => section)
     - else
       %table
