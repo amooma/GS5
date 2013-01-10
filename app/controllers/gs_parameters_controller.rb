@@ -18,10 +18,15 @@ class GsParametersController < ApplicationController
 
   def update
     @gs_parameter = GsParameter.find(params[:id])
-    if @gs_parameter.update_attributes(params[:gs_parameter])
+    if @gs_parameter.update_attributes(gs_parameter_params)
       redirect_to @gs_parameter, :notice  => t('gs_parameters.controller.successfuly_updated')
     else
       render :edit
     end
+  end
+
+  private
+  def gs_parameter_params
+    params.require(:gs_parameter).permit(:value, :class_type, :description)
   end
 end

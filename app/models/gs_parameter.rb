@@ -1,5 +1,6 @@
 class GsParameter < ActiveRecord::Base
-  attr_accessible :entity, :name, :section, :value, :class_type, :description
+  # https://github.com/rails/strong_parameters
+  include ActiveModel::ForbiddenAttributesProtection  
 
   validates :name,
             :presence => true,
@@ -7,12 +8,12 @@ class GsParameter < ActiveRecord::Base
 
   validates :class_type,
             :presence => true,
-            :inclusion => { :in => ['String', 'Integer', 'Boolean', 'YAML'] }
+            :inclusion => { :in => ['String', 'Integer', 'Boolean', 'YAML', 'Nil'] }
 
   def self.get(wanted_variable)
     if GsParameter.table_exists?
       item = GsParameter.where(:name => wanted_variable).first
-      if item.nil?
+      if item.nil? || item.class_type == 'Nil'
         return nil
       else
         return item.value.to_i if item.class_type == 'Integer'

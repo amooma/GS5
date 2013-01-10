@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130107222128) do
+ActiveRecord::Schema.define(:version => 20130109182800) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -534,6 +534,7 @@ ActiveRecord::Schema.define(:version => 20130107222128) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.string   "entity"
   end
 
   create_table "gui_function_memberships", :force => true do |t|

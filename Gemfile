@@ -14,6 +14,8 @@ gem 'state_machine'
 
 gem 'acts_as_list'
 
+gem 'strong_parameters'
+
 # Nicer console output:
 gem "hirb"
 
