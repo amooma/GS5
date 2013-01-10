@@ -125,6 +125,13 @@ function conf_conference(database)
   end
 end
 
+function conf_post_switch(database)
+  require 'common.configuration_table';
+  local parameters = common.configuration_table.get(database, 'post_load_switch', 'settings');
+
+  XML_STRING = xml:document(xml:generic{name = 'post_load_switch.conf', parameters = parameters});
+end
+
 
 function directory_sip_account(database)
   local key       = params:getHeader('key');
@@ -213,6 +220,8 @@ if XML_REQUEST.section == 'configuration' and XML_REQUEST.tag_name == 'configura
     conf_sofia(database);
   elseif XML_REQUEST.key_value == "conference.conf" then
     conf_conference(database);
+  elseif XML_REQUEST.key_value == "post_load_switch.conf" then
+    conf_post_switch(database);
   end
 elseif XML_REQUEST.section == 'directory' and XML_REQUEST.tag_name == '' then
   log:debug('SIP_ACCOUNT_DIRECTORY - initialization phase');
