@@ -1,15 +1,15 @@
 - title t("gs_parameters.index.page_title")
 
 - if @gs_parameters && @gs_parameters.count > 0
-  - if @sections
-    %table
-      - @sections.each do |section|
-        %tr
-          %td{:colspan => 3}
-            %h3= section
-        = render "index_core", :gs_parameters => @gs_parameters.where(:section => section)
-  - else
-    %table
-      = render "index_core", :gs_parameters => @gs_parameters
-
-= render :partial => 'shared/create_link', :locals => {:child_class => GsParameter}
+  - cache([@ps_parameters_unordered.order(:updated_at).last, @ps_parameters_unordered.pluck(:id)]) do
+    - if @sections
+      %table
+        - @sections.each do |section|
+          %tr
+            %td{:colspan => 3}
+              %h3= section
+          / Template Dependency: gs_parameters/index_core
+          = render "index_core", :gs_parameters => @gs_parameters.where(:section => section)
+    - else
+      %table
+        = render "index_core", :gs_parameters => @gs_parameters
