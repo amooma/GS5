@@ -1,12 +1,3 @@
-development: 
-   adapter: sqlite3
-   database: db/development.sqlite3
-   pool: 5
-   timeout: 5000
-
-# Read the database configuration from the system odbc
-# configuration.
-#
 <% system_odbc_ini_file = '/var/lib/freeswitch/.odbc.ini' %>
 <% if File.exists?(system_odbc_ini_file) %>
 <% system_odbc_configuration = IniFile.load(system_odbc_ini_file) %>
@@ -20,12 +11,32 @@ production:
    password: <%= system_odbc_configuration['gemeinschaft']['PASSWORD'] %>
    socket: /var/run/mysqld/mysqld.sock 
    reconnect: true
+
+development:
+   adapter: mysql2 
+   encoding: utf8 
+   database: <%= system_odbc_configuration['gemeinschaft']['DATABASE'] %>
+   pool: 5
+   username: <%= system_odbc_configuration['gemeinschaft']['USER'] %>
+   password: <%= system_odbc_configuration['gemeinschaft']['PASSWORD'] %>
+   socket: /var/run/mysqld/mysqld.sock 
+   reconnect: true
 <% else %>
 production: 
-   adapter: mysql2 
+   adapter: mysql2
    encoding: utf8 
    database: gemeinschaft 
    pool: 10 
+   username: gemeinschaft 
+   password: gemeinschaft 
+   socket: /var/run/mysqld/mysqld.sock 
+   reconnect: true
+
+development:
+   adapter: mysql2 
+   encoding: utf8 
+   database: gemeinschaft 
+   pool: 5
    username: gemeinschaft 
    password: gemeinschaft 
    socket: /var/run/mysqld/mysqld.sock 
