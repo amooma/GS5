@@ -3,6 +3,9 @@
 -- 
 
 function nodes(database, local_node_id)
+  require 'configuration.simple_xml'
+  local xml = configuration.simple_xml.SimpleXml:new();
+
   local gateways_xml = '';
 
   require 'common.node'
@@ -14,7 +17,11 @@ function nodes(database, local_node_id)
       node_parameters['proxy'] = node_record.ip_address;
       node_parameters['register'] = 'false';
       log:debug('NODE_GATEWAY ', node_record.id, ' - name: ', node_record.name, ', address: ', node_record.ip_address);
-      gateways_xml = gateways_xml .. xml:gateway(node_record.name, node_parameters);
+      gateways_xml = gateways_xml .. xml:element{
+        'gateway',
+        name = node_record.name,
+        xml:from_hash('param', node_parameters, 'name', 'value'),
+      };
     end
   end
 
@@ -22,6 +29,9 @@ function nodes(database, local_node_id)
 end
 
 function gateways(profile_name)
+  require 'configuration.simple_xml'
+  local xml = configuration.simple_xml.SimpleXml:new();
+
   require 'common.configuration_file'
   local gateways_xml = '';
   local gateways  = common.configuration_file.get('/opt/freeswitch/scripts/ini/gateways.ini', false);
@@ -30,10 +40,14 @@ function gateways(profile_name)
     return '';
   end
 
-  for sofia_gateway, gateway_parameters in pairs(gateways) do
+  for gateway_name, gateway_parameters in pairs(gateways) do
     if tostring(gateway_parameters.profile) == profile_name then
-      log:debug('GATEWAY - name: ', sofia_gateway, ', address: ', gateway_parameters.proxy);
-      gateways_xml = gateways_xml .. xml:gateway(sofia_gateway, gateway_parameters);
+      log:debug('GATEWAY - name: ', gateway_name, ', address: ', gateway_parameters.proxy);
+      gateways_xml = gateways_xml .. xml:element{
+        'gateway',
+        name = gateway_name,
+        xml:from_hash('param', gateway_parameters, 'name', 'value'),
+      };
     end
   end
 
@@ -41,25 +55,28 @@ function gateways(profile_name)
 end
 
 function profile(database, sofia_ini, profile_name, index, domains, node_id)
-  local profile_parameters = sofia_ini['profile:' .. profile_name];
+  require 'configuration.simple_xml'
+  local xml = configuration.simple_xml.SimpleXml:new();
 
-  if not profile_parameters then
+  local parameters = sofia_ini['profile:' .. profile_name];
+
+  if not parameters then
     log:error('SOFIA_PROFILE ', index,' - name: ', profile_name, ' - no parameters');
     return '';
   end
 
-  if tostring(profile_parameters['odbc-dsn']) == 'default' then
-    profile_parameters['odbc-dsn'] = 'gemeinschaft:' .. tostring(database.user_name) .. ':' .. tostring(database.password);
+  if tostring(parameters['odbc-dsn']) == 'default' then
+    parameters['odbc-dsn'] = 'gemeinschaft:' .. tostring(database.user_name) .. ':' .. tostring(database.password);
   end
 
   -- set local bind address
   if domains[index] then
-    profile_parameters['sip-ip'] = domains[index]['host'];
-    profile_parameters['rtp-ip'] = domains[index]['host'];
-    profile_parameters['force-register-domain'] = domains[index]['host'];
-    profile_parameters['force-subscription-domain'] = domains[index]['host'];
-    profile_parameters['force-register-db-domain'] = domains[index]['host'];
-    log:debug('SOFIA_PROFILE ', index,' - name: ', profile_name, ', domain: ', domains[index]['host'], ',  sip_bind: ', profile_parameters['sip-ip'], ':', profile_parameters['sip-port']);
+    parameters['sip-ip'] = domains[index]['host'];
+    parameters['rtp-ip'] = domains[index]['host'];
+    parameters['force-register-domain'] = domains[index]['host'];
+    parameters['force-subscription-domain'] = domains[index]['host'];
+    parameters['force-register-db-domain'] = domains[index]['host'];
+    log:debug('SOFIA_PROFILE ', index,' - name: ', profile_name, ', domain: ', domains[index]['host'], ',  sip_bind: ', parameters['sip-ip'], ':', parameters['sip-port']);
   else
     log:error('SOFIA_PROFILE ', index,' - name: ', profile_name, ' - no domains');
   end
@@ -70,11 +87,37 @@ function profile(database, sofia_ini, profile_name, index, domains, node_id)
     gateways_xml = gateways_xml .. nodes(database, node_id);
   end
 
-  return xml:sofia_profile(profile_name, profile_parameters, gateways_xml);
+  local profile_xml = xml:element{
+    'profile',
+    name = profile_name,
+    xml:element{
+      'gateways',
+      gateways_xml,
+    },
+    xml:element{
+      'domains',
+      xml:element{
+        'domain',
+        name = 'all',
+        alias = 'true',
+        parse = 'false',
+      },
+    },
+    xml:element{
+      'settings',
+      xml:from_hash('param', parameters, 'name', 'value'),
+    },
+  };
+
+  return profile_xml;
 end
+
 
 -- generate sofia.conf
 function conf_sofia(database)
+  require 'configuration.simple_xml'
+  local xml = configuration.simple_xml.SimpleXml:new();
+
   require 'common.configuration_table'
   local sofia_profile = "gemeinschaft";
 
@@ -93,14 +136,38 @@ function conf_sofia(database)
     end
   end
 
-  XML_STRING = xml:document(xml:sofia(sofia_ini.parameters, sofia_profiles_xml))
+  XML_STRING = xml:element{
+    'document', 
+    ['type'] = 'freeswitch/xml',
+    xml:element{
+      'section',
+      name = 'configuration',
+      description = 'Gemeinschaft 5 FreeSWITCH configuration',
+      xml:element{
+        'configuration',
+        name = 'sofia.conf',
+        description = 'Sofia configuration',
+        xml:element{
+          'global_settings',
+          xml:from_hash('param', sofia_ini.parameters, 'name', 'value'),
+        },
+        xml:element{
+          'profiles',
+          sofia_profiles_xml,
+        },
+      },
+    },
+  };
+
 end
 
 function conf_conference(database)
+  require 'configuration.simple_xml'
+  local xml = configuration.simple_xml.SimpleXml:new();
+
   require 'common.configuration_table'
-  
   local config = common.configuration_table.get(database, 'conferences');
-  XML_STRING = xml:document(xml:conference(nil, config.controls_speaker, config.controls_moderator));
+  local profiles = nil;
 
   local event_name = params:getHeader("Event-Name")
   if event_name == 'COMMAND' then
@@ -113,7 +180,14 @@ function conf_conference(database)
       if conference then
         log:debug('CONFIG_CONFERENCE ', conf_name, ' name: ', conference.record.name, ', profile: ', profile_name);
         config.parameters['caller-id-name'] = conference.record.name or '';
-        XML_STRING = xml:document(xml:conference(xml:conference_profile(profile_name, config.parameters), config.controls_speaker, config.controls_moderator));
+        profiles = xml:element{
+          'profiles',
+          xml:element{
+            'profile',
+            name = profile_name,
+            xml:from_hash('param', config.parameters, 'name', 'value'),
+          },
+        };
       else
         log:error('CONFIG_CONFERENCE ', conf_name, ' - conference not found');
       end
@@ -123,9 +197,41 @@ function conf_conference(database)
   else
     log:debug('CONFIG_CONFERENCE ', conf_name, ' - event: ', event_name);
   end
+
+  XML_STRING = xml:element{
+    'document', 
+    ['type'] = 'freeswitch/xml',
+    xml:element{
+      'section',
+      name = 'configuration',
+      description = 'Gemeinschaft 5 FreeSWITCH configuration',
+      xml:element{
+        'configuration',
+        name = 'conference.conf',
+        description = 'Conference configuration',
+        xml:element{
+          'caller-controls',
+          xml:element{
+            'group',
+            name = 'speaker',
+            xml:from_hash('control', config.controls_speaker, 'action', 'digits'),
+          },
+          xml:element{
+            'group',
+            name = 'moderator',
+            xml:from_hash('control', config.controls_moderator, 'action', 'digits'),
+          },
+        },
+        profiles,
+      },
+    },
+  };
 end
 
 function conf_voicemail(database)
+  require 'configuration.simple_xml'
+  local xml = configuration.simple_xml.SimpleXml:new();
+
   require 'common.configuration_table';
   local parameters = common.configuration_table.get(database, 'voicemail', 'parameters');
 
@@ -133,46 +239,68 @@ function conf_voicemail(database)
     parameters['odbc-dsn'] = 'gemeinschaft:' .. tostring(database.user_name) .. ':' .. tostring(database.password);
   end
 
-  local params_xml = {};
-  for name, value in pairs(parameters) do
-    params_xml[#params_xml+1] = xml:tag{ _name = 'param', name = name, value = value };
-  end
-
-  XML_STRING = xml:document(
-    xml:tag{
-      _name = 'section',
+  XML_STRING = xml:element{
+    'document', 
+    ['type'] = 'freeswitch/xml',
+    xml:element{
+      'section',
       name = 'configuration',
       description = 'Gemeinschaft 5 FreeSWITCH configuration',
-      _data = xml:tag{
-        _name = 'configuration',
+      xml:element{
+        'configuration',
         name = 'voicemail.conf',
         description = 'Voicemail configuration',
-        _data = xml:tag{
-          _name = 'profiles',
-          _data = xml:tag{
-            _name = 'profile',
+        xml:element{
+          'profiles',
+          xml:element{
+            'profile',
             name = 'default',
-            _data = table.concat(params_xml, '\n'),
+            xml:from_hash('param', parameters, 'name', 'value'),
           },
         },
       },
-    }
-  );
+    },
+  };
 end
 
 function conf_post_switch(database)
+  require 'configuration.simple_xml'
+  local xml = configuration.simple_xml.SimpleXml:new();
+
   require 'common.configuration_table';
   local parameters = common.configuration_table.get(database, 'post_load_switch', 'settings');
 
-  XML_STRING = xml:document(xml:generic{name = 'post_load_switch.conf', parameters = parameters});
+  XML_STRING = xml:element{
+    'document', 
+    ['type'] = 'freeswitch/xml',
+    xml:element{
+      'section',
+      name = 'configuration',
+      description = 'Gemeinschaft 5 FreeSWITCH configuration',
+      xml:element{
+        'configuration',
+        name = 'post_load_switch.conf',
+        description = 'Switch configuration',
+        xml:element{
+          'settings',
+          xml:from_hash('param', parameters, 'name', 'value'),
+        },
+      },
+    },
+  };
 end
 
 
 function directory_sip_account(database)
+  require 'configuration.simple_xml'
+  local xml = configuration.simple_xml.SimpleXml:new();
+
   local key       = params:getHeader('key');
   local auth_name = params:getHeader('user');
   local domain    = params:getHeader('domain');
   local purpose   = params:getHeader('purpose');
+
+  local user_xml = nil;
 
   if auth_name and  auth_name ~= '' then
     -- sip account or gateway
@@ -184,45 +312,137 @@ function directory_sip_account(database)
       local sip_gateway = configuration.sip.Sip:new{ log = log, database = database}:find_gateway_by_name(gateway_name);
       if sip_gateway ~= nil and next(sip_gateway) ~= nil then
         log:debug('DIRECTORY_GATEWAY - name: ', gateway_name, ', auth_name: ', auth_name);
-        XML_STRING = xml:document(xml:directory(xml:gateway_user(sip_gateway, gateway_name, auth_name), domain));
+
+        local user_variables = {
+          user_context = "default",
+          gs_from_gateway = "true",
+          gs_gateway_name = gateway_name,
+          gs_gateway_id   = sip_gateway.id,
+        }
+
+        user_xml = xml:element{
+          'user',
+          id = auth_name,
+          xml:element{
+            'params',
+            xml:element{
+              'param',
+              password = sip_gateway.password,
+            }
+          },
+          xml:element{
+            'variables',
+            xml:from_hash('variable', user_variables, 'name', 'value'),
+          },
+        };
       else
         log:debug('DIRECTORY_GATEWAY - gateway not found - name: ', gateway_name, ', auth_name: ', auth_name);
       end
     else
-      require 'common.configuration_table'
-      local user_params = common.configuration_table.get(database, 'sip_accounts', 'parameters');
-
       require 'common.sip_account'
       local sip_account = common.sip_account.SipAccount:new{ log = log, database = database}:find_by_auth_name(auth_name, domain);
+
+      require 'common.configuration_table'
+      local user_parameters = common.configuration_table.get(database, 'sip_accounts', 'parameters');
+            
       if sip_account ~= nil then
+        user_parameters['password'] = sip_account.record.password;
+        user_parameters['vm-password'] = sip_account.record.voicemail_pin;
+
+        local user_variables = {
+          user_context           = "default",
+          gs_from_gateway        = "false",
+          gs_account_id          = sip_account.record.id,
+          gs_account_uuid        = sip_account.record.uuid,
+          gs_account_type        = "SipAccount",
+          gs_account_state       = sip_account.record.state,
+          gs_account_caller_name = sip_account.record.caller_name,
+          gs_account_owner_type  = sip_account.record.sip_accountable_type,
+          gs_account_owner_id    = sip_account.record.sip_accountable_id    
+        }
+
         if tostring(purpose) == 'publish-vm' then
           log:debug('DIRECTORY_SIP_ACCOUNT - purpose: VoiceMail, auth_name: ', sip_account.record.auth_name, ', caller_name: ', sip_account.record.caller_name, ', domain: ', domain);
-          XML_STRING = xml:document(xml:directory(xml:group_default(xml:user(sip_account.record, user_params)), domain));
+          user_xml = xml:element{
+            'groups',
+            xml:element{
+              'group',
+              name = 'default',
+              xml:element{
+                'users',
+                xml:element{  
+                  'user',
+                  id = sip_account.record.auth_name,
+                  xml:element{
+                    'params',
+                    xml:from_hash('param', user_parameters, 'name', 'value'),
+                  },
+                  xml:element{
+                    'variables',
+                    xml:from_hash('variable', user_variables, 'name', 'value'),
+                  },
+                },
+              },
+            },
+          };
         else
           log:debug('DIRECTORY_SIP_ACCOUNT - auth_name: ', sip_account.record.auth_name, ', caller_name: ', sip_account.record.caller_name, ', domain: ', domain);
-          XML_STRING = xml:document(xml:directory(xml:user(sip_account.record, user_params), domain));
+          
+          user_xml = xml:element{
+            'user',
+            id = sip_account.record.auth_name,
+            xml:element{
+              'params',
+              xml:from_hash('param', user_parameters, 'name', 'value'),
+            },
+            xml:element{
+              'variables',
+              xml:from_hash('variable', user_variables, 'name', 'value'),
+            },
+          };
         end
       else
         log:debug('DIRECTORY_SIP_ACCOUNT - sip account not found - auth_name: ', auth_name, ', domain: ', domain);
         -- fake sip_account configuration
-        sip_account = {
-              auth_name             = auth_name,
-              id                    = 0,
-              uuid                  = '',
-              password              = tostring(math.random(0, 65534)),
-              voicemail_pin         = '',
-              state                 = 'inactive',
-              caller_name           = '',
-              sip_accountable_type  = 'none',
-              sip_accountable_id    = 0,   
-        }
-        XML_STRING = xml:document(xml:directory(xml:user(sip_account, user_params), domain))
+        user_parameters['password'] = tostring(math.random(0, 65534));
+        user_parameters['vm-password'] = '';
+
+        user_xml = xml:element{
+          'user',
+          id = auth_name,
+          xml:element{
+            'params',
+            xml:from_hash('param', user_parameters, 'name', 'value'),
+          },
+        };
       end
     end
   elseif tostring(XML_REQUEST.key_name) == 'name' and tostring(XML_REQUEST.key_value) ~= '' then
     log:debug('DOMAIN_DIRECTORY - domain: ', XML_REQUEST.key_value);
     XML_STRING = xml:document(xml:directory(nil, XML_REQUEST.key_value));
   end
+
+  XML_STRING = xml:element{
+    'document', 
+    ['type'] = 'freeswitch/xml',
+    xml:element{
+      'section',
+      name = 'directory',
+      xml:element{
+        'domain',
+        name = domain,
+        xml:element{
+          'params',
+          xml:element{
+            'param',
+            name = 'dial-string',
+            value = '${sofia_contact(${dialed_user}@${dialed_domain})}',
+          },
+        },
+        user_xml,
+      },
+    },
+  };  
 end
 
 
@@ -234,9 +454,12 @@ log = common.log.Log:new();
 log.prefix = '#C# [' .. log_identifier .. '] ';
 
 -- return a valid xml document
-require 'configuration.freeswitch_xml'
-xml = configuration.freeswitch_xml.FreeSwitchXml:new();
-XML_STRING = xml:document();
+require 'configuration.simple_xml'
+local xml = configuration.simple_xml.SimpleXml:new();
+XML_STRING = xml:element{
+  'document', 
+  ['type'] = 'freeswitch/xml',
+};
 
 local database = nil;
 
