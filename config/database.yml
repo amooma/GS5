@@ -7,7 +7,7 @@ development:
 # Read the database configuration from the system odbc
 # configuration.
 #
-<% system_odbc_ini_file = '/var/lib/.odbc.ini' %>
+<% system_odbc_ini_file = '/var/lib/freeswitch/.odbc.ini' %>
 <% if File.exists?(system_odbc_ini_file) %>
 <% system_odbc_configuration = IniFile.load(system_odbc_ini_file) %>
 <% if !system_odbc_configuration['gemeinschaft']['DATABASE'].blank? && !system_odbc_configuration['gemeinschaft']['USER'].blank? %>
