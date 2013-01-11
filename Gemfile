@@ -1,18 +1,13 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.2.2'
-
 gem 'bcrypt-ruby'
-
 gem 'sqlite3'
-
 gem 'mysql2'
-
 gem 'cancan'
-
 gem 'state_machine'
-
 gem 'acts_as_list'
+gem 'dalli' # memcached
 
 # Useful Rails 4 stuff
 #
