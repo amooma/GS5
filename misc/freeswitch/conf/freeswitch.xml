@@ -715,7 +715,6 @@
           <param name="operator-key" value="9"/>
           <param name="vmain-extension" value="vmain XML default"/>
           <param name="vmain-key" value="*"/>
-          <param name="odbc-dsn" value="gemeinschaft:gemeinschaft:gemeinschaft"/>
           <email>
             <param name="notify-template-file" value="notify-voicemail.tpl"/>
             <param name="template-file" value="voicemail.tpl"/>
