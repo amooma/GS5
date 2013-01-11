@@ -8,6 +8,7 @@ gem 'cancan'
 gem 'state_machine'
 gem 'acts_as_list'
 gem 'dalli' # memcached
+gem 'inifile'
 
 # Useful Rails 4 stuff
 #
