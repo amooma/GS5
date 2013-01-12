@@ -1,4 +1,4 @@
-- cache([I18n.locale, @tenant, UserGroup.count, UserGroup.order(:updated_at).last, User.count, User.order(:updated_at).last, Manufacturer.count, Manufacturer.order(:updated_at).last, PhoneModel.count]) do
+- cache([I18n.locale, @tenant, UserGroup.count, UserGroup.order(:updated_at).last, User.count, User.order(:updated_at).last, Manufacturer.all]) do
   %p
     Sie sind Mitglied der  
     = link_to 'Admin Gruppe', tenant_user_group_path(@tenant, @tenant.user_groups.find_by_name('Admins'))
@@ -32,4 +32,3 @@
 = render :partial => 'tenants/table_of_functions', :locals => {:tenant => @tenant}
 
 = render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => @tenant}
-

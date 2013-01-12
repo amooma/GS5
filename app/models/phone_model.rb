@@ -3,7 +3,7 @@ class PhoneModel < ActiveRecord::Base
   
   # Associations
   #
-  belongs_to :manufacturer
+  belongs_to :manufacturer, :touch => true
   
   has_many :phones, :dependent => :destroy
   

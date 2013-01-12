@@ -9,7 +9,7 @@ class Phone < ActiveRecord::Base
   # Associations
   #
   belongs_to :phone_model
-  belongs_to :phoneable, :polymorphic => true
+  belongs_to :phoneable, :polymorphic => true, :touch => true
 
   has_many :phone_sip_accounts, :dependent => :destroy, :uniq => true, :order => :position
   has_many :sip_accounts, :through => :phone_sip_accounts

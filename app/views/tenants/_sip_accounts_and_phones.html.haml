@@ -1,65 +1,64 @@
-- cache([I18n.locale, tenant, Phone.count, Phone.order(:updated_at).last, PhoneNumber.count, PhoneNumber.order(:updated_at).last, GsParameter.get('NUMBER_OF_SHOWN_ITEMS')]) do
-  %table
-    %tr{:class => 'even'}
-      %th
-      %th
-        = tenant
-      %th= t("users.index.page_title")
+%table
+  %tr{:class => 'even'}
+    %th
+    %th
+      = tenant
+    %th= t("users.index.page_title")
 
-    %tr{:class => 'odd'}
-      %td= t("sip_accounts.index.page_title")
-      - cache([I18n.locale, tenant, 'sip_accounts', tenant.sip_accounts.count, tenant.sip_accounts.order(:updated_at).last]) do
-        %td
-          - if tenant.sip_accounts.any?
-            - if tenant.sip_accounts.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
-              = link_to tenant.sip_accounts.count.to_s, tenant_sip_accounts_path(tenant)
-            - else
-              - tenant.sip_accounts.each do |sip_account|
-                = succeed ', ' do
-                  =link_to "#{sip_account.caller_name}", tenant_sip_account_path(tenant,sip_account)
-                  - if sip_account.phone_numbers.any?
-                    = '[' + truncate(sip_account.phone_numbers.map{|phone_number| phone_number.to_s}.join(', '), :length => 25) + ']'
-          = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
-      %td
-        - if tenant.users_sip_accounts.any?
-          - if tenant.users_sip_accounts.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
-            = tenant.users_sip_accounts.count
-          - else
-            - tenant.users_sip_accounts.each do |sip_account|
-              - if sip_account != tenant.users_sip_accounts.last
-                = succeed ', ' do
-                  =link_to "#{sip_account.caller_name}", user_sip_account_path(sip_account.sip_accountable,sip_account)
-                  - if sip_account.phone_numbers.any?
-                    = '[' + truncate(sip_account.phone_numbers.map{|phone_number| phone_number.to_s}.join(', '), :length => 25) + ']'
-              - else
+  %tr{:class => 'odd'}
+    %td= t("sip_accounts.index.page_title")
+    %td
+      - if tenant.sip_accounts.any?
+        - if tenant.sip_accounts.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
+          = link_to tenant.sip_accounts.count.to_s, tenant_sip_accounts_path(tenant)
+        - else
+          - cache([I18n.locale, tenant, tenant.sip_accounts, PhoneNumber.where(:phone_numberable_type => 'SipAccount').where(:id => tenant.sip_account_ids)]) do
+            - tenant.sip_accounts.each do |sip_account|
+              = succeed ', ' do
+                =link_to "#{sip_account.caller_name}", tenant_sip_account_path(tenant,sip_account)
+                - if sip_account.phone_numbers.any?
+                  = '[' + truncate(sip_account.phone_numbers.map{|phone_number| phone_number.to_s}.join(', '), :length => 25) + ']'
+        = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
+    %td
+      - if tenant.users_sip_accounts.any?
+        - if tenant.users_sip_accounts.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
+          = tenant.users_sip_accounts.count
+        - else
+          - tenant.users_sip_accounts.each do |sip_account|
+            - if sip_account != tenant.users_sip_accounts.last
+              = succeed ', ' do
                 =link_to "#{sip_account.caller_name}", user_sip_account_path(sip_account.sip_accountable,sip_account)
                 - if sip_account.phone_numbers.any?
                   = '[' + truncate(sip_account.phone_numbers.map{|phone_number| phone_number.to_s}.join(', '), :length => 25) + ']'
-        - else
-          = "-"
-
-    %tr{:class => 'even'}
-      %td= t("phones.index.page_title")
-      - cache([I18n.locale, tenant, 'phones', tenant.phones.count, tenant.phones.order(:updated_at).last]) do
-        %td
-          - if tenant.phones.any?
-            - if tenant.phones.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
-              = link_to tenant.phones.count.to_s, tenant_phones_path(tenant)
             - else
-              - tenant.phones.each do |phone|
-                = succeed ', ' do
-                  = link_to "#{phone.phone_model.to_s} (#{phone.pretty_mac_address})#{(phone.ip_address.blank? ? '' : " - #{phone.ip_address}")}", tenant_phone_path(tenant, phone)
-          = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => Phone}
-      %td
-        - if tenant.users_phones.any?
-          - if tenant.users_phones.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
-            = tenant.users_phones.count
-          - else
-            - tenant.users_phones.each do |phone|
-              - if phone != tenant.users_phones.last
-                = succeed ', ' do
-                  = link_to "#{phone.phone_model.to_s} (#{phone.pretty_mac_address})#{(phone.ip_address.blank? ? '' : " - #{phone.ip_address}")}", user_phone_path(phone.phoneable, phone)
-              - else
-                = link_to "#{phone.phone_model.to_s} (#{phone.pretty_mac_address})#{(phone.ip_address.blank? ? '' : " - #{phone.ip_address}")}", user_phone_path(phone.phoneable, phone)            
+              =link_to "#{sip_account.caller_name}", user_sip_account_path(sip_account.sip_accountable,sip_account)
+              - if sip_account.phone_numbers.any?
+                = '[' + truncate(sip_account.phone_numbers.map{|phone_number| phone_number.to_s}.join(', '), :length => 25) + ']'
+      - else
+        = "-"
+
+  %tr{:class => 'even'}
+    %td= t("phones.index.page_title")
+    %td
+      - if tenant.phones.any?
+        - if tenant.phones.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
+          = link_to tenant.phones.count.to_s, tenant_phones_path(tenant)
         - else
-          = '-' 
+          - cache([I18n.locale, tenant, tenant.phones]) do
+            - tenant.phones.each do |phone|
+              = succeed ', ' do
+                = link_to "#{phone.phone_model.to_s} (#{phone.pretty_mac_address})#{(phone.ip_address.blank? ? '' : " - #{phone.ip_address}")}", tenant_phone_path(tenant, phone)
+      = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => Phone}
+    %td
+      - if tenant.users_phones.any?
+        - if tenant.users_phones.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
+          = tenant.users_phones.count
+        - else
+          - tenant.users_phones.each do |phone|
+            - if phone != tenant.users_phones.last
+              = succeed ', ' do
+                = link_to "#{phone.phone_model.to_s} (#{phone.pretty_mac_address})#{(phone.ip_address.blank? ? '' : " - #{phone.ip_address}")}", user_phone_path(phone.phoneable, phone)
+            - else
+              = link_to "#{phone.phone_model.to_s} (#{phone.pretty_mac_address})#{(phone.ip_address.blank? ? '' : " - #{phone.ip_address}")}", user_phone_path(phone.phoneable, phone)            
+      - else
+        = '-' 
