@@ -8,7 +8,7 @@
 
     %tr{:class => 'odd'}
       %td= t("sip_accounts.index.page_title")
-      - cache([I18n.locale, tenant, tenant.sip_accounts.count, tenant.sip_accounts.order(:updated_at).last]) do
+      - cache([I18n.locale, tenant, 'sip_accounts', tenant.sip_accounts.count, tenant.sip_accounts.order(:updated_at).last]) do
         %td
           - if tenant.sip_accounts.any?
             - if tenant.sip_accounts.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
@@ -19,7 +19,7 @@
                   =link_to "#{sip_account.caller_name}", tenant_sip_account_path(tenant,sip_account)
                   - if sip_account.phone_numbers.any?
                     = '[' + truncate(sip_account.phone_numbers.map{|phone_number| phone_number.to_s}.join(', '), :length => 25) + ']'
-            = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
+          = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
       %td
         - if tenant.users_sip_accounts.any?
           - if tenant.users_sip_accounts.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
@@ -40,7 +40,7 @@
 
     %tr{:class => 'even'}
       %td= t("phones.index.page_title")
-      - cache([I18n.locale, tenant, tenant.phones.count, tenant.phones.order(:updated_at).last]) do
+      - cache([I18n.locale, tenant, 'phones', tenant.phones.count, tenant.phones.order(:updated_at).last]) do
         %td
           - if tenant.phones.any?
             - if tenant.phones.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
