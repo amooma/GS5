@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="freeswitch/xml">
   <X-PRE-PROCESS cmd="set" data="sound_prefix=/opt/freeswitch/sounds/en/us/callie"/>
-  <X-PRE-PROCESS cmd="set" data="hold_music=local_stream://moh"/>
-  <X-PRE-PROCESS cmd="set" data="use_profile=internal"/>
-  <X-PRE-PROCESS cmd="set" data="send_silence_when_idle=400"/>
-  <X-PRE-PROCESS cmd="set" data="de-ring=%(1000,4000,425.0)"/>
   <section name="languages" description="Language Management">
     <language name="en" say-module="en" sound-prefix="/opt/freeswitch/sounds/en/us/callie">
       <phrases>
@@ -495,13 +491,6 @@
         <param name="listen-port" value="8021"/>
       </settings>
     </configuration>
-    <configuration name="fifo.conf" description="FIFO Configuration">
-      <settings>
-        <param name="delete-all-outbound-member-on-startup" value="false"/>
-      </settings>
-      <fifos>
-      </fifos>
-    </configuration>
     <configuration name="local_stream.conf" description="stream files from local dir">
       <directory name="default" path="/opt/freeswitch/sounds/music/16000">
         <param name="rate" value="16000"/>
@@ -541,30 +530,13 @@
         </profile>
       </profiles>
     </configuration>
-    <configuration name="xml_rpc.conf" description="XML RPC">
-      <settings>
-        <param name="http-port" value="228080"/>
-        <param name="auth-realm" value="gemeinschaft"/>
-        <param name="auth-user" value="7ff020f74d99a1b88bd2"/>
-        <param name="auth-pass" value="85d13b5a56c55f7261cc"/>
-      </settings>
-    </configuration>
     <configuration name="switch.conf" description="Core Configuration">
       <cli-keybindings>
       </cli-keybindings>
       <settings>
-        <param name="colorize-console" value="true"/>
-        <param name="max-sessions" value="1000"/>
-        <param name="sessions-per-second" value="30"/>
-        <param name="loglevel" value="debug"/>
-        <param name="mailer-app" value="sendmail"/>
-        <param name="mailer-app-args" value="-t"/>
         <param name="dump-cores" value="yes"/>
         <param name="auto-create-schemas" value="true"/>
-        <param name="rtp-enable-zrtp" value="false"/>
-        <param name="rtp-start-port" value="16384" />
-        <param name="rtp-end-port" value="32768" />
-	<param name="core-db-dsn" value="gemeinschaft:gemeinschaft:gemeinschaft"/>
+	      <param name="core-db-dsn" value="gemeinschaft:gemeinschaft:gemeinschaft"/>
       </settings>
     </configuration>
     <configuration name="spandsp.conf" description="Tone detector descriptors">
@@ -645,8 +617,6 @@
         <load module="mod_console"/>
         <load module="mod_logfile"/>
         <load module="mod_lua"/>
-        <!-- <load module="mod_xml_rpc"/> -->
-        <!-- <load module="mod_cdr_csv"/> -->
         <load module="mod_event_socket"/>
         <load module="mod_sofia"/>
         <load module="mod_loopback"/>
@@ -654,12 +624,8 @@
         <load module="mod_conference"/>
         <load module="mod_dptools"/>
         <load module="mod_expr"/>
-        <!-- <load module="mod_fifo"/> -->
         <load module="mod_voicemail"/>
-        <!-- <load module="mod_esf"/> -->
-        <!-- <load module="mod_fsv"/> -->
         <load module="mod_valet_parking"/>
-        <!-- <load module="mod_curl"/> -->
         <load module="mod_dialplan_xml"/>
         <load module="mod_sndfile"/>
         <load module="mod_native_file"/>
@@ -668,62 +634,7 @@
         <load module="mod_say_en"/>
         <load module="mod_spandsp"/>
       </modules>
-    </configuration>
-    <configuration name="post_load_modules.conf" description="Modules">
-      <modules>
-      </modules>
-    </configuration>    
-    <configuration name="voicemail.conf" description="Voicemail">
-      <settings>
-      </settings>
-      <profiles>
-        <profile name="default">
-          <param name="file-extension" value="wav"/>
-          <param name="terminator-key" value="#"/>
-          <param name="max-login-attempts" value="3"/>
-          <param name="digit-timeout" value="10000"/>
-          <param name="min-record-len" value="3"/>
-          <param name="max-record-len" value="300"/>
-          <param name="max-retries" value="3"/>
-          <param name="tone-spec" value="%(1000, 0, 640)"/>
-          <param name="callback-dialplan" value="XML"/>
-          <param name="callback-context" value="default"/>
-          <param name="play-new-messages-key" value="1"/>
-          <param name="play-saved-messages-key" value="2"/>
-          <param name="login-keys" value="0"/>
-          <param name="main-menu-key" value="0"/>
-          <param name="config-menu-key" value="5"/>
-          <param name="record-greeting-key" value="1"/>
-          <param name="choose-greeting-key" value="2"/>
-          <param name="change-pass-key" value="6"/>
-          <param name="record-name-key" value="3"/>
-          <param name="record-file-key" value="3"/>
-          <param name="listen-file-key" value="1"/>
-          <param name="save-file-key" value="2"/>
-          <param name="delete-file-key" value="7"/>
-          <param name="undelete-file-key" value="8"/>
-          <param name="email-key" value="4"/>
-          <param name="pause-key" value="0"/>
-          <param name="restart-key" value="1"/>
-          <param name="ff-key" value="6"/>
-          <param name="rew-key" value="4"/>
-          <param name="skip-greet-key" value="#"/>
-          <param name="record-silence-threshold" value="200"/>
-          <param name="record-silence-hits" value="2"/>
-          <param name="web-template-file" value="web-vm.tpl"/>
-          <param name="operator-extension" value="operator XML default"/>
-          <param name="operator-key" value="9"/>
-          <param name="vmain-extension" value="vmain XML default"/>
-          <param name="vmain-key" value="*"/>
-          <email>
-            <param name="notify-template-file" value="notify-voicemail.tpl"/>
-            <param name="template-file" value="voicemail.tpl"/>
-            <param name="date-fmt" value="%A, %B %d %Y, %I %M %p"/>
-            <param name="email-from" value="${voicemail_account}@${voicemail_domain}"/>
-          </email>
-        </profile>
-      </profiles>
-    </configuration>
+    </configuration>  
     <configuration name="lua.conf" description="LUA Configuration">
       <settings>
         <param name="script-directory" value="$${base_dir}/scripts/?.lua"/>
