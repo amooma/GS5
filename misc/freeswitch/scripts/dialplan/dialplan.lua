@@ -466,10 +466,6 @@ function Dialplan.dial(self, destination)
     end
   end
 
-  if common.str.to_b(self.config.parameters.bypass_media) then
-    self.caller:set_variable('bypass_media', true);
-  end
-
   require 'dialplan.sip_call'
   return dialplan.sip_call.SipCall:new{ log = self.log, database = self.database, caller = self.caller }:fork(
     destinations,
@@ -866,15 +862,19 @@ end
 
 function Dialplan.run(self, destination)
   self.caller:set_variable('hangup_after_bridge', false);
-  self.caller:set_variable('ringback', self.config.parameters.ringback);
   self.caller:set_variable('bridge_early_media', 'true');
-  self.caller:set_variable('send_silence_when_idle', 0);
   self.caller:set_variable('default_language', self.default_language);
   self.caller:set_variable('gs_save_cdr', true);
   self.caller:set_variable('gs_call_service', 'dial');
   self.caller.session:setAutoHangup(false);
   self.caller.date = os.date('%y%m%d%w');
   self.caller.time = os.date('%H%M%S');
+
+  if type(self.config.variables) == 'table' then
+    for key, value in pairs(self.config.variables) do
+      self.caller:set_variable(key, value);
+    end
+  end
 
   self.routes = common.configuration_file.get('/opt/freeswitch/scripts/ini/routes.ini');
   self.caller.domain_local = self.domain;
