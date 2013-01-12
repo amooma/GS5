@@ -78,7 +78,7 @@ function profile(database, sofia_ini, profile_name, index, domains, node_id)
     parameters['force-register-db-domain'] = domains[index]['host'];
     log:debug('SOFIA_PROFILE ', index,' - name: ', profile_name, ', domain: ', domains[index]['host'], ',  sip_bind: ', parameters['sip-ip'], ':', parameters['sip-port']);
   else
-    log:error('SOFIA_PROFILE ', index,' - name: ', profile_name, ' - no domains');
+    log:debug('SOFIA_PROFILE ', index,' - name: ', profile_name, ' - no domains');
   end
 
   local gateways_xml = gateways(profile_name);
