@@ -1,0 +1,60 @@
+en:
+  gateways:
+    name: 'Gateway'
+    controller:
+      successfuly_created: 'Successfully created Gateway.'
+      successfuly_updated: 'Successfully updated Gateway.'
+      successfuly_destroyed: 'Successfully destroyed Gateway.'
+    index:
+      page_title: 'Listing Gateway'
+      name: 'Name'
+      technology: 'Technology'
+      inbound: 'Inbound'
+      outbound: 'Outbound'
+      description: 'Description'
+      actions:
+        confirm: 'Are you sure you want to delete this Gateway?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New Gateway for %{resource}'
+    show:
+      page_title: 'Show Gateway'
+      name: 'Name'
+      technology: 'Technology'
+      inbound: 'Inbound'
+      outbound: 'Outbound'
+      description: 'Description'
+      actions:
+        confirm: 'Are you sure you want to delete this element?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New Gateway'
+      actions:
+        back_to_list: 'Back to Index'
+    edit:
+      page_title: 'Editing Gateway'
+      actions:
+        back_to_list: 'Back to Index'
+        edit: 'Edit'
+        view_all: 'View All'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      technology:
+        label: 'Technology'
+        hint: ''
+      inbound:
+        label: 'Inbound'
+        hint: ''
+      outbound:
+        label: 'Outbound'
+        hint: ''
+      description:
+        label: 'Description'
+        hint: ''
+      button: 'Submit'
