@@ -28,31 +28,36 @@ function nodes(database, local_node_id)
   return gateways_xml;
 end
 
-function gateways(profile_name)
+
+function gateways(database, profile_name)
   require 'configuration.simple_xml'
   local xml = configuration.simple_xml.SimpleXml:new();
 
-  require 'common.configuration_file'
+  require 'common.str'
+
+  require 'common.gateway'
+  local gateway_class = common.gateway.Gateway:new{ log = log, database = database};
+  local gateways = gateway_class:list('sip');
+
   local gateways_xml = '';
-  local gateways  = common.configuration_file.get('/opt/freeswitch/scripts/ini/gateways.ini', false);
+  for index=1, #gateways do
+    local gateway = gateways[index];
+    local gateway_profile = gateway_class:profile_get(gateway.id);
+    if tostring(gateway_profile) == profile_name or (profile_name == 'gemeinschaft' and common.str.blank(gateway_profile)) then
+      log:debug('GATEWAY - name: ', gateway.name);
+      local parameters = gateway_class:parameters_build(gateway.id);
 
-  if not gateways then
-    return '';
-  end
-
-  for gateway_name, gateway_parameters in pairs(gateways) do
-    if tostring(gateway_parameters.profile) == profile_name then
-      log:debug('GATEWAY - name: ', gateway_name, ', address: ', gateway_parameters.proxy);
       gateways_xml = gateways_xml .. xml:element{
         'gateway',
-        name = gateway_name,
-        xml:from_hash('param', gateway_parameters, 'name', 'value'),
+        name = gateway.name,
+        xml:from_hash('param', parameters, 'name', 'value'),
       };
     end
   end
 
   return gateways_xml;
 end
+
 
 function profile(database, sofia_ini, profile_name, index, domains, node_id)
   require 'configuration.simple_xml'
@@ -81,7 +86,7 @@ function profile(database, sofia_ini, profile_name, index, domains, node_id)
     log:debug('SOFIA_PROFILE ', index,' - name: ', profile_name, ' - no domains');
   end
 
-  local gateways_xml = gateways(profile_name);
+  local gateways_xml = gateways(database, profile_name);
 
   if index == 1 then
     gateways_xml = gateways_xml .. nodes(database, node_id);
