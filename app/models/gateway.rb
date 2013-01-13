@@ -1,6 +1,17 @@
 class Gateway < ActiveRecord::Base
+  TECHNOLOGIES = ['sip']
+
   attr_accessible :name, :technology, :inbound, :outbound, :description
 
   has_many :gateway_settings, :dependent => :destroy
   has_many :gateway_parameters, :dependent => :destroy
+
+  validates :name,
+            :presence => true,
+            :uniqueness => true
+
+  validates :technology,
+            :presence => true,
+            :inclusion => { :in => TECHNOLOGIES }
+
 end
