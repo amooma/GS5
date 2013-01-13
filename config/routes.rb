@@ -1,4 +1,10 @@
 Gemeinschaft42c::Application.routes.draw do
+
+  resources :gateways do
+    resources :gateway_settings
+    resources :gateway_parameters
+  end
+
   resources :gs_parameters, :only => [:show, :index, :update, :edit]
 
   resources :automatic_call_distributors
