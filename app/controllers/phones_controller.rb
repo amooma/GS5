@@ -46,6 +46,7 @@ class PhonesController < ApplicationController
       m = method( :"#{@phoneable.class.name.underscore}_phone_path" )
       redirect_to m.( @phoneable, @phone ), :notice => t('phones.controller.successfuly_updated')
     else
+      set_fallback_sip_accounts
       render :edit
     end
   end

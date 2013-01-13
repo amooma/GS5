@@ -10,7 +10,7 @@ class SipAccount < ActiveRecord::Base
 
   # Associations:
   #
-  belongs_to :sip_accountable, :polymorphic => true
+  belongs_to :sip_accountable, :polymorphic => true, :touch => true
   
   has_many :phone_sip_accounts, :uniq => true
   has_many :phones, :through => :phone_sip_accounts

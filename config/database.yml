@@ -1,27 +1,11 @@
 <% system_odbc_ini_file = '/var/lib/freeswitch/.odbc.ini' %>
-<% if File.exists?(system_odbc_ini_file) %>
-<% system_odbc_configuration = IniFile.load(system_odbc_ini_file) %>
-<% if !system_odbc_configuration['gemeinschaft']['DATABASE'].blank? && !system_odbc_configuration['gemeinschaft']['USER'].blank? %>
-production: 
-   adapter: mysql2 
-   encoding: utf8 
-   database: <%= system_odbc_configuration['gemeinschaft']['DATABASE'] %>
-   pool: 10 
-   username: <%= system_odbc_configuration['gemeinschaft']['USER'] %>
-   password: <%= system_odbc_configuration['gemeinschaft']['PASSWORD'] %>
-   socket: /var/run/mysqld/mysqld.sock 
-   reconnect: true
-
+<% if !File.exists?(system_odbc_ini_file) %>
 development:
-   adapter: mysql2 
-   encoding: utf8 
-   database: <%= system_odbc_configuration['gemeinschaft']['DATABASE'] %>
+   adapter: sqlite3
+   database: db/development.sqlite3
    pool: 5
-   username: <%= system_odbc_configuration['gemeinschaft']['USER'] %>
-   password: <%= system_odbc_configuration['gemeinschaft']['PASSWORD'] %>
-   socket: /var/run/mysqld/mysqld.sock 
-   reconnect: true
-<% else %>
+   timeout: 5000
+
 production: 
    adapter: mysql2
    encoding: utf8 
@@ -31,14 +15,26 @@ production:
    password: gemeinschaft 
    socket: /var/run/mysqld/mysqld.sock 
    reconnect: true
-
+<% else %>
+<% system_odbc_configuration = IniFile.load(system_odbc_ini_file) %>
+<% if !system_odbc_configuration['gemeinschaft']['DATABASE'].blank? && !system_odbc_configuration['gemeinschaft']['USER'].blank? %>
 development:
    adapter: mysql2 
    encoding: utf8 
-   database: gemeinschaft 
+   database: <%= system_odbc_configuration['gemeinschaft']['DATABASE'] %>
    pool: 5
-   username: gemeinschaft 
-   password: gemeinschaft 
+   username: <%= system_odbc_configuration['gemeinschaft']['USER'] %>
+   password: <%= system_odbc_configuration['gemeinschaft']['PASSWORD'] %>
+   socket: /var/run/mysqld/mysqld.sock 
+   reconnect: true
+
+production: 
+   adapter: mysql2 
+   encoding: utf8 
+   database: <%= system_odbc_configuration['gemeinschaft']['DATABASE'] %>
+   pool: 10 
+   username: <%= system_odbc_configuration['gemeinschaft']['USER'] %>
+   password: <%= system_odbc_configuration['gemeinschaft']['PASSWORD'] %>
    socket: /var/run/mysqld/mysqld.sock 
    reconnect: true
 <% end %>

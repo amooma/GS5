@@ -11,5 +11,5 @@
 
   - if defined? GsParameter.get('NIGHTLY_REBOOT_OF_PHONES') && GsParameter.get('NIGHTLY_REBOOT_OF_PHONES') == true
     = f.input :nightly_reboot, :label => t('phones.form.nightly_reboot.label'), :hint => conditional_hint('phones.form.nightly_reboot.hint')
-  - if defined? PROVISIONING_KEY_LENGTH && PROVISIONING_KEY_LENGTH > 0
+  - if !GsParameter.get('PROVISIONING_KEY_LENGTH').nil? && GsParameter.get('PROVISIONING_KEY_LENGTH') > 0
     = f.input :provisioning_key_active, :label => t('phones.form.provisioning_key_active.label'), :hint => conditional_hint('phones.form.provisioning_key_active.hint')

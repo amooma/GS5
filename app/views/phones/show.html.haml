@@ -21,7 +21,7 @@
     %strong= t('phones.show.nightly_reboot') + ":"
     = @phone.nightly_reboot
 
-- if defined? PROVISIONING_KEY_LENGTH && PROVISIONING_KEY_LENGTH > 0
+- if !GsParameter.get('PROVISIONING_KEY_LENGTH').nil? && GsParameter.get('PROVISIONING_KEY_LENGTH') > 0
   %p
     %strong= t('phones.show.provisioning_key_active') + ":"
     = @phone.provisioning_key_active

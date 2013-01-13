@@ -182,9 +182,9 @@ class ConfigSnomController < ApplicationController
     send_sensitve = @provisioning_authenticated || !@phone.provisioning_key_active
     @phone_settings = Hash.new()
 
-    if defined?(PROVISIONING_KEY_LENGTH) && PROVISIONING_KEY_LENGTH > 0
+    if !GsParameter.get('PROVISIONING_KEY_LENGTH').nil? && GsParameter.get('PROVISIONING_KEY_LENGTH') > 0
       if @phone.provisioning_key.blank?
-        @phone.update_attributes({ :provisioning_key => SecureRandom.hex(PROVISIONING_KEY_LENGTH), :provisioning_key_active => false })
+        @phone.update_attributes({ :provisioning_key => SecureRandom.hex(GsParameter.get('PROVISIONING_KEY_LENGTH')), :provisioning_key_active => false })
       elsif @provisioning_authenticated
         @phone.update_attributes({ :provisioning_key_active => true })
       end
