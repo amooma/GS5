@@ -1,0 +1,17 @@
+%table
+  %tr
+    %th= t('gateway_parameters.index.gateway_id')
+    %th= t('gateway_parameters.index.name')
+    %th= t('gateway_parameters.index.value')
+    %th= t('gateway_parameters.index.class_type')
+    %th= t('gateway_parameters.index.description')
+
+  - reset_cycle
+  - for gateway_parameter in gateway_parameters
+    %tr{:class => cycle('odd', 'even')}
+      %td= gateway_parameter.gateway_id
+      %td= gateway_parameter.name
+      %td= gateway_parameter.value
+      %td= gateway_parameter.class_type
+      %td= gateway_parameter.description
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gateway_parameter}
