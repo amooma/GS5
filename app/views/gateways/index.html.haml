@@ -1,0 +1,6 @@
+- title t("gateways.index.page_title")
+
+- if @gateways && @gateways.count > 0
+  = render "index_core", :gateways => @gateways
+
+= render :partial => 'shared/create_link', :locals => {:child_class => Gateway}

@@ -1,0 +1,19 @@
+- title t("gateways.show.page_title")
+
+%p
+  %strong= t('gateways.show.name') + ":"
+  = @gateway.name
+%p
+  %strong= t('gateways.show.technology') + ":"
+  = @gateway.technology
+%p
+  %strong= t('gateways.show.inbound') + ":"
+  = @gateway.inbound
+%p
+  %strong= t('gateways.show.outbound') + ":"
+  = @gateway.outbound
+%p
+  %strong= t('gateways.show.description') + ":"
+  = @gateway.description
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @gateway }

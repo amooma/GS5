@@ -1,0 +1,17 @@
+%table
+  %tr
+    %th= t('gateways.index.name')
+    %th= t('gateways.index.technology')
+    %th= t('gateways.index.inbound')
+    %th= t('gateways.index.outbound')
+    %th= t('gateways.index.description')
+
+  - reset_cycle
+  - for gateway in gateways
+    %tr{:class => cycle('odd', 'even')}
+      %td= gateway.name
+      %td= gateway.technology
+      %td= gateway.inbound
+      %td= gateway.outbound
+      %td= gateway.description
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gateway}
