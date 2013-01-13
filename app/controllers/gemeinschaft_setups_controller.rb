@@ -46,6 +46,10 @@ class GemeinschaftSetupsController < ApplicationController
       GsParameter.where(:name => 'ringtone_url').first.update_attributes(:value => "http://#{@gemeinschaft_setup.sip_domain.host}")
       GsParameter.where(:name => 'user_image_url').first.update_attributes(:value => "http://#{@gemeinschaft_setup.sip_domain.host}/uploads/user/image")
 
+      # Restart FreeSWITCH
+      require 'freeswitch_event'
+      FreeswitchAPI.execute('fsctl', 'shutdown restart')
+
       # Auto-Login:
       session[:user_id] = user.id
       
