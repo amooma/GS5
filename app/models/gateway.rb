@@ -14,4 +14,15 @@ class Gateway < ActiveRecord::Base
             :presence => true,
             :inclusion => { :in => TECHNOLOGIES }
 
+  before_validation :downcase_technology
+
+  def to_s
+    name
+  end
+
+  private
+  def downcase_technology
+    technology = technology.downcase
+  end
+
 end

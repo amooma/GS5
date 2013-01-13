@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130112103337) do
+ActiveRecord::Schema.define(:version => 20130113090705) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -488,6 +488,36 @@ ActiveRecord::Schema.define(:version => 20130112103337) do
     t.integer "ring_count",                   :default => 0, :null => false
     t.integer "start_time",                   :default => 0, :null => false
     t.integer "stop_time",                    :default => 0, :null => false
+  end
+
+  create_table "gateway_parameters", :force => true do |t|
+    t.integer  "gateway_id"
+    t.string   "name"
+    t.string   "value"
+    t.string   "class_type"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "gateway_settings", :force => true do |t|
+    t.integer  "gateway_id"
+    t.string   "name"
+    t.string   "value"
+    t.string   "class_type"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "gateways", :force => true do |t|
+    t.string   "name"
+    t.string   "technology"
+    t.boolean  "inbound"
+    t.boolean  "outbound"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "gemeinschaft_setups", :force => true do |t|
