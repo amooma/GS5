@@ -1,4 +1,6 @@
 class GatewayParameter < ActiveRecord::Base
+  CLASS_TYPES = ['String', 'Integer', 'Boolean']
+
   attr_accessible :gateway_id, :name, :value, :class_type, :description
 
   belongs_to :gateway, :touch => true
@@ -9,7 +11,7 @@ class GatewayParameter < ActiveRecord::Base
 
   validates :class_type,
             :presence => true,
-            :inclusion => { :in => ['String', 'Integer', 'Boolean'] }
+            :inclusion => { :in => CLASS_TYPES }
 
   def to_s
   	name
