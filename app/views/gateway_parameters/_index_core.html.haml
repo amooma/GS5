@@ -9,9 +9,9 @@
   - reset_cycle
   - for gateway_parameter in gateway_parameters
     %tr{:class => cycle('odd', 'even')}
-      %td= gateway_parameter.gateway_id
+      %td= gateway_parameter.gateway
       %td= gateway_parameter.name
       %td= gateway_parameter.value
       %td= gateway_parameter.class_type
       %td= gateway_parameter.description
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gateway_parameter}
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => gateway_parameter.gateway, :child => gateway_parameter}

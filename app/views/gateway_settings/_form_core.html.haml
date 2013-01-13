@@ -1,5 +1,5 @@
 .inputs
-  = f.input :name, :label => t('gateway_settings.form.name.label'), :hint => conditional_hint('gateway_settings.form.name.hint')
+  = f.input :name, :label => t('gateway_settings.form.name.label'), :hint => conditional_hint('gateway_settings.form.name.hint'), :autofocus => true
   = f.input :value, :label => t('gateway_settings.form.value.label'), :hint => conditional_hint('gateway_settings.form.value.hint')
   = f.input :class_type, :label => t('gateway_settings.form.class_type.label'), :hint => conditional_hint('gateway_settings.form.class_type.hint')
   = f.input :description, :label => t('gateway_settings.form.description.label'), :hint => conditional_hint('gateway_settings.form.description.hint')

@@ -16,4 +16,4 @@
   %strong= t('gateway_settings.show.description') + ":"
   = @gateway_setting.description
 
-= render :partial => 'shared/show_edit_destroy_part', :locals => {:parent => @gateway_setting.gateway, :child_class => @gateway_setting}
+= render :partial => 'shared/show_edit_destroy_part', :locals => {:parent => @gateway_setting.gateway, :child => @gateway_setting}

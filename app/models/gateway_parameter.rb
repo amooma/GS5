@@ -1,13 +1,17 @@
 class GatewayParameter < ActiveRecord::Base
   attr_accessible :gateway_id, :name, :value, :class_type, :description
 
-  belongs_to :gateway
+  belongs_to :gateway, :touch => true
 
   validates :name,
             :presence => true,
-            :uniqueness => true
+            :uniqueness => {:scope => :gateway_id}
 
   validates :class_type,
             :presence => true,
             :inclusion => { :in => ['String', 'Integer', 'Boolean'] }
+
+  def to_s
+  	name
+  end
 end

@@ -5,9 +5,13 @@ class GatewaySetting < ActiveRecord::Base
 
   validates :name,
             :presence => true,
-            :uniqueness => true
+            :uniqueness => {:scope => :gateway_id}
 
   validates :class_type,
             :presence => true,
             :inclusion => { :in => ['String', 'Integer', 'Boolean'] }
+
+  def to_s
+  	name
+  end
 end
