@@ -17,7 +17,7 @@ class GatewayParametersController < ApplicationController
   def create
     @gateway_parameter = @gateway.gateway_parameters.build(params[:gateway_parameter])
     if @gateway_parameter.save
-      redirect_to [@gateway, @gateway_parameter], :notice => t('gateway_parameters.controller.successfuly_created')
+      redirect_to @gateway, :notice => t('gateway_parameters.controller.successfuly_created')
     else
       render :new
     end
@@ -30,7 +30,7 @@ class GatewayParametersController < ApplicationController
   def update
     @gateway_parameter = @gateway.gateway_parameters.find(params[:id])
     if @gateway_parameter.update_attributes(params[:gateway_parameter])
-      redirect_to [@gateway, @gateway_parameter], :notice  => t('gateway_parameters.controller.successfuly_updated')
+      redirect_to @gateway, :notice  => t('gateway_parameters.controller.successfuly_updated')
     else
       render :edit
     end
@@ -39,6 +39,6 @@ class GatewayParametersController < ApplicationController
   def destroy
     @gateway_parameter = @gateway.gateway_parameters.find(params[:id])
     @gateway_parameter.destroy
-    redirect_to gateway_gateway_parameters_path(@gateway), :notice => t('gateway_parameters.controller.successfuly_destroyed')
+    redirect_to gateway_path(@gateway), :notice => t('gateway_parameters.controller.successfuly_destroyed')
   end
 end
