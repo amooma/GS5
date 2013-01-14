@@ -42,7 +42,7 @@ start_caller:init_channel_variables();
 -- session:execute('info','notice');
 
 if not start_dialplan:check_auth() then
-  log:debug('AUTHENTICATION_REQUIRED - domain: ', start_dialplan.domain);
+  log:debug('AUTHENTICATION_REQUIRED - host: ' , start_caller.sip_contact_host, ', domain: ', start_dialplan.domain);
   start_dialplan:hangup(407, start_dialplan.domain);
   return false;
 end
