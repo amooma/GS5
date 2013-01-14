@@ -134,7 +134,7 @@ function Dialplan.check_auth(self)
       self.caller.gateway_name = gateway.name;
       self.caller.gateway_id = gateway.id;
       self.caller.from_gateway = true;
-      self.log:info('AUTH_FIRST_STAGE - gateway autheticated by ip: gateway=', self.caller.gateway_id, ', name: ', self.caller.gateway_name, ', ip: ', self.caller.sip_contact_host);
+      self.log:info('AUTH_FIRST_STAGE - gateway autheticated by: ', gateway.auth_source, ' ~ ', gateway.auth_pattern, ', gateway=', self.caller.gateway_id, ', name: ', self.caller.gateway_name, ', ip: ', self.caller.sip_contact_host);
       authenticated = true;
     end
   end
