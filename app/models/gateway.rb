@@ -22,7 +22,7 @@ class Gateway < ActiveRecord::Base
 
   private
   def downcase_technology
-    technology = technology.downcase if !technology.blank?
+    self.technology = self.technology.downcase if !self.technology.blank?
   end
 
 end
