@@ -15,6 +15,7 @@ class GatewaySettingsController < ApplicationController
 
   def create
     @gateway_setting = @gateway.gateway_settings.build(params[:gateway_setting])
+    @gateway_setting.class_type = GatewaySetting::GATEWAY_SETTINGS[@gateway.technology][@gateway_setting.name]
     if @gateway_setting.save
       redirect_to @gateway, :notice => t('gateway_settings.controller.successfuly_created')
     else
