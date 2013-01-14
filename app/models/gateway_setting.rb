@@ -1,7 +1,7 @@
 class GatewaySetting < ActiveRecord::Base
   CLASS_TYPES = ['String', 'Integer', 'Boolean']
   GATEWAY_SETTINGS = {
-    'sip' => { 'domain' => 'String', 'username' => 'String', 'password' => 'String', 'register' => 'Boolean' },
+    'sip' => { 'domain' => 'String', 'username' => 'String', 'password' => 'String', 'register' => 'Boolean', 'auth_source' =>  'String', 'auth_pattern' =>  'String' },
   }
   
   attr_accessible :gateway_id, :name, :value, :class_type, :description
