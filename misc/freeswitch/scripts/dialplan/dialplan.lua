@@ -127,17 +127,15 @@ function Dialplan.check_auth(self)
     self.log:info('AUTH_FIRST_STAGE - gateway autheticated by name/password: gateway=', self.caller.gateway_id, ', name: ', self.caller.gateway_name);
     authenticated = true;
   else
-    local gateways  = common.configuration_file.get('/opt/freeswitch/scripts/ini/gateways.ini', false);
-    if not gateways then	
-      return false;
-    end
-    for gateway, gateway_parameters in pairs(gateways) do
-      if common.str.to_s(gateway_parameters.proxy) == self.caller.sip_contact_host then
-        self.caller.gateway_name = gateway;
-        self.caller.from_gateway = true;
-        self.log:info('AUTH_FIRST_STAGE - gateway autheticated by ip: gateway=', self.caller.gateway_id, ', name: ', self.caller.gateway_name, ', ip: ', self.caller.sip_contact_host);
-        authenticated = true;
-      end
+    require 'common.gateway'
+    local gateway = common.gateway.Gateway:new{ log = self.log, database = self.database}:authenticate('sip', self.caller);
+  
+    if gateway then
+      self.caller.gateway_name = gateway.name;
+      self.caller.gateway_id = gateway.id;
+      self.caller.from_gateway = true;
+      self.log:info('AUTH_FIRST_STAGE - gateway autheticated by ip: gateway=', self.caller.gateway_id, ', name: ', self.caller.gateway_name, ', ip: ', self.caller.sip_contact_host);
+      authenticated = true;
     end
   end
 
@@ -875,6 +873,10 @@ function Dialplan.run(self, destination)
       self.caller:set_variable(key, value);
     end
   end
+
+  require 'dialplan.router'
+  local router = dialplan.router.Router:new{ log = self.log, database = self.database };
+  router:table_load();
 
   self.routes = common.configuration_file.get('/opt/freeswitch/scripts/ini/routes.ini');
   self.caller.domain_local = self.domain;
