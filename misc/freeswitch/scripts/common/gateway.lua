@@ -61,6 +61,28 @@ function Gateway.find_by_name(self, name)
 end
 
 
+function Gateway.authenticate(self, technology, caller)
+  local sql_query = 'SELECT `c`.`name`, `c`.`id`, `a`.`value` `auth_source`, `b`.`value` `auth_pattern` \
+    FROM `gateway_settings` `a` \
+    INNER JOIN `gateway_settings` `b` \
+    ON (`a`.`gateway_id` = `b`.`gateway_id` AND `a`.`name` = "auth_source" AND `b`.`name` = "auth_pattern" ) \
+    LEFT JOIN `gateways` `c` \
+    ON (`a`.`gateway_id` = `c`.`id`) \
+    WHERE `c`.`inbound` IS TRUE AND `c`.`technology` = "' .. tostring(technology) .. '"';
+
+  local gateway = false;
+
+  self.database:query(sql_query, function(entry)
+    if caller:to_s(entry.auth_source):match(entry.auth_pattern) then
+      gateway = entry;
+      return;
+    end
+  end)
+
+  return gateway;
+end
+
+
 function Gateway.profile_get(self, gateway_id)
   local sql_query = 'SELECT `value` FROM `gateway_settings` WHERE `gateway_id` = ' .. tonumber(gateway_id) .. ' AND `name` = "profile" LIMIT 1';
 
