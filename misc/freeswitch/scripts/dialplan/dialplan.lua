@@ -874,10 +874,6 @@ function Dialplan.run(self, destination)
     end
   end
 
-  require 'dialplan.router'
-  local router = dialplan.router.Router:new{ log = self.log, database = self.database };
-  router:table_load();
-
   self.routes = common.configuration_file.get('/opt/freeswitch/scripts/ini/routes.ini');
   self.caller.domain_local = self.domain;
   self:retrieve_caller_data();
