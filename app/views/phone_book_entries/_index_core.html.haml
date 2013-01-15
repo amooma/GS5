@@ -2,39 +2,42 @@
 %section.phone-book-entries 
   %header.entries-nav= render :partial => "phone_book_entries/navigation"
   .content
-    - reset_cycle
-    %table
-      - for entry in phone_book_entries
-        ~# Dear IE7,
-        ~# Because of you we have to do this with a table.
-        ~# With Love,
-        ~# Mario.
-        %tr.phone-book-entry{:class => cycle('odd', 'even'), :"itemscope itemtype" => "http://schema.org/Person"}
-          %td.thumbnail
-            = image_tag(entry.image_url(:small).to_s, :itemprop => 'image')
-          %td.user
-            - if entry.is_organization == true
-              %a.name{:href=> phone_book_phone_book_entry_path(entry.phone_book, entry), :itemprop => "name"}= entry
-            - else
-              %a.name{:href=> phone_book_phone_book_entry_path(entry.phone_book, entry), :itemprop => "name"}= entry
-              %a.company{:href=> phone_book_phone_book_entry_path(entry.phone_book, entry), :itemprop => 'memberOf'}= entry.organization
-          %td.contact
-            - if @found_phone_numbers and @found_phone_numbers.where(:phone_numberable_id => entry.id)
-              %a.phone{:href=> phone_book_phone_book_entry_path(entry.phone_book, entry), :itemprop => 'telephone'}= @found_phone_numbers.where(:phone_numberable_id => entry.id).first
-            - elsif entry.phone_numbers.first
-              %a.phone{:href=> phone_book_phone_book_entry_path(entry.phone_book, entry), :itemprop => 'telephone'}= entry.phone_numbers.first
-            - if entry.phone_numbers.count > 1
-              %a.more{:href => phone_book_phone_book_entry_path(entry.phone_book, entry)}= t('phone_book_entries.index.more_numbers', :numbers => (entry.phone_numbers.count-1))
-          %td.extra
-            - if !entry.description.blank?
-              %strong Description:
-              %div
-                = entry.description
-                - if !entry.homepage_organization.blank?
-                  %br
-                  =link_to entry.homepage_organization, entry.homepage_organization
-          - if can? :edit, entry
-            %td= link_to t('phone_book_entries.index.actions.edit'), edit_phone_book_phone_book_entry_path( entry.phone_book, entry )
-          - if can? :destroy, entry
-            %td= link_to t('phone_book_entries.index.actions.destroy'), [entry.phone_book, entry], :confirm => t('phone_book_entries.index.actions.confirm'), :method => :delete
+    - cache([I18n.locale, 'phone_book_entries_table', current_user, phone_book_entries]) do
+      - reset_cycle
+      - reset_cycle
+      %table
+        - for entry in phone_book_entries
+          - cache([I18n.locale, 'phone_book_entries_table_tr', current_user, entry]) do
+            ~# Dear IE7,
+            ~# Because of you we have to do this with a table.
+            ~# With Love,
+            ~# Mario.
+            %tr.phone-book-entry{:class => cycle('odd', 'even'), :"itemscope itemtype" => "http://schema.org/Person"}
+              %td.thumbnail
+                = image_tag(entry.image_url(:small).to_s, :itemprop => 'image')
+              %td.user
+                - if entry.is_organization == true
+                  %a.name{:href=> phone_book_phone_book_entry_path(entry.phone_book, entry), :itemprop => "name"}= entry
+                - else
+                  %a.name{:href=> phone_book_phone_book_entry_path(entry.phone_book, entry), :itemprop => "name"}= entry
+                  %a.company{:href=> phone_book_phone_book_entry_path(entry.phone_book, entry), :itemprop => 'memberOf'}= entry.organization
+              %td.contact
+                - if @found_phone_numbers and @found_phone_numbers.where(:phone_numberable_id => entry.id)
+                  %a.phone{:href=> phone_book_phone_book_entry_path(entry.phone_book, entry), :itemprop => 'telephone'}= @found_phone_numbers.where(:phone_numberable_id => entry.id).first
+                - elsif entry.phone_numbers.first
+                  %a.phone{:href=> phone_book_phone_book_entry_path(entry.phone_book, entry), :itemprop => 'telephone'}= entry.phone_numbers.first
+                - if entry.phone_numbers.count > 1
+                  %a.more{:href => phone_book_phone_book_entry_path(entry.phone_book, entry)}= t('phone_book_entries.index.more_numbers', :numbers => (entry.phone_numbers.count-1))
+              %td.extra
+                - if !entry.description.blank?
+                  %strong Description:
+                  %div
+                    = entry.description
+                    - if !entry.homepage_organization.blank?
+                      %br
+                      =link_to entry.homepage_organization, entry.homepage_organization
+              - if can? :edit, entry
+                %td= link_to t('phone_book_entries.index.actions.edit'), edit_phone_book_phone_book_entry_path( entry.phone_book, entry )
+              - if can? :destroy, entry
+                %td= link_to t('phone_book_entries.index.actions.destroy'), [entry.phone_book, entry], :confirm => t('phone_book_entries.index.actions.confirm'), :method => :delete
   %footer.entries-nav= render :partial => "phone_book_entries/navigation"
