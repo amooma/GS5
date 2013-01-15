@@ -1,4 +1,4 @@
-- cache([I18n.locale, tenant, GuiFunction.count, GuiFunction.order(:updated_at).last, GsParameter.count, GsParameter.order(:updated_at).last]) do
+- cache(['gs_parameters_tenant_overview_table', I18n.locale, tenant, GuiFunction.count, GuiFunction.order(:updated_at).last, GsParameter.count, GsParameter.order(:updated_at).last]) do
   %table
     %tr{:class => 'even'}
       %th
