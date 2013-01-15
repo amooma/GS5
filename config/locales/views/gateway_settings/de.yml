@@ -1,42 +1,42 @@
 de:
   gateway_settings:
-    name: 'Gatewaysetting'
+    name: 'Gateway Einstellungen'
     controller:
-      successfuly_created: 'Gatewaysetting wurde angelegt.'
-      successfuly_updated: 'Gatewaysetting wurde aktualisiert.'
-      successfuly_destroyed: 'Gatewaysetting wurde gelöscht.'
+      successfuly_created: 'Gateway Einstellung wurde angelegt.'
+      successfuly_updated: 'Gateway Einstellung wurde aktualisiert.'
+      successfuly_destroyed: 'Gateway Einstellung wurde gelöscht.'
     index:
-      page_title: 'Übersicht von Gatewaysetting'
+      page_title: 'Gateway Einstellungen'
       gateway_id: 'Gateway'
       name: 'Name'
       value: 'Value'
       class_type: 'Class type'
-      description: 'Description'
+      description: 'Beschreibung'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Gatewaysetting'
+        confirm: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Gateway Einstellungen'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
         create: 'Neu anlegen'
-        create_for: 'Gatewaysetting neu anlegen für %{resource}'
+        create_for: 'Gateway Einstellungen neu anlegen für %{resource}'
     show:
-      page_title: 'Gatewaysetting bearbeiten'
+      page_title: 'Gateway Einstellungen bearbeiten'
       gateway_id: 'Gateway'
       name: 'Name'
       value: 'Value'
       class_type: 'Class type'
-      description: 'Description'
+      description: 'Beschreibung'
       actions:
         confirm: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     new:
-      page_title: 'Gatewaysetting neu anlegen'
+      page_title: 'Gateway Einstellungen neu anlegen'
       actions:
         back_to_list: 'Zurück zur Übersicht'
     edit:
-      page_title: 'Gatewaysetting bearbeiten'
+      page_title: 'Gateway Einstellungen bearbeiten'
       actions:
         back_to_list: 'Zurück zur Übersicht'
         edit: 'Bearbeiten'
@@ -55,6 +55,6 @@ de:
         label: 'Class type'
         hint: ''
       description:
-        label: 'Description'
+        label: 'Beschreibung'
         hint: ''
       button: 'Absenden'
