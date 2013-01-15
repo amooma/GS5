@@ -1,4 +1,8 @@
 class GsParametersController < ApplicationController
+  load_resource :gs_parameter
+
+  before_filter :spread_breadcrumbs
+
   def index
     @gs_parameters_unordered = GsParameter.scoped
     @gs_parameters = GsParameter.order([:section, :name])
@@ -29,5 +33,12 @@ class GsParametersController < ApplicationController
   private
   def gs_parameter_params
     params.require(:gs_parameter).permit(:value, :class_type, :description)
+  end
+
+  def spread_breadcrumbs
+    add_breadcrumb t("gs_parameters.index.page_title"), gs_parameters_path
+    if @gs_parameter && !@gs_parameter.new_record?
+      add_breadcrumb @gs_parameter, gs_parameter_path(@gs_parameter)
+    end
   end
 end
