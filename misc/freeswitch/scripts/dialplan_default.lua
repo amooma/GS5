@@ -34,20 +34,37 @@ end
 -- dialplan object
 require 'dialplan.dialplan'
 
-start_dialplan = dialplan.dialplan.Dialplan:new{ log = log, caller = start_caller, database = database };
+local start_dialplan = dialplan.dialplan.Dialplan:new{ log = log, caller = start_caller, database = database };
 start_dialplan:configuration_read();
 start_caller.local_node_id = start_dialplan.node_id;
 start_caller:init_channel_variables();
 
 -- session:execute('info','notice');
 
-if not start_dialplan:check_auth() then
-  log:debug('AUTHENTICATION_REQUIRED - host: ' , start_caller.sip_contact_host, ', domain: ', start_dialplan.domain);
-  start_dialplan:hangup(407, start_dialplan.domain);
-  return false;
+if start_caller.from_node and not start_dialplan:auth_node() then
+  log:debug('DIALPLAN_DEFAULT - node unauthorized - node_id: ', start_caller.node_id, ', domain: ', start_dialplan.domain);
+  start_dialplan:hangup(401, start_dialplan.domain);
+else
+  if not start_dialplan:auth_sip_account() then
+    local gateway = start_dialplan:auth_gateway()
+
+    if gateway then
+      start_caller.gateway_name = gateway.name;
+      start_caller.gateway_id = gateway.id;
+      start_caller.from_gateway = true;
+      start_caller.gateway = gateway;
+    else
+      log:debug('AUTHENTICATION_REQUIRED_SIP_ACCOUNT - contact host: ' , start_caller.sip_contact_host, ', ip: ', start_caller.sip_network_ip, ', domain: ', start_dialplan.domain);
+      start_dialplan:hangup(407, start_dialplan.domain);
+      if database then
+        database:release();
+      end
+      return;
+    end
+  end
 end
 
-if start_caller.from_node and not start_dialplan:check_auth_node() then
+if start_caller.from_node then
   log:debug('AUTHENTICATION_REQUIRED_NODE - node_id: ', start_caller.node_id, ', domain: ', start_dialplan.domain);
   start_dialplan:hangup(407, start_dialplan.domain);
 else

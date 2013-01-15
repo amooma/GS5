@@ -113,55 +113,34 @@ function Dialplan.hangup(self, code, phrase, cause)
 end
 
 
-function Dialplan.check_auth(self)
-  local authenticated = false;
-
-  require 'common.str'
-  if self.caller.from_node then
-    self.log:info('AUTH_FIRST_STAGE - node authenticated - node_id: ', self.caller.node_id);
-    authenticated = true;
-  elseif not common.str.blank(self.caller.auth_account_type) then
-    self.log:info('AUTH_FIRST_STAGE - sipaccount autheticated by name/password: ', self.caller.auth_account_type, '=', self.caller.account_id, '/', self.caller.account_uuid);
-    authenticated = true;
-  elseif self.caller.from_gateway then
-    self.log:info('AUTH_FIRST_STAGE - gateway autheticated by name/password: gateway=', self.caller.gateway_id, ', name: ', self.caller.gateway_name);
-    authenticated = true;
-  else
-    require 'common.gateway'
-    local gateway = common.gateway.Gateway:new{ log = self.log, database = self.database}:authenticate('sip', self.caller);
-  
-    if gateway then
-      self.caller.gateway_name = gateway.name;
-      self.caller.gateway_id = gateway.id;
-      self.caller.from_gateway = true;
-      self.log:info('AUTH_FIRST_STAGE - gateway autheticated by: ', gateway.auth_source, ' ~ ', gateway.auth_pattern, ', gateway=', self.caller.gateway_id, ', name: ', self.caller.gateway_name, ', ip: ', self.caller.sip_contact_host);
-      authenticated = true;
-    end
-  end
-
-  return authenticated;
-end
-
-
-function Dialplan.check_auth_node(self)
+function Dialplan.auth_node(self)
   require 'common.node'
   local node = common.node.Node:new{ log = self.log, database = self.database }:find_by_address(self.caller.sip_contact_host);
 
-  return (node ~= nil);
+  if node then
+    self.log:info('AUTH_NODE - node_id: ', self.caller.node_id, ', contact address:', self.caller.sip_contact_host);
+    return true;
+  end
 end
 
 
-function Dialplan.check_auth_ip(self)
-  self.log:info('AUTH - node: ', self.caller.from_node, ', auth_account: ', self.caller.auth_account_type, ', gateway: ', self.caller.from_gateway);
+function Dialplan.auth_sip_account(self)
   require 'common.str'
-  if self.caller.from_node then
+  if not common.str.blank(self.caller.auth_account_type) then
+    self.log:info('AUTH_SIP_ACCOUNT - ', self.caller.auth_account_type, '=', self.caller.account_id, '/', self.caller.account_uuid);
     return true;
-  elseif not common.str.blank(self.caller.auth_account_type) then
-    return true;
-  elseif self.caller.from_gateway then
-    return true;
-  else
-    return nil;
+  end
+end
+
+
+function Dialplan.auth_gateway(self)
+  require 'common.gateway'
+  local gateway_class = common.gateway.Gateway:new{ log = self.log, database = self.database};
+  local gateway = gateway_class:authenticate('sip', self.caller);
+
+  if gateway then
+    log:info('AUTH_GATEWAY - ', gateway.auth_source, ' ~ ', gateway.auth_pattern, ', gateway=', gateway.id, ', name: ', gateway.name, ', ip: ', self.caller.sip_contact_host);
+    return gateway_class:find_by_id(gateway.id);
   end
 end
 
@@ -859,6 +838,8 @@ end
 
 
 function Dialplan.run(self, destination)
+  require 'common.str';
+
   self.caller:set_variable('hangup_after_bridge', false);
   self.caller:set_variable('bridge_early_media', 'true');
   self.caller:set_variable('default_language', self.default_language);
@@ -882,7 +863,12 @@ function Dialplan.run(self, destination)
     require 'dialplan.route'
     local route = nil;
 
-    if self.caller.from_gateway then
+    if self.caller.gateway then
+      if not common.str.blank(self.caller.gateway.settings.number_source) then
+        self.log:debug('INBOUND_NUMBER: number_source: ', self.caller.gateway.settings.number_source, ', number: ', self.caller:to_s(self.caller.gateway.settings.number_source));
+        self.caller.destination_number = self.caller:to_s(self.caller.gateway.settings.number_source);
+      end
+
       local route_object = dialplan.route.Route:new{ log = self.log, database = self.database, routing_table = self.routes };
       route = route_object:inbound(self.caller, self.caller.destination_number);
       local inbound_caller_id_number = route_object:inbound_cid_number(self.caller, self.caller.gateway_name, 'gateway');
