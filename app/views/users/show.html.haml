@@ -2,7 +2,7 @@
 
 #user-show
   %aside
-    - cache([I18n.locale, 'show_aside', @user, @user.sip_accounts, @user.conferences]) do
+    - cache(['user_show_aside', I18n.locale, @user, @user.sip_accounts, @user.conferences]) do
       = image_tag @user.image_url(:small).to_s, class: 'display' if @user.image? && @user.image_url(:small)
       %p
         %strong= t('users.show.user_name') + ":"
@@ -43,18 +43,18 @@
   %section
     = render :partial => 'phone_books', :locals => {:user => @user, :phone_books => @phone_books}
 
-    - cache([I18n.locale, @user, @user.user_groups, @user.sip_accounts, @user.phones, @user.fax_accounts, @user.conferences]) do
-      - cache([I18n.locale, @user, @user.user_groups]) do
+    - cache(['user_show_overview', I18n.locale, @user, @user.user_groups, @user.sip_accounts, @user.phones, @user.fax_accounts, @user.conferences]) do
+      - cache(['user_show_user_groups_overview', I18n.locale, @user, @user.user_groups]) do
         = render :partial => 'user_groups', :locals => {:user => @user, :tenant => @tenant}
 
-      - cache([I18n.locale, @user, @user.sip_accounts]) do
+      - cache(['user_show_sip_accounts_overview', I18n.locale, @user, @user.sip_accounts]) do
         = render :partial => 'sip_accounts', :locals => {:user => @user}
 
-      - cache([I18n.locale, @user, @user.phones]) do
+      - cache(['user_show_phones_overview', I18n.locale, @user, @user.phones]) do
         = render :partial => 'phones', :locals => {:user => @user}
 
-      - cache([I18n.locale, @user, @user.fax_accounts]) do
+      - cache(['user_show_fax_accounts_overview', I18n.locale, @user, @user.fax_accounts]) do
         = render :partial => 'fax_accounts', :locals => {:user => @user}
 
-      - cache([I18n.locale, @user, @user.conferences]) do
+      - cache(['user_show_conferences_overview', I18n.locale, @user, @user.conferences]) do
         = render :partial => 'conferences', :locals => {:user => @user}
