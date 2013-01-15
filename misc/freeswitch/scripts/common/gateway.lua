@@ -32,32 +32,22 @@ function Gateway.list(self, technology)
 end
 
 
-function Gateway.find_by_sql(self, where)
-  local sql_query = 'SELECT * FROM `gateways` WHERE ' .. where .. ' LIMIT 1';
+function Gateway.find_by_id(self, id)
+  local sql_query = 'SELECT * FROM `gateways` WHERE `id`= ' .. tonumber(id) .. ' LIMIT 1';
 
   local gateway = nil;
   self.database:query(sql_query, function(entry)
     gateway = Gateway:new(self);
     gateway.record = entry;
     gateway.id = tonumber(entry.id);
-    gateway.uuid = entry.uuid;
+    gateway.name = entry.name;
   end)
 
+  if gateway then
+    gateway.settings = self:config_table_get('gateway_settings', gateway.id);
+  end
+
   return gateway;
-end
-
-
--- find gateway by id
-function Gateway.find_by_id(self, id)
-  local sql_query = '`id`= ' .. tonumber(id);
-  return self:find_by_sql(sql_query);
-end
-
--- find gateway name
-function Gateway.find_by_name(self, name)
-  local sql_query = '`name`= "' .. name .. '"';
-
-  return self:find_by_sql(sql_query);
 end
 
 
@@ -138,6 +128,14 @@ function Gateway.parameters_build(self, gateway_id)
     parameters.password = 'gateway' .. gateway_id;
   else
     parameters.password = settings.password;
+  end
+
+  parameters['extension-in-contact'] = true;
+
+  if common.str.blank(settings.contact) then
+    parameters['extension'] = 'gateway' .. gateway_id;
+  else
+    parameters['extension'] = settings.contact;
   end
 
   for key, value in pairs(self:config_table_get('gateway_parameters', gateway_id)) do 
