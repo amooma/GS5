@@ -1,14 +1,15 @@
 - title t("tenants.show.page_title")
 
-%p
-  %strong= t('tenants.show.name') + ":"
-  = @tenant.name
-- if !@tenant.description.blank?
+- cache(['tenant_show_name_and_description', I18n.locale, @tenant, current_user]) do
   %p
-    %strong= t('tenants.show.description') + ":"
-    = @tenant.description
+    %strong= t('tenants.show.name') + ":"
+    = @tenant.name
+  - if !@tenant.description.blank?
+    %p
+      %strong= t('tenants.show.description') + ":"
+      = @tenant.description
 
-= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @tenant }
+  = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @tenant }
 
 - if @tenant.user_groups.where(:name => 'Admins').count > 0 && @tenant.user_groups.where(:name => 'Admins').first.users.include?(current_user)
   = render 'admin_area'
