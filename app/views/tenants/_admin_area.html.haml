@@ -1,4 +1,4 @@
-- cache([I18n.locale, @tenant, UserGroup.count, UserGroup.order(:updated_at).last, User.count, User.order(:updated_at).last, Manufacturer.all]) do
+- cache(['tenant_show_admin_area', I18n.locale, @tenant, UserGroup.count, UserGroup.order(:updated_at).last, User.count, User.order(:updated_at).last, Manufacturer.all]) do
   %p
     You belong to the 
     = link_to 'admin group', tenant_user_group_path(@tenant, @tenant.user_groups.find_by_name('Admins'))

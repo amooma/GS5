@@ -2,11 +2,11 @@
 %section.phone-book-entries 
   %header.entries-nav= render :partial => "phone_book_entries/navigation"
   .content
-    - cache([I18n.locale, 'phone_book_entries_table', current_user, phone_book_entries]) do
+    - cache(['phone_book_entries_table', I18n.locale, current_user, phone_book_entries]) do
       - reset_cycle
       %table
         - for entry in phone_book_entries
-          - cache([I18n.locale, 'phone_book_entries_table_tr', current_user, entry]) do
+          - cache(['phone_book_entries_table_tr', I18n.locale, current_user, entry]) do
             ~# Dear IE7,
             ~# Because of you we have to do this with a table.
             ~# With Love,

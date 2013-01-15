@@ -12,7 +12,7 @@
         - if tenant.sip_accounts.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
           = link_to tenant.sip_accounts.count.to_s, tenant_sip_accounts_path(tenant)
         - else
-          - cache([I18n.locale, tenant, tenant.sip_accounts, PhoneNumber.where(:phone_numberable_type => 'SipAccount').where(:id => tenant.sip_account_ids)]) do
+          - cache(['tenant_show_tenant_sip_accounts',I18n.locale, tenant, tenant.sip_accounts, PhoneNumber.where(:phone_numberable_type => 'SipAccount').where(:id => tenant.sip_account_ids)]) do
             - tenant.sip_accounts.each do |sip_account|
               = succeed ', ' do
                 =link_to "#{sip_account.caller_name}", tenant_sip_account_path(tenant,sip_account)
@@ -44,7 +44,7 @@
         - if tenant.phones.count > GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
           = link_to tenant.phones.count.to_s, tenant_phones_path(tenant)
         - else
-          - cache([I18n.locale, tenant, tenant.phones]) do
+          - cache(['tenant_show_tenant_phones', I18n.locale, tenant, tenant.phones]) do
             - tenant.phones.each do |phone|
               = succeed ', ' do
                 = link_to "#{phone.phone_model.to_s} (#{phone.pretty_mac_address})#{(phone.ip_address.blank? ? '' : " - #{phone.ip_address}")}", tenant_phone_path(tenant, phone)
