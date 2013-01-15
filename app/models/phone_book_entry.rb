@@ -6,7 +6,7 @@ class PhoneBookEntry < ActiveRecord::Base
   
   attr_accessible :first_name, :middle_name, :last_name, :title, :nickname, :organization, :is_organization, :department, :job_title, :is_male, :birthday, :birth_name, :description, :homepage_personal, :homepage_organization, :twitter_account, :facebook_account, :google_plus_account, :xing_account, :linkedin_account, :mobileme_account, :image
   
-  belongs_to :phone_book
+  belongs_to :phone_book, :touch => true
   has_many :conference_invitees, :dependent => :destroy
   
   acts_as_list :scope => :phone_book
