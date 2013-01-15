@@ -1,6 +1,6 @@
 class GsParametersController < ApplicationController
   def index
-    @ps_parameters_unordered = GsParameter.scoped
+    @gs_parameters_unordered = GsParameter.scoped
     @gs_parameters = GsParameter.order([:section, :name])
     @sections = @gs_parameters.pluck(:section).uniq.sort
   end

@@ -1,4 +1,4 @@
-- cache([gs_parameters.first.section, gs_parameters.reorder(:updated_at).last, gs_parameters.pluck(:id)]) do
+- cache(['gs_parameters_table_section', gs_parameters.first.section, gs_parameters.reorder(:updated_at).last, gs_parameters.pluck(:id)]) do
   %tr
     %th= t('gs_parameters.index.name')
     - if !@sections
@@ -7,10 +7,10 @@
 
   - reset_cycle
   - for gs_parameter in gs_parameters
-    - cache(gs_parameter) do
+    - cache(['gs_parameters_table_single_row', gs_parameter]) do 
       %tr{:class => cycle('odd', 'even')}
         %td= gs_parameter.name
         - if !@sections
           %td= gs_parameter.section
-        %td= gs_parameter.value
+        %td= truncate(gs_parameter.value, :length => 50)
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gs_parameter}
