@@ -20,7 +20,8 @@ de:
         create: 'Neu anlegen'
         create_for: 'Gateway neu anlegen für %{resource}'
     show:
-      page_title: 'Gateway bearbeiten'
+      page_title: 'Gateway'
+      id: 'ID'
       name: 'Name'
       technology: 'Technology'
       inbound: 'Inbound'

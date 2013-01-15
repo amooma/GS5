@@ -20,7 +20,8 @@ en:
         create: 'New'
         create_for: 'New Gateway for %{resource}'
     show:
-      page_title: 'Show Gateway'
+      page_title: 'Gateway'
+      id: 'ID'
       name: 'Name'
       technology: 'Technology'
       inbound: 'Inbound'
