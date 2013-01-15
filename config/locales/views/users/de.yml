@@ -1,15 +1,15 @@
 de:
   users:
-    name: "Benutzer"
+    name: "User"
     controller:
-      successfuly_created: 'Der Benutzer %{resource} wurde erstellt.'
-      successfuly_created_and_login: 'Der Benutzer %{resource} wurde erstellt. Sie sind jetzt als dieser Benutzer angemeldet.'
-      successfuly_updated: 'Benutzer-Daten aktualisiert.'
-      successfuly_destroyed: 'Der Benutzer wurde gelöscht.'
+      successfuly_created: 'Der User %{resource} wurde erstellt.'
+      successfuly_created_and_login: 'Der User %{resource} wurde erstellt. Sie sind jetzt als dieser User angemeldet.'
+      successfuly_updated: 'User-Daten aktualisiert.'
+      successfuly_destroyed: 'Der User wurde gelöscht.'
       avatar_destroyed: 'Der Avatar wurde gelöscht.'
     index:
-      page_title: 'Benutzer'
-      user_name: 'Benutzer-Name'
+      page_title: 'User'
+      user_name: 'User-Name'
       email: 'E-Mail Adresse'
       first_name: 'Vorname'
       middle_name: 'Zweiter Vorname'
@@ -20,15 +20,15 @@ de:
       language_id: 'Sprache'
       send_voicemail_as_email_attachment: 'Sprachnachrichten per E-Mail'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?'
+        confirm: 'Sind Sie sicher, dass Sie diesen User löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
-        create: 'Neuen Benutzer anlegen'
-        create_for: 'Neuen Benutzer für %{resource} anlegen'
+        create: 'Neuen User anlegen'
+        create_for: 'Neuen User für %{resource} anlegen'
     show:
-      page_title: 'Benutzer anzeigen'
-      user_name: 'Benutzer-Name'
+      page_title: 'User anzeigen'
+      user_name: 'User-Name'
       email: 'E-Mail Adresse'
       first_name: 'Vorname'
       middle_name: 'Zweiter Vorname'
@@ -39,17 +39,17 @@ de:
       language_id: 'Sprache'
       send_voicemail_as_email_attachment: 'Sprachnachrichten per E-Mail'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?'
+        confirm: 'Sind Sie sicher, dass Sie diesen User löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
-        view_all: 'Alle Benutzer anzeigen'
+        view_all: 'Alle User anzeigen'
     new:
-      page_title: 'Neuen Benutzer anlegen'
+      page_title: 'Neuen User anlegen'
     edit:
-      page_title: 'Benutzer %{resource} bearbeiten'
+      page_title: 'User %{resource} bearbeiten'
     form:
       user_name:
-        label: 'Benutzer-Name'
+        label: 'User-Name'
         hint: ''
       email:
         label: 'E-Mail Adresse'
