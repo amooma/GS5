@@ -1,6 +1,9 @@
 - title t("gateways.show.page_title")
 
 %p
+  %strong= t('gateways.show.id') + ":"
+  = @gateway.id
+%p
   %strong= t('gateways.show.name') + ":"
   = @gateway.name
 %p
@@ -19,14 +22,14 @@
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @gateway }
 
 
-%h2= t('gateway_settings.index.page_title')
+%h3= t('gateway_settings.index.page_title')
 - if @gateway.gateway_settings.any?
   = render "gateway_settings/index_core", :gateway_settings => @gateway.gateway_settings
   %br
 = render :partial => 'shared/create_link', :locals => { :parent => @gateway, :child_class => GatewaySetting }
 
 - if @gateway.gateway_parameters.any?
-  %h2= t('gateway_parameters.index.page_title')
+  %h3= t('gateway_parameters.index.page_title')
   = render "gateway_parameters/index_core", :gateway_parameters => @gateway.gateway_parameters
   %br
 = render :partial => 'shared/create_link', :locals => { :parent => @gateway, :child_class => GatewayParameter }
