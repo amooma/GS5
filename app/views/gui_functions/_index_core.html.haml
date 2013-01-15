@@ -8,19 +8,20 @@
   - reset_cycle
   - for gui_function in gui_functions
     %tr{:class => cycle('odd', 'even')}
-      %td= gui_function.category
-      %td
-        = gui_function.name
-        - if !gui_function.description.blank?
-          %br
-          %i= gui_function.description
-      - @user_groups.each do |user_group|
-        - if gui_function.gui_function_memberships.find_by_user_group_id(user_group.id)
-          - if gui_function.gui_function_memberships.find_by_user_group_id(user_group.id).activated == true
-            %td= 'x'
+      - cache(['gui_functions_table_row', I18n.locale, gui_function]) do
+        %td= gui_function.category
+        %td
+          = gui_function.name
+          - if !gui_function.description.blank?
+            %br
+            %i= gui_function.description
+        - @user_groups.each do |user_group|
+          - if gui_function.gui_function_memberships.find_by_user_group_id(user_group.id)
+            - if gui_function.gui_function_memberships.find_by_user_group_id(user_group.id).activated == true
+              %td= 'x'
+            - else
+              %td= ''
           - else
-            %td= ''
-        - else
-          %td= 'x'
+            %td= 'x'
 
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gui_function}
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gui_function}
