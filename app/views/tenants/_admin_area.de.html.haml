@@ -27,8 +27,14 @@
         = succeed '.' do
           =link_to manufacturer, manufacturer_path(manufacturer)
 
+%h2 Admin Bereich
 = render :partial => 'tenants/sip_accounts_and_phones', :locals => {:tenant => @tenant}
 
+%h2 Features
 = render :partial => 'tenants/table_of_functions', :locals => {:tenant => @tenant}
 
+%h2 Gemeinschaft Konfiguration
+= render :partial => 'tenants/gs_parameter_table', :locals => {:tenant => @tenant}
+
+%h2=t("phone_books.index.page_title")
 = render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => @tenant}

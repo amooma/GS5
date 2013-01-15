@@ -3,6 +3,5 @@
   -#
   - if GuiFunction.display?('show_phone_books_in_user_show_view', current_user)
     - if can?( :index, PhoneBook )
-      %h2=t("phone_books.index.page_title")
       = render "phone_books/index_core", :phone_books => tenant.phone_books
       = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => PhoneBook}
