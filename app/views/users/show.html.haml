@@ -2,95 +2,61 @@
 
 #user-show
   %aside
-    = image_tag @user.image_url(:small).to_s, class: 'display' if @user.image? && @user.image_url(:small)
-    %p
-      %strong= t('users.show.user_name') + ":"
-      = @user.user_name
-    %p
-      %strong= t('users.show.email') + ":"
-      = @user.email
-
-    %p.controls
-      = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @tenant, :child => @user }
-
-    - @user.sip_accounts.each do |sip_account|
-      - phone_number = sip_account.phone_numbers.order(:number).last
-      - if phone_number && !phone_number.number.blank? && phone_number.number[0] != '+'
-        %p
-          %strong= sip_account.phone_numbers.order(:number).last.number
-        %p
-          =link_to t("call_histories.index.page_title"), sip_account_call_histories_path(sip_account)
-          %br
-          =link_to t("voicemail_messages.index.page_title"), sip_account_voicemail_messages_path(sip_account)
-          %br
-          =link_to t("call_forwards.index.page_title"), phone_number_call_forwards_path(phone_number)
-          %br
-          =link_to t("voicemail_settings.index.page_title"), sip_account_voicemail_settings_path(sip_account)
-          %br
-          =link_to t("softkeys.index.page_title"), sip_account_softkeys_path(sip_account)
-          %br
-          =link_to t("ringtones.show.page_title"), phone_number_ringtones_path(phone_number)
-
-    - if @user.conferences.any?
+    - cache(['user_show_aside', I18n.locale, @user, @user.sip_accounts, @user.conferences]) do
+      = image_tag @user.image_url(:small).to_s, class: 'display' if @user.image? && @user.image_url(:small)
       %p
-        %strong= t("conferences.index.page_title")
-      - @user.conferences.each do |conference|
+        %strong= t('users.show.user_name') + ":"
+        = @user.user_name
+      %p
+        %strong= t('users.show.email') + ":"
+        = @user.email
+
+      %p.controls
+        = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @tenant, :child => @user }
+
+      - @user.sip_accounts.each do |sip_account|
+        - phone_number = sip_account.phone_numbers.order(:number).last
+        - if phone_number && !phone_number.number.blank? && phone_number.number[0] != '+'
+          %p
+            %strong= sip_account.phone_numbers.order(:number).last.number
+          %p
+            =link_to t("call_histories.index.page_title"), sip_account_call_histories_path(sip_account)
+            %br
+            =link_to t("voicemail_messages.index.page_title"), sip_account_voicemail_messages_path(sip_account)
+            %br
+            =link_to t("call_forwards.index.page_title"), phone_number_call_forwards_path(phone_number)
+            %br
+            =link_to t("voicemail_settings.index.page_title"), sip_account_voicemail_settings_path(sip_account)
+            %br
+            =link_to t("softkeys.index.page_title"), sip_account_softkeys_path(sip_account)
+            %br
+            =link_to t("ringtones.show.page_title"), phone_number_ringtones_path(phone_number)
+
+      - if @user.conferences.any?
         %p
-          =link_to conference, edit_user_conference_path(@user, conference)
+          %strong= t("conferences.index.page_title")
+        - @user.conferences.each do |conference|
+          %p
+            =link_to conference, edit_user_conference_path(@user, conference)
 
 
   %section
-    -# Phone books
-    -#
-    - if GuiFunction.display?('show_phone_books_in_user_show_view', current_user)
-      - if can?( :index, PhoneBook )
-        %h2=t("phone_books.index.page_title")
-        = render "phone_books/index_core", :phone_books => @phone_books
-        = render :partial => 'shared/create_link', :locals => {:parent => @user, :child_class => PhoneBook}
+    = render :partial => 'phone_books', :locals => {:user => @user, :phone_books => @phone_books}
 
-    -# User groups (only if the current user can edit or destroy them)
-    -#
-    - if @user.user_groups.map{ |x| can?( :edit, x ) || can?( :destroy, x ) }.include?(true)
-      - if can?( :index, UserGroup )
-        %h2=t("user_groups.index.page_title")
-        - if @user.user_groups.count > 0
-          = render "user_groups/index_core", :user_groups => @user.user_groups.where(:tenant_id => @tenant.id).order(:name)
-        = render :partial => 'shared/create_link', :locals => {:parent => @tenant, :child_class => UserGroup}
+    - if current_user.user_groups.where(:name => 'Admins').any?
+      - cache(['user_show_user_groups_overview', I18n.locale, @user, @user.user_groups]) do
+        = render :partial => 'user_groups', :locals => {:user => @user, :tenant => @tenant}
 
-    -# SIP accounts
-    -#
-    - if (can?( :index, SipAccount ) && @user.sip_accounts.count > 0 ) || can?( :create, SipAccount )
-      %h2= t('sip_accounts.index.page_title')
-      - if can?( :index, SipAccount ) && @user.sip_accounts.count > 0
-        = render "sip_accounts/index_core", :sip_accounts => @user.sip_accounts
-      = render :partial => 'shared/create_link', :locals => {:parent => @user, :child_class => SipAccount}
+    - cache(['user_show_overview_for_sip_account_phones_fax_accounts_and_conferences', I18n.locale, @user, @user.sip_accounts, @user.phones, @user.fax_accounts, @user.conferences]) do
 
-    -# Phones
-    -#
-    - if (can?( :index, Phone, :phoneable => @user ) && @user.phones.count > 0 ) || can?( :create, Phone, :phoneable => @user )
-      %h2= t('phones.index.page_title')
-      - if can?( :index, Phone, :phoneable => @user ) && @user.phones.count > 0
-        = render "phones/index_core", :phones => @user.phones
-      = render :partial => 'shared/create_link', :locals => {:parent => @user, :child_class => Phone}
+      - cache(['user_show_sip_accounts_overview', I18n.locale, @user, @user.sip_accounts]) do
+        = render :partial => 'sip_accounts', :locals => {:user => @user}
 
-    -# FaxAccount
-    -#
-    - if (can?( :index, FaxAccount ) && @user.fax_accounts.count > 0 ) || can?( :create, FaxAccount )
-      %h2= t('fax_accounts.index.page_title')
-      - if can?( :index, FaxAccount ) && @user.fax_accounts.count > 0
-        = render "fax_accounts/index_core", {:fax_accounts => @user.fax_accounts, :fax_accountable => @user}
-      = render :partial => 'shared/create_link', :locals => {:parent => @user, :child_class => FaxAccount}
+      - cache(['user_show_phones_overview', I18n.locale, @user, @user.phones]) do
+        = render :partial => 'phones', :locals => {:user => @user}
 
-    -# Conferences
-    -#
-    - if (can?( :index, Conference ) && @user.conferences.count > 0 ) || can?( :create, Conference )
-      %h2= t('conferences.index.page_title')
-      - if can?( :index, Conference ) && @user.conferences.count > 0
-        = render "conferences/index_core", :conferences => @user.conferences
-      = render :partial => 'shared/create_link', :locals => {:parent => @user, :child_class => Conference}
+      - cache(['user_show_fax_accounts_overview', I18n.locale, @user, @user.fax_accounts]) do
+        = render :partial => 'fax_accounts', :locals => {:user => @user}
 
-    -# Tenants
-    -#
-    - if can?( :index, Tenant ) && @user.tenants.count > 1
-      %h2=t("tenants.index.page_title")
-      = render "tenants/index_core", :tenants => @user.tenants
+      - cache(['user_show_conferences_overview', I18n.locale, @user, @user.conferences]) do
+        = render :partial => 'conferences', :locals => {:user => @user}

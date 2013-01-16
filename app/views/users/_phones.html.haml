@@ -1,0 +1,7 @@
+-# Phones
+-#
+- if (can?( :index, Phone, :phoneable => user ) && user.phones.count > 0 ) || can?( :create, Phone, :phoneable => user )
+  %h2= t('phones.index.page_title')
+  - if can?( :index, Phone, :phoneable => user ) && user.phones.count > 0
+    = render "phones/index_core", :phones => user.phones
+  = render :partial => 'shared/create_link', :locals => {:parent => user, :child_class => Phone}

@@ -1,0 +1,7 @@
+-# FaxAccount
+-#
+- if (can?( :index, FaxAccount ) && user.fax_accounts.count > 0 ) || can?( :create, FaxAccount )
+  %h2= t('fax_accounts.index.page_title')
+  - if can?( :index, FaxAccount ) && user.fax_accounts.count > 0
+    = render "fax_accounts/index_core", {:fax_accounts => user.fax_accounts, :fax_accountable => user}
+  = render :partial => 'shared/create_link', :locals => {:parent => user, :child_class => FaxAccount}

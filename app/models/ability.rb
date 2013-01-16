@@ -74,9 +74,10 @@ class Ability
             cannot :manage, PhoneNumberRange
           end
 
-          # GsParameter can't be created or deleted via the GUI
+          # GsParameter and GuiFunction can't be created or deleted via the GUI
           #
           cannot [:create, :destroy], GsParameter
+          cannot [:create, :destroy], GuiFunction
         else
           # Any user can do the following stuff.
           #
