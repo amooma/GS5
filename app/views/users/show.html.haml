@@ -43,9 +43,11 @@
   %section
     = render :partial => 'phone_books', :locals => {:user => @user, :phone_books => @phone_books}
 
-    - cache(['user_show_overview', I18n.locale, @user, @user.user_groups, @user.sip_accounts, @user.phones, @user.fax_accounts, @user.conferences]) do
+    - if current_user.user_groups.where(:name => 'Admins').any?
       - cache(['user_show_user_groups_overview', I18n.locale, @user, @user.user_groups]) do
         = render :partial => 'user_groups', :locals => {:user => @user, :tenant => @tenant}
+
+    - cache(['user_show_overview_for_sip_account_phones_fax_accounts_and_conferences', I18n.locale, @user, @user.sip_accounts, @user.phones, @user.fax_accounts, @user.conferences]) do
 
       - cache(['user_show_sip_accounts_overview', I18n.locale, @user, @user.sip_accounts]) do
         = render :partial => 'sip_accounts', :locals => {:user => @user}
