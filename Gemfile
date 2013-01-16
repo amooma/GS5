@@ -68,6 +68,9 @@ gem 'breadcrumbs_on_rails'
 # UUID Generator https://github.com/assaf/uuid
 gem 'uuid'
 
+# Application server
+gem 'unicorn'
+
 # Local Variables:
 # mode: ruby
 # End:
