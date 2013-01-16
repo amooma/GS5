@@ -1,9 +1,6 @@
 - title t("route_elements.show.page_title")
 
 %p
-  %strong= t('route_elements.show.call_route_id') + ":"
-  = @route_element.call_route_id
-%p
   %strong= t('route_elements.show.var_in') + ":"
   = @route_element.var_in
 %p
@@ -25,4 +22,4 @@
   %strong= t('route_elements.show.position') + ":"
   = @route_element.position
 
-= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @route_element }
+= render :partial => 'shared/show_edit_destroy_part', :locals => {:parent => @call_route, :child => @route_element }

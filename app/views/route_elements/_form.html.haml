@@ -1,4 +1,4 @@
-= simple_form_for(@route_element) do |f|
+= simple_form_for([@call_route, @route_element]) do |f|
   = f.error_notification
 
   = render "form_core", :f => f

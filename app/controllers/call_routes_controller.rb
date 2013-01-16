@@ -1,14 +1,15 @@
 class CallRoutesController < ApplicationController
+  load_and_authorize_resource :call_route
+  
+  before_filter :spread_breadcrumbs
+
   def index
-    @call_routes = CallRoute.all
   end
 
   def show
-    @call_route = CallRoute.find(params[:id])
   end
 
   def new
-    @call_route = CallRoute.new
   end
 
   def create
@@ -21,11 +22,9 @@ class CallRoutesController < ApplicationController
   end
 
   def edit
-    @call_route = CallRoute.find(params[:id])
   end
 
   def update
-    @call_route = CallRoute.find(params[:id])
     if @call_route.update_attributes(params[:call_route])
       redirect_to @call_route, :notice  => t('call_routes.controller.successfuly_updated')
     else
@@ -34,8 +33,16 @@ class CallRoutesController < ApplicationController
   end
 
   def destroy
-    @call_route = CallRoute.find(params[:id])
     @call_route.destroy
     redirect_to call_routes_url, :notice => t('call_routes.controller.successfuly_destroyed')
   end
+
+  private
+  def spread_breadcrumbs
+    add_breadcrumb t("call_routes.index.page_title"), call_routes_path
+    if @call_route && !@call_route.new_record?
+      add_breadcrumb @call_route, call_route_path(@call_route)
+    end
+  end
+
 end

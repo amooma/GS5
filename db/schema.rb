@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130113090705) do
+ActiveRecord::Schema.define(:version => 20130116133433) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -174,6 +174,16 @@ ActiveRecord::Schema.define(:version => 20130113090705) do
     t.boolean  "returned_flag"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
+  end
+
+  create_table "call_routes", :force => true do |t|
+    t.string   "table"
+    t.string   "name"
+    t.string   "endpoint_type"
+    t.integer  "endpoint_id"
+    t.integer  "position"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "calls", :id => false, :force => true do |t|
@@ -804,6 +814,19 @@ ActiveRecord::Schema.define(:version => 20130113090705) do
     t.integer  "bellcore_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+  end
+
+  create_table "route_elements", :force => true do |t|
+    t.integer  "call_route_id"
+    t.string   "var_in"
+    t.string   "var_out"
+    t.string   "pattern"
+    t.string   "replacement"
+    t.string   "action"
+    t.boolean  "mandatory"
+    t.integer  "position"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "sessions", :force => true do |t|
