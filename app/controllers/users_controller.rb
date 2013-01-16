@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    @phone_books = PhoneBook.accessible_by( Ability.new( @user ) ).all
+    @phone_books = PhoneBook.accessible_by( Ability.new( @user ), :read )
   end
 
   def new
