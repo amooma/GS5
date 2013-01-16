@@ -39,7 +39,9 @@ start_dialplan:configuration_read();
 start_caller.local_node_id = start_dialplan.node_id;
 start_caller:init_channel_variables();
 
--- session:execute('info','notice');
+if start_dialplan.config.parameters.dump_variables then
+  start_caller:execute('info', 'notice');
+end
 
 if start_caller.from_node and not start_dialplan:auth_node() then
   log:debug('DIALPLAN_DEFAULT - node unauthorized - node_id: ', start_caller.node_id, ', domain: ', start_dialplan.domain);
