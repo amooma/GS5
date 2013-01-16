@@ -3,6 +3,8 @@ class RouteElement < ActiveRecord::Base
 
   belongs_to :call_route
 
+  acts_as_list :scope => :call_route
+
   def to_s
     "#{var_in} #{var_out}"
   end

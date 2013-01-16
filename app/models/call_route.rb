@@ -6,6 +6,8 @@ class CallRoute < ActiveRecord::Base
   validates :name,
   					:presence => true
 
+  acts_as_list :scope => '`table` = \'#{table}\''
+
   def to_s
     name.to_s
   end
