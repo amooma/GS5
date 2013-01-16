@@ -5,4 +5,3 @@
     %h2=t("user_groups.index.page_title")
     - if user.user_groups.count > 0
       = render "user_groups/index_core", :user_groups => user.user_groups.where(:tenant_id => tenant.id).order(:name)
-    = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => UserGroup}
