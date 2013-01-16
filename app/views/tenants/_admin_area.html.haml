@@ -29,6 +29,10 @@
 %h2 Admin Area
 = render :partial => 'tenants/sip_accounts_and_phones', :locals => {:tenant => @tenant}
 
+- if @tenant.user_groups.any?
+  %h2 Groups
+  = render "user_groups/index_core", :user_groups => @tenant.user_groups
+
 %h2 Features
 = render :partial => 'tenants/table_of_functions', :locals => {:tenant => @tenant}
 

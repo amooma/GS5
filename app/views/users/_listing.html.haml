@@ -1,8 +1,8 @@
 - amount_of_users = users.count
 - if amount_of_users > 0
-  - if amount_of_users < 30
+  - if amount_of_users < GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
     = users.map{|user| user}.join(', ')
   - else
-    = users.limit(15).map{|user| user}.join(', ') + ', '
+    = users.limit((GsParameter.get('NUMBER_OF_SHOWN_ITEMS') / 2).floor).map{|user| user}.join(', ') + ', '
     = '[...]'
-    = users.offset(amount_of_users - 15).map{|user| user}.join(', ')
+    = users.offset(amount_of_users - (GsParameter.get('NUMBER_OF_SHOWN_ITEMS') / 2).floor).map{|user| user}.join(', ')
