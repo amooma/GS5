@@ -5,23 +5,13 @@
 module(...,package.seeall)
 
 function try(array, arguments)
-  local argument = arguments:match('^(.-)%.') or arguments;
-  local remaining_arguments = arguments:match('%.(.-)$');
-  argument = tonumber(argument) or argument;
+  local result = array;
   
-  if argument and type(array) == 'table' then
-    if remaining_arguments then
-      if type(array[argument]) == 'table' then
-        return try(array[argument], remaining_arguments);
-      else
-        return nil;
-      end
-    else
-      return array[argument];
-    end
-  end
-
-  return nil;
+  arguments:gsub('([^%.]+)', function(entry)
+    local success, result = pcall(function() result = (result[tonumber(entry) or entry]); end);
+  end);
+  
+  return result;
 end
 
 -- to number
