@@ -1,0 +1,19 @@
+- title t("call_routes.show.page_title")
+
+%p
+  %strong= t('call_routes.show.table') + ":"
+  = @call_route.table
+%p
+  %strong= t('call_routes.show.name') + ":"
+  = @call_route.name
+%p
+  %strong= t('call_routes.show.endpoint_type') + ":"
+  = @call_route.endpoint_type
+%p
+  %strong= t('call_routes.show.endpoint_id') + ":"
+  = @call_route.endpoint_id
+%p
+  %strong= t('call_routes.show.position') + ":"
+  = @call_route.position
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @call_route }

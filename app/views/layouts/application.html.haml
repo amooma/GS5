@@ -3,8 +3,7 @@
 <!--[if IE 7]>    <html lang="en" class="no-js ie7"> <![endif]-->
 <!--[if IE 8]>    <html lang="en" class="no-js ie8"> <![endif]-->
 <!--[if gt IE 8]><!-->
-%html.no-js{ :lang => "en" }
-  ~#OPTIMIZE Make html lang attribute reflect the actual language.
+%html.no-js{ :lang => I18n.locale.to_s }
   <!--<![endif]-->
   %header
     %meta{ :charset => "utf-8" }/
@@ -19,7 +18,8 @@
 
   %body
     #container
-      = render :partial => "shared/header"
+      - cache(['application_header', I18n.locale, current_user]) do
+        = render :partial => "shared/header"
       = render :partial => "shared/flash", :locals => { :flash => flash}
 
       #content{:role => 'main'}
@@ -30,18 +30,19 @@
               %h1= yield(:title)
           = yield
 
-      %footer#main
-        %ul
-          %li
-            %a{:href => "http://amooma.de/gemeinschaft/gs5"} Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}
-          - if GuiFunction.display?('amooma_commercial_support_link_in_footer', current_user)
+      - cache(['application_footer', I18n.locale]) do
+        %footer#main
+          %ul
             %li
-              %a{:href => "http://amooma.de"} Kommerzieller Support und Consulting
-          - if GuiFunction.display?('gemeinschaft_mailinglist_link_in_footer', current_user)
-            %li
-              %a{:href => "https://groups.google.com/group/gs5-users/"} Kostenlose Mailingliste
+              %a{:href => "http://amooma.de/gemeinschaft/gs5"} Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}
+            - if GuiFunction.display?('amooma_commercial_support_link_in_footer', current_user)
+              %li
+                %a{:href => "http://amooma.de"} Kommerzieller Support und Consulting
+            - if GuiFunction.display?('gemeinschaft_mailinglist_link_in_footer', current_user)
+              %li
+                %a{:href => "https://groups.google.com/group/gs5-users/"} Kostenlose Mailingliste
 
-        .amooma-logo
-          %span brought to you by
-          %a{ :target => '_blank', :href => "http://amooma.de/" } Amooma
+          .amooma-logo
+            %span brought to you by
+            %a{ :target => '_blank', :href => "http://amooma.de/" } Amooma
 

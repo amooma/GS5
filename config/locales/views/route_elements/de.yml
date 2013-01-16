@@ -1,0 +1,75 @@
+de:
+  route_elements:
+    name: 'Route element'
+    controller:
+      successfuly_created: 'Route element wurde angelegt.'
+      successfuly_updated: 'Route element wurde aktualisiert.'
+      successfuly_destroyed: 'Route element wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von Route element'
+      call_route_id: 'Call route'
+      var_in: 'Var in'
+      var_out: 'Var out'
+      pattern: 'Pattern'
+      replacement: 'Replacement'
+      action: 'Action'
+      mandatory: 'Mandatory'
+      position: 'Position'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Route element'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Route element neu anlegen für %{resource}'
+    show:
+      page_title: 'Route element bearbeiten'
+      call_route_id: 'Call route'
+      var_in: 'Var in'
+      var_out: 'Var out'
+      pattern: 'Pattern'
+      replacement: 'Replacement'
+      action: 'Action'
+      mandatory: 'Mandatory'
+      position: 'Position'
+      actions:
+        confirm: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Route element neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Route element bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      call_route_id:
+        label: 'Call route'
+        hint: ''
+      var_in:
+        label: 'Var in'
+        hint: ''
+      var_out:
+        label: 'Var out'
+        hint: ''
+      pattern:
+        label: 'Pattern'
+        hint: ''
+      replacement:
+        label: 'Replacement'
+        hint: ''
+      action:
+        label: 'Action'
+        hint: ''
+      mandatory:
+        label: 'Mandatory'
+        hint: ''
+      position:
+        label: 'Position'
+        hint: ''
+      button: 'Absenden'

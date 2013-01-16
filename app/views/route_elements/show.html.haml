@@ -1,0 +1,28 @@
+- title t("route_elements.show.page_title")
+
+%p
+  %strong= t('route_elements.show.call_route_id') + ":"
+  = @route_element.call_route_id
+%p
+  %strong= t('route_elements.show.var_in') + ":"
+  = @route_element.var_in
+%p
+  %strong= t('route_elements.show.var_out') + ":"
+  = @route_element.var_out
+%p
+  %strong= t('route_elements.show.pattern') + ":"
+  = @route_element.pattern
+%p
+  %strong= t('route_elements.show.replacement') + ":"
+  = @route_element.replacement
+%p
+  %strong= t('route_elements.show.action') + ":"
+  = @route_element.action
+%p
+  %strong= t('route_elements.show.mandatory') + ":"
+  = @route_element.mandatory
+%p
+  %strong= t('route_elements.show.position') + ":"
+  = @route_element.position
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @route_element }
