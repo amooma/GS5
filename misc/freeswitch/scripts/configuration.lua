@@ -49,7 +49,7 @@ function gateways(database, profile_name)
 
       gateways_xml = gateways_xml .. xml:element{
         'gateway',
-        name = gateway.name,
+        name = gateway_class.GATEWAY_PREFIX .. gateway.id,
         xml:from_hash('param', parameters, 'name', 'value'),
       };
     end

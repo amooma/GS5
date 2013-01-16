@@ -21,54 +21,34 @@ function Router.new(self, arg)
   return object;
 end
 
-function Router.build_tables(self)
-  local elements = {
-    { var_in = 'group', var_out = '', pattern = '^users$', replacement = '', action = 'not_match', mandatory = true },
-    { var_in = 'destination_number', var_out = 'destination_number', pattern = '^1$', replacement = '+123456', action = 'not_match', mandatory = true },
-    { var_in = 'caller_id_number', var_out = 'caller_id_number', pattern = '^100$', replacement = '+4930100', action = 'set_route_var', mandatory = false },
-  }
 
-  local elements2 = {
-    { var_in = 'group', var_out = '', pattern = '^users$', replacement = '', action = 'match', mandatory = true },
-    { var_in = 'destination_number', var_out = 'destination_number', pattern = '^1$', replacement = '+123456', action = 'not_match', mandatory = true },
-    { var_in = 'caller_id_number', var_out = 'caller_id_number', pattern = '^100$', replacement = '+4930100', action = 'set_route_var', mandatory = false },
-  }
+function Router.read_table(self, table_name)
+  local routing_table = {};
 
-  local elements3 = {
-    { var_in = 'destination_number', var_out = 'destination_number', pattern = '^#31#(%d+)$', replacement = 'f-dcliron-%1', action = 'set_route_var', mandatory = false },
-  }
+  local sql_query = 'SELECT * \
+    FROM `call_routes` `a` \
+    JOIN `route_elements` `b` ON `a`.`id` = `b`.`call_route_id`\
+    WHERE `a`.`table` = "' .. table_name .. '" \
+    ORDER BY `a`.`position`, `b`.`position`';
 
-  local elements4 = {
-    { var_in = 'destination_number', var_out = 'destination_number', pattern = '^(%d+)$', replacement = '%1', action = 'set_route_var', mandatory = true },
-    { var_in = 'caller_id_number', var_out = 'caller_id_number', pattern = '^(.+)$', replacement = '+49%1', action = 'set_route_var', mandatory = false },
-  }
+  local last_id = 0;
+  self.database:query(sql_query, function(route)
+    if last_id ~= tonumber(route.call_route_id) then
+      last_id = tonumber(route.call_route_id);
+      table.insert(routing_table, {id = route.call_route_id, name = route.name, endpoint_type = route.endpoint_type , endpoint_id = route.endpoint_id, elements = {} });
+    end
+    
+    table.insert(routing_table[#routing_table].elements, {
+      var_in = route.var_in, 
+      var_out = route.var_out, 
+      pattern = route.pattern,
+      replacement = route.replacement, 
+      action = route.action,
+      mandatory = common.str.to_b(route.mandatory),
+    }); 
+  end);
 
-  local routes = {
-    prerouting = {
-      { id = 10, name = 'feature codes', elements = elements3, endpoint_type = 'dialplanfunction', endpoint_id = 0 },
-    },
-    outbound = {
-      { id = 1, name = 'no users', elements = elements, endpoint_type = 'gateway', endpoint_id = 1, },
-      { id = 2, name = 'all users', elements = elements2, endpoint_type = 'gateway', endpoint_id = 1, },
-      { id = 3, name = 'all users', elements = elements2, endpoint_type = 'gateway', endpoint_id = 1, },
-    },
-    inbound = {
-      { id = 20, name = 'haeron', elements = elements4, endpoint_type = 'phonenumber', endpoint_id = 1, },
-    },
-
-  };
-
-  return routes;
-end
-
-
-function Router.failover_table(self)
-  return {
-    ['603']                  = true,
-    ['480']                  = true,
-    UNALLOCATED_NUMBER       = true,
-    NORMAL_TEMPORARY_FAILURE = true,
-  }
+  return routing_table;
 end
 
 
@@ -177,9 +157,7 @@ end
 
 
 function Router.route_run(self, table_name, phone_number, find_first)
-  local routing_tables = self:build_tables();
-  local routing_table = routing_tables[table_name];
-
+  local routing_table = self:read_table(table_name);
   local routes = {};
 
   if type(routing_table) == 'table' then

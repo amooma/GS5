@@ -16,6 +16,7 @@ function Gateway.new(self, arg)
   self.log = arg.log;
   self.database = arg.database;
   self.record = arg.record;
+  self.GATEWAY_PREFIX = 'gateway';
   return object;
 end
 
