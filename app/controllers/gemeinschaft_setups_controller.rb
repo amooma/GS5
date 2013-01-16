@@ -1,8 +1,12 @@
 class GemeinschaftSetupsController < ApplicationController
+  # We use the heater rake task to generate this file.
+  # So it loads super fast even on slow machines.
+  #
+  caches_page :new, :gzip => :best_compression
+
   load_and_authorize_resource :gemeinschaft_setup
 
   skip_before_filter :go_to_setup_if_new_installation
-  # before_filter :redirect_if_not_a_fresh_installation
 
   def new
     @user = @gemeinschaft_setup.build_user(
@@ -59,18 +63,6 @@ class GemeinschaftSetupsController < ApplicationController
       redirect_to new_tenant_url, :notice => t('gemeinschaft_setups.initial_setup.successful_setup')
     else
       render :new
-    end
-  end
-  
-  private
-  
-  def redirect_if_not_a_fresh_installation
-    if GemeinschaftSetup.all.count > 0
-      if current_user
-        redirect_to root_url    , :alert => t('gemeinschaft_setups.initial_setup.access_denied_only_available_on_a_new_system')
-      else
-        redirect_to log_in_path , :alert => t('gemeinschaft_setups.initial_setup.access_denied_only_available_on_a_new_system')
-      end
     end
   end
   
