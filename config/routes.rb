@@ -1,5 +1,7 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  resources :call_routes
+
   resources :gateways do
     resources :gateway_settings
     resources :gateway_parameters
