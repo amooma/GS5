@@ -1,0 +1,6 @@
+- title t("route_elements.index.page_title")
+
+- if @route_elements && @route_elements.count > 0
+  = render "index_core", :route_elements => @route_elements
+
+= render :partial => 'shared/create_link', :locals => {:child_class => RouteElement}
