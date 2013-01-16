@@ -4,7 +4,7 @@ gem 'rails', '3.2.11'
 gem 'bcrypt-ruby'
 gem 'sqlite3'
 gem 'mysql2'
-gem 'cancan'
+gem 'cancan', '1.6.7'
 gem 'state_machine'
 gem 'acts_as_list'
 gem 'dalli' # memcached
