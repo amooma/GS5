@@ -1,0 +1,6 @@
+- title t("call_routes.index.page_title")
+
+- if @call_routes && @call_routes.count > 0
+  = render "index_core", :call_routes => @call_routes
+
+= render :partial => 'shared/create_link', :locals => {:child_class => CallRoute}
