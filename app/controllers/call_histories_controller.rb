@@ -34,6 +34,8 @@ class CallHistoriesController < ApplicationController
     if ! @type.blank?
       @call_histories = @call_histories.where(:entry_type => @type)
     end
+
+    @call_histories = @call_histories.order(:created_at).reverse_order.limit(1000)
   end
 
 
