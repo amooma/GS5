@@ -175,7 +175,7 @@ function Router.route_run(self, table_name, phone_number, find_first)
       local route = self:route_match(routing_table[index], phone_number);
       if route then
         table.insert(routes, route);
-        self.log:info('ROUTE ', #routes,' - ', table_name,'=', routing_table[index].id, '/', routing_table[index].name, ', destination: ', route.type, '=', route.id);
+        self.log:info('ROUTE ', #routes,' - ', table_name,'=', routing_table[index].id, '/', routing_table[index].name, ', destination: ', route.type, '=', route.id, ', destination_number: ', route.destination_number);
         if find_first then
           return route;
         end
