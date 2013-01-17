@@ -4,7 +4,6 @@
     %th= t('call_routes.index.name')
     %th= t('call_routes.index.endpoint_type')
     %th= t('call_routes.index.endpoint_id')
-    %th= t('call_routes.index.position')
 
   - reset_cycle
   - for call_route in call_routes
@@ -13,5 +12,4 @@
       %td= call_route.name
       %td= call_route.endpoint_type
       %td= call_route.endpoint_id
-      %td= call_route.position
       =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => call_route}
