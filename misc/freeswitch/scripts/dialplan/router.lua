@@ -151,13 +151,15 @@ function Router.route_match(self, route)
           return false;
         end
       else
-        local command, variable_name = common.str.partition(element.var_out, ':');
-        if not command or not variable_name or command == 'var' then
-          destination[element.var_out] = replacement;
-        elseif command == 'chv' then
-          table.insert(destination.channel_variables, { name = element.var_out, value = replacement });
-        elseif command == 'hdr' then
-          table.insert(destination.channel_variables, { name = 'sip_h_' .. tostring(element.var_out), value = replacement });
+        if not common.str.blank(element.var_out) then
+          local command, variable_name = common.str.partition(element.var_out, ':');
+          if not command or not variable_name or command == 'var' then
+            destination[element.var_out] = replacement;
+          elseif command == 'chv' then
+            table.insert(destination.channel_variables, { name = element.var_out, value = replacement });
+          elseif command == 'hdr' then
+            table.insert(destination.channel_variables, { name = 'sip_h_' .. tostring(element.var_out), value = replacement });
+          end
         end
 
         if element.action == 'match' or element.action == 'not_match' then
