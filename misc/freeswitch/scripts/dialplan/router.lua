@@ -92,6 +92,23 @@ function Router.element_match(self, pattern, search_string, replacement)
 end
 
 
+function Router.element_match_group(self, pattern, groups, replacement, use_key)
+  if type(groups) ~= 'table' then
+    return false;
+  end
+
+  for key, value in pairs(groups) do
+    if use_key then 
+      value = key;
+    end
+    result, replaced_value = self:element_match(pattern, tostring(value), replacement);
+    if result then
+      return true, replaced_value;
+    end
+  end
+end
+
+
 function Router.route_match(self, route)
   local destination = {
     gateway = 'gateway' .. route.endpoint_id,
@@ -107,24 +124,17 @@ function Router.route_match(self, route)
     local replacement = nil;
 
     local element = route.elements[index];
-    if element.var_in == 'group' then
-      local groups = common.str.try(self.caller, 'auth_account.owner.groups');
-      if not groups or type(groups) ~= 'table' then
-        if element.mandatory then
-          return false;
-        end
-      end
+    local command, variable_name = common.str.partition(element.var_in, ':');
 
-      for group_name, value in pairs(groups) do
-        result, replacement = self:element_match(tostring(element.pattern), tostring(group_name), tostring(element.replacement));
-        if result then
-          break;
-        end
-      end
-      
-    else
+    if not command or not variable_name or command == 'var' then
       local search_string = tostring(common.str.try(self.caller, element.var_in))
       result, replacement = self:element_match(tostring(element.pattern), tostring(search_string), tostring(element.replacement));
+    elseif command == 'key' or command == 'val' then
+      local groups = common.str.try(self.caller, variable_name);
+      result, replacement = self:element_match_group(tostring(element.pattern), groups, tostring(element.replacement), command == 'key');
+    elseif command == 'chv' then
+      local search_string = self.caller:to_s(variable_name);
+      result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
     end
 
     if element.action == 'not_match' then
