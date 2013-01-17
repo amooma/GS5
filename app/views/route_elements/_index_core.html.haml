@@ -6,7 +6,6 @@
     %th= t('route_elements.index.replacement')
     %th= t('route_elements.index.action')
     %th= t('route_elements.index.mandatory')
-    %th= t('route_elements.index.position')
 
   - reset_cycle
   - for route_element in route_elements
@@ -17,5 +16,4 @@
       %td= route_element.replacement
       %td= route_element.action
       %td= route_element.mandatory
-      %td= route_element.position
       =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => @call_route, :child => route_element}

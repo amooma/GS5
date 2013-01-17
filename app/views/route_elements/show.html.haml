@@ -18,8 +18,5 @@
 %p
   %strong= t('route_elements.show.mandatory') + ":"
   = @route_element.mandatory
-%p
-  %strong= t('route_elements.show.position') + ":"
-  = @route_element.position
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => {:parent => @call_route, :child => @route_element }
