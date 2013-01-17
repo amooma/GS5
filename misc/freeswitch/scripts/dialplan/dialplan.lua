@@ -757,6 +757,21 @@ function Dialplan.switch(self, destination)
   elseif not common.str.blank(destination.number) then
     local result = { continue = false, code = 404, phrase = 'No route' }
 
+    local clip_no_screening = common.str.try(caller, 'account.record.clip_no_screening');
+    self.caller.caller_id_numbers = {}
+    if not common.str.blank(clip_no_screening) then
+      for index, number in ipairs(common.str.strip_to_a(clip_no_screening, ',')) do
+        table.insert(self.caller.caller_id_numbers, number);
+      end
+    end
+    for index, number in ipairs(self.caller.caller_phone_numbers) do
+      table.insert(self.caller.caller_id_numbers, number);
+    end
+    self.log:info('CALLER_ID_NUMBERS - clir: ', self.caller.clir, ', numbers: ', table.concat(self.caller.caller_id_numbers, ','));
+
+    destination.callee_id_number = destination.number;
+    destination.callee_id_name = nil;
+
     require 'dialplan.router'
     local routes =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller }:route_run('outbound', destination.number);
     
@@ -764,9 +779,6 @@ function Dialplan.switch(self, destination)
       self.log:notice('SWITCH - no route - number: ', destination.number);
       return { continue = false, code = 404, phrase = 'No route' }
     end
-
-    destination.callee_id_number = destination.number;
-    destination.callee_id_name = nil;
 
     if self.phonebook_number_lookup then
       require 'common.str'
