@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130116213312) do
+ActiveRecord::Schema.define(:version => 20130117191840) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -177,7 +177,7 @@ ActiveRecord::Schema.define(:version => 20130116213312) do
   end
 
   create_table "call_routes", :force => true do |t|
-    t.string   "table"
+    t.string   "routing_table"
     t.string   "name"
     t.string   "endpoint_type"
     t.integer  "endpoint_id"
