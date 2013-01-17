@@ -114,7 +114,7 @@ function Router.route_match(self, route)
     gateway = 'gateway' .. route.endpoint_id,
     ['type'] = route.endpoint_type,
     id = route.endpoint_id,
-    actions = {}
+    channel_variables = {}
   };
 
   local route_matches = false;
@@ -124,37 +124,46 @@ function Router.route_match(self, route)
     local replacement = nil;
 
     local element = route.elements[index];
-    local command, variable_name = common.str.partition(element.var_in, ':');
 
-    if not command or not variable_name or command == 'var' then
-      local search_string = tostring(common.str.try(self.caller, element.var_in))
-      result, replacement = self:element_match(tostring(element.pattern), tostring(search_string), tostring(element.replacement));
-    elseif command == 'key' or command == 'val' then
-      local groups = common.str.try(self.caller, variable_name);
-      result, replacement = self:element_match_group(tostring(element.pattern), groups, tostring(element.replacement), command == 'key');
-    elseif command == 'chv' then
-      local search_string = self.caller:to_s(variable_name);
-      result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
-    end
+    if element.action ~= 'none' then
+      local command, variable_name = common.str.partition(element.var_in, ':');
 
-    if element.action == 'not_match' then
-      result = not result;
-    end
-
-    if not result then
-      if element.mandatory then
-        return false;
+      if not command or not variable_name or command == 'var' then
+        local search_string = tostring(common.str.try(self.caller, element.var_in))
+        result, replacement = self:element_match(tostring(element.pattern), tostring(search_string), tostring(element.replacement));
+      elseif command == 'key' or command == 'val' then
+        local groups = common.str.try(self.caller, variable_name);
+        result, replacement = self:element_match_group(tostring(element.pattern), groups, tostring(element.replacement), command == 'key');
+      elseif command == 'chv' then
+        local search_string = self.caller:to_s(variable_name);
+        result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
+      elseif command == 'hdr' then
+        local search_string = self.caller:to_s('sip_h_' .. variable_name);
+        result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
       end
-    elseif element.action ~= 'match' and element.action ~= 'not_match' then
-      if element.action == 'set_route_var' then
-        destination[element.var_out] = replacement;
+
+      if element.action == 'not_match' then
+        result = not result;
+      end
+
+      if not result then
+        if element.mandatory then
+          return false;
+        end
       else
-        table.insert(destination.actions, {action = element.action, name = element.var_out, value = replacement});
-      end
-    end
+        local command, variable_name = common.str.partition(element.var_out, ':');
+        if not command or not variable_name or command == 'var' then
+          destination[element.var_out] = replacement;
+        elseif command == 'chv' then
+          table.insert(destination.channel_variables, { name = element.var_out, value = replacement });
+        elseif command == 'hdr' then
+          table.insert(destination.channel_variables, { name = 'sip_h_' .. tostring(element.var_out), value = replacement });
+        end
 
-    if result then
-      route_matches = true;
+        if element.action == 'match' or element.action == 'not_match' then
+          route_matches = true;
+        end
+      end 
     end
   end
 
