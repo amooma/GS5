@@ -28,7 +28,7 @@ function Router.read_table(self, table_name)
   local sql_query = 'SELECT * \
     FROM `call_routes` `a` \
     JOIN `route_elements` `b` ON `a`.`id` = `b`.`call_route_id`\
-    WHERE `a`.`table` = "' .. table_name .. '" \
+    WHERE `a`.`routing_table` = "' .. table_name .. '" \
     ORDER BY `a`.`position`, `b`.`position`';
 
   local last_id = 0;

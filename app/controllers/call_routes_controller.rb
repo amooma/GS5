@@ -4,8 +4,8 @@ class CallRoutesController < ApplicationController
   before_filter :spread_breadcrumbs
 
   def index
-    @call_routes = CallRoute.order(['`table`', :position])
-    @tables = @call_routes.pluck('`table`').uniq.sort
+    @call_routes = CallRoute.order([:routing_table, :position])
+    @routing_tables = @call_routes.pluck(:routing_table).uniq.sort
   end
 
   def show

@@ -1,5 +1,5 @@
 .inputs
-  = f.input :table, :collection => CallRoute::ROUTING_TABLES, :label => t('call_routes.form.table.label'), :hint => conditional_hint('call_routes.form.table.hint'), :include_blank => false
+  = f.input :routing_table, :collection => CallRoute::ROUTING_TABLES, :label => t('call_routes.form.table.label'), :hint => conditional_hint('call_routes.form.table.hint'), :include_blank => false
   = f.input :name, :label => t('call_routes.form.name.label'), :hint => conditional_hint('call_routes.form.name.hint')
   = f.input :endpoint_type, :label => t('call_routes.form.endpoint_type.label'), :hint => conditional_hint('call_routes.form.endpoint_type.hint')
   = f.input :endpoint_id, :label => t('call_routes.form.endpoint_id.label'), :hint => conditional_hint('call_routes.form.endpoint_id.hint')
