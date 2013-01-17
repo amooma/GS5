@@ -62,7 +62,7 @@ function User.list_groups(self, id)
   local groups = {};
 
   self.database:query(sql_query, function(entry)
-    groups[common.str.downcase(entry.name)] = true;
+    table.insert(groups, common.str.downcase(entry.name));
   end);
 
   return groups;
