@@ -1,5 +1,5 @@
 class RouteElement < ActiveRecord::Base
-  ELEMENT_ACTIONS = ['match', 'not_match', 'set_route_var', 'set_header']
+  ELEMENT_ACTIONS = ['none', 'match', 'not_match', 'set']
 
   attr_accessible :call_route_id, :var_in, :var_out, :pattern, :replacement, :action, :mandatory, :position
 
