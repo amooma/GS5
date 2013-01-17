@@ -89,7 +89,7 @@ function SipCall.fork(self, destinations, arg )
   for index, destination in ipairs(destinations) do
     local origination_variables = { 'gs_fork_index=' .. index }
 
-    self.log:info('FORK ', index, '/', #destinations, ' - ', destination.type, '=', destination.id, '/', destination.gateway or destination.uuid, '@', destination.node_id, ', number: ', destination.number);
+    self.log:info('FORK ', index, '/', #destinations, ' - ', destination.type, '=', destination.id, '/', destination.gateway or destination.uuid, '@', destination.node_id, ', number: ', destination.number, ', caller_id: "', destination.caller_id_name, '" <', destination.caller_id_number, '>');
     
     if not common.str.to_b(arg.update_callee_display) then
       table.insert(origination_variables, 'ignore_display_updates=true');
