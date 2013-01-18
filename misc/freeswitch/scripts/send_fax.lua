@@ -1,5 +1,5 @@
 -- Gemeinschaft 5.0
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 local FAX_FILE_PATH = "/opt/GS5/public/uploads/fax_document/tiff/";

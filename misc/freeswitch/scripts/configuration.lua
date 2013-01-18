@@ -1,5 +1,5 @@
 -- Gemeinschaft 5 dynamic freeswitch configuration
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 function nodes(database, local_node_id)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # MonAMI Asterisk Manger Interface server
 # helper functions
-# (c) AMOOMA GmbH 2012
+# (c) AMOOMA GmbH 2012-2013
 
 
 def to_hash(message):

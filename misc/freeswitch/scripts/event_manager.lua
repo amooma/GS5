@@ -1,5 +1,5 @@
 -- Gemeinschaft 5.0 event handler
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 -- Set logger
