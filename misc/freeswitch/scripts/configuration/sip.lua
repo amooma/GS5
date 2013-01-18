@@ -18,12 +18,6 @@ function Sip.new(self, arg)
   return object;
 end
 
--- find gateway by name
-function Sip.find_gateway_by_name(self, name)
-  require 'common.configuration_file'
-  return common.configuration_file.get('/opt/freeswitch/scripts/ini/gateways.ini', name);
-end
-
 -- list sip domains
 function Sip.domains(self)
   local sql_query = 'SELECT * FROM `sip_domains`';
