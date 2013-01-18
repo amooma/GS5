@@ -43,8 +43,8 @@ function Session.init_channel_variables(self)
     self.from_gateway       = true;
   end
 
-  self.dialed_sip_user      = self.caller:to_s('dialed_user');
-  self.dialed_domain        = self.caller:to_s('dialed_domain');
+  self.dialed_sip_user      = self:to_s('dialed_user');
+  self.dialed_domain        = self:to_s('dialed_domain');
 
   self.account_uuid         = self:to_s('gs_account_uuid');
   self.account_type         = self:to_s('gs_account_type');
