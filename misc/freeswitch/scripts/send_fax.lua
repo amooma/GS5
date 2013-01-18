@@ -80,8 +80,6 @@ local session = nil
 if phone_number then
   session = freeswitch.Session("[" .. table.concat(origination_variables, ",") .. "]loopback/" .. destination_number .. "/default");
 else
-  -- local owner_class = common.str.downcase(fax_account.record.fax_accountable_type);
-
   local caller = {
     destination_number = destination_number,
     caller_id_name = fax_account.record.station_id,
@@ -90,8 +88,6 @@ else
     auth_account_type = 'faxaccount', 
     auth_account_uuid = fax_account.uuid,
   }
-  
-  -- caller.caller_phone_numbers = phone_number_class:list_by_owner(fax_account.record.id, 'FaxAccount');
 
   require 'dialplan.dialplan'
   local dialplan = dialplan.dialplan.Dialplan:new{ log = log, caller = caller, database = database };
