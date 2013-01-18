@@ -880,11 +880,11 @@ function Dialplan.run(self, destination)
 
       route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller }:route_run('inbound', self.caller.destination_number, true);
       if route then
-
         local ignore_keys = {
+          id = true,
           gateway = true,
           ['type'] = true,
-          actions = true,
+          channel_variables = true,
         };
 
         for key, value in pairs(route) do
@@ -897,23 +897,31 @@ function Dialplan.run(self, destination)
       else
         self.log:notice('INBOUND - no route');
       end
-
-      if false then
-        local route_object = dialplan.route.Route:new{ log = self.log, database = self.database, routing_table = self.routes };
-        route = route_object:inbound(self.caller, self.caller.destination_number);
-        local inbound_caller_id_number = route_object:inbound_cid_number(self.caller, self.caller.gateway_name, 'gateway');
-        route_object.expandable.caller_id_number = inbound_caller_id_number;
-        local inbound_caller_id_name = route_object:inbound_cid_name(self.caller, self.caller.gateway_name, 'gateway');
-        self.log:info('INBOUND_CALLER_ID_REWRITE - number: ', inbound_caller_id_number, ', name: ', inbound_caller_id_name);
-        self.caller.caller_id_number = inbound_caller_id_number or self.caller.caller_id_number;
-        self.caller.caller_id_name = inbound_caller_id_name or self.caller.caller_id_name;
-        self.caller.caller_phone_numbers[1] = self.caller.caller_id_number;
-      end
     else
       route = dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller }:route_run('prerouting', self.caller.destination_number, true);
+      if route then
+        local ignore_keys = {
+          id = true,
+          gateway = true,
+          ['type'] = true,
+          channel_variables = true,
+        };
+
+        for key, value in pairs(route) do
+          if not ignore_keys[key] then
+            self.caller[key] = value;
+          end
+        end
+      end
     end
 
     if route then
+      if type(route.channel_variables) == 'table' then
+        for key, value in pairs(route.channel_variables) do
+          self.caller:set_variable(key, value);
+        end
+      end
+
       destination = self:destination_new{ ['type'] = route.type, id = route.id, number = route.destination_number }
       self.caller.destination_number = destination.number;
       self.caller.destination = destination;
