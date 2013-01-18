@@ -1,6 +1,4 @@
 class CallRoutesController < ApplicationController
-  load_and_authorize_resource :call_route
-  
   before_filter :spread_breadcrumbs
 
   def index
@@ -9,13 +7,15 @@ class CallRoutesController < ApplicationController
   end
 
   def show
+    @call_route = CallRoute.find(params[:id])
   end
 
   def new
+    @call_route = CallRoute.new
   end
 
   def create
-    @call_route = CallRoute.new(call_route_parameter_params[:call_route])
+    @call_route = CallRoute.new(call_route_parameter_params)
     if @call_route.save
       redirect_to @call_route, :notice => t('call_routes.controller.successfuly_created')
     else
@@ -27,7 +27,8 @@ class CallRoutesController < ApplicationController
   end
 
   def update
-    if @call_route.update_attributes(call_route_parameter_params[:call_route])
+    @call_route = CallRoute.find(params[:id])
+    if @call_route.update_attributes(call_route_parameter_params)
       redirect_to @call_route, :notice  => t('call_routes.controller.successfuly_updated')
     else
       render :edit
@@ -35,13 +36,14 @@ class CallRoutesController < ApplicationController
   end
 
   def destroy
+    @call_route = CallRoute.find(params[:id])
     @call_route.destroy
     redirect_to call_routes_url, :notice => t('call_routes.controller.successfuly_destroyed')
   end
 
   private
   def call_route_parameter_params
-    params.require(:call_route).permit(:id, :routing_table, :name, :endpoint_type, :endpoint_id, :position)
+    params.require(:call_route).permit(:routing_table, :name, :endpoint_type, :endpoint_id)
   end
 
   def spread_breadcrumbs
@@ -50,6 +52,5 @@ class CallRoutesController < ApplicationController
       add_breadcrumb @call_route, call_route_path(@call_route)
     end
   end
-
 
 end
