@@ -624,7 +624,7 @@ function Dialplan.callthrough(self, destination)
   end
 
   require 'dialplan.router'
-  local route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller }:route_run('prerouting', destination_number, true);
+  local route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('prerouting', destination_number, true);
 
   if route and route.destination_number then
     destination_number = route.destination_number;
@@ -773,7 +773,7 @@ function Dialplan.switch(self, destination)
     destination.callee_id_name = nil;
 
     require 'dialplan.router'
-    local routes =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller }:route_run('outbound', destination.number);
+    local routes =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('outbound', destination.number);
     
     if not routes or #routes == 0 then
       self.log:notice('SWITCH - no route - number: ', destination.number);
@@ -878,7 +878,7 @@ function Dialplan.run(self, destination)
         self.caller.destination_number = self.caller:to_s(self.caller.gateway.settings.number_source);
       end
 
-      route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller }:route_run('inbound', self.caller.destination_number, true);
+      route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('inbound', self.caller.destination_number, true);
       if route then
         local ignore_keys = {
           id = true,
@@ -898,7 +898,7 @@ function Dialplan.run(self, destination)
         self.log:notice('INBOUND - no route');
       end
     else
-      route = dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller }:route_run('prerouting', self.caller.destination_number, true);
+      route = dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('prerouting', self.caller.destination_number, true);
       if route then
         local ignore_keys = {
           id = true,
