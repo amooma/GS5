@@ -52,6 +52,27 @@ function Gateway.find_by_id(self, id)
 end
 
 
+function Gateway.find_by_name(self, name)
+  local gateway_name = name:gsub('([^%a%d%._%+])', '');
+
+  local sql_query = 'SELECT * FROM `gateways` WHERE `name`= "' .. gateway_name .. '" LIMIT 1';
+
+  local gateway = nil;
+  self.database:query(sql_query, function(entry)
+    gateway = Gateway:new(self);
+    gateway.record = entry;
+    gateway.id = tonumber(entry.id);
+    gateway.name = entry.name;
+  end)
+
+  if gateway then
+    gateway.settings = self:config_table_get('gateway_settings', gateway.id);
+  end
+
+  return gateway;
+end
+
+
 function Gateway.authenticate(self, technology, caller)
   local sql_query = 'SELECT `c`.`name`, `c`.`id`, `a`.`value` `auth_source`, `b`.`value` `auth_pattern` \
     FROM `gateway_settings` `a` \
