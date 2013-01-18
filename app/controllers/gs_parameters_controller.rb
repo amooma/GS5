@@ -1,5 +1,5 @@
 class GsParametersController < ApplicationController
-  load_resource :gs_parameter
+  load_and_authorize_resource :gs_parameter
 
   before_filter :spread_breadcrumbs
 
