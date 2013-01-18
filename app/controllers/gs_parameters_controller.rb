@@ -10,7 +10,7 @@ class GsParametersController < ApplicationController
   end
 
   def show
-    @gs_parameter = GsParameter.find(params[:id])
+    @gs_parameter = GsParameter.find(gs_parameter_params[:id])
   end
 
   def new
@@ -18,11 +18,11 @@ class GsParametersController < ApplicationController
   end
 
   def edit
-    @gs_parameter = GsParameter.find(params[:id])
+    @gs_parameter = GsParameter.find(gs_parameter_params[:id])
   end
 
   def update
-    @gs_parameter = GsParameter.find(params[:id])
+    @gs_parameter = GsParameter.find(gs_parameter_params[:id])
     if @gs_parameter.update_attributes(gs_parameter_params)
       redirect_to @gs_parameter, :notice  => t('gs_parameters.controller.successfuly_updated')
     else
@@ -32,7 +32,7 @@ class GsParametersController < ApplicationController
 
   private
   def gs_parameter_params
-    params.require(:gs_parameter).permit(:value, :class_type, :description)
+    params.require(:gs_parameter).permit(:id, :value, :class_type, :description)
   end
 
   def spread_breadcrumbs

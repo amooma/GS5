@@ -1,14 +1,15 @@
 class CallRoute < ActiveRecord::Base
-  ROUTING_TABLES = ['prerouting', 'outbound', 'inbound']
+  # https://github.com/rails/strong_parameters
+  include ActiveModel::ForbiddenAttributesProtection
 
-  attr_accessible :routing_table, :name, :endpoint_type, :endpoint_id, :position
+  ROUTING_TABLES = ['prerouting', 'outbound', 'inbound']
 
   has_many :route_elements, :dependent => :destroy
 
   validates :name,
   					:presence => true
 
-  validates :table,
+  validates :routing_table,
             :presence => true,
             :inclusion => { :in => ROUTING_TABLES }
 
