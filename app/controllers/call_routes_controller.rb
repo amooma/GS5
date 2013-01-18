@@ -15,7 +15,7 @@ class CallRoutesController < ApplicationController
   end
 
   def create
-    @call_route = CallRoute.new(params[:call_route])
+    @call_route = CallRoute.new(call_route_parameter_params[:call_route])
     if @call_route.save
       redirect_to @call_route, :notice => t('call_routes.controller.successfuly_created')
     else
@@ -27,7 +27,7 @@ class CallRoutesController < ApplicationController
   end
 
   def update
-    if @call_route.update_attributes(params[:call_route])
+    if @call_route.update_attributes(call_route_parameter_params[:call_route])
       redirect_to @call_route, :notice  => t('call_routes.controller.successfuly_updated')
     else
       render :edit
@@ -40,11 +40,16 @@ class CallRoutesController < ApplicationController
   end
 
   private
+  def call_route_parameter_params
+    params.require(:call_route).permit(:id, :routing_table, :name, :endpoint_type, :endpoint_id, :position)
+  end
+
   def spread_breadcrumbs
     add_breadcrumb t("call_routes.index.page_title"), call_routes_path
     if @call_route && !@call_route.new_record?
       add_breadcrumb @call_route, call_route_path(@call_route)
     end
   end
+
 
 end
