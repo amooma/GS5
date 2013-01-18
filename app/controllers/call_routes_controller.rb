@@ -1,4 +1,5 @@
 class CallRoutesController < ApplicationController
+  load_and_authorize_resource :call_route
   before_filter :spread_breadcrumbs
 
   def index
