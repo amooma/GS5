@@ -7,12 +7,6 @@ class RouteElement < ActiveRecord::Base
 
   acts_as_list :scope => :call_route
 
-  validates :var_in,
-            :presence => true
-
-  validates :pattern,
-            :presence => true
-
   validates :action,
             :presence => true,
             :inclusion => { :in => ELEMENT_ACTIONS }
