@@ -312,10 +312,9 @@ function directory_sip_account(database)
     if string.len(auth_name) > 3 and auth_name:sub(1, 3) == 'gw+' then
       local gateway_name = auth_name:sub(4);
       domain = domain or freeswitch.API():execute('global_getvar', 'domain');
-      require 'configuration.sip'
-      log:notice('DATABASE: ', database);
-      local sip_gateway = configuration.sip.Sip:new{ log = log, database = database}:find_gateway_by_name(gateway_name);
-      if sip_gateway ~= nil and next(sip_gateway) ~= nil then
+      require 'common.gateway'
+      local sip_gateway = common.gateway.Gateway:new{ log = self.log, database = self.database }:find_by_name(gateway_name);
+      if sip_gateway then
         log:debug('DIRECTORY_GATEWAY - name: ', gateway_name, ', auth_name: ', auth_name);
 
         local user_variables = {
@@ -332,7 +331,7 @@ function directory_sip_account(database)
             'params',
             xml:element{
               'param',
-              password = sip_gateway.password,
+              password = sip_gateway.record.password,
             }
           },
           xml:element{
