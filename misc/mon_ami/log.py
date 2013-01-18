@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Log library
-# (c) AMOOMA GmbH 2012
+# (c) AMOOMA GmbH 2012-2013
 
 import logging
 

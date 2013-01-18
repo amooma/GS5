@@ -1,5 +1,5 @@
 -- Gemeinschaft 5 module: dialplan class
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 module(...,package.seeall)
@@ -7,7 +7,6 @@ module(...,package.seeall)
 Dialplan = {}
 
 -- local constants
-local CONFIG_FILE_NAME = '/opt/freeswitch/scripts/ini/dialplan.ini';
 local DIAL_TIMEOUT = 120;
 local MAX_LOOPS = 20;
 local DIALPLAN_FUNCTION_PATTERN = '^f[_%-].*';
@@ -235,19 +234,21 @@ end
 
 
 function Dialplan.retrieve_caller_data(self)
-  self.caller.caller_phone_numbers_hash = {}
-  
   require 'common.str'
 
-  local dialed_sip_user = self.caller:to_s('dialed_user');
+  self.caller.caller_phone_numbers_hash = {}
 
   -- TODO: Set auth_account on transfer initiated by calling party
-  if not common.str.blank(dialed_sip_user) then
-    self.caller.auth_account = self:object_find('sipaccount', self.caller:to_s('dialed_domain'), dialed_sip_user);
-    self.caller:set_auth_account(self.caller.auth_account);
+  if not common.str.blank(self.caller.dialed_sip_user) then
+    self.caller.auth_account = self:object_find('sipaccount', self.caller.dialed_domain, dialed_sip_user);
+    if self.caller.set_auth_account then
+      self.caller:set_auth_account(self.caller.auth_account);
+    end
   elseif not common.str.blank(self.caller.auth_account_type) and not common.str.blank(self.caller.auth_account_uuid) then
     self.caller.auth_account = self:object_find(self.caller.auth_account_type, self.caller.auth_account_uuid);
-    self.caller:set_auth_account(self.caller.auth_account);
+    if self.caller.set_auth_account then
+      self.caller:set_auth_account(self.caller.auth_account);
+    end
   end
 
   if self.caller.auth_account then
@@ -276,7 +277,7 @@ function Dialplan.retrieve_caller_data(self)
         self.log:error('CALLER_DATA - caller owner not found');
       end
 
-      if not self.caller.clir then
+      if not self.caller.clir and self.caller.set_caller_id then
         self.caller:set_caller_id(self.caller.caller_phone_numbers[1], self.caller.account.record.caller_name or self.caller.account.record.name);
       end
     else
@@ -624,7 +625,7 @@ function Dialplan.callthrough(self, destination)
   end
 
   require 'dialplan.router'
-  local route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller }:route_run('prerouting', destination_number, true);
+  local route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('prerouting', destination_number, true);
 
   if route and route.destination_number then
     destination_number = route.destination_number;
@@ -773,7 +774,7 @@ function Dialplan.switch(self, destination)
     destination.callee_id_name = nil;
 
     require 'dialplan.router'
-    local routes =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller }:route_run('outbound', destination.number);
+    local routes =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('outbound', destination.number);
     
     if not routes or #routes == 0 then
       self.log:notice('SWITCH - no route - number: ', destination.number);
@@ -878,7 +879,7 @@ function Dialplan.run(self, destination)
         self.caller.destination_number = self.caller:to_s(self.caller.gateway.settings.number_source);
       end
 
-      route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller }:route_run('inbound', self.caller.destination_number, true);
+      route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('inbound', self.caller.destination_number, true);
       if route then
         local ignore_keys = {
           id = true,
@@ -898,7 +899,7 @@ function Dialplan.run(self, destination)
         self.log:notice('INBOUND - no route');
       end
     else
-      route = dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller }:route_run('prerouting', self.caller.destination_number, true);
+      route = dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('prerouting', self.caller.destination_number, true);
       if route then
         local ignore_keys = {
           id = true,

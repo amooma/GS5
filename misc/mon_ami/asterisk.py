@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # MonAMI Asterisk Manger Interface Server
 # Asterisk AMI client connector
-# (c) AMOOMA GmbH 2012
+# (c) AMOOMA GmbH 2012-2013
 
 from threading import Thread, Lock
 from log import ldebug, linfo, lwarn, lerror, lcritic

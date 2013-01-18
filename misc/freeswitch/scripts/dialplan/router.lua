@@ -52,21 +52,20 @@ function Router.read_table(self, table_name)
 end
 
 
-function Router.expand_variables(self, line)
-  return (line:gsub('{([%a%d_]+)}', function(captured)
-    return variables[captured] or '';
+function Router.expand_variables(self, line, variables)
+  return (line:gsub('{([%a%d%._]+)}', function(captured)
+    return common.str.try(variables, captured) or '';
   end))
 end
 
 
 function Router.element_match(self, pattern, search_string, replacement)
-  local variables_list = {};
   local success, result = pcall(string.find, search_string, pattern);
 
   if not success then
     self.log:error('ELEMENT_MATCH - table error - pattern: ', pattern, ', search_string: ', search_string);
   elseif result then
-    return true, search_string:gsub(pattern, self:expand_variables(replacement, variables_list));
+    return true, search_string:gsub(pattern, self:expand_variables(replacement, self.variables));
   end
 
   return false;
@@ -109,7 +108,7 @@ function Router.route_match(self, route)
     if element.action ~= 'none' then
       if common.str.blank(element.var_in) or common.str.blank(element.pattern) and element.action == 'set' then
         result = true;
-        replacement = element.replacement;
+        replacement = self:expand_variables(element.replacement, self.variables);
       else
         local command, variable_name = common.str.partition(element.var_in, ':');
 
