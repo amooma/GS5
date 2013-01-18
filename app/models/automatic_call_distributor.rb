@@ -26,6 +26,6 @@ class AutomaticCallDistributor < ActiveRecord::Base
     self.announce_call_agents ||= 'ivr/ivr-stay_on_line_call_answered_momentarily.wav'
     self.greeting ||= 'ivr/ivr-thank_you_for_calling.wav'
     self.goodbye ||= 'ivr/ivr-thank_you_for_calling.wav'
-    self.music ||= 'local_stream://mohl'
+    self.music ||= 'local_stream://moh'
   end
 end
