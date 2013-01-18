@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # MonAMI Asterisk Manger Interface Server
 # TCP Server
-# (c) AMOOMA GmbH 2012
+# (c) AMOOMA GmbH 2012-2013
 
 import socket
 from traceback import format_exc

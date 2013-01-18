@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # MonAMI Asterisk Manger Interface Server
 # Asterisk AMI Emulator server thread
-# (c) AMOOMA GmbH 2012
+# (c) AMOOMA GmbH 2012-2013
 
 from threading import Thread
 from log import ldebug, linfo, lwarn, lerror, lcritic

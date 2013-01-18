@@ -1,5 +1,5 @@
 -- Gemeinschaft 5 module: user class
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 module(...,package.seeall)

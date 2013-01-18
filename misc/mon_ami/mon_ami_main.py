@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # MonAMI Asterisk Manger Interface Server
 # Main Programm
-# (c) AMOOMA GmbH 2012
+# (c) AMOOMA GmbH 2012-2013
 
 from log import ldebug, linfo, lwarn, lerror, lcritic, setup_log
 from time import sleep
