@@ -234,19 +234,21 @@ end
 
 
 function Dialplan.retrieve_caller_data(self)
-  self.caller.caller_phone_numbers_hash = {}
-  
   require 'common.str'
 
-  local dialed_sip_user = self.caller:to_s('dialed_user');
+  self.caller.caller_phone_numbers_hash = {}
 
   -- TODO: Set auth_account on transfer initiated by calling party
-  if not common.str.blank(dialed_sip_user) then
-    self.caller.auth_account = self:object_find('sipaccount', self.caller:to_s('dialed_domain'), dialed_sip_user);
-    self.caller:set_auth_account(self.caller.auth_account);
+  if not common.str.blank(self.caller.dialed_sip_user) then
+    self.caller.auth_account = self:object_find('sipaccount', self.caller.dialed_domain, dialed_sip_user);
+    if self.caller.set_auth_account then
+      self.caller:set_auth_account(self.caller.auth_account);
+    end
   elseif not common.str.blank(self.caller.auth_account_type) and not common.str.blank(self.caller.auth_account_uuid) then
     self.caller.auth_account = self:object_find(self.caller.auth_account_type, self.caller.auth_account_uuid);
-    self.caller:set_auth_account(self.caller.auth_account);
+    if self.caller.set_auth_account then
+      self.caller:set_auth_account(self.caller.auth_account);
+    end
   end
 
   if self.caller.auth_account then
@@ -275,7 +277,7 @@ function Dialplan.retrieve_caller_data(self)
         self.log:error('CALLER_DATA - caller owner not found');
       end
 
-      if not self.caller.clir then
+      if not self.caller.clir and self.caller.set_caller_id then
         self.caller:set_caller_id(self.caller.caller_phone_numbers[1], self.caller.account.record.caller_name or self.caller.account.record.name);
       end
     else
