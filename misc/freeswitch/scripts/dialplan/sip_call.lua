@@ -137,7 +137,6 @@ function SipCall.fork(self, destinations, arg )
       end
       if destination.channel_variables then
         for key, value in pairs(destination.channel_variables) do
-          self.log:notice('FORK_CHANNEL_VARIABLES: ', tostring(key) .. "='" .. tostring(value) .. "'");
           table.insert(origination_variables, tostring(key) .. "='" .. tostring(value) .. "'");
         end
       end
