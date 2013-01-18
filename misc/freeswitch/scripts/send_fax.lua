@@ -80,36 +80,38 @@ local session = nil
 if phone_number then
   session = freeswitch.Session("[" .. table.concat(origination_variables, ",") .. "]loopback/" .. destination_number .. "/default");
 else
-  local owner_class = common.str.downcase(fax_account.record.fax_accountable_type);
+  -- local owner_class = common.str.downcase(fax_account.record.fax_accountable_type);
 
-  local caller = {}
-  caller.caller_phone_numbers = phone_number_class:list_by_owner(fax_account.record.id, 'FaxAccount');
-  caller.account = fax_account;
-  caller.auth_account = fax_account;
-  caller.caller_id_name = fax_account.record.station_id;
+  local caller = {
+    destination_number = destination_number,
+    caller_id_name = fax_account.record.station_id,
+    account_type = 'faxaccount', 
+    account_uuid = fax_account.uuid,
+    auth_account_type = 'faxaccount', 
+    auth_account_uuid = fax_account.uuid,
+  }
+  
+  -- caller.caller_phone_numbers = phone_number_class:list_by_owner(fax_account.record.id, 'FaxAccount');
 
-  if owner_class == 'user' then
-    require 'dialplan.user'
-    caller.auth_account.owner = dialplan.user.User:new{ log = log, database = database }:find_by_id(fax_account.record.fax_accountable_id);
-    if caller.auth_account.owner then
-      caller.auth_account.owner.groups = caller.auth_account.owner:list_groups();
-    end
-  elseif  owner_class == 'tenant' then
-    require 'dialplan.tenant'
-    caller.auth_account.owner = dialplan.tenant.Tenant:new{ log = log, database = database }:find_by_id(fax_account.record.fax_accountable_id);
+  require 'dialplan.dialplan'
+  local dialplan = dialplan.dialplan.Dialplan:new{ log = log, caller = caller, database = database };
+  local result = dialplan:retrieve_caller_data();
+
+  local dialplan_router = require('dialplan.router');
+  local routes =  dialplan_router.Router:new{ log = log, database = database, caller = caller, variables = caller }:route_run('outbound', destination_number);
+      
+  if not routes or #routes == 0 then
+    log:notice('SWITCH - no route - number: ', destination_number);
+    return { continue = false, code = 404, phrase = 'No route' }
   end
 
-  require 'common.configuration_file'
-  local routing_table = common.configuration_file.get('/opt/freeswitch/scripts/ini/routes.ini');
-  require 'dialplan.route'  
-  local routes = dialplan.route.Route:new{ log = log, database = database, routing_table = routing_table }:outbound(caller, destination_number);
-
   for index, route in ipairs(routes) do
-    log:info('FAX_SEND - ', route.class, '=', route.endpoint, ', number: ', route.value);
-    if route.class == 'gateway' then
+    log:info('FAX_SEND - ', route.type, '=', route.id, '/', route.gateway,', number: ', route.destination_number);
+    if route.type == 'gateway' then
       table.insert(origination_variables, "origination_caller_id_number='" .. (route.caller_id_number or caller.caller_phone_numbers[1]) .. "'");
       table.insert(origination_variables, "origination_caller_id_name='" .. (route.caller_id_name or fax_account.record.station_id) .. "'");
-      session = freeswitch.Session('[' .. table.concat(origination_variables, ',') .. ']sofia/gateway/' .. route.endpoint .. '/' .. route.value);
+      session = freeswitch.Session('[' .. table.concat(origination_variables, ',') .. ']sofia/gateway/' .. route.gateway .. '/' .. route.destination_number);
+      log:notice('SESSION: ', session);
       break;
     end
   end
