@@ -7,7 +7,6 @@ module(...,package.seeall)
 Dialplan = {}
 
 -- local constants
-local CONFIG_FILE_NAME = '/opt/freeswitch/scripts/ini/dialplan.ini';
 local DIAL_TIMEOUT = 120;
 local MAX_LOOPS = 20;
 local DIALPLAN_FUNCTION_PATTERN = '^f[_%-].*';
