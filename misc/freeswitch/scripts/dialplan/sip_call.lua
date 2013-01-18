@@ -135,6 +135,11 @@ function SipCall.fork(self, destinations, arg )
       if destination.caller_id_name then
         table.insert(origination_variables, "origination_caller_id_name='" .. destination.caller_id_name .. "'");
       end
+      if destination.channel_variables then
+        for key, value in pairs(destination.channel_variables) do
+          table.insert(origination_variables, tostring(key) .. "='" .. tostring(value) .. "'");
+        end
+      end
       table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. tostring(destination.gateway) .. '/' .. tostring(destination.number));
     elseif destination.type == 'dial' then
       if destination.caller_id_number then

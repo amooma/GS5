@@ -59,25 +59,6 @@ function Router.expand_variables(self, line)
 end
 
 
-function Router.set_parameter(self, action, name, value)
-  if action == 'set_session_var' then
-    self.log:debug('ROUTER_SET_SESSION_VARIABLE - ',  name, ' = ', value);
-    self.caller[name] = value;
-  elseif action == 'set_channel_var' then
-    self.log:debug('ROUTER_SET_VARIABLE - ',  name, ' = ', value);
-    self.caller:set_variable(name, value);
-  elseif action == 'export_channel_var' then
-    self.log:debug('ROUTER_EXPORT_VARIABLE - ',  name, ' = ', value);
-    self.caller:export_variable(name, value);
-  elseif action == 'set_header' then
-    self.log:debug('ROUTER_SIP_HEADER - ',  name, ': ', value);
-    self.caller:export_variable('sip_h_' .. name, value);
-  else
-    self.log:error('ROUTER_SET_PARAMERER - unknown action: ', action, ', ', name, ' = ', value);
-  end
-end
-
-
 function Router.element_match(self, pattern, search_string, replacement)
   local variables_list = {};
   local success, result = pcall(string.find, search_string, pattern);
@@ -126,20 +107,25 @@ function Router.route_match(self, route)
     local element = route.elements[index];
 
     if element.action ~= 'none' then
-      local command, variable_name = common.str.partition(element.var_in, ':');
+      if common.str.blank(element.var_in) or common.str.blank(element.pattern) and element.action == 'set' then
+        result = true;
+        replacement = element.replacement;
+      else
+        local command, variable_name = common.str.partition(element.var_in, ':');
 
-      if not command or not variable_name or command == 'var' then
-        local search_string = tostring(common.str.try(self.caller, element.var_in))
-        result, replacement = self:element_match(tostring(element.pattern), tostring(search_string), tostring(element.replacement));
-      elseif command == 'key' or command == 'val' then
-        local groups = common.str.try(self.caller, variable_name);
-        result, replacement = self:element_match_group(tostring(element.pattern), groups, tostring(element.replacement), command == 'key');
-      elseif command == 'chv' then
-        local search_string = self.caller:to_s(variable_name);
-        result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
-      elseif command == 'hdr' then
-        local search_string = self.caller:to_s('sip_h_' .. variable_name);
-        result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
+        if not command or not variable_name or command == 'var' then
+          local search_string = tostring(common.str.try(self.caller, element.var_in))
+          result, replacement = self:element_match(tostring(element.pattern), tostring(search_string), tostring(element.replacement));
+        elseif command == 'key' or command == 'val' then
+          local groups = common.str.try(self.caller, variable_name);
+          result, replacement = self:element_match_group(tostring(element.pattern), groups, tostring(element.replacement), command == 'key');
+        elseif command == 'chv' then
+          local search_string = self.caller:to_s(variable_name);
+          result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
+        elseif command == 'hdr' then
+          local search_string = self.caller:to_s('sip_h_' .. variable_name);
+          result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
+        end
       end
 
       if element.action == 'not_match' then
@@ -156,9 +142,9 @@ function Router.route_match(self, route)
           if not command or not variable_name or command == 'var' then
             destination[element.var_out] = replacement;
           elseif command == 'chv' then
-            table.insert(destination.channel_variables, { name = element.var_out, value = replacement });
+            destination.channel_variables[variable_name] = replacement;
           elseif command == 'hdr' then
-            table.insert(destination.channel_variables, { name = 'sip_h_' .. tostring(element.var_out), value = replacement });
+            destination.channel_variables['sip_h_' .. variable_name] = replacement;
           end
         end
 
