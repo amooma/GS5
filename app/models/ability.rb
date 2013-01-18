@@ -27,6 +27,10 @@ class Ability
           #
           cannot [:create, :destroy, :edit, :update], Tenant, :id => 1
 
+          # Can't destroy any tenant
+          #
+          cannot :destroy, Tenant
+
           cannot :manage, PhoneBook
 
           # Phonebooks and PhoneBookEntries
