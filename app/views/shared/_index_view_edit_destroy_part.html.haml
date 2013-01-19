@@ -27,3 +27,9 @@
   %td{ :style => style }
     - if can? :destroy, child
       = link_to t("#{child.class.name.underscore.pluralize}.index.actions.destroy"), method( :"#{child.class.name.underscore}_path" ).(child), :method => :delete
+  - if child.respond_to?(:move_up?) or child and child.respond_to?(:move_down?)
+    %td{ :style => style }
+      - if can? :move_down, child and child.respond_to?(:move_down?) and child.move_down?
+        = link_to '&#8681;'.html_safe, method( :"move_lower_#{child.class.name.underscore}_path" ).(child), :method => :put
+      - if can? :move_up, child and child.respond_to?(:move_up?) and child.move_up?
+        = link_to '&#8679;'.html_safe, method( :"move_higher_#{child.class.name.underscore}_path" ).(child), :method => :put
