@@ -18,4 +18,12 @@ class CallRoute < ActiveRecord::Base
   def to_s
     name.to_s
   end
+
+  def move_up?
+    return self.position.to_i > CallRoute.where(:routing_table => self.routing_table ).order(:position).first.position.to_i
+  end
+
+  def move_down?
+    return self.position.to_i < CallRoute.where(:routing_table => self.routing_table ).order(:position).last.position.to_i
+  end
 end
