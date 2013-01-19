@@ -36,6 +36,7 @@ gem 'jquery-rails'
 group :development do
   gem 'factory_girl_rails'
   gem 'factory_girl'
+  gem 'sextant' # Rails 4 stuff
 end
 
 group :test do
