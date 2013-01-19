@@ -1,23 +1,12 @@
-%h2 Admin Area
 = render :partial => 'tenants/sip_accounts_and_phones', :locals => {:tenant => @tenant}
 
-%h2= t("users.index.page_title")
-- if @tenant.users.count <= GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
-  = render "users/index_core", :users => @tenant.users
-  = render :partial => 'shared/create_link', :locals => {:parent => @tenant, :child_class => User}
-- else
-  %p
-    = link_to "Liste aller User.", tenant_users_path(@tenant)
+= render :partial => 'users_table', :locals => {:tenant => @tenant}
 
-- if @tenant.user_groups.any?
-  %h2= t("user_groups.index.page_title")
-  = render "user_groups/index_core", :user_groups => @tenant.user_groups
-  = render :partial => 'shared/create_link', :locals => {:parent => @tenant, :child_class => UserGroup}
+= render :partial => 'user_groups_table', :locals => {:tenant => @tenant}
 
 %h2 Features
 = render :partial => 'tenants/table_of_functions', :locals => {:tenant => @tenant}
 
-%h2=t("phone_books.index.page_title")
 = render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => @tenant}
 
 %h2 Gemeinschaft Configuration

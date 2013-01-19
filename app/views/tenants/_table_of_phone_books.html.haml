@@ -1,4 +1,5 @@
 - cache(['user_show_phone_books', I18n.locale, tenant, tenant.phone_books]) do
+  %h2=t("phone_books.index.page_title")
   -# Phone books
   -#
   - if GuiFunction.display?('show_phone_books_in_user_show_view', current_user)
