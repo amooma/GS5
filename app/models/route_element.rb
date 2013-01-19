@@ -13,7 +13,7 @@ class RouteElement < ActiveRecord::Base
 
 
   def to_s
-    "#{var_in} #{var_out}"
+    "#{pattern} => #{var_in} #{var_out}"
   end
 
 end

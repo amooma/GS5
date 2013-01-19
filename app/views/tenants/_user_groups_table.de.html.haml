@@ -1,0 +1,4 @@
+- if @tenant.user_groups.any?
+  %h2= t("user_groups.index.page_title")
+  = render "user_groups/index_core", :user_groups => tenant.user_groups
+  = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => UserGroup}

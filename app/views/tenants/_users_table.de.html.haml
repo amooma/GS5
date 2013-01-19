@@ -1,0 +1,7 @@
+%h2= t("users.index.page_title")
+- if @tenant.users.count <= GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
+  = render "users/index_core", :users => tenant.users
+  = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => User}
+- else
+  %p
+    = link_to "Liste aller User.", tenant_users_path(tenant)
