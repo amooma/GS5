@@ -1,7 +1,16 @@
 Gemeinschaft42c::Application.routes.draw do
 
   resources :call_routes do
-    resources :route_elements
+    resources :route_elements do
+      member do
+        put 'move_higher'
+        put 'move_lower'
+      end
+    end
+    member do
+      put 'move_higher'
+      put 'move_lower'
+    end
   end
 
   resources :gateways do

@@ -42,6 +42,16 @@ class CallRoutesController < ApplicationController
     redirect_to call_routes_url, :notice => t('call_routes.controller.successfuly_destroyed')
   end
 
+  def move_higher
+    @call_route.move_higher
+    redirect_to :back
+  end
+
+  def move_lower
+    @call_route.move_lower
+    redirect_to :back
+  end
+
   private
   def call_route_parameter_params
     params.require(:call_route).permit(:routing_table, :name, :endpoint_type, :endpoint_id)
