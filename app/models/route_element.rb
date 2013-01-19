@@ -16,4 +16,11 @@ class RouteElement < ActiveRecord::Base
     "#{pattern} => #{var_in} #{var_out}"
   end
 
+  def move_up?
+    #return self.position.to_i > RouteElement.where(:call_route_id => self.call_route_id ).order(:position).first.position.to_i
+  end
+
+  def move_down?
+    #return self.position.to_i < RouteElement.where(:call_route_id => self.call_route_id ).order(:position).last.position.to_i
+  end
 end
