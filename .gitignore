@@ -83,3 +83,6 @@ tmp/**/*
 # Freeswitch
 /misc/freeswitch/conf/freeswitch.serial
 /misc/freeswitch/scripts/ini/gateway_gateway1.ini
+
+# Cache
+/public/gemeinschaft_setups/*
