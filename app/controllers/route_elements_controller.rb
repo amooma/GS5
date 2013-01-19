@@ -44,6 +44,16 @@ class RouteElementsController < ApplicationController
     redirect_to call_route_route_elements_path(@call_route), :notice => t('route_elements.controller.successfuly_destroyed')
   end
 
+  def move_higher
+    @route_element.move_higher
+    redirect_to :back
+  end
+
+  def move_lower
+    @route_element.move_lower
+    redirect_to :back
+  end
+
   private
   def spread_breadcrumbs
     add_breadcrumb t("call_routes.index.page_title"), call_routes_path
