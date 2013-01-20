@@ -104,8 +104,6 @@ function HuntGroup.run(self, dialplan_object, caller, destination)
   for index, hunt_group_member in ipairs(hunt_group_members) do
     local destination = dialplan_object:destination_new{ number = hunt_group_member.number };
     if destination.type == 'unknown' then
-      self.log:notice('HG_DESTINATION - number: ', destination.number, ', hunt_group_member.number: ', hunt_group_member.number);
-
       
       caller.destination_number = destination.number;
 
