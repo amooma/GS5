@@ -116,6 +116,8 @@ GEM
     polyglot (0.3.3)
     private_pub (1.0.3)
       faye
+    quiet_assets (1.0.1)
+      railties (~> 3.1)
     rack (1.4.4)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -211,6 +213,7 @@ DEPENDENCIES
   mysql2
   nokogiri
   private_pub
+  quiet_assets
   rails (= 3.2.11)
   sass-rails
   sextant

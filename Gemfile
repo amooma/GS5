@@ -37,6 +37,7 @@ group :development do
   gem 'factory_girl_rails'
   gem 'factory_girl'
   gem 'sextant' # Rails 4 stuff
+  gem 'quiet_assets' # turns off assets logging
 end
 
 group :test do
