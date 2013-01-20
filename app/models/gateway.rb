@@ -14,6 +14,7 @@ class Gateway < ActiveRecord::Base
             :presence => true,
             :inclusion => { :in => TECHNOLOGIES }
 
+  after_initialize :set_defaults
   before_validation :downcase_technology
 
   def to_s
@@ -23,6 +24,12 @@ class Gateway < ActiveRecord::Base
   private
   def downcase_technology
     self.technology = self.technology.downcase if !self.technology.blank?
+  end
+
+  def set_defaults 
+    if TECHNOLOGIES.count == 1
+      self.technology = TECHNOLOGIES.first
+    end
   end
 
 end

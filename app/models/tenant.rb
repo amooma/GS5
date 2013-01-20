@@ -1,15 +1,8 @@
 # encoding: UTF-8
 
 class Tenant < ActiveRecord::Base
-  attr_accessible :name, :description, :sip_domain_id, :country_id, :language_id, :from_field_pin_change_email, :from_field_voicemail_email
-
-  if GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') == true
-    attr_accessible :internal_extension_ranges
-  end
-
-  if GsParameter.get('STRICT_DID_HANDLING') == true
-    attr_accessible :did_list
-  end
+  # https://github.com/rails/strong_parameters
+  include ActiveModel::ForbiddenAttributesProtection
 
   # Associations:
   #
