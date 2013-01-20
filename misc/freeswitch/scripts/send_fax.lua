@@ -94,7 +94,7 @@ else
   local result = dialplan:retrieve_caller_data();
 
   local dialplan_router = require('dialplan.router');
-  local routes =  dialplan_router.Router:new{ log = log, database = database, caller = caller, variables = caller }:route_run('outbound', destination_number);
+  local routes =  dialplan_router.Router:new{ log = log, database = database, caller = caller, variables = caller }:route_run('outbound');
       
   if not routes or #routes == 0 then
     log:notice('SWITCH - no route - number: ', destination_number);
