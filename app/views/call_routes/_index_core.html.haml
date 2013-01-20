@@ -1,13 +1,15 @@
-%table
-  %tr
-    %th= t('call_routes.index.name')
-    %th= t('call_routes.index.endpoint_type')
-    %th= t('call_routes.index.endpoint_id')
+- cache(['call_routes_table', call_routes.count, call_routes.reorder(:updated_at).last]) do 
+  %table
+    %tr
+      %th= t('call_routes.index.name')
+      %th= t('call_routes.index.endpoint_type')
+      %th= t('call_routes.index.endpoint_id')
 
-  - reset_cycle
-  - for call_route in call_routes
-    %tr{:class => cycle('odd', 'even')}
-      %td= call_route.name
-      %td= call_route.endpoint_type
-      %td= call_route.endpoint_id
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => call_route}
+    - reset_cycle
+    - for call_route in call_routes
+      %tr{:class => cycle('odd', 'even')}
+        - cache(['call_route_single_table_row', call_route]) do 
+          %td= call_route.name
+          %td= call_route.endpoint_type
+          %td= call_route.endpoint_id
+          =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => call_route}
