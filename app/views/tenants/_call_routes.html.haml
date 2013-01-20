@@ -1,7 +1,7 @@
 %h2= t("call_routes.index.page_title")
 
 - if CallRoute.count <= GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
-  = render "call_routes/index_core", :call_routes => CallRoute.call
+  = render "call_routes/index_core", :call_routes => CallRoute.all
   = render :partial => 'shared/create_link', :locals => {:child_class => CallRoute}
 - else
   %p
