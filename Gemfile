@@ -73,6 +73,8 @@ gem 'uuid'
 # Application server
 gem 'unicorn'
 
+gem 'thin'
+
 # Local Variables:
 # mode: ruby
 # End:

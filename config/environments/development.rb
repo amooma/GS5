@@ -40,7 +40,7 @@ Gemeinschaft42c::Application.configure do
 
   # Enable Hirb:
   extend Hirb::Console
-  Hirb::View.enable  
+  Hirb::View.enable
 end
 
 
