@@ -162,13 +162,13 @@ function Router.route_match(self, route)
 end
 
 
-function Router.route_run(self, table_name, phone_number, find_first)
+function Router.route_run(self, table_name, find_first)
   local routing_table = self:read_table(table_name);
   local routes = {};
 
   if type(routing_table) == 'table' then
     for index=1, #routing_table do    
-      local route = self:route_match(routing_table[index], phone_number);
+      local route = self:route_match(routing_table[index]);
       if route then
         table.insert(routes, route);
         self.log:info('ROUTE ', #routes,' - ', table_name,'=', routing_table[index].id, '/', routing_table[index].name, ', destination: ', route.type, '=', route.id, ', destination_number: ', route.destination_number);
