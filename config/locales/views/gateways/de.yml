@@ -6,9 +6,9 @@ de:
       successfuly_updated: 'Gateway wurde aktualisiert.'
       successfuly_destroyed: 'Gateway wurde gelöscht.'
     index:
-      page_title: 'Übersicht von Gateway'
+      page_title: 'Liste aller Gateways'
       name: 'Name'
-      technology: 'Technology'
+      technology: 'Technologie'
       inbound: 'Inbound'
       outbound: 'Outbound'
       description: 'Description'
@@ -23,7 +23,7 @@ de:
       page_title: 'Gateway'
       id: 'ID'
       name: 'Name'
-      technology: 'Technology'
+      technology: 'Technologie'
       inbound: 'Inbound'
       outbound: 'Outbound'
       description: 'Description'
@@ -47,7 +47,7 @@ de:
         label: 'Name'
         hint: ''
       technology:
-        label: 'Technology'
+        label: 'Technologie'
         hint: ''
       inbound:
         label: 'Inbound'
