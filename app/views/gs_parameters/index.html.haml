@@ -1,7 +1,7 @@
 - title t("gs_parameters.index.page_title")
 
 - if @gs_parameters && @gs_parameters.count > 0
-  - cache(['gs_parameters_table', I18n.locale, @gs_parameters_unordered.order(:updated_at).last, @gs_parameters_unordered.count]) do
+  - cache(['gs_parameters_table', I18n.locale, @gs_parameters_unordered.reorder(:updated_at).last, @gs_parameters_unordered.count]) do
     - if @sections
       %table
         - @sections.each do |section|
