@@ -8,7 +8,7 @@
     - reset_cycle
     - for call_route in call_routes
       %tr{:class => cycle('odd', 'even')}
-        - cache(['call_route_single_table_row_within_tr', call_route]) do 
+        - cache(['call_route_single_table_row_within_tr', call_route, call_routes.count]) do 
           %td= call_route.name
           %td= call_route.endpoint_type
           %td= call_route.endpoint_id
