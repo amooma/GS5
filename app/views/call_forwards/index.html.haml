@@ -1,4 +1,4 @@
-- title t("call_forwards.index.page_title")
+- content_for :title, t("call_forwards.index.page_title")
 
 - if @call_forwards.count > 0
   = render "index_core", :call_forwards => @call_forwards

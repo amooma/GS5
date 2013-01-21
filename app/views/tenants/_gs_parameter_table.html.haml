@@ -1,6 +1,6 @@
 - cache(['gs_parameters_tenant_overview_table', I18n.locale, tenant, GuiFunction.count, GuiFunction.reorder(:updated_at).last, GsParameter.count, GsParameter.reorder(:updated_at).last]) do
-  %table
-    %tr{:class => 'even'}
+  %table{:class => 'table table-striped'}
+    %tr
       %th
         Funktion
       %th
@@ -8,14 +8,14 @@
       %th
         Letztes Update
 
-    %tr{:class => 'odd'}
+    %tr
       %td
         = t("gui_functions.name")
       %td
         = link_to GuiFunction.count.to_s, gui_functions_path
       %td
         = l GuiFunction.reorder(:updated_at).last.updated_at, :format => :short 
-    %tr{:class => 'even'}
+    %tr
       %td
         = t("gs_parameters.name")
       %td

@@ -1,4 +1,4 @@
-- title nil
+- content_for :title, nil
 
 %section.phone-book-entry
   .content

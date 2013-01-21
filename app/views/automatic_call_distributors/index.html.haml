@@ -1,4 +1,4 @@
-- title t("automatic_call_distributors.index.page_title")
+- content_for :title, t("automatic_call_distributors.index.page_title")
 
 - if @automatic_call_distributors && @automatic_call_distributors.count > 0
   = render "index_core", :automatic_call_distributors => @automatic_call_distributors

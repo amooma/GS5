@@ -1,4 +1,4 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('conferences.index.name')
     - if !conferences.respond_to?('where') || conferences.where(:start => nil).where(:end => nil).count != conferences.count

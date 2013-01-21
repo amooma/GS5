@@ -1,7 +1,7 @@
-- title "User: #{@user}"
+- content_for :title, "User: #{@user}"
 
-#user-show
-  %aside
+.row
+  .span3
     - cache(['user_show_aside', I18n.locale, @user, @user.sip_accounts, @user.conferences]) do
       = image_tag @user.image_url(:small).to_s, class: 'display' if @user.image? && @user.image_url(:small)
       %p
@@ -40,7 +40,7 @@
             =link_to conference, edit_user_conference_path(@user, conference)
 
 
-  %section
+  .span9
     = render :partial => 'phone_books', :locals => {:user => @user, :phone_books => @phone_books}
 
     - if current_user.user_groups.where(:name => 'Admins').any?

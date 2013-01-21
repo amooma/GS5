@@ -1,4 +1,4 @@
-- title t("acd_agents.index.page_title")
+- content_for :title, t("acd_agents.index.page_title")
 
 - if @acd_agents && @acd_agents.count > 0
   = render "index_core", :acd_agents => @acd_agents

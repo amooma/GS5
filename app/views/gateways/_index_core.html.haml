@@ -1,5 +1,5 @@
 - cache(['gateways_table', gateways.count, gateways.first, gateways.last]) do 
-  %table
+  %table{:class => 'table table-striped'}
     %tr
       %th= t('gateways.index.name')
       %th= t('gateways.index.technology')

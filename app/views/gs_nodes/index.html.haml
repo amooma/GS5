@@ -1,4 +1,4 @@
-- title t("gs_nodes.index.page_title")
+- content_for :title, t("gs_nodes.index.page_title")
 
 - if @gs_nodes && @gs_nodes.count > 0
   = render "index_core", :gs_nodes => @gs_nodes

@@ -2,7 +2,7 @@
   %header.entries-nav= render :partial => "call_histories/navigation"
   .content
     - cache(['call_history_table', I18n.locale, @sip_account, call_histories.first, call_histories.last, call_histories.count]) do
-      %table
+      %table{:class => 'table table-striped'}
         - reset_cycle
         - for call_history in call_histories
           - tr_background_colour = cycle('odd', 'even')

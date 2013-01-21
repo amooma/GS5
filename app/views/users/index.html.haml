@@ -1,4 +1,4 @@
-- title t("users.index.page_title")
+- content_for :title, t("users.index.page_title")
 
 - if @users.count > 0
   = render "index_core", :users => @users

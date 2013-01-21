@@ -1,6 +1,6 @@
 - show_seconds = hunt_groups.map{|x| ! x.seconds_between_jumps.nil? }.include?(true)
 
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('hunt_groups.index.name')
     %th= t('hunt_groups.index.strategy')

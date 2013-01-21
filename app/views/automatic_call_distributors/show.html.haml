@@ -1,6 +1,6 @@
-- title t("automatic_call_distributors.show.page_title")
+- content_for :title, t("automatic_call_distributors.show.page_title")
 
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('automatic_call_distributors.show.name') + ":"
     %td= @automatic_call_distributor.name

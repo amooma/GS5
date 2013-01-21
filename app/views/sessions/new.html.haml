@@ -1,4 +1,4 @@
-- title t("sessions.new.page_title")
+- content_for :title, t("sessions.new.page_title")
 
 = simple_form_for :sessions, :url => sessions_path do |t|
   = t.input :login_data, :label => t('sessions.form.email'), :autofocus => true

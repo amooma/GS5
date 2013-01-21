@@ -1,4 +1,4 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     - if phone_numbers.count > 1 && phone_numbers.first.phone_numberable_type == 'PhoneBookEntry'
       %th= t('phone_numbers.index.name')
