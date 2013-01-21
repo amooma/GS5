@@ -5,13 +5,13 @@ class ConfigSnomController < ApplicationController
   KEY_REGEXP = {
     '0' => "[ -.,_0]+",
     '1' => "[ -.,_1]+",
-    '2' => "[abc2]",
-    '3' => "[def3]",
-    '4' => "[ghi4]",
+    '2' => "[abc2\xC3\xA4]",
+    '3' => "[def3\xC3\xA9]",
+    '4' => "[ghi4\xC3\xAF]",
     '5' => "[jkl5]",
-    '6' => "[mno6]",
-    '7' => "[pqrs7]",
-    '8' => "[tuv8]",
+    '6' => "[mno6\xC3\xB6]",
+    '7' => "[pqrs7\xC3\x9F]",
+    '8' => "[tuv8\xC3\xBC]",
     '9' => "[wxyz9]",
   }
 
