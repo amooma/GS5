@@ -1,15 +1,21 @@
 - cache(['call_routes_table', call_routes.count, call_routes.reorder(:updated_at).last]) do 
-  %table
+  %table{:class => 'table table-striped'}
     %tr
       %th= t('call_routes.index.name')
+      %th= t('route_elements.index.pattern')
       %th= t('call_routes.index.endpoint_type')
-      %th= t('call_routes.index.endpoint_id')
-
-    - reset_cycle
+      %th{:colspan => '3'}
+    
     - for call_route in call_routes
-      %tr{:class => cycle('odd', 'even')}
-        - cache(['call_route_single_table_row_within_tr', call_route, call_routes.count]) do 
+      - cache(['call_route_single_table_row', call_route, call_routes.count]) do 
+        %tr
           %td= call_route.name
+          %td
+            - if call_route.route_elements.any?
+              = call_route.route_elements.first.pattern
+              - if call_route.route_elements.count > 1
+                = ', ...'
+            - else
+              = '-'
           %td= call_route.endpoint_type
-          %td= call_route.endpoint_id
           =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => call_route}

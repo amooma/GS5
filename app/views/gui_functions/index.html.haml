@@ -1,4 +1,4 @@
-- title t("gui_functions.index.page_title")
+- content_for :title, t("gui_functions.index.page_title")
 
 - if @gui_functions && @gui_functions.count > 0
   - cache(['gui_functions_table', I18n.locale, @gui_functions.reorder(:updated_at).last, @gui_functions.count]) do

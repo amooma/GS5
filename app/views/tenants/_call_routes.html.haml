@@ -5,4 +5,4 @@
   = render :partial => 'shared/create_link', :locals => {:child_class => CallRoute}
 - else
   %p
-    = link_to t("call_routes.index.page_title"), call_routes_path
+    = link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + t("call_routes.index.page_title"), call_routes_path

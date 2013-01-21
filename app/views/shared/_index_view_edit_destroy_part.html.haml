@@ -1,35 +1,40 @@
-- style = 'width:35px'
+- style = 'width:90px'
+- style = ''
 
 - if !(defined? parent).nil? && !(defined? child).nil?
-  %td{ :style => style }
-    - if can? :show, child
-      = link_to t("#{child.class.name.underscore.pluralize}.index.actions.show"), method( :"#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child)
-  %td{ :style => style }
-    - if can? :edit, child
-      = link_to t("#{child.class.name.underscore.pluralize}.index.actions.edit"), method( :"edit_#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child)
-  %td{ :style => style }
-    - if can? :destroy, child
-      = link_to t("#{child.class.name.underscore.pluralize}.index.actions.destroy"), method( :"#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child), :method => :delete
-  - if child.respond_to?(:move_up?) or child and child.respond_to?(:move_down?)
+  - if can? :show, child
     %td{ :style => style }
-      - if can? :move_down, child and child.respond_to?(:move_down?) and child.move_down?
-        = link_to '&#8681;'.html_safe, method( :"move_lower_#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child), :method => :put
-      - if can? :move_up, child and child.respond_to?(:move_up?) and child.move_up?
-        = link_to '&#8679;'.html_safe, method( :"move_higher_#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child), :method => :put
+      %a.btn.btn-mini.btn-success{:href => method( :"#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child) }
+        %i.icon-info-sign.icon-white
+        =t("#{child.class.name.underscore.pluralize}.index.actions.show")
+
+  - if can? :edit, child
+    %td{ :style => style }
+      %a.btn.btn-mini.btn-warning{:href => method( :"edit_#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child) }
+        %i.icon-edit.icon-white
+        =t("#{child.class.name.underscore.pluralize}.index.actions.edit")
+
+  - if can? :destroy, child
+    %td{ :style => style }
+      %a.btn.btn-mini.btn-danger{"data-confirm" => t("#{child.class.name.underscore.pluralize}.index.actions.confirm_detroy"), "data-method" => "delete", :href => method( :"#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child), :rel => "nofollow"}
+        %i.icon-remove.icon-white
+        =t("#{child.class.name.underscore.pluralize}.index.actions.destroy")
 
 - elsif !(defined? child).nil?
-  %td{ :style => style }
-    - if can? :show, child
-      = link_to t("#{child.class.name.underscore.pluralize}.index.actions.show"), method( :"#{child.class.name.underscore}_path" ).(child)
-  %td{ :style => style }
-    - if can? :edit, child
-      = link_to t("#{child.class.name.underscore.pluralize}.index.actions.edit"), method( :"edit_#{child.class.name.underscore}_path" ).(child)
-  %td{ :style => style }
-    - if can? :destroy, child
-      = link_to t("#{child.class.name.underscore.pluralize}.index.actions.destroy"), method( :"#{child.class.name.underscore}_path" ).(child), :method => :delete
-  - if child.respond_to?(:move_up?) or child and child.respond_to?(:move_down?)
+  - if can? :show, child
     %td{ :style => style }
-      - if can? :move_down, child and child.respond_to?(:move_down?) and child.move_down?
-        = link_to '&#8681;'.html_safe, method( :"move_lower_#{child.class.name.underscore}_path" ).(child), :method => :put
-      - if can? :move_up, child and child.respond_to?(:move_up?) and child.move_up?
-        = link_to '&#8679;'.html_safe, method( :"move_higher_#{child.class.name.underscore}_path" ).(child), :method => :put
+      %a.btn.btn-mini.btn-success{:href => method( :"#{child.class.name.underscore}_path" ).(child) }
+        %i.icon-info-sign.icon-white
+        =t("#{child.class.name.underscore.pluralize}.index.actions.show")
+
+  - if can? :edit, child
+    %td{ :style => style }
+      %a.btn.btn-mini.btn-warning{:href => method( :"edit_#{child.class.name.underscore}_path" ).(child) }
+        %i.icon-edit.icon-white
+        =t("#{child.class.name.underscore.pluralize}.index.actions.edit")
+        
+  - if can? :destroy, child
+    %td{ :style => style }
+      %a.btn.btn-mini.btn-danger{"data-confirm" => t("#{child.class.name.underscore.pluralize}.index.actions.confirm_detroy"), "data-method" => "delete", :href => method( :"#{child.class.name.underscore}_path" ).(child), :rel => "nofollow"}
+        %i.icon-trash.icon-white
+        =t("#{child.class.name.underscore.pluralize}.index.actions.destroy")

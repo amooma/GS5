@@ -1,4 +1,4 @@
-- title t("gs_cluster_sync_log_entries.index.page_title")
+- content_for :title, t("gs_cluster_sync_log_entries.index.page_title")
 
 - if @gs_cluster_sync_log_entries && @gs_cluster_sync_log_entries.count > 0
   = render "index_core", :gs_cluster_sync_log_entries => @gs_cluster_sync_log_entries

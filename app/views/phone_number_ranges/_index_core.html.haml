@@ -1,13 +1,13 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('phone_number_ranges.index.name')
     %th= t('phone_number_ranges.index.description')
     %th= t('phone_number_ranges.index.numbers')
     %th= t('phone_number_ranges.index.amount')
 
-  - reset_cycle
+  
   - for phone_number_range in phone_number_ranges
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= t("phone_number_ranges.ranges.#{phone_number_range}.label")
       %td= t("phone_number_ranges.ranges.#{phone_number_range}.description")
       %td

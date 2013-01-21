@@ -1,12 +1,12 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     - if phone_numbers.count > 1 && phone_numbers.first.phone_numberable_type == 'PhoneBookEntry'
       %th= t('phone_numbers.index.name')
     %th= t('phone_numbers.index.number')
 
-  - reset_cycle
+  
   - for phone_number in phone_numbers.order(:position)
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       - if phone_number.phone_numberable_type == 'PhoneBookEntry'
         %td= phone_number.name
       %td= phone_number

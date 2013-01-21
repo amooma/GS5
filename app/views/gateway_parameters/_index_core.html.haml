@@ -1,12 +1,12 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('gateway_parameters.index.name')
     %th= t('gateway_parameters.index.value')
     %th= t('gateway_parameters.index.description')
 
-  - reset_cycle
+  
   - for gateway_parameter in gateway_parameters
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= gateway_parameter.name
       %td= gateway_parameter.value
       %td= gateway_parameter.description

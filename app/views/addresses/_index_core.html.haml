@@ -1,4 +1,4 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('addresses.index.phone_book_entry_id')
     %th= t('addresses.index.line1')
@@ -9,9 +9,9 @@
     %th= t('addresses.index.country_id')
     %th= t('addresses.index.position')
 
-  - reset_cycle
+  
   - for address in addresses
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= address.phone_book_entry_id
       %td= address.line1
       %td= address.line2

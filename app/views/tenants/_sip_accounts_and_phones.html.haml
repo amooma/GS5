@@ -1,12 +1,12 @@
-%table
-  %tr{:class => 'even'}
+%table{:class => 'table table-striped'}
+  %tr
     %th
     %th= t("sip_accounts.index.page_title")
     %th= t("phones.index.page_title")
 
   - cache(['tenant_show_admin_area_sip_accounts_and_phones_row', I18n.locale, @tenant, @tenant.sip_accounts.count, @tenant.sip_accounts.reorder(:updated_at).last, @tenant.phones.count, @tenant.phones.reorder(:updated_at).last]) do
 
-    %tr{:class => 'odd'}
+    %tr
       %td= tenant
       - cache(['tenant_show_admin_area_sip_accounts_table_cell', I18n.locale, @tenant, @tenant.sip_accounts.count, @tenant.sip_accounts.reorder(:updated_at).last]) do
         %td
@@ -33,7 +33,7 @@
                     = link_to "#{phone.phone_model.to_s} (#{phone.pretty_mac_address})#{(phone.ip_address.blank? ? '' : " - #{phone.ip_address}")}", tenant_phone_path(tenant, phone)
           = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => Phone}
 
-  %tr{:class => 'even'}
+  %tr
     %td= t("users.index.page_title")
     %td
       - if tenant.users_sip_accounts.any?

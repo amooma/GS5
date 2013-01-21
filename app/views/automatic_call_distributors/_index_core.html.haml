@@ -1,4 +1,4 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('automatic_call_distributors.index.name')
     %th= t('automatic_call_distributors.index.strategy')
@@ -10,9 +10,9 @@
     %th= t('automatic_call_distributors.index.phone_numbers')
     %th= t('automatic_call_distributors.index.acd_agents')
 
-  - reset_cycle
+  
   - for automatic_call_distributor in automatic_call_distributors
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= automatic_call_distributor.name
       %td= t("automatic_call_distributors.strategies.#{automatic_call_distributor.strategy}")
       %td= automatic_call_distributor.max_callers

@@ -1,4 +1,4 @@
-- title t("softkeys.index.page_title")
+- content_for :title, t("softkeys.index.page_title")
 
 - if @softkeys.count > 0
   = render "index_core", :softkeys => @softkeys

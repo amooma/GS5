@@ -1,13 +1,13 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('hunt_group_members.index.name')
     %th= t('hunt_group_members.index.active')
     %th= t('hunt_group_members.index.can_switch_status_itself')
     %th= t('hunt_group_members.index.phone_numbers')
 
-  - reset_cycle
+  
   - for hunt_group_member in hunt_group_members
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= hunt_group_member.name
       %td= hunt_group_member.active
       %td= hunt_group_member.can_switch_status_itself

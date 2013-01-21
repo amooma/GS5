@@ -1,4 +1,4 @@
-- title t("route_elements.index.page_title")
+- content_for :title, t("route_elements.index.page_title")
 
 - if @route_elements && @route_elements.count > 0
   = render "index_core", :route_elements => @route_elements

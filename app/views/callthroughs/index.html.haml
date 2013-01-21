@@ -1,4 +1,4 @@
-- title t("callthroughs.index.page_title")
+- content_for :title, t("callthroughs.index.page_title")
 
 - if @callthroughs.count > 0
   = render "index_core", :callthroughs => @callthroughs

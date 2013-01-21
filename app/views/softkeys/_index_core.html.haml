@@ -1,12 +1,12 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('softkeys.index.function')
     %th= t('softkeys.index.number')
     %th= t('softkeys.index.label')
 
-  - reset_cycle
+  
   - for softkey in softkeys.order(:position)
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td
         =softkey.to_s
       %td= softkey.number

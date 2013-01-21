@@ -13,7 +13,7 @@ Gemeinschaft42c::Application.configure do
   config.consider_all_requests_local       = true
 
   # Enable caching for development
-  config.action_controller.perform_caching = true
+  config.action_controller.perform_caching = false
   CacheDigests::TemplateDigestor.cache = ActiveSupport::Cache::NullStore.new
 
   # Don't care if the mailer can't send

@@ -1,18 +1,18 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('sip_accounts.index.online')
     %th= t('sip_accounts.index.caller_name')
     %th= t('sip_accounts.index.phone_numbers')
     %th= t('phones.name')
-
-  - reset_cycle
+    %th{:colspan => '3'}
+  
   - for sip_account in sip_accounts
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td
         - if sip_account.registration
-          =image_tag 'icons/phone-down-green-32x.png'
+          %i.icon-ok
         - else
-          =image_tag 'icons/phone-down-grey-32x.png'
+          %i.icon-thumbs-down
       %td
         = sip_account.caller_name
       - phone_numbers = sip_account.phone_numbers

@@ -1,4 +1,4 @@
-- title t("sip_domains.index.page_title")
+- content_for :title, t("sip_domains.index.page_title")
 
 - if @sip_domains.count > 0
   = render "index_core", :sip_domains => @sip_domains

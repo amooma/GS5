@@ -1,4 +1,4 @@
-- title t("phones.new.page_title")
+- content_for :title, t("phones.new.page_title")
 
 - if !@fallback_sip_accounts.any? && can?(:create, current_user.current_tenant.sip_accounts.build)
   %p

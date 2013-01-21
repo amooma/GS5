@@ -1,4 +1,4 @@
-- title t("conferences.index.page_title")
+- content_for :title, t("conferences.index.page_title")
 
 - if @conferences.count > 0
   = render "index_core", :conferences => @conferences

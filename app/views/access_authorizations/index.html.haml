@@ -1,4 +1,4 @@
-- title t("access_authorizations.index.page_title")
+- content_for :title, t("access_authorizations.index.page_title")
 
 - if @access_authorizations.count > 0
   = render "index_core", :access_authorizations => @access_authorizations

@@ -1,4 +1,4 @@
-- title t("fax_accounts.index.page_title")
+- content_for :title, t("fax_accounts.index.page_title")
 
 - if @fax_accounts.count > 0
   = render "index_core", {:fax_accounts => @fax_accounts, :fax_accountable => @parent}

@@ -1,4 +1,4 @@
-- title t("gateway_parameters.index.page_title")
+- content_for :title, t("gateway_parameters.index.page_title")
 
 - if @gateway_parameters && @gateway_parameters.count > 0
   = render "index_core", :gateway_parameters => @gateway_parameters
