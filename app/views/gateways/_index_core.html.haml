@@ -7,9 +7,9 @@
       %th= t('gateways.index.outbound')
       %th= t('gateways.index.description')
 
-    - reset_cycle
+    
     - for gateway in gateways
-      %tr{:class => cycle('odd', 'even')}
+      %tr
         - cache(['gateway_single_table_row_within_tr', gateway, gateways.count]) do 
           %td= gateway.name
           %td= gateway.technology

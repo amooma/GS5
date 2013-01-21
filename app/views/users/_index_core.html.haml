@@ -7,9 +7,9 @@
       %th= t('users.index.first_name')
       %th= t('users.index.last_name')
 
-    - reset_cycle
+    
     - for user in users
-      %tr{:class => cycle('odd', 'even')}
+      %tr
         - cache(['user_table_row_inner_td', I18n.locale, current_user, user]) do
           %td 
             = image_tag user.image_url(:mini).to_s if user.image_url(:mini)

@@ -4,9 +4,9 @@
     %th= t('gateway_settings.index.value')
     %th= t('gateway_settings.index.description')
 
-  - reset_cycle
+  
   - for gateway_setting in gateway_settings
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= gateway_setting.name
       %td= gateway_setting.value
       %td= gateway_setting.description

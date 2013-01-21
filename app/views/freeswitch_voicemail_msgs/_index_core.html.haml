@@ -4,9 +4,9 @@
     %th= t('freeswitch_voicemail_msgs.index.message_len')
     %th= t('freeswitch_voicemail_msgs.index.file_path')
 
-  - reset_cycle
+  
   - for freeswitch_voicemail_msg in freeswitch_voicemail_msgs
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= freeswitch_voicemail_msg.created_epoch
       %td= freeswitch_voicemail_msg.message_len
       %td= freeswitch_voicemail_msg.file_path

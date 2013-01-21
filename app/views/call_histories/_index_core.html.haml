@@ -3,7 +3,7 @@
   .content
     - cache(['call_history_table', I18n.locale, @sip_account, call_histories.first, call_histories.last, call_histories.count]) do
       %table{:class => 'table table-striped'}
-        - reset_cycle
+        
         - for call_history in call_histories
           - tr_background_colour = cycle('odd', 'even')
           - cache(['call_history_table_row', I18n.locale, call_history, tr_background_colour]) do

@@ -4,9 +4,9 @@
     %th= t('phone_books.index.description')
     %th= t('phone_books.index.count')
 
-  - reset_cycle
+  
   - for phone_book in phone_books
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= phone_book.name
       %td= phone_book.description
       %td

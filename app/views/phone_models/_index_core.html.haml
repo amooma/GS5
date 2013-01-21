@@ -5,9 +5,9 @@
     %th= t('phone_models.index.product_homepage_url')
     %th= t('phone_models.index.number_of_phones')
 
-  - reset_cycle
+  
   - for phone_model in phone_models
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= phone_model.name
       %td
         - if phone_model.product_manual_homepage_url

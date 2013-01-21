@@ -5,9 +5,9 @@
     - @user_groups.each do |user_group|
       %th= user_group
 
-  - reset_cycle
+  
   - for gui_function in gui_functions
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       - cache(['gui_functions_table_row', I18n.locale, gui_function]) do
         %td= gui_function.category
         %td

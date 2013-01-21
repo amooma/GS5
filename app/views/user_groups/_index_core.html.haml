@@ -9,9 +9,9 @@
       - else
         %th= t('user_groups.index.members')
 
-    - reset_cycle
+    
     - for user_group in user_groups
-      %tr{:class => cycle('odd', 'even')}
+      %tr
         %td= user_group.name
         - if user_groups.pluck(:description).uniq != [nil]
           %td= user_group.description

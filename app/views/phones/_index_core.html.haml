@@ -5,9 +5,9 @@
     %th= t('phones.index.hot_deskable')
     %th= t('phones.index.ip_address')
 
-  - reset_cycle
+  
   - for phone in phones
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= phone.pretty_mac_address
       %td= phone.phone_model
       %td= phone.hot_deskable

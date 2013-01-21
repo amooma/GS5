@@ -6,9 +6,9 @@
     %th= t('conference_invitees.index.speaker')
     %th= t('conference_invitees.index.moderator')
 
-  - reset_cycle
+  
   - for conference_invitee in conference_invitees
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= conference_invitee.phone_book_entry || '-'
       %td= conference_invitee.phone_number
       %td= conference_invitee.pin

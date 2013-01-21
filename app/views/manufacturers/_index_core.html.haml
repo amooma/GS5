@@ -5,9 +5,9 @@
     %th= t('manufacturers.index.homepage_url')
     %th= t('manufacturers.index.phone_models')
 
-  - reset_cycle
+  
   - for manufacturer in manufacturers
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= manufacturer.name
       %td= manufacturer.ieee_name
       %td

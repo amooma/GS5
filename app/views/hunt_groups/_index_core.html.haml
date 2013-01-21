@@ -9,9 +9,9 @@
     %th= t('hunt_groups.index.phone_numbers')
     %th= t('hunt_groups.index.hunt_group_members')
 
-  - reset_cycle
+  
   - for hunt_group in hunt_groups
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= hunt_group.name
       %td= t("hunt_groups.strategies.#{hunt_group.strategy}")
       - if show_seconds

@@ -3,9 +3,9 @@
     %th= t('system_messages.index.created_at')
     %th= t('system_messages.index.content')
 
-  - reset_cycle
+  
   - for system_message in system_messages
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= system_message.created_at
       %td= system_message.content
       =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => system_message}

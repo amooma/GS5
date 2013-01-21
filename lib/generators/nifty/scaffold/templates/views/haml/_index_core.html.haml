@@ -4,9 +4,9 @@
     %th= t('<%= plural_name %>.index.<%= attribute.name %>')
     <%- end -%>
 
-  - reset_cycle
+  
   - for <%= instance_name %> in <%= instances_name %>
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       <%- for attribute in model_attributes -%>
       %td= <%= instance_name %>.<%= attribute.name %>
       <%- end -%>

@@ -7,9 +7,9 @@
     %th= t('route_elements.index.action')
     %th= t('route_elements.index.mandatory')
 
-  - reset_cycle
+  
   - for route_element in route_elements
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= route_element.var_in
       %td= route_element.var_out
       %td= route_element.pattern

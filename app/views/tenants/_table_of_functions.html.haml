@@ -12,7 +12,7 @@
           = t("callthroughs.name")
         %td
           - if tenant.callthroughs.any?
-            = link_to tenant.callthroughs.count.to_s, tenant_callthroughs_path(tenant)
+            = link_to Haml::Engine.new("%i.icon-list").render + ' ' + tenant.callthroughs.count.to_s, tenant_callthroughs_path(tenant)
           - else
             = '-'
         %td
@@ -23,7 +23,8 @@
           = t("conferences.name")
         %td
           - if tenant.conferences.any?
-            = link_to tenant.conferences.count.to_s, tenant_conferences_path(tenant)
+            
+            = link_to Haml::Engine.new("%i.icon-list").render + ' ' + tenant.conferences.count.to_s, tenant_conferences_path(tenant)
           - else
             = '-'
         %td
@@ -34,7 +35,7 @@
           = t("hunt_groups.name")
         %td
           - if tenant.hunt_groups.any?
-            = link_to tenant.hunt_groups.count.to_s, tenant_hunt_groups_path(tenant)
+            = link_to Haml::Engine.new("%i.icon-list").render + ' ' + tenant.hunt_groups.count.to_s, tenant_hunt_groups_path(tenant)
           - else
             = '-'
         %td
@@ -45,7 +46,7 @@
           = t("automatic_call_distributors.name")
         %td
           - if tenant.automatic_call_distributors.any?
-            = link_to tenant.automatic_call_distributors.count.to_s, tenant_automatic_call_distributors_path(tenant)
+            = link_to Haml::Engine.new("%i.icon-list").render + ' ' + tenant.automatic_call_distributors.count.to_s, tenant_automatic_call_distributors_path(tenant)
           - else
             = '-'
         %td

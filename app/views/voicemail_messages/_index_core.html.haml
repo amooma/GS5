@@ -2,7 +2,7 @@
   %header.entries-nav= render :partial => "voicemail_messages/navigation"
   .content
     %table{:class => 'table table-striped'}
-      - reset_cycle
+      
       - for voicemail_message in voicemail_messages
         %tr.voicemail-messages-entry{:class => cycle('odd', 'even'), :id => "message_#{voicemail_message.uuid}"}
           %td.select_box= check_box_tag("selected_uuids[]", voicemail_message.uuid, false, :uuid => "select_item_#{voicemail_message.uuid}", :class => 'select_item')

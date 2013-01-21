@@ -11,10 +11,10 @@
     %th= t('conferences.index.number_of_invitees')
     %th= t('conferences.index.flags')
 
-  - reset_cycle
+  
   - for conference in conferences
     - parent = conference.conferenceable
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= conference.name
       - if !conferences.respond_to?('where') || conferences.where(:start => nil).where(:end => nil).count != conferences.count
         %td

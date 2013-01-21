@@ -7,9 +7,9 @@
     %th= t('gs_nodes.index.push_updates_to')
     %th= t('gs_nodes.index.accepts_updates_from')
 
-  - reset_cycle
+  
   - for gs_node in gs_nodes
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= gs_node.name
       %td= gs_node.ip_address
       %td= gs_node.site

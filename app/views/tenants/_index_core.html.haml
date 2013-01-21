@@ -3,9 +3,9 @@
     %th= t('tenants.index.name')
     %th= t('tenants.index.description')
 
-  - reset_cycle
+  
   - for tenant in tenants
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= tenant.name
       %td= tenant.description
       %td

@@ -6,9 +6,9 @@
     - if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
       %th= t('callthroughs.index.whitelist_phone_numbers')
 
-  - reset_cycle
+  
   - for callthrough in callthroughs
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= callthrough.name
       %td=render 'phone_numbers/listing', :phone_numbers => callthrough.phone_numbers
       %td=render 'phone_numbers/listing', :phone_numbers => callthrough.access_authorization_phone_numbers
