@@ -27,20 +27,20 @@ class CallRoute < ActiveRecord::Base
     return self.position.to_i < CallRoute.where(:routing_table => self.routing_table ).order(:position).last.position.to_i
   end
 
-  def self.factory_defaults_prerouting(country_code, national_prefix = '', international_prefix = '', trunk_prefix = '', area_code = '')
+  def self.factory_defaults_prerouting(country_code, national_prefix = '', international_prefix = '', trunk_access_code = '', area_code = '')
     CallRoute.where(:routing_table => "prerouting").destroy_all
 
     CallRoute.create_prerouting_entry('international call', [
-      { :pattern => '^'+trunk_prefix+international_prefix+'([1-9]%d+)$', :replacement => '+%1', },
+      { :pattern => '^'+trunk_access_code+international_prefix+'([1-9]%d+)$', :replacement => '+%1', },
     ], 'phonenumber')
 
     CallRoute.create_prerouting_entry('national call', [
-      { :pattern => '^'+trunk_prefix+national_prefix+'([1-9]%d+)$', :replacement => '+'+country_code+'%1', },
+      { :pattern => '^'+trunk_access_code+national_prefix+'([1-9]%d+)$', :replacement => '+'+country_code+'%1', },
     ], 'phonenumber')
 
-    if !trunk_prefix.blank? && !area_code.blank?
+    if !trunk_access_code.blank? && !area_code.blank?
       CallRoute.create_prerouting_entry('local call', [
-        { :pattern => '^'+trunk_prefix+'([1-9]%d+)$', :replacement => '+'+country_code+area_code+'%1', },
+        { :pattern => '^'+trunk_access_code+'([1-9]%d+)$', :replacement => '+'+country_code+area_code+'%1', },
       ], 'phonenumber')
     end
 
@@ -76,24 +76,24 @@ class CallRoute < ActiveRecord::Base
 
     elements = [
       { :pattern => '^#31#(%+?[1-9]%d+)$', :replacement => 'f-dcliron-%1', }, 
-      { :pattern => '^#31#'+trunk_prefix+international_prefix+'([1-9]%d+)$', :replacement => 'f-dcliron-+%1' },
-      { :pattern => '^#31#'+trunk_prefix+national_prefix+'([1-9]%d+)$', :replacement => 'f-dcliron-+'+country_code+'%1' },
+      { :pattern => '^#31#'+trunk_access_code+international_prefix+'([1-9]%d+)$', :replacement => 'f-dcliron-+%1' },
+      { :pattern => '^#31#'+trunk_access_code+national_prefix+'([1-9]%d+)$', :replacement => 'f-dcliron-+'+country_code+'%1' },
     ]
 
-    if !trunk_prefix.blank? && !area_code.blank?
-      elements << { :pattern => '^#31#'+trunk_prefix+'([1-9]%d+)$', :replacement => 'f-dcliron-+'+country_code+area_code+'%1' }
+    if !trunk_access_code.blank? && !area_code.blank?
+      elements << { :pattern => '^#31#'+trunk_access_code+'([1-9]%d+)$', :replacement => 'f-dcliron-+'+country_code+area_code+'%1' }
     end
 
     CallRoute.create_prerouting_entry('activate CLIR for call', elements)
 
     elements = [
       { :pattern => '^%*31#(%+?[1-9]%d+)$', :replacement => 'f-dcliroff-%1', }, 
-      { :pattern => '^%*31#'+trunk_prefix+international_prefix+'([1-9]%d+)$', :replacement => 'f-dcliroff-+%1' },
-      { :pattern => '^%*31#'+trunk_prefix+national_prefix+'([1-9]%d+)$', :replacement => 'f-dcliroff-+'+country_code+'%1' },
+      { :pattern => '^%*31#'+trunk_access_code+international_prefix+'([1-9]%d+)$', :replacement => 'f-dcliroff-+%1' },
+      { :pattern => '^%*31#'+trunk_access_code+national_prefix+'([1-9]%d+)$', :replacement => 'f-dcliroff-+'+country_code+'%1' },
     ]
 
-    if !trunk_prefix.blank? && !area_code.blank?
-      elements << { :pattern => '^%*31#'+trunk_prefix+'([1-9]%d+)$', :replacement => 'f-dcliroff-+'+country_code+area_code+'%1' }
+    if !trunk_access_code.blank? && !area_code.blank?
+      elements << { :pattern => '^%*31#'+trunk_access_code+'([1-9]%d+)$', :replacement => 'f-dcliroff-+'+country_code+area_code+'%1' }
     end
 
     CallRoute.create_prerouting_entry('deactivate CLIR for call', elements)
@@ -117,12 +117,12 @@ class CallRoute < ActiveRecord::Base
     elements = [
       { :pattern => '^%*21#$', :replacement => 'f-cfu', },
       { :pattern => '^%*%*?21%*(%+?[1-9]%d+)#$', :replacement => 'f-cfu-%1', },
-      { :pattern => '^%*%*?21%*'+trunk_prefix+international_prefix+'([1-9]%d+)#$', :replacement => 'f-cfu-+%1', },
-      { :pattern => '^%*%*?21%*'+trunk_prefix+national_prefix+'([1-9]%d+)#$', :replacement => 'f-cfu-+'+country_code+'%1', },
+      { :pattern => '^%*%*?21%*'+trunk_access_code+international_prefix+'([1-9]%d+)#$', :replacement => 'f-cfu-+%1', },
+      { :pattern => '^%*%*?21%*'+trunk_access_code+national_prefix+'([1-9]%d+)#$', :replacement => 'f-cfu-+'+country_code+'%1', },
     ]
 
-    if !trunk_prefix.blank? && !area_code.blank?
-      elements << { :pattern => '^%*%*?21%*'+trunk_prefix+'([1-9]%d+)#$', :replacement => 'f-cfu-+'+country_code+area_code+'%1' }
+    if !trunk_access_code.blank? && !area_code.blank?
+      elements << { :pattern => '^%*%*?21%*'+trunk_access_code+'([1-9]%d+)#$', :replacement => 'f-cfu-+'+country_code+area_code+'%1' }
     end
 
     CallRoute.create_prerouting_entry('set unconditional call forwarding', elements)
@@ -137,17 +137,17 @@ class CallRoute < ActiveRecord::Base
 
     elements = [
       { :pattern => '^%*61#$', :replacement => 'f-cfn', },
-      { :pattern => '^%*%*?61%*'+trunk_prefix+international_prefix+'([1-9]%d+)#$', :replacement => 'f-cfn-+%1', },
-      { :pattern => '^%*%*?61%*'+trunk_prefix+national_prefix+'([1-9]%d+)#$', :replacement => 'f-cfn-+'+country_code+'%1', },
+      { :pattern => '^%*%*?61%*'+trunk_access_code+international_prefix+'([1-9]%d+)#$', :replacement => 'f-cfn-+%1', },
+      { :pattern => '^%*%*?61%*'+trunk_access_code+national_prefix+'([1-9]%d+)#$', :replacement => 'f-cfn-+'+country_code+'%1', },
       { :pattern => '^%*%*?61%*(%+?[1-9]%d+)#$', :replacement => 'f-cfn-%1', },
-      { :pattern => '^%*%*?61%*'+trunk_prefix+international_prefix+'([1-9]%d+)%*(%d+)#$', :replacement => 'f-cfn-+%1-%2', },
-      { :pattern => '^%*%*?61%*'+trunk_prefix+national_prefix+'([1-9]%d+)%*(%d+)#$', :replacement => 'f-cfn-+'+country_code+'%1-%2', },
+      { :pattern => '^%*%*?61%*'+trunk_access_code+international_prefix+'([1-9]%d+)%*(%d+)#$', :replacement => 'f-cfn-+%1-%2', },
+      { :pattern => '^%*%*?61%*'+trunk_access_code+national_prefix+'([1-9]%d+)%*(%d+)#$', :replacement => 'f-cfn-+'+country_code+'%1-%2', },
       { :pattern => '^%*%*?61%*(%+?[1-9]%d+)%*(%d+)#$', :replacement => 'f-cfn-%1-%2', },
     ]
 
-    if !trunk_prefix.blank? && !area_code.blank?
-      elements << { :pattern => '^%*%*?61%*'+trunk_prefix+'([1-9]%d+)#$', :replacement => 'f-cfn-+'+country_code+area_code+'%1' }
-      elements << { :pattern => '^%*%*?61%*'+trunk_prefix+'([1-9]%d+)%*(%d+)#$', :replacement => 'f-cfn-+'+country_code+area_code+'%1-%2' }
+    if !trunk_access_code.blank? && !area_code.blank?
+      elements << { :pattern => '^%*%*?61%*'+trunk_access_code+'([1-9]%d+)#$', :replacement => 'f-cfn-+'+country_code+area_code+'%1' }
+      elements << { :pattern => '^%*%*?61%*'+trunk_access_code+'([1-9]%d+)%*(%d+)#$', :replacement => 'f-cfn-+'+country_code+area_code+'%1-%2' }
     end
 
     CallRoute.create_prerouting_entry('call forward if not answered', elements)
@@ -163,12 +163,12 @@ class CallRoute < ActiveRecord::Base
     elements = [
       { :pattern => '^%*62#$', :replacement => 'f-cfo', },
       { :pattern => '^%*%*?62%*(%+?[1-9]%d+)#$', :replacement => 'f-cfo-%1', },
-      { :pattern => '^%*%*?62%*'+trunk_prefix+international_prefix+'([1-9]%d+)#$', :replacement => 'f-cfo-+%1', },
-      { :pattern => '^%*%*?62%*'+trunk_prefix+national_prefix+'([1-9]%d+)#$', :replacement => 'f-cfo-+'+country_code+'%1', },
+      { :pattern => '^%*%*?62%*'+trunk_access_code+international_prefix+'([1-9]%d+)#$', :replacement => 'f-cfo-+%1', },
+      { :pattern => '^%*%*?62%*'+trunk_access_code+national_prefix+'([1-9]%d+)#$', :replacement => 'f-cfo-+'+country_code+'%1', },
     ]
 
-    if !trunk_prefix.blank? && !area_code.blank?
-      elements << { :pattern => '^%*%*?62%*'+trunk_prefix+'([1-9]%d+)#$', :replacement => 'f-cfo-+'+country_code+area_code+'%1' }
+    if !trunk_access_code.blank? && !area_code.blank?
+      elements << { :pattern => '^%*%*?62%*'+trunk_access_code+'([1-9]%d+)#$', :replacement => 'f-cfo-+'+country_code+area_code+'%1' }
     end
 
     CallRoute.create_prerouting_entry('call forward if offline', elements)
@@ -184,12 +184,12 @@ class CallRoute < ActiveRecord::Base
     elements = [
       { :pattern => '^%*67#$', :replacement => 'f-cfb', },
       { :pattern => '^%*%*?67%*(%+?[1-9]%d+)#$', :replacement => 'f-cfb-%1', },
-      { :pattern => '^%*%*?67%*'+trunk_prefix+international_prefix+'([1-9]%d+)#$', :replacement => 'f-cfb-+%1', },
-      { :pattern => '^%*%*?67%*'+trunk_prefix+national_prefix+'([1-9]%d+)#$', :replacement => 'f-cfb-+'+country_code+'%1', },
+      { :pattern => '^%*%*?67%*'+trunk_access_code+international_prefix+'([1-9]%d+)#$', :replacement => 'f-cfb-+%1', },
+      { :pattern => '^%*%*?67%*'+trunk_access_code+national_prefix+'([1-9]%d+)#$', :replacement => 'f-cfb-+'+country_code+'%1', },
     ]
 
-    if !trunk_prefix.blank? && !area_code.blank?
-      elements << { :pattern => '^%*%*?67%*'+trunk_prefix+'([1-9]%d+)#$', :replacement => 'f-cfb-+'+country_code+area_code+'%1' }
+    if !trunk_access_code.blank? && !area_code.blank?
+      elements << { :pattern => '^%*%*?67%*'+trunk_access_code+'([1-9]%d+)#$', :replacement => 'f-cfb-+'+country_code+area_code+'%1' }
     end
 
     CallRoute.create_prerouting_entry('call forward if busy', elements)
