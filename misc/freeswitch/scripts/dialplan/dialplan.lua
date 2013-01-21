@@ -1004,6 +1004,7 @@ function Dialplan.run(self, destination)
       self.log:info('LOOP ', loop, ' NEW_DESTINATION_NUMBER - number: ', result.number );
       destination = self:destination_new{ number = result.number }
       self.caller.destination = destination;
+      self.caller.destination_number = destination.number;
     end
   end
 
