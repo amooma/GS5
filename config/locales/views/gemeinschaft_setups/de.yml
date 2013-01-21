@@ -25,4 +25,7 @@ de:
       language_id:
         label: 'Sprache'
         hint: ''
+      default_area_code:
+        label: 'Standard Ortsvorwahl'
+        hint: '030 für Berlin, 0261 für Koblenz, 02631 für Neuwied, usw.'        
       button: 'Absenden'

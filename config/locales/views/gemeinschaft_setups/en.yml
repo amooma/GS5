@@ -25,4 +25,7 @@ en:
       language_id:
         label: 'Language'
         hint: ''
+      default_area_code:
+        label: 'Default area code'
+        hint: ''
       button: 'Submit'

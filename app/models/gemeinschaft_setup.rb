@@ -10,8 +10,20 @@ class GemeinschaftSetup < ActiveRecord::Base
   #
   after_create :expire_cache
 
+  before_validation :format_default_area_code
+
   private
   def expire_cache
     ActionController::Base.expire_page(Rails.application.routes.url_helpers.new_gemeinschaft_setup_path)
+  end
+
+  def format_default_area_code
+    if self.default_area_code.blank?
+      self.default_area_code = nil
+    else
+      if self.country != nil && !self.country.trunk_prefix.blank?
+        self.default_area_code.gsub(/^#{self.country.trunk_prefix}/,'')
+      end
+    end
   end
 end
