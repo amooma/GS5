@@ -8,7 +8,7 @@
         %th= t('user_groups.index.tenant_id')
       - else
         %th= t('user_groups.index.members')
-
+      %th{:colspan => '3'}
     
     - for user_group in user_groups
       %tr

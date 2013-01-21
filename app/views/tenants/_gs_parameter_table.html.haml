@@ -12,13 +12,13 @@
       %td
         = t("gui_functions.name")
       %td
-        = link_to GuiFunction.count.to_s, gui_functions_path
+        = link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + GuiFunction.count.to_s, gui_functions_path
       %td
         = l GuiFunction.reorder(:updated_at).last.updated_at, :format => :short 
     %tr
       %td
         = t("gs_parameters.name")
       %td
-        = link_to GsParameter.count.to_s, gs_parameters_path
+        = link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + GsParameter.count.to_s, gs_parameters_path
       %td
         = l GsParameter.reorder(:updated_at).last.updated_at, :format => :short 

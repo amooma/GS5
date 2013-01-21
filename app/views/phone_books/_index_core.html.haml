@@ -1,14 +1,17 @@
 %table{:class => 'table table-striped'}
   %tr
     %th= t('phone_books.index.name')
-    %th= t('phone_books.index.description')
     %th= t('phone_books.index.count')
-
+    %th{:colspan => '3'}
   
   - for phone_book in phone_books
     %tr
-      %td= phone_book.name
-      %td= phone_book.description
+      %td
+        - if phone_book.description.blank?
+          = phone_book.name
+        - else
+          %a.brand{:rel => 'tooltip', :title => phone_book.description}
+            = phone_book.name
       %td
         = number_with_delimiter( phone_book.phone_book_entries.count )
         = render :partial => 'shared/create_link', :locals => {:parent => phone_book, :child_class => PhoneBookEntry, :short_link => true}

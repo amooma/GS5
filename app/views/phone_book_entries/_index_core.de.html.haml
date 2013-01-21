@@ -11,7 +11,7 @@
             ~# Because of you we have to do this with a table.
             ~# With Love,
             ~# Mario.
-            %tr.phone-book-entry{:class => cycle('odd', 'even'), :"itemscope itemtype" => "http://schema.org/Person"}
+            %tr.phone-book-entry{:"itemscope itemtype" => "http://schema.org/Person"}
               %td.thumbnail
                 = image_tag(entry.image_url(:small).to_s, :itemprop => 'image')
               %td.user

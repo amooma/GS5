@@ -19,13 +19,13 @@
   - Manufacturer.all.each do |manufacturer|
     - if manufacturer != Manufacturer.last && manufacturer != Manufacturer.limit(Manufacturer.count - 1).last
       = succeed ', ' do
-        =link_to manufacturer, manufacturer_path(manufacturer)
+        =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
     - elsif manufacturer == Manufacturer.limit(Manufacturer.count - 1).last
       = succeed ' und ' do
-        =link_to manufacturer, manufacturer_path(manufacturer)
+        =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
     - else
       = succeed '.' do
-        =link_to manufacturer, manufacturer_path(manufacturer)
+        =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
 
 = render :partial => 'call_routes', :locals => {:tenant => tenant}
 
