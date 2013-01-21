@@ -516,7 +516,13 @@ function Functions.redial(self, caller)
     return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
   end
 
-  local sql_query = 'SELECT `destination_number` FROM `call_histories` WHERE `entry_type` = "dialed" AND `call_historyable_type` = "SipAccount" AND `call_historyable_id` = ' .. caller_sip_account.record.id;
+  local sql_query = 'SELECT `destination_number` \
+    FROM `call_histories` \
+    WHERE `entry_type` = "dialed" \
+    AND `call_historyable_type` = "SipAccount" \
+    AND `call_historyable_id` = ' .. caller_sip_account.record.id .. ' \
+    ORDER BY `start_stamp` DESC LIMIT 1';
+
   local phone_number = self.database:query_return_value(sql_query);
 
   common_str = require 'common.str';
