@@ -49,11 +49,13 @@ class CallRoutesController < ApplicationController
   end
 
   def move_higher
+    @call_route = CallRoute.find(params[:id])
     @call_route.move_higher
     redirect_to :back
   end
 
   def move_lower
+    @call_route = CallRoute.find(params[:id])
     @call_route.move_lower
     redirect_to :back
   end
