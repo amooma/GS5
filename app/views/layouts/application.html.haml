@@ -15,10 +15,6 @@
     /[if lt IE 9]
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   %body
-    = render 'layouts/navbar'
-
-    = render_breadcrumbs :builder => ::BootstrapBreadcrumbsBuilder, :separator => "/"
-
     .container
       .row
         .span12
@@ -27,6 +23,11 @@
               %div{:class => "alert alert-#{name == :notice ? "success" : "error"} fade in"}
                 %a.close{"data-dismiss" => "alert"} ×
                 = msg
+
+          - if current_user
+            = render_breadcrumbs :builder => ::BootstrapBreadcrumbsBuilder, :separator => "/"
+
+          = render 'layouts/navbar'
 
           = yield
 
