@@ -45,6 +45,14 @@ class GemeinschaftSetupsController < ApplicationController
       super_tenant_super_admin_group = super_tenant.user_groups.create(:name => t('gemeinschaft_setups.initial_setup.super_admin_group_name'))
       super_tenant_super_admin_group.user_group_memberships.create(:user_id => user.id)
 
+      # Set CallRoute defaults
+      CallRoute.factory_defaults_prerouting(@gemeinschaft_setup.country.country_code, 
+                                            @gemeinschaft_setup.country.trunk_prefix, 
+                                            @gemeinschaft_setup.country.international_call_prefix, 
+                                            '', 
+                                            @gemeinschaft_setup.default_area_code
+                                            )
+
       # Set a couple of URLs in the GsParameter table
       GsParameter.where(:name => 'phone_book_entry_image_url').first.update_attributes(:value => "http://#{@gemeinschaft_setup.sip_domain.host}/uploads/phone_book_entry/image")
       GsParameter.where(:name => 'ringtone_url').first.update_attributes(:value => "http://#{@gemeinschaft_setup.sip_domain.host}")

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130117191840) do
+ActiveRecord::Schema.define(:version => 20130121123742) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -535,8 +535,9 @@ ActiveRecord::Schema.define(:version => 20130117191840) do
     t.integer  "sip_domain_id"
     t.integer  "country_id"
     t.integer  "language_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.string   "default_area_code"
   end
 
   create_table "gs_cluster_sync_log_entries", :force => true do |t|
