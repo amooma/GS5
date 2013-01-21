@@ -1,3 +1,13 @@
-%footer
-  %p
-    \&copy; AMOOMA GmbH 2005 - #{Date.today.year.to_s} · Bachstr. 124 · 56566 Neuwied · Germany · #{mail_to 'info@amooma.de', 'info@amooma.de'}
+- cache(['application_footer', I18n.locale]) do
+	%footer
+		%ul{:class => 'nav nav-pills'}
+			%li
+				%a{:href => "http://amooma.de/gemeinschaft/gs5"} Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}
+			- if GuiFunction.display?('amooma_commercial_support_link_in_footer', current_user)
+				%li
+					%a{:href => "http://amooma.de"} Support und Consulting
+			- if GuiFunction.display?('gemeinschaft_mailinglist_link_in_footer', current_user)
+				%li
+					%a{:href => "https://groups.google.com/group/gs5-users/"} Mailingliste
+			%li{:class => 'pull-right'}
+				= link_to 'brought to you by AMOOMA GmbH', 'http://amooma.de'
