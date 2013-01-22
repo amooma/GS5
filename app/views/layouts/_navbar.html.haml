@@ -9,13 +9,17 @@
         %span.icon-bar
         %span.icon-bar   
 
-      - if current_user
+      - if current_user && current_user.sip_accounts.any?
         .nav-collapse.collapse
           %ul.nav
             %li
-              %a{:href => "#about"} About
-            %li.pull_right
-              %a{:href => "#contact"} Contact
+              %a{:href => sip_account_call_histories_path(current_user.sip_accounts.first)}
+                %i.icon-list-alt.icon-white
+                =t("call_histories.index.page_title")
+            %li
+              %a{:href => sip_account_voicemail_messages_path(current_user.sip_accounts.first)}
+                %i.icon-volume-up.icon-white
+                =t("voicemail_messages.index.page_title")
 
       - if current_user
         %ul.nav.pull-right
