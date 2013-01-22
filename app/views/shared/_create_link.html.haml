@@ -2,11 +2,11 @@
   - if can? :create, parent.send(child_class.name.underscore.pluralize).build
     %p
       - if t("#{child_class.name.underscore.pluralize}.index.actions.create_for").include?('translation missing') || (!(defined? short_link).nil? && short_link == true)
-        %a.btn.btn-mini.btn-primary{:href => method( :"new_#{parent.class.name.underscore}_#{child_class.name.underscore}_path" ).(parent) }
+        %a.btn.btn-small.btn-primary{:href => method( :"new_#{parent.class.name.underscore}_#{child_class.name.underscore}_path" ).(parent) }
           %i.icon-plus.icon-white
           =t("#{child_class.name.underscore.pluralize}.index.actions.create")
       - else
-        %a.btn.btn-mini.btn-primary{:href => method( :"new_#{parent.class.name.underscore}_#{child_class.name.underscore}_path" ).(parent) }
+        %a.btn.btn-small.btn-primary{:href => method( :"new_#{parent.class.name.underscore}_#{child_class.name.underscore}_path" ).(parent) }
           %i.icon-plus.icon-white
           / =t("#{child_class.name.underscore.pluralize}.index.actions.create_for", :resource => parent.to_s)
           =t("#{child_class.name.underscore.pluralize}.index.actions.create")          
@@ -14,6 +14,6 @@
 - elsif !(defined? child_class).nil?
   - if can? :create, child_class
     %p
-      %a.btn.btn-mini.btn-primary{:href => method( :"new_#{child_class.name.underscore}_path" ).() }
+      %a.btn.btn-small.btn-primary{:href => method( :"new_#{child_class.name.underscore}_path" ).() }
         %i.icon-plus.icon-white
         =t("#{child_class.name.underscore.pluralize}.index.actions.create")
