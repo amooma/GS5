@@ -1,21 +1,22 @@
 %table{:class => 'table table-striped'}
-  %tr
-    %th= t('access_authorizations.index.name')
-    %th= t('access_authorizations.index.login')
-    %th= t('access_authorizations.index.pin')
-    %th= t('callthroughs.index.phone_numbers')
-
-  
-  - for access_authorization in access_authorizations
-    - show_path_method = method( :"#{access_authorization.access_authorizationable.class.name.underscore}_access_authorization_path" )
-    - edit_path_method = method( :"edit_#{access_authorization.access_authorizationable.class.name.underscore}_access_authorization_path" )
+  %thead
     %tr
-      %td= access_authorization.name
-      %td= access_authorization.login
-      %td= access_authorization.pin
-      %td
-        =render 'phone_numbers/listing', :phone_numbers => access_authorization.phone_numbers
-        - if access_authorization.phone_numbers.count > 0
-          %br
-        = link_to t('phone_numbers.index.actions.create'), new_access_authorization_phone_number_path(access_authorization)
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => access_authorization.access_authorizationable, :child => access_authorization}
+      %th= t('access_authorizations.index.name')
+      %th= t('access_authorizations.index.login')
+      %th= t('access_authorizations.index.pin')
+      %th= t('callthroughs.index.phone_numbers')
+
+  %tbody
+    - for access_authorization in access_authorizations
+      - show_path_method = method( :"#{access_authorization.access_authorizationable.class.name.underscore}_access_authorization_path" )
+      - edit_path_method = method( :"edit_#{access_authorization.access_authorizationable.class.name.underscore}_access_authorization_path" )
+      %tr
+        %td= access_authorization.name
+        %td= access_authorization.login
+        %td= access_authorization.pin
+        %td
+          =render 'phone_numbers/listing', :phone_numbers => access_authorization.phone_numbers
+          - if access_authorization.phone_numbers.count > 0
+            %br
+          = link_to t('phone_numbers.index.actions.create'), new_access_authorization_phone_number_path(access_authorization)
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => access_authorization.access_authorizationable, :child => access_authorization}

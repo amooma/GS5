@@ -1,16 +1,17 @@
 - cache(['gs_parameters_table_section', gs_parameters.first.section, gs_parameters.reorder(:updated_at).last, gs_parameters.pluck(:id)]) do
-  %tr
-    %th= t('gs_parameters.index.name')
-    - if !@sections
-      %th= t('gs_parameters.index.section')
-    %th= t('gs_parameters.index.value')
+  %thead
+    %tr
+      %th= t('gs_parameters.index.name')
+      - if !@sections
+        %th= t('gs_parameters.index.section')
+      %th= t('gs_parameters.index.value')
 
-  
-  - for gs_parameter in gs_parameters
-    - cache(['gs_parameters_table_single_row', gs_parameter]) do 
-      %tr
-        %td= gs_parameter.name
-        - if !@sections
-          %td= gs_parameter.section
-        %td= truncate(gs_parameter.value, :length => 50)
-        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gs_parameter}
+  %tbody
+    - for gs_parameter in gs_parameters
+      - cache(['gs_parameters_table_single_row', gs_parameter]) do 
+        %tr
+          %td= gs_parameter.name
+          - if !@sections
+            %td= gs_parameter.section
+          %td= truncate(gs_parameter.value, :length => 50)
+          =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gs_parameter}

@@ -1,18 +1,19 @@
 %table{:class => 'table table-striped'}
-  %tr
-    %th= t('phone_books.index.name')
-    %th= t('phone_books.index.count')
-    %th{:colspan => '3'}
-  
-  - for phone_book in phone_books
+  %thead
     %tr
-      %td
-        - if phone_book.description.blank?
-          = phone_book.name
-        - else
-          %a.brand{:rel => 'tooltip', :title => phone_book.description}
-            = phone_book.name
-      %td
-        = number_with_delimiter( phone_book.phone_book_entries.count )
+      %th= t('phone_books.index.name')
+      %th= t('phone_books.index.count')
 
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone_book.phone_bookable, :child => phone_book}
+  %tbody
+    - for phone_book in phone_books
+      %tr
+        %td
+          - if phone_book.description.blank?
+            = phone_book.name
+          - else
+            %a.brand{:rel => 'tooltip', :title => phone_book.description}
+              = phone_book.name
+        %td
+          = number_with_delimiter( phone_book.phone_book_entries.count )
+
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone_book.phone_bookable, :child => phone_book}

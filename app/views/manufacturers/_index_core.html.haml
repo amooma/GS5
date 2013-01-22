@@ -1,18 +1,19 @@
 %table{:class => 'table table-striped'}
-  %tr
-    %th= t('manufacturers.index.name')
-    %th= t('manufacturers.index.ieee_name')
-    %th= t('manufacturers.index.homepage_url')
-    %th= t('manufacturers.index.phone_models')
-
-  
-  - for manufacturer in manufacturers
+  %thead
     %tr
-      %td= manufacturer.name
-      %td= manufacturer.ieee_name
-      %td
-        - if manufacturer.homepage_url
-          =link_to manufacturer.homepage_url, manufacturer.homepage_url
-      %td
-        = manufacturer.phone_models.map{|x| x.to_s }.join(', ')
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => manufacturer}
+      %th= t('manufacturers.index.name')
+      %th= t('manufacturers.index.ieee_name')
+      %th= t('manufacturers.index.homepage_url')
+      %th= t('manufacturers.index.phone_models')
+
+  %tbody
+    - for manufacturer in manufacturers
+      %tr
+        %td= manufacturer.name
+        %td= manufacturer.ieee_name
+        %td
+          - if manufacturer.homepage_url
+            =link_to manufacturer.homepage_url, manufacturer.homepage_url
+        %td
+          = manufacturer.phone_models.map{|x| x.to_s }.join(', ')
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => manufacturer}

@@ -1,52 +1,74 @@
 - content_for :title, t("phones.show.page_title")
 
-%p
-  %strong= t('phones.show.mac_address') + ":"
-  = @phone.pretty_mac_address
-%p
-  %strong= t('phones.show.phone_model_id') + ":"
-  = @phone.phone_model
-  - if !@phone.phone_model.product_manual_homepage_url.blank?
-    (#{link_to t('phones.show.manual'), @phone.phone_model.product_manual_homepage_url})
-- if @phone.hot_deskable == true
-  %p
-    %strong= t('phones.show.hot_deskable') + ":"
-    = @phone.hot_deskable
-  %p
-    %strong= t('phones.show.fallback_sip_account_id') + ":"
-    = @phone.fallback_sip_account
+.row
+  .span6
+    %table
+      %tr
+        %td
+          %strong= t('phones.show.mac_address') + ":"
+        %td
+          = @phone.pretty_mac_address
+      %tr
+        %td
+          %strong= t('phones.show.phone_model_id') + ":"
+        %td
+          = @phone.phone_model
+          - if !@phone.phone_model.product_manual_homepage_url.blank?
+            (#{link_to t('phones.show.manual'), @phone.phone_model.product_manual_homepage_url})
+      - if @phone.hot_deskable == true
+        %tr
+          %td
+            %strong= t('phones.show.hot_deskable') + ":"
+          %td
+            = @phone.hot_deskable
+        %tr
+          %td
+            %strong= t('phones.show.fallback_sip_account_id') + ":"
+          %td
+            = @phone.fallback_sip_account
 
-- if defined? GsParameter.get('NIGHTLY_REBOOT_OF_PHONES') && GsParameter.get('NIGHTLY_REBOOT_OF_PHONES') == true
-  %p
-    %strong= t('phones.show.nightly_reboot') + ":"
-    = @phone.nightly_reboot
+      - if defined? GsParameter.get('NIGHTLY_REBOOT_OF_PHONES') && GsParameter.get('NIGHTLY_REBOOT_OF_PHONES') == true
+        %tr
+          %td
+            %strong= t('phones.show.nightly_reboot') + ":"
+          %td
+            = @phone.nightly_reboot
 
-- if !GsParameter.get('PROVISIONING_KEY_LENGTH').nil? && GsParameter.get('PROVISIONING_KEY_LENGTH') > 0
-  %p
-    %strong= t('phones.show.provisioning_key_active') + ":"
-    = @phone.provisioning_key_active
-%p
-  %strong= t('phones.show.ip_address') + ":"
-  = @phone.ip_address
+      - if !GsParameter.get('PROVISIONING_KEY_LENGTH').nil? && GsParameter.get('PROVISIONING_KEY_LENGTH') > 0
+        %tr
+          %td
+            %strong= t('phones.show.provisioning_key_active') + ":"
+          %td
+            = @phone.provisioning_key_active
 
-- if @phone.ip_address.blank? && @phone.phone_model.manufacturer.ieee_name == 'SNOM Technology AG'
-  %p
-    Sollten Sie Ihren DHCP-Server noch nicht für das automatische Konfigurieren der GS5 Provisionierungs-URL konfiguriert haben, können Sie manuell in Ihrem Telefon die folgende Provisionierungs-URL eingeben.
-  %p
-    Das entsprechende Eingabefeld finden Sie unter
-    %br
-    Advanced -> Update -> Setting URL
-  %p
-    Das "{mac}" bitte genau so eingeben, es wird vom Telefon automatisch mit der eigenen MAC-Adresse befüllt:
-    %pre
-      = "http://#{GemeinschaftSetup.first.sip_domain.host}/settings-{mac}"
-  %p
-    Danach müssen Sie die Konfiguration abspeichern und das Telefon booten.
+      %tr
+        %td
+          %strong= t('phones.show.ip_address') + ":"
+        %td
+          = @phone.ip_address
 
-= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone.phoneable, :child => @phone }
+    = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone.phoneable, :child => @phone }
 
-%h2= t("phones.sip_accounts.title")
-- if @phone.phone_sip_accounts.count > 0
-  = render "phone_sip_accounts/index_core", :phone_sip_accounts => @phone.phone_sip_accounts
 
-= render :partial => 'shared/create_link', :locals => {:parent => @phone, :child_class => PhoneSipAccount}
+  .span6
+    - if @phone.ip_address.blank? && @phone.phone_model.manufacturer.ieee_name == 'SNOM Technology AG'
+      %p
+        Sollten Sie Ihren DHCP-Server noch nicht für das automatische Konfigurieren der GS5 Provisionierungs-URL konfiguriert haben, können Sie manuell in Ihrem Telefon die folgende Provisionierungs-URL eingeben.
+      %p
+        Das entsprechende Eingabefeld finden Sie unter
+        %br
+        Advanced -> Update -> Setting URL
+      %p
+        Das "{mac}" bitte genau so eingeben, es wird vom Telefon automatisch mit der eigenen MAC-Adresse befüllt:
+        %pre
+          = "http://#{GemeinschaftSetup.first.sip_domain.host}/settings-{mac}"
+      %p
+        Danach müssen Sie die Konfiguration abspeichern und das Telefon booten.
+
+.row
+  .span12
+    %h2= t("phones.sip_accounts.title")
+    - if @phone.phone_sip_accounts.count > 0
+      = render "phone_sip_accounts/index_core", :phone_sip_accounts => @phone.phone_sip_accounts
+
+    = render :partial => 'shared/create_link', :locals => {:parent => @phone, :child_class => PhoneSipAccount}

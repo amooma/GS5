@@ -1,31 +1,32 @@
 %table{:class => 'table table-striped'}
-  %tr
-    - if !@phone_number
-      %th= t('call_forwards.index.phone_number_id')
-    %th= t('call_forwards.index.call_forward_case_id')
-    %th= t('call_forwards.index.timeout')
-    %th= t('call_forwards.index.destination')
-    %th= t('call_forwards.index.source')
-    - if GuiFunction.display?('depth_field_value_in_index_table', current_user)
-      %th= t('call_forwards.index.depth')
-    %th= t('call_forwards.index.active')
-
-  
-  - for call_forward in call_forwards
+  %thead
     %tr
       - if !@phone_number
-        %td= call_forward.phone_number
-      %td= t("call_forward_cases.#{call_forward.call_forward_case.value}")
-      %td= call_forward.timeout
-      %td
-        = call_forward.destination
-        - if call_forward.call_forwardable_type
-          %br
-          = call_forward.call_forwardable_type
-          - if call_forward.call_forwardable
-            = ": #{call_forward.call_forwardable}"
-      %td= call_forward.source
+        %th= t('call_forwards.index.phone_number_id')
+      %th= t('call_forwards.index.call_forward_case_id')
+      %th= t('call_forwards.index.timeout')
+      %th= t('call_forwards.index.destination')
+      %th= t('call_forwards.index.source')
       - if GuiFunction.display?('depth_field_value_in_index_table', current_user)
-        %td= call_forward.depth
-      %td= call_forward.active
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => call_forward.phone_number, :child => call_forward}
+        %th= t('call_forwards.index.depth')
+      %th= t('call_forwards.index.active')
+
+  %tbody
+    - for call_forward in call_forwards
+      %tr
+        - if !@phone_number
+          %td= call_forward.phone_number
+        %td= t("call_forward_cases.#{call_forward.call_forward_case.value}")
+        %td= call_forward.timeout
+        %td
+          = call_forward.destination
+          - if call_forward.call_forwardable_type
+            %br
+            = call_forward.call_forwardable_type
+            - if call_forward.call_forwardable
+              = ": #{call_forward.call_forwardable}"
+        %td= call_forward.source
+        - if GuiFunction.display?('depth_field_value_in_index_table', current_user)
+          %td= call_forward.depth
+        %td= call_forward.active
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => call_forward.phone_number, :child => call_forward}

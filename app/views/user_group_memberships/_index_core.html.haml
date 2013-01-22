@@ -1,13 +1,14 @@
 %table{:class => 'table table-striped'}
-  %tr
-    %th= t('user_group_memberships.index.tenant')
-    %th= t('user_group_memberships.index.user_group')
-    %th= t('user_group_memberships.index.user')
-
-  
-  - for user_group_membership in user_group_memberships
+  %thead
     %tr
-      %td= user_group_membership.user_group.tenant
-      %td= user_group_membership.user_group
-      %td= user_group_membership.user
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => user_group_membership.user_group, :child => user_group_membership}
+      %th= t('user_group_memberships.index.tenant')
+      %th= t('user_group_memberships.index.user_group')
+      %th= t('user_group_memberships.index.user')
+
+  %tbody
+    - for user_group_membership in user_group_memberships
+      %tr
+        %td= user_group_membership.user_group.tenant
+        %td= user_group_membership.user_group
+        %td= user_group_membership.user
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => user_group_membership.user_group, :child => user_group_membership}

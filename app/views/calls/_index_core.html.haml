@@ -1,9 +1,10 @@
 %table{:class => 'table table-striped'}
-  %tr
-    %th= t('calls.index.uuid')
-
-  
-  - for call in @calls
+  %thead
     %tr
-      %td
-        = call.uuid
+      %th= t('calls.index.uuid')
+  
+  %tbody
+    - for call in @calls
+      %tr
+        %td
+          = call.uuid

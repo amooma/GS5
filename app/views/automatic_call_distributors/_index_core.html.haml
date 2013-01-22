@@ -1,39 +1,40 @@
 %table{:class => 'table table-striped'}
-  %tr
-    %th= t('automatic_call_distributors.index.name')
-    %th= t('automatic_call_distributors.index.strategy')
-    %th= t('automatic_call_distributors.index.max_callers')
-    %th= t('automatic_call_distributors.index.agent_timeout')
-    %th= t('automatic_call_distributors.index.retry_timeout')
-    %th= t('automatic_call_distributors.index.join')
-    %th= t('automatic_call_distributors.index.leave')
-    %th= t('automatic_call_distributors.index.phone_numbers')
-    %th= t('automatic_call_distributors.index.acd_agents')
-
-  
-  - for automatic_call_distributor in automatic_call_distributors
+  %thead
     %tr
-      %td= automatic_call_distributor.name
-      %td= t("automatic_call_distributors.strategies.#{automatic_call_distributor.strategy}")
-      %td= automatic_call_distributor.max_callers
-      %td= automatic_call_distributor.agent_timeout
-      %td= automatic_call_distributor.retry_timeout
-      %td= t("automatic_call_distributors.join_on.#{automatic_call_distributor.join}")
-      %td= t("automatic_call_distributors.leave_on.#{automatic_call_distributor.leave}")
+      %th= t('automatic_call_distributors.index.name')
+      %th= t('automatic_call_distributors.index.strategy')
+      %th= t('automatic_call_distributors.index.max_callers')
+      %th= t('automatic_call_distributors.index.agent_timeout')
+      %th= t('automatic_call_distributors.index.retry_timeout')
+      %th= t('automatic_call_distributors.index.join')
+      %th= t('automatic_call_distributors.index.leave')
+      %th= t('automatic_call_distributors.index.phone_numbers')
+      %th= t('automatic_call_distributors.index.acd_agents')
 
-      %td
-        - if automatic_call_distributor.phone_numbers.count > 0
-          = render 'phone_numbers/listing', :phone_numbers => automatic_call_distributor.phone_numbers
-          %br
-        = render :partial => 'shared/create_link', :locals => {:parent => automatic_call_distributor, :child_class => PhoneNumber, :short_link => true}
+  %tbody
+    - for automatic_call_distributor in automatic_call_distributors
+      %tr
+        %td= automatic_call_distributor.name
+        %td= t("automatic_call_distributors.strategies.#{automatic_call_distributor.strategy}")
+        %td= automatic_call_distributor.max_callers
+        %td= automatic_call_distributor.agent_timeout
+        %td= automatic_call_distributor.retry_timeout
+        %td= t("automatic_call_distributors.join_on.#{automatic_call_distributor.join}")
+        %td= t("automatic_call_distributors.leave_on.#{automatic_call_distributor.leave}")
 
-      %td
-        - if automatic_call_distributor.acd_agents.count > 3
-          = link_to automatic_call_distributor.acd_agents.count, automatic_call_distributor_acd_agents_path(automatic_call_distributor)
-          %br
-        - elsif automatic_call_distributor.acd_agents.count > 0
-          = render 'acd_agents/listing', :acd_agents => automatic_call_distributor.acd_agents
-          %br
-        = render :partial => 'shared/create_link', :locals => {:parent => automatic_call_distributor, :child_class => AcdAgent, :short_link => true}
+        %td
+          - if automatic_call_distributor.phone_numbers.count > 0
+            = render 'phone_numbers/listing', :phone_numbers => automatic_call_distributor.phone_numbers
+            %br
+          = render :partial => 'shared/create_link', :locals => {:parent => automatic_call_distributor, :child_class => PhoneNumber, :short_link => true}
 
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => automatic_call_distributor.automatic_call_distributorable, :child => automatic_call_distributor}
+        %td
+          - if automatic_call_distributor.acd_agents.count > 3
+            = link_to automatic_call_distributor.acd_agents.count, automatic_call_distributor_acd_agents_path(automatic_call_distributor)
+            %br
+          - elsif automatic_call_distributor.acd_agents.count > 0
+            = render 'acd_agents/listing', :acd_agents => automatic_call_distributor.acd_agents
+            %br
+          = render :partial => 'shared/create_link', :locals => {:parent => automatic_call_distributor, :child_class => AcdAgent, :short_link => true}
+
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => automatic_call_distributor.automatic_call_distributorable, :child => automatic_call_distributor}

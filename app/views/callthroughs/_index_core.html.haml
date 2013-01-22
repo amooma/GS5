@@ -1,17 +1,18 @@
 %table{:class => 'table table-striped'}
-  %tr
-    %th= t('callthroughs.index.name')
-    %th= t('callthroughs.index.phone_numbers')
-    %th= t('callthroughs.index.access_authorized_phone_numbers')
-    - if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
-      %th= t('callthroughs.index.whitelist_phone_numbers')
-
-  
-  - for callthrough in callthroughs
+  %thead
     %tr
-      %td= callthrough.name
-      %td=render 'phone_numbers/listing', :phone_numbers => callthrough.phone_numbers
-      %td=render 'phone_numbers/listing', :phone_numbers => callthrough.access_authorization_phone_numbers
+      %th= t('callthroughs.index.name')
+      %th= t('callthroughs.index.phone_numbers')
+      %th= t('callthroughs.index.access_authorized_phone_numbers')
       - if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
-        %td=render 'phone_numbers/listing', :phone_numbers => callthrough.whitelisted_phone_numbers
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => callthrough.tenant, :child => callthrough}
+        %th= t('callthroughs.index.whitelist_phone_numbers')
+
+  %tbody
+    - for callthrough in callthroughs
+      %tr
+        %td= callthrough.name
+        %td=render 'phone_numbers/listing', :phone_numbers => callthrough.phone_numbers
+        %td=render 'phone_numbers/listing', :phone_numbers => callthrough.access_authorization_phone_numbers
+        - if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
+          %td=render 'phone_numbers/listing', :phone_numbers => callthrough.whitelisted_phone_numbers
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => callthrough.tenant, :child => callthrough}

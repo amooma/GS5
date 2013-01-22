@@ -1,11 +1,12 @@
 %table{:class => 'table table-striped'}
-  %tr
-    %th= t('sip_domains.index.host')
-    %th= t('sip_domains.index.realm')
-
-  
-  - for sip_domain in sip_domains
+  %thead
     %tr
-      %td= sip_domain.host
-      %td= sip_domain.realm
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => sip_domain}
+      %th= t('sip_domains.index.host')
+      %th= t('sip_domains.index.realm')
+
+  %tbody
+    - for sip_domain in sip_domains
+      %tr
+        %td= sip_domain.host
+        %td= sip_domain.realm
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => sip_domain}

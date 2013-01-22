@@ -1,15 +1,16 @@
 %table{:class => 'table table-striped'}
-  %tr
-    %th= t('phones.index.mac_address')
-    %th= t('phones.index.phone_model_id')
-    %th= t('phones.index.hot_deskable')
-    %th= t('phones.index.ip_address')
-
-  
-  - for phone in phones
+  %thead
     %tr
-      %td= phone.pretty_mac_address
-      %td= phone.phone_model
-      %td= phone.hot_deskable
-      %td= phone.ip_address
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone.phoneable, :child => phone}
+      %th= t('phones.index.mac_address')
+      %th= t('phones.index.phone_model_id')
+      %th= t('phones.index.hot_deskable')
+      %th= t('phones.index.ip_address')
+
+  %tbody
+    - for phone in phones
+      %tr
+        %td= phone.pretty_mac_address
+        %td= phone.phone_model
+        %td= phone.hot_deskable
+        %td= phone.ip_address
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone.phoneable, :child => phone}

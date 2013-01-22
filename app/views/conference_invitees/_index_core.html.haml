@@ -1,17 +1,18 @@
 %table{:class => 'table table-striped'}
-  %tr
-    %th= t('conference_invitees.index.phone_book_entry_id')
-    %th= t('conference_invitees.index.phone_number')
-    %th= t('conference_invitees.index.pin')
-    %th= t('conference_invitees.index.speaker')
-    %th= t('conference_invitees.index.moderator')
-
-  
-  - for conference_invitee in conference_invitees
+  %thead
     %tr
-      %td= conference_invitee.phone_book_entry || '-'
-      %td= conference_invitee.phone_number
-      %td= conference_invitee.pin
-      %td= conference_invitee.speaker
-      %td= conference_invitee.moderator
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => conference_invitee.conference, :child => conference_invitee}
+      %th= t('conference_invitees.index.phone_book_entry_id')
+      %th= t('conference_invitees.index.phone_number')
+      %th= t('conference_invitees.index.pin')
+      %th= t('conference_invitees.index.speaker')
+      %th= t('conference_invitees.index.moderator')
+
+  %tbody
+    - for conference_invitee in conference_invitees
+      %tr
+        %td= conference_invitee.phone_book_entry || '-'
+        %td= conference_invitee.phone_number
+        %td= conference_invitee.pin
+        %td= conference_invitee.speaker
+        %td= conference_invitee.moderator
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => conference_invitee.conference, :child => conference_invitee}
