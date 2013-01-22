@@ -5,12 +5,20 @@
       - if !conferences.respond_to?('where') || conferences.where(:start => nil).where(:end => nil).count != conferences.count
         %th= t('conferences.index.start')
         %th= t('conferences.index.end')
-      %th= t('conferences.index.phone_numbers')
+      %th
+        %span.hidden-phone
+          = t('conferences.index.phone_numbers')
       - if !conferences.respond_to?('where') || conferences.where(:pin => '').count != conferences.count
         %th= t('conferences.index.pin')
-      %th= t('conferences.index.max_members')
-      %th= t('conferences.index.number_of_invitees')
-      %th= t('conferences.index.flags')
+      %th
+        %span.hidden-phone
+          = t('conferences.index.max_members')
+      %th
+        %span.hidden-phone
+          = t('conferences.index.number_of_invitees')
+      %th
+        %span.hidden-phone
+          = t('conferences.index.flags')
 
   %tbody
     - for conference in conferences
@@ -29,10 +37,8 @@
             - else
               = '-'
         %td
-          - if conference.phone_numbers.count > 0
+          - if conference.phone_numbers.any?
             = render 'phone_numbers/listing', :phone_numbers => conference.phone_numbers.order(:number)
-            %br
-          = render :partial => 'shared/create_link', :locals => {:parent => conference, :child_class => PhoneNumber, :short_link => true}
 
         - if !conferences.respond_to?('where') || conferences.where(:pin => '').count != conferences.count
           %td
@@ -40,15 +46,20 @@
               = conference.pin
             - else
               = '-'
-        %td= conference.max_members
-        %td= conference.conference_invitees.count
         %td
-          %ul
-          - if conference.open_for_anybody
-            %li= t('conferences.index.open_for_anybody')
-          - if conference.announce_new_member_by_name
-            %li= t('conferences.index.announce_new_member_by_name')
-          - if conference.announce_left_member_by_name
-            %li= t('conferences.index.announce_left_member_by_name')
+          %span.hidden-phone
+            = conference.max_members
+        %td
+          %span.hidden-phone
+            = conference.conference_invitees.count
+        %td
+          %span.hidden-phone
+            %ul
+            - if conference.open_for_anybody
+              %li= t('conferences.index.open_for_anybody')
+            - if conference.announce_new_member_by_name
+              %li= t('conferences.index.announce_new_member_by_name')
+            - if conference.announce_left_member_by_name
+              %li= t('conferences.index.announce_left_member_by_name')
 
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => parent, :child => conference}
