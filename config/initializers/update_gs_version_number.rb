@@ -7,3 +7,10 @@ if !ENV['GS_VERSION'].nil? && GsParameter.table_exists? && GsParameter.get('GEME
   version.value = ENV['GS_VERSION']
   version.save
 end
+
+if !ENV['GS_BUILDNAME'].nil? && GsParameter.table_exists? && GsParameter.get('GS_BUILDNAME') != ENV['GS_BUILDNAME']
+  buildname = GsParameter.find_or_create_by_name('GEMEINSCHAFT_BUILDNAME')
+  buildname.section = 'Generic'
+  buildname.value = ENV['GS_BUILDNAME']
+  buildname.save
+end
