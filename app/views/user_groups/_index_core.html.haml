@@ -4,9 +4,13 @@
       %tr
         %th= t('user_groups.index.name')
         - if user_groups.pluck(:description).uniq != [nil]
-          %th= t('user_groups.index.description')
+          %th
+            %span.hidden-phone
+              = t('user_groups.index.description')
         - if @user
-          %th= t('user_groups.index.tenant_id')
+          %th
+            %span.hidden-phone
+              = t('user_groups.index.tenant_id')
         - else
           %th= t('user_groups.index.members')
 
@@ -15,9 +19,13 @@
         %tr
           %td= user_group.name
           - if user_groups.pluck(:description).uniq != [nil]
-            %td= user_group.description
+            %td
+              %span.hidden-phone
+                = user_group.description
           - if @user
-            %td= user_group.tenant
+            %td
+              %span.hidden-phone
+                = user_group.tenant
           - else
             %td
               =render 'users/listing', :users => user_group.users

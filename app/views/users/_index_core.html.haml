@@ -4,8 +4,12 @@
       %tr
         %th
         %th= t('users.index.user_name')
-        %th= t('users.index.email')
-        %th= t('users.index.first_name')
+        %th
+          %span.hidden-phone
+            = t('users.index.email')
+        %th
+          %span.hidden-phone
+            = t('users.index.first_name')
         %th= t('users.index.last_name')
 
     %tbody
@@ -23,7 +27,10 @@
             %td= user.user_name
             %td
               - if !user.email.blank?
-                = mail_to user.email, (Haml::Engine.new("%i.icon-envelope").render + ' ' + user.email)
-            %td= user.first_name
+                %span.hidden-phone
+                  = mail_to user.email, (Haml::Engine.new("%i.icon-envelope").render + ' ' + user.email)
+            %td
+              %span.hidden-phone
+                = user.first_name
             %td= user.last_name
             =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => @tenant, :child => user}

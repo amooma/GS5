@@ -2,17 +2,19 @@
   %thead
     %tr
       %th= t('phone_books.index.name')
+      %th
+        %span.visible-desktop
+          = t('phone_books.index.description')
       %th= t('phone_books.index.count')
 
   %tbody
     - for phone_book in phone_books
       %tr
         %td
-          - if phone_book.description.blank?
-            = phone_book.name
-          - else
-            %a.brand{:rel => 'tooltip', :title => phone_book.description}
-              = phone_book.name
+          = phone_book.name
+        %td
+          %span.visible-desktop
+            = phone_book.description
         %td
           = number_with_delimiter( phone_book.phone_book_entries.count )
 
