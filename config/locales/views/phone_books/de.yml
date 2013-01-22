@@ -13,7 +13,7 @@ de:
       successfuly_destroyed: 'Ein Telefonbuch wurde gelöscht.'
     index:
       page_title: 'Telefonbücher'
-      name: 'Name des Telefonbuches'
+      name: 'Name'
       description: 'Beschreibung'
       count: 'Anzahl Einträge'
       actions:
