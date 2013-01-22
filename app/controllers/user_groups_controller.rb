@@ -38,7 +38,7 @@ class UserGroupsController < ApplicationController
 
   def destroy
     @user_group.destroy
-    redirect_to method( :"#{@parent.class.name.underscore}_user_groups_path" ).(@parent), :notice => t('user_groups.controller.successfuly_destroyed')
+    redirect_to :back, :notice => t('user_groups.controller.successfuly_destroyed')
   end
   
   private

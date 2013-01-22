@@ -31,9 +31,17 @@
 
 - if @phone.ip_address.blank? && @phone.phone_model.manufacturer.ieee_name == 'SNOM Technology AG'
   %p
-    Sollten Sie Ihren DHCP-Server noch nicht für das automatische Konfigurieren der GS5 Provisionierungs-URL konfiguriert haben, können Sie manuell in Ihrem Telefon die folgende Provisionierungs-URL eingeben. Das "{mac}" bitte genau so eingeben, es wird vom Telefon automatisch mit der eigenen MAC-Adresse befüllt:
+    Sollten Sie Ihren DHCP-Server noch nicht für das automatische Konfigurieren der GS5 Provisionierungs-URL konfiguriert haben, können Sie manuell in Ihrem Telefon die folgende Provisionierungs-URL eingeben.
+  %p
+    Das entsprechende Eingabefeld finden Sie unter
+    %br
+    Advanced -> Update -> Setting URL
+  %p
+    Das "{mac}" bitte genau so eingeben, es wird vom Telefon automatisch mit der eigenen MAC-Adresse befüllt:
     %pre
       = "http://#{GemeinschaftSetup.first.sip_domain.host}/settings-{mac}"
+  %p
+    Danach müssen Sie die Konfiguration abspeichern und das Telefon booten.
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone.phoneable, :child => @phone }
 

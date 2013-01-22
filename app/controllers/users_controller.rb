@@ -52,7 +52,7 @@ class UsersController < ApplicationController
     
   def destroy
     @user.destroy
-    redirect_to @parent, :notice => t('users.controller.successfuly_destroyed')
+    redirect_to :back, :notice => t('users.controller.successfuly_destroyed')
   end
 
   def destroy_avatar
