@@ -1,5 +1,10 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  scope :constraints => lambda{|req|%w(127.0.0.1).include? req.remote_addr} do
+    get "trigger/voicemail"
+    get "trigger/fax"
+  end
+
   resources :call_routes do
     resources :route_elements do
       member do
