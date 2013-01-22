@@ -1,18 +1,23 @@
 = render :partial => "call_histories/navigation"
 
 %table{:class => 'table table-striped'}
+  %thead
+    %tr
+      %th
+        Uhrzeit
+      %th
+        Teilnehmer
+      %th
+        Status
+
   %tbody
     - for call_history in call_histories
       - phone_number = call_history.display_number
       - voicemail_message = call_history.voicemail_message
       - if phone_number
         - phone_book_entry = call_history.phone_book_entry_by_number(phone_number)
-      %tr.call-history-entry
-        %td.thumbnail
-          - image = call_history.display_image(:small, phone_book_entry)
-          - if image
-            = image_tag(image, :itemprop => 'image')
-        %td.time
+      %tr
+        %td
           - if voicemail_message
             .voicemail-message
               %a{:href => sip_account_voicemail_messages_path(@sip_account, :anchor => "message_#{voicemail_message.id}")}
@@ -37,7 +42,11 @@
           - if call_history.forwarding_service && call_history.entry_type != 'forwarded'
             = t("call_histories.index.forwarded_by")
             = call_history.display_auth_account_name
-        %td.user
+        %td
+          - image = call_history.display_image(:small, phone_book_entry)
+          - if image
+            = image_tag(image, :itemprop => 'image')
+
           - display_name = call_history.display_name
           - if display_name.blank?
             - display_name = phone_book_entry.to_s
@@ -46,14 +55,17 @@
           - else
             .name= display_name
           .phone= phone_number
-        %td.status
+        %td
           - if call_history.display_duration
             .duration= call_history.display_duration
           - else
             .disposition= t("call_histories.call_results.#{call_history.result}")
-        %td.actions
+        %td
           - if @sip_account.registration && can?(:call, call_history)
             = link_to t('call_histories.index.actions.call'), call_sip_account_call_history_path(@sip_account, call_history), :method => :put
-        %td.actions
+        %td
           - if can? :destroy, call_history
-            = link_to t('call_histories.index.actions.destroy'), sip_account_call_history_path(@sip_account, call_history), :method => :delete
+            / = link_to t('call_histories.index.actions.destroy'), sip_account_call_history_path(@sip_account, call_history), :method => :delete
+            %a.btn.btn-mini.btn-danger{"data-confirm" => t("#{call_history.class.name.underscore.pluralize}.actions.confirm_detroy"), "data-method" => "delete", :href => sip_account_call_history_path(@sip_account, call_history), :rel => "nofollow"}
+              %i.icon-trash.icon-white
+              =t('call_histories.index.actions.destroy')            
