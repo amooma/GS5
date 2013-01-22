@@ -1,4 +1,4 @@
-- title t("hunt_groups.index.page_title")
+- content_for :title, t("hunt_groups.index.page_title")
 
 - if @hunt_groups.count > 0
   = render "index_core", :hunt_groups => @hunt_groups

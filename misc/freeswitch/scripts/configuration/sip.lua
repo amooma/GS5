@@ -1,5 +1,5 @@
 -- Gemeinschaft 5 module: sip configuration class
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 module(...,package.seeall)
@@ -16,12 +16,6 @@ function Sip.new(self, arg)
   self.database = arg.database;
   self.record = arg.record;
   return object;
-end
-
--- find gateway by name
-function Sip.find_gateway_by_name(self, name)
-  require 'common.configuration_file'
-  return common.configuration_file.get('/opt/freeswitch/scripts/ini/gateways.ini', name);
 end
 
 -- list sip domains

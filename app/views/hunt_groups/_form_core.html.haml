@@ -1,4 +1,4 @@
 .inputs
   = f.input :name, :label => t('hunt_groups.form.name.label'), :hint => conditional_hint('hunt_groups.form.name.hint')
-  = f.input :strategy, :as => :select, :label => t('hunt_groups.form.strategy.label'), :hint => conditional_hint('hunt_groups.form.strategy.hint'), :include_blank => false, :collection => HUNT_GROUP_STRATEGIES.map {|x| [I18n.t('hunt_groups.strategies.' + x), x] }
-  = f.input :seconds_between_jumps, :collection => VALID_SECONDS_BETWEEN_JUMPS_VALUES, :label => t('hunt_groups.form.seconds_between_jumps.label'), :hint => conditional_hint('hunt_groups.form.seconds_between_jumps.hint')
+  = f.input :strategy, :as => :select, :label => t('hunt_groups.form.strategy.label'), :hint => conditional_hint('hunt_groups.form.strategy.hint'), :include_blank => false, :collection => GsParameter.get('HUNT_GROUP_STRATEGIES').map {|x| [I18n.t('hunt_groups.strategies.' + x), x] }
+  = f.input :seconds_between_jumps, :collection => GsParameter.get('VALID_SECONDS_BETWEEN_JUMPS_VALUES'), :label => t('hunt_groups.form.seconds_between_jumps.label'), :hint => conditional_hint('hunt_groups.form.seconds_between_jumps.hint')

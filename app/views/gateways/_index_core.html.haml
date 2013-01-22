@@ -1,0 +1,19 @@
+- cache(['gateways_table', gateways.count, gateways.first, gateways.last]) do 
+  %table{:class => 'table table-striped'}
+    %tr
+      %th= t('gateways.index.name')
+      %th= t('gateways.index.technology')
+      %th= t('gateways.index.inbound')
+      %th= t('gateways.index.outbound')
+      %th= t('gateways.index.description')
+      %th{:colspan => '3'}
+    
+    - for gateway in gateways
+      %tr
+        - cache(['gateway_single_table_row_within_tr', gateway, gateways.count]) do 
+          %td= gateway.name
+          %td= gateway.technology
+          %td= gateway.inbound
+          %td= gateway.outbound
+          %td= gateway.description
+          =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gateway}

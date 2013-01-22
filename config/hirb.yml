@@ -198,4 +198,11 @@
       - first_name
       - user_name
       - user
-
+  GatewaySetting:
+    :options:
+      :fields:
+      - id
+      - gateway
+      - name
+      - value
+      - class_type

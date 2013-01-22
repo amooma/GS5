@@ -1,0 +1,15 @@
+- content_for :title, t("gs_parameters.index.page_title")
+
+- if @gs_parameters && @gs_parameters.count > 0
+  - cache(['gs_parameters_table', I18n.locale, @gs_parameters_unordered.reorder(:updated_at).last, @gs_parameters_unordered.count]) do
+    - if @sections
+      %table{:class => 'table table-striped'}
+        - @sections.each do |section|
+          %tr
+            %td{:colspan => 3}
+              %h3= section
+          -# Template Dependency: gs_parameters/_index_core 
+          = render "index_core", :gs_parameters => @gs_parameters.where(:section => section)
+    - else
+      %table{:class => 'table table-striped'}
+        = render "index_core", :gs_parameters => @gs_parameters

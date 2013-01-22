@@ -1,5 +1,5 @@
 -- Gemeinschaft 5.0 event handler
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 -- Set logger
@@ -17,10 +17,9 @@ if not database:connected() then
 end
 
 require "configuration.sip"
-local sip = configuration.sip.Sip:new{ log = log, database = database }
+local domains = configuration.sip.Sip:new{ log = log, database = database }:domains();
 
 local domain = '127.0.0.1';
-local domains = sip:domains();
 if domains[1] then
   domain = domains[1]['host'];
 else

@@ -3,7 +3,7 @@ require 'test_helper'
 class GemeinschaftSetupsControllerTest < ActionController::TestCase
   
   setup do
-    @gemeinschaft_setup = Factory.build(:gemeinschaft_setup)
+    @gemeinschaft_setup = FactoryGirl.build(:gemeinschaft_setup)
   end
 
 #   test "should get index" do
@@ -20,7 +20,7 @@ class GemeinschaftSetupsControllerTest < ActionController::TestCase
 #   test "should create gemeinschaft_setup" do
 #     assert_difference('GemeinschaftSetup.count') do
 #       post :create,
-#         gemeinschaft_setup: Factory.attributes_for(:gemeinschaft_setup)
+#         gemeinschaft_setup: FactoryGirl.attributes_for(:gemeinschaft_setup)
 #     end
 #     assert_redirected_to gemeinschaft_setup_path(assigns(:gemeinschaft_setup))
 #   end

@@ -1,4 +1,4 @@
-- title "Erste Schritte mit Gemeinschaft #{GEMEINSCHAFT_VERSION}!"
+- content_for :title, "Erste Schritte mit Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}!"
 
 %p
   Sie müssen als erstes mindestens zwei neue SIP-Accounts anlegen. Dabei haben Sie die Wahl zwischen folgenden Varianten:
@@ -29,5 +29,5 @@
 %p
   Komfortabler ist der Betrieb von im Provisioning unterstützen Telefone. Diese können Sie beim Anlegen direkt mit einem bestimmten SIP-Account verknüpfen. Danach müssen Sie nur noch die Provisioningdaten per Hand ins Telefon eintragen oder ein paar Einstellungen in Ihrem DHCP-Server vornehmen. Hilfe dazu finden Sie im #{link_to 'Wiki', 'https://github.com/amooma/GS5/wiki'} und der #{link_to 'Mailingliste', 'https://groups.google.com/group/gs5-users/'}.
 %p
-  Folgende Telefone werden in der Version #{GEMEINSCHAFT_VERSION} vom automatischen Provisioning unterstützt: 
+  Folgende Telefone werden in der Version #{GsParameter.get('GEMEINSCHAFT_VERSION')} vom automatischen Provisioning unterstützt: 
   = nicely_joined_with_commata(PhoneModel.order(:name).map{|phone_model| "#{phone_model.to_s}"})

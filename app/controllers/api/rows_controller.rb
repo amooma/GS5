@@ -84,7 +84,7 @@ class Api::RowsController < ApplicationController
   private
 
   def check_remote_ip_address_whitelist
-    if !(REMOTE_IP_ADDRESS_WHITELIST.empty? or REMOTE_IP_ADDRESS_WHITELIST.include?(ENV['REMOTE_ADDR']))
+    if !(GsParameter.get('REMOTE_IP_ADDRESS_WHITELIST').empty? or GsParameter.get('REMOTE_IP_ADDRESS_WHITELIST').include?(ENV['REMOTE_ADDR']))
       redirect_to root_url
     end
   end

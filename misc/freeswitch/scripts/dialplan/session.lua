@@ -1,5 +1,5 @@
 -- Gemeinschaft 5 module: caller session class
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 module(...,package.seeall)
@@ -43,9 +43,13 @@ function Session.init_channel_variables(self)
     self.from_gateway       = true;
   end
 
+  self.dialed_sip_user      = self:to_s('dialed_user');
+  self.dialed_domain        = self:to_s('dialed_domain');
+
   self.account_uuid         = self:to_s('gs_account_uuid');
   self.account_type         = self:to_s('gs_account_type');
   self.sip_contact_host     = self:to_s('sip_contact_host');
+  self.sip_network_ip       = self:to_s('sip_network_ip');
   self.clir                 = self:to_b('gs_clir');
   self.call_timeout         = self:to_i('gs_call_timeout');
   self.auth_account_type    = self:to_s('gs_auth_account_type');

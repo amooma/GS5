@@ -1,0 +1,4 @@
+.inputs
+  = f.input :value, :label => t('gs_parameters.form.value.label'), :hint => conditional_hint('gs_parameters.form.value.hint'), :autofocus => true
+  = f.input :class_type, :collection => ['String', 'Integer', 'Boolean', 'YAML', 'Nil'], :label => t('gs_parameters.form.class_type.label'), :hint => conditional_hint('gs_parameters.form.class_type.hint'), :include_blank => false
+  = f.input :description, :label => t('gs_parameters.form.description.label'), :hint => conditional_hint('gs_parameters.form.description.hint')

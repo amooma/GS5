@@ -1,4 +1,4 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     - if !@phone_number
       %th= t('call_forwards.index.phone_number_id')
@@ -10,9 +10,9 @@
       %th= t('call_forwards.index.depth')
     %th= t('call_forwards.index.active')
 
-  - reset_cycle
+  
   - for call_forward in call_forwards
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       - if !@phone_number
         %td= call_forward.phone_number
       %td= t("call_forward_cases.#{call_forward.call_forward_case.value}")

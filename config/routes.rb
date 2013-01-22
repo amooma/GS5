@@ -1,4 +1,30 @@
 Gemeinschaft42c::Application.routes.draw do
+
+  scope :constraints => lambda{|req|%w(127.0.0.1).include? req.remote_addr} do
+    get "trigger/voicemail"
+    get "trigger/fax"
+  end
+
+  resources :call_routes do
+    resources :route_elements do
+      member do
+        put 'move_higher'
+        put 'move_lower'
+      end
+    end
+    member do
+      put 'move_higher'
+      put 'move_lower'
+    end
+  end
+
+  resources :gateways do
+    resources :gateway_settings
+    resources :gateway_parameters
+  end
+
+  resources :gs_parameters, :only => [:show, :index, :update, :edit]
+
   resources :automatic_call_distributors
 
   resources :gs_cluster_sync_log_entries
@@ -53,7 +79,7 @@ Gemeinschaft42c::Application.routes.draw do
     end
   end
 
-  if CALLTHROUGH_HAS_WHITELISTS == true
+  if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
     resources :whitelists, :only => [] do
       resources :phone_numbers do
         member do
@@ -237,7 +263,7 @@ Gemeinschaft42c::Application.routes.draw do
     resources :conferences
     resources :phone_number_ranges
     resources :callthroughs
-    if CALLTHROUGH_HAS_WHITELISTS == true
+    if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
       resources :whitelists
     end
     resources :hunt_groups
@@ -252,7 +278,7 @@ Gemeinschaft42c::Application.routes.draw do
         put 'move_lower'
       end
     end
-    if CALLTHROUGH_HAS_WHITELISTS == true
+    if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
       resources :whitelists
     end
   end
@@ -302,6 +328,7 @@ Gemeinschaft42c::Application.routes.draw do
       member do
         put 'move_higher'
         put 'move_lower'
+        put 'call'
       end
     end
   end

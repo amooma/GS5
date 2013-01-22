@@ -1,5 +1,5 @@
 !!! XML
-%SnomIPPhoneMenu{:state => 'relevant', :title => "Gemeinschaft #{GEMEINSCHAFT_VERSION}"}
+%SnomIPPhoneMenu{:state => 'relevant', :title => "Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}"}
   %MenuItem{:name => '$(lang:menu100_phone_book)'}
     %URL= "#{@base_url}/#{@sip_account_ids.first}/phone_book.xml"
   %Menu{:name => '$(lang:menu100_call_lists)'}

@@ -1,0 +1,60 @@
+de:
+  gateway_parameters:
+    name: 'Gatewayparameter'
+    controller:
+      successfuly_created: 'Gatewayparameter wurde angelegt.'
+      successfuly_updated: 'Gatewayparameter wurde aktualisiert.'
+      successfuly_destroyed: 'Gatewayparameter wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von Gatewayparameter'
+      gateway_id: 'Gateway'
+      name: 'Name'
+      value: 'Value'
+      class_type: 'Class type'
+      description: 'Description'
+      actions:
+        confirm: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Gatewayparameter'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Gatewayparameter neu anlegen für %{resource}'
+    show:
+      page_title: 'Gatewayparameter bearbeiten'
+      gateway_id: 'Gateway'
+      name: 'Name'
+      value: 'Value'
+      class_type: 'Class type'
+      description: 'Description'
+      actions:
+        confirm: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Gatewayparameter neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Gatewayparameter bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      gateway_id:
+        label: 'Gateway'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      value:
+        label: 'Value'
+        hint: ''
+      class_type:
+        label: 'Class type'
+        hint: ''
+      description:
+        label: 'Description'
+        hint: ''
+      button: 'Absenden'

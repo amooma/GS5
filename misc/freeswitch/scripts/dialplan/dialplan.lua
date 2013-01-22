@@ -1,5 +1,5 @@
 -- Gemeinschaft 5 module: dialplan class
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 module(...,package.seeall)
@@ -7,7 +7,6 @@ module(...,package.seeall)
 Dialplan = {}
 
 -- local constants
-local CONFIG_FILE_NAME = '/opt/freeswitch/scripts/ini/dialplan.ini';
 local DIAL_TIMEOUT = 120;
 local MAX_LOOPS = 20;
 local DIALPLAN_FUNCTION_PATTERN = '^f[_%-].*';
@@ -74,22 +73,22 @@ function Dialplan.domain_get(self, domain)
 end
 
 
-function Dialplan.configuration_read(self, file_name)
+function Dialplan.configuration_read(self)
   require 'common.str'
-  require 'common.configuration_file'
+  require 'common.configuration_table'
 
   -- dialplan configuration
-  self.config  = common.configuration_file.get(file_name or CONFIG_FILE_NAME);
+  self.config  = common.configuration_table.get(self.database, 'dialplan');
   self.node_id = common.str.to_i(self.config.parameters.node_id);
   self.domain =  self:domain_get(self.config.parameters.domain);
   self.dial_timeout = tonumber(self.config.parameters.dial_timeout) or DIAL_TIMEOUT;
   self.max_loops = tonumber(self.config.parameters.max_loops) or MAX_LOOPS;
   self.user_image_url = common.str.to_s(self.config.parameters.user_image_url);
   self.phone_book_entry_image_url = common.str.to_s(self.config.parameters.phone_book_entry_image_url);
-  self.phonebook_number_lookup = common.str.to_b(self.config.parameters.phonebook_number_lookup);
-  self.geo_number_lookup = common.str.to_b(self.config.parameters.geo_number_lookup);
+  self.phonebook_number_lookup = self.config.parameters.phonebook_number_lookup;
+  self.geo_number_lookup = self.config.parameters.geo_number_lookup;
   self.default_language = self.config.parameters.default_language or 'en';
-  self.send_ringing_to_gateways = common.str.to_b(self.config.parameters.send_ringing_to_gateways);
+  self.send_ringing_to_gateways = self.config.parameters.send_ringing_to_gateways;
   
   if tonumber(self.config.parameters.default_ringtone) then
     self.default_ringtone = 'http://amooma.de;info=Ringer' .. self.config.parameters.default_ringtone .. ';x-line-id=0';
@@ -113,57 +112,34 @@ function Dialplan.hangup(self, code, phrase, cause)
 end
 
 
-function Dialplan.check_auth(self)
-  local authenticated = false;
-
-  require 'common.str'
-  if self.caller.from_node then
-    self.log:info('AUTH_FIRST_STAGE - node authenticated - node_id: ', self.caller.node_id);
-    authenticated = true;
-  elseif not common.str.blank(self.caller.auth_account_type) then
-    self.log:info('AUTH_FIRST_STAGE - sipaccount autheticated by name/password: ', self.caller.auth_account_type, '=', self.caller.account_id, '/', self.caller.account_uuid);
-    authenticated = true;
-  elseif self.caller.from_gateway then
-    self.log:info('AUTH_FIRST_STAGE - gateway autheticated by name/password: gateway=', self.caller.gateway_id, ', name: ', self.caller.gateway_name);
-    authenticated = true;
-  else
-    local gateways  = common.configuration_file.get('/opt/freeswitch/scripts/ini/gateways.ini', false);
-    if not gateways then	
-      return false;
-    end
-    for gateway, gateway_parameters in pairs(gateways) do
-      if common.str.to_s(gateway_parameters.proxy) == self.caller.sip_contact_host then
-        self.caller.gateway_name = gateway;
-        self.caller.from_gateway = true;
-        self.log:info('AUTH_FIRST_STAGE - gateway autheticated by ip: gateway=', self.caller.gateway_id, ', name: ', self.caller.gateway_name, ', ip: ', self.caller.sip_contact_host);
-        authenticated = true;
-      end
-    end
-  end
-
-  return authenticated;
-end
-
-
-function Dialplan.check_auth_node(self)
+function Dialplan.auth_node(self)
   require 'common.node'
   local node = common.node.Node:new{ log = self.log, database = self.database }:find_by_address(self.caller.sip_contact_host);
 
-  return (node ~= nil);
+  if node then
+    self.log:info('AUTH_NODE - node_id: ', self.caller.node_id, ', contact address:', self.caller.sip_contact_host);
+    return true;
+  end
 end
 
 
-function Dialplan.check_auth_ip(self)
-  self.log:info('AUTH - node: ', self.caller.from_node, ', auth_account: ', self.caller.auth_account_type, ', gateway: ', self.caller.from_gateway);
+function Dialplan.auth_sip_account(self)
   require 'common.str'
-  if self.caller.from_node then
+  if not common.str.blank(self.caller.auth_account_type) then
+    self.log:info('AUTH_SIP_ACCOUNT - ', self.caller.auth_account_type, '=', self.caller.account_id, '/', self.caller.account_uuid);
     return true;
-  elseif not common.str.blank(self.caller.auth_account_type) then
-    return true;
-  elseif self.caller.from_gateway then
-    return true;
-  else
-    return nil;
+  end
+end
+
+
+function Dialplan.auth_gateway(self)
+  require 'common.gateway'
+  local gateway_class = common.gateway.Gateway:new{ log = self.log, database = self.database};
+  local gateway = gateway_class:authenticate('sip', self.caller);
+
+  if gateway then
+    log:info('AUTH_GATEWAY - ', gateway.auth_source, ' ~ ', gateway.auth_pattern, ', gateway=', gateway.id, ', name: ', gateway.name, ', ip: ', self.caller.sip_contact_host);
+    return gateway_class:find_by_id(gateway.id);
   end
 end
 
@@ -258,19 +234,21 @@ end
 
 
 function Dialplan.retrieve_caller_data(self)
-  self.caller.caller_phone_numbers_hash = {}
-  
   require 'common.str'
 
-  local dialed_sip_user = self.caller:to_s('dialed_user');
+  self.caller.caller_phone_numbers_hash = {}
 
   -- TODO: Set auth_account on transfer initiated by calling party
-  if not common.str.blank(dialed_sip_user) then
-    self.caller.auth_account = self:object_find('sipaccount', self.caller:to_s('dialed_domain'), dialed_sip_user);
-    self.caller:set_auth_account(self.caller.auth_account);
+  if not common.str.blank(self.caller.dialed_sip_user) then
+    self.caller.auth_account = self:object_find('sipaccount', self.caller.dialed_domain, dialed_sip_user);
+    if self.caller.set_auth_account then
+      self.caller:set_auth_account(self.caller.auth_account);
+    end
   elseif not common.str.blank(self.caller.auth_account_type) and not common.str.blank(self.caller.auth_account_uuid) then
     self.caller.auth_account = self:object_find(self.caller.auth_account_type, self.caller.auth_account_uuid);
-    self.caller:set_auth_account(self.caller.auth_account);
+    if self.caller.set_auth_account then
+      self.caller:set_auth_account(self.caller.auth_account);
+    end
   end
 
   if self.caller.auth_account then
@@ -299,7 +277,7 @@ function Dialplan.retrieve_caller_data(self)
         self.log:error('CALLER_DATA - caller owner not found');
       end
 
-      if not self.caller.clir then
+      if not self.caller.clir and self.caller.set_caller_id then
         self.caller:set_caller_id(self.caller.caller_phone_numbers[1], self.caller.account.record.caller_name or self.caller.account.record.name);
       end
     else
@@ -363,12 +341,6 @@ function Dialplan.destination_new(self, arg)
   self.log:info('DESTINATION_NEW - ', destination.type, '=', destination.id, '/', destination.uuid,'@', destination.node_id, ', number: ', destination.number);
 
   return destination;
-end
-
-
-function Dialplan.routes_get(self, destination)
-  require 'dialplan.route'  
-  return dialplan.route.Route:new{ log = self.log, database = self.database, routing_table = self.routes }:outbound(self.caller, destination.number);
 end
 
 
@@ -466,16 +438,13 @@ function Dialplan.dial(self, destination)
     end
   end
 
-  if common.str.to_b(self.config.parameters.bypass_media) then
-    self.caller:set_variable('bypass_media', true);
-  end
-
   require 'dialplan.sip_call'
   return dialplan.sip_call.SipCall:new{ log = self.log, database = self.database, caller = self.caller }:fork(
     destinations,
     { timeout =  self.dial_timeout_active, 
       send_ringing = ( self.send_ringing_to_gateways and self.caller.from_gateway ),
       bypass_media_network = self.config.parameters.bypass_media_network,
+      update_callee_display = self.config.parameters.update_callee_display,
     }
   );
 end
@@ -655,9 +624,11 @@ function Dialplan.callthrough(self, destination)
     return { continue = false, code = 404, phrase = 'No destination' }
   end
 
-  local route = dialplan.route.Route:new{ log = self.log, database = self.database, routing_table = self.routes }:prerouting(self.caller, destination_number);
-  if route and route.value then
-    destination_number = route.value;
+  require 'dialplan.router'
+  local route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('prerouting', true);
+
+  if route and route.destination_number then
+    destination_number = route.destination_number;
   end
 
   if not callthrough:whitelist(destination_number) then
@@ -786,15 +757,29 @@ function Dialplan.switch(self, destination)
     return self:dialplanfunction(destination);
   elseif not common.str.blank(destination.number) then
     local result = { continue = false, code = 404, phrase = 'No route' }
-    local routes = self:routes_get(destination);
+
+    local clip_no_screening = common.str.try(caller, 'account.record.clip_no_screening');
+    self.caller.caller_id_numbers = {}
+    if not common.str.blank(clip_no_screening) then
+      for index, number in ipairs(common.str.strip_to_a(clip_no_screening, ',')) do
+        table.insert(self.caller.caller_id_numbers, number);
+      end
+    end
+    for index, number in ipairs(self.caller.caller_phone_numbers) do
+      table.insert(self.caller.caller_id_numbers, number);
+    end
+    self.log:info('CALLER_ID_NUMBERS - clir: ', self.caller.clir, ', numbers: ', table.concat(self.caller.caller_id_numbers, ','));
+
+    destination.callee_id_number = destination.number;
+    destination.callee_id_name = nil;
+
+    require 'dialplan.router'
+    local routes =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('outbound');
     
     if not routes or #routes == 0 then
       self.log:notice('SWITCH - no route - number: ', destination.number);
       return { continue = false, code = 404, phrase = 'No route' }
     end
-
-    destination.callee_id_number = destination.number;
-    destination.callee_id_name = nil;
 
     if self.phonebook_number_lookup then
       require 'common.str'
@@ -828,26 +813,26 @@ function Dialplan.switch(self, destination)
     self.caller:set_callee_id(destination.callee_id_number, destination.callee_id_name);
 
     for index, route in ipairs(routes) do
-      if route.class == 'hangup' then
+      if route.endpoint_type == 'hangup' then
         return { continue = false, code = route.endpoint, phrase = route.phrase, cause = route.value }
       end
-      if route.class == 'forward' then
+      if route.endpoint_type == 'forward' then
         return { continue = true, call_forwarding = { number = route.value, service = 'route', type = 'phonenumber' }}
       end
-      destination.gateway = route.endpoint;
-      destination.type = route.class;
-      destination.number = route.value;
-      destination.caller_id_number = route.caller_id_number;
-      destination.caller_id_name = route.caller_id_name;
+
+      for key, value in pairs(route) do
+        destination[key] = value;
+      end
+
       result = self:dial(destination);
 
       if result.continue == false then
         break;
       end
 
-      if common.str.to_b(self.routes.failover[tostring(result.code)]) == true then
+      if common.str.to_b(self.route_failover[tostring(result.code)]) == true then
         self.log:info('SWITCH - failover - code: ', result.code);
-      elseif common.str.to_b(self.routes.failover[tostring(result.cause)]) == true then
+      elseif common.str.to_b(self.route_failover[tostring(result.cause)]) == true then
         self.log:info('SWITCH - failover - cause: ', result.cause);
       else
         self.log:info('SWITCH - no failover - cause: ', result.cause, ', code: ', result.code);
@@ -864,10 +849,11 @@ end
 
 
 function Dialplan.run(self, destination)
+  require 'common.str';
+  require 'dialplan.router';
+  
   self.caller:set_variable('hangup_after_bridge', false);
-  self.caller:set_variable('ringback', self.config.parameters.ringback);
   self.caller:set_variable('bridge_early_media', 'true');
-  self.caller:set_variable('send_silence_when_idle', 0);
   self.caller:set_variable('default_language', self.default_language);
   self.caller:set_variable('gs_save_cdr', true);
   self.caller:set_variable('gs_call_service', 'dial');
@@ -875,30 +861,69 @@ function Dialplan.run(self, destination)
   self.caller.date = os.date('%y%m%d%w');
   self.caller.time = os.date('%H%M%S');
 
-  self.routes = common.configuration_file.get('/opt/freeswitch/scripts/ini/routes.ini');
+  if type(self.config.variables) == 'table' then
+    for key, value in pairs(self.config.variables) do
+      self.caller:set_variable(key, value);
+    end
+  end
+
   self.caller.domain_local = self.domain;
   self:retrieve_caller_data();
+  self.route_failover = common.configuration_table.get(self.database, 'call_route', 'failover');
 
   if not destination or destination.type == 'unknown' then
-    require 'dialplan.route'
     local route = nil;
+    if self.caller.gateway then
+      if not common.str.blank(self.caller.gateway.settings.number_source) then
+        self.log:debug('INBOUND_NUMBER: number_source: ', self.caller.gateway.settings.number_source, ', number: ', self.caller:to_s(self.caller.gateway.settings.number_source));
+        self.caller.destination_number = self.caller:to_s(self.caller.gateway.settings.number_source);
+      end
 
-    if self.caller.from_gateway then
-      local route_object = dialplan.route.Route:new{ log = self.log, database = self.database, routing_table = self.routes };
-      route = route_object:inbound(self.caller, self.caller.destination_number);
-      local inbound_caller_id_number = route_object:inbound_cid_number(self.caller, self.caller.gateway_name, 'gateway');
-      route_object.expandable.caller_id_number = inbound_caller_id_number;
-      local inbound_caller_id_name = route_object:inbound_cid_name(self.caller, self.caller.gateway_name, 'gateway');
-      self.log:info('INBOUND_CALLER_ID_REWRITE - number: ', inbound_caller_id_number, ', name: ', inbound_caller_id_name);
-      self.caller.caller_id_number = inbound_caller_id_number or self.caller.caller_id_number;
-      self.caller.caller_id_name = inbound_caller_id_name or self.caller.caller_id_name;
-      self.caller.caller_phone_numbers[1] = self.caller.caller_id_number;
+      route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('inbound', true);
+      if route then
+        local ignore_keys = {
+          id = true,
+          gateway = true,
+          ['type'] = true,
+          channel_variables = true,
+        };
+
+        for key, value in pairs(route) do
+          if not ignore_keys[key] then
+            self.caller[key] = value;
+          end
+        end
+
+        self.caller.caller_phone_numbers[1] = self.caller.caller_id_number;
+      else
+        self.log:notice('INBOUND - no route');
+      end
     else
-      route = dialplan.route.Route:new{ log = self.log, database = self.database, routing_table = self.routes }:prerouting(self.caller, self.caller.destination_number);
+      route = dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('prerouting', true);
+      if route then
+        local ignore_keys = {
+          id = true,
+          gateway = true,
+          ['type'] = true,
+          channel_variables = true,
+        };
+
+        for key, value in pairs(route) do
+          if not ignore_keys[key] then
+            self.caller[key] = value;
+          end
+        end
+      end
     end
 
     if route then
-      destination = self:destination_new{ number = route.value }
+      if type(route.channel_variables) == 'table' then
+        for key, value in pairs(route.channel_variables) do
+          self.caller:set_variable(key, value);
+        end
+      end
+
+      destination = self:destination_new{ ['type'] = route.type, id = route.id, number = route.destination_number }
       self.caller.destination_number = destination.number;
       self.caller.destination = destination;
     elseif not destination or destination.type == 'unknown' then
@@ -979,6 +1004,7 @@ function Dialplan.run(self, destination)
       self.log:info('LOOP ', loop, ' NEW_DESTINATION_NUMBER - number: ', result.number );
       destination = self:destination_new{ number = result.number }
       self.caller.destination = destination;
+      self.caller.destination_number = destination.number;
     end
   end
 

@@ -3,7 +3,7 @@ require 'test_helper'
 class ConferencesControllerTest < ActionController::TestCase
   
   setup do
-    @conference = Factory.create(:conference)
+    @conference = FactoryGirl.create(:conference)
   end
 
 #   test "should get index" do

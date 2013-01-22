@@ -2,14 +2,14 @@ require 'test_helper'
 
 class ManufacturersControllerTest < ActionController::TestCase
   setup do
-    @tenant = Factory.create(:tenant)
-    @user  = Factory.create(:user)
+    @tenant = FactoryGirl.create(:tenant)
+    @user  = FactoryGirl.create(:user)
     
     @tenant.tenant_memberships.create(:user_id => @user.id)
     
     @user.update_attributes!(:current_tenant_id => @tenant.id)
 
-    @manufacturer = Factory.create(:manufacturer)
+    @manufacturer = FactoryGirl.create(:manufacturer)
     
     @expected_status_if_not_authorized = :redirect
   end
@@ -46,7 +46,7 @@ class ManufacturersControllerTest < ActionController::TestCase
   # 
   # test "should create manufacturer" do
   #   assert_difference('Manufacturer.count') do
-  #     post :create, manufacturer: Factory.build(:manufacturer).attributes
+  #     post :create, manufacturer: FactoryGirl.build(:manufacturer).attributes
   #   end
   # 
   #   assert_redirected_to manufacturer_path(assigns(:manufacturer))

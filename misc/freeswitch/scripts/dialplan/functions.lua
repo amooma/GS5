@@ -51,10 +51,16 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:user_auto_logout(caller, true);
   elseif fid == "loaoff" then
     result = self:user_auto_logout(caller, false);
+  elseif fid == "redial" then
+    result = self:redial(caller);
   elseif fid == "dcliroff" then
     result = self:dial_clir_off(caller, parameters[3]);
   elseif fid == "dcliron" then
     result = self:dial_clir_on(caller, parameters[3]);
+  elseif fid == "cliron" then
+    result = self:clir_on(caller);
+  elseif fid == "cliroff" then
+    result = self:clir_off(caller);
   elseif fid == "clipon" then
     result = self:clip_on(caller);
   elseif fid == "clipoff" then
@@ -503,6 +509,30 @@ function Functions.user_auto_logout(self, caller, auto_logout)
   caller:sleep(1000);
 end
 
+function Functions.redial(self, caller)
+  -- Ensure a valid sip account
+  local caller_sip_account = self:ensure_caller_sip_account(caller);
+  if not caller_sip_account then
+    return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
+  end
+
+  local sql_query = 'SELECT `destination_number` \
+    FROM `call_histories` \
+    WHERE `entry_type` = "dialed" \
+    AND `call_historyable_type` = "SipAccount" \
+    AND `call_historyable_id` = ' .. caller_sip_account.record.id .. ' \
+    ORDER BY `start_stamp` DESC LIMIT 1';
+
+  local phone_number = self.database:query_return_value(sql_query);
+
+  common_str = require 'common.str';
+  if common_str.blank(phone_number) then
+    return { continue = false, code = 404, phrase = 'No phone number saved', no_cdr = true }
+  end
+
+  return { continue = true, number = phone_number }
+end
+
 function Functions.dial_clir_off(self, caller, phone_number)
   -- Ensure a valid sip account
   local caller_sip_account = self:ensure_caller_sip_account(caller);
@@ -565,6 +595,48 @@ function Functions.callwaiting_off(self, caller)
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
 
+function Functions.clir_on(self, caller)
+  -- Find caller's SipAccount
+  local caller_sip_account = self:ensure_caller_sip_account(caller);
+  if not caller_sip_account then
+    return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
+  end
+
+  local sql_query = 'UPDATE `sip_accounts` SET `clir` = TRUE WHERE `id` = ' .. caller_sip_account.record.id;
+  
+  if not self.database:query(sql_query) then
+    self.log:notice("CLIR could not be set");
+    return { continue = false, code = 500, phrase = 'CLIR could not be set', no_cdr = true }
+    
+  end
+
+  caller:answer();
+  caller:send_display('CLIR on');
+  caller:sleep(1000);
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
+function Functions.clir_off(self, caller)
+  -- Find caller's SipAccount
+  local caller_sip_account = self:ensure_caller_sip_account(caller);
+  if not caller_sip_account then
+    return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
+  end
+
+  local sql_query = 'UPDATE `sip_accounts` SET `clir` = FALSE WHERE `id` = ' .. caller_sip_account.record.id;
+  
+  if not self.database:query(sql_query) then
+    self.log:notice("CLIR could not be set");
+    return { continue = false, code = 500, phrase = 'CLIR could not be set', no_cdr = true }
+    
+  end
+
+  caller:answer();
+  caller:send_display('CLIR off');
+  caller:sleep(1000);
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
 function Functions.clip_on(self, caller)
   -- Find caller's SipAccount
   local caller_sip_account = self:ensure_caller_sip_account(caller);
@@ -586,6 +658,7 @@ function Functions.clip_on(self, caller)
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
 
+
 function Functions.clip_off(self, caller)
   -- Find caller's SipAccount
   local caller_sip_account = self:ensure_caller_sip_account(caller);
@@ -606,7 +679,6 @@ function Functions.clip_off(self, caller)
   caller:sleep(1000);
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
-
 
 function Functions.call_forwarding_off(self, caller, call_forwarding_service, delete)
   local defaults = {log = self.log, database = self.database, domain = caller.domain}

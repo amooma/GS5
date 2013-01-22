@@ -1,8 +1,12 @@
 class GemeinschaftSetupsController < ApplicationController
+  # We use the heater rake task to generate this file.
+  # So it loads super fast even on slow machines.
+  #
+  caches_page :new, :gzip => :best_compression
+
   load_and_authorize_resource :gemeinschaft_setup
 
   skip_before_filter :go_to_setup_if_new_installation
-  # before_filter :redirect_if_not_a_fresh_installation
 
   def new
     @user = @gemeinschaft_setup.build_user(
@@ -21,7 +25,7 @@ class GemeinschaftSetupsController < ApplicationController
   def create
     if @gemeinschaft_setup.save
       super_tenant = Tenant.create(
-                                    :name => SUPER_TENANT_NAME,
+                                    :name => GsParameter.get('SUPER_TENANT_NAME'),
                                     :country_id  => @gemeinschaft_setup.country.id, 
                                     :language_id => @gemeinschaft_setup.language_id,
                                     :description => t('gemeinschaft_setups.initial_setup.super_tenant_description'),
@@ -41,6 +45,25 @@ class GemeinschaftSetupsController < ApplicationController
       super_tenant_super_admin_group = super_tenant.user_groups.create(:name => t('gemeinschaft_setups.initial_setup.super_admin_group_name'))
       super_tenant_super_admin_group.user_group_memberships.create(:user_id => user.id)
 
+      # Set CallRoute defaults
+      CallRoute.factory_defaults_prerouting(@gemeinschaft_setup.country.country_code, 
+                                            @gemeinschaft_setup.country.trunk_prefix, 
+                                            @gemeinschaft_setup.country.international_call_prefix, 
+                                            '', 
+                                            @gemeinschaft_setup.default_area_code
+                                            )
+
+      # Set a couple of URLs in the GsParameter table
+      GsParameter.where(:name => 'phone_book_entry_image_url').first.update_attributes(:value => "http://#{@gemeinschaft_setup.sip_domain.host}/uploads/phone_book_entry/image")
+      GsParameter.where(:name => 'ringtone_url').first.update_attributes(:value => "http://#{@gemeinschaft_setup.sip_domain.host}")
+      GsParameter.where(:name => 'user_image_url').first.update_attributes(:value => "http://#{@gemeinschaft_setup.sip_domain.host}/uploads/user/image")
+
+      # Restart FreeSWITCH
+      if Rails.env.production?
+        require 'freeswitch_event'
+        FreeswitchAPI.execute('fsctl', 'shutdown restart')
+      end
+
       # Auto-Login:
       session[:user_id] = user.id
       
@@ -48,18 +71,6 @@ class GemeinschaftSetupsController < ApplicationController
       redirect_to new_tenant_url, :notice => t('gemeinschaft_setups.initial_setup.successful_setup')
     else
       render :new
-    end
-  end
-  
-  private
-  
-  def redirect_if_not_a_fresh_installation
-    if GemeinschaftSetup.all.count > 0
-      if current_user
-        redirect_to root_url    , :alert => t('gemeinschaft_setups.initial_setup.access_denied_only_available_on_a_new_system')
-      else
-        redirect_to log_in_path , :alert => t('gemeinschaft_setups.initial_setup.access_denied_only_available_on_a_new_system')
-      end
     end
   end
   

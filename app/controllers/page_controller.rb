@@ -5,7 +5,12 @@ class PageController < ApplicationController
   before_filter :if_fresh_system_then_go_to_wizard
   skip_before_filter :home_breadcrumb, :only => [:index]
   
-  def index;end
+  def index
+    if current_user
+      redirect_to [current_user.current_tenant, current_user]
+    end
+  end
+
   def conference;end
   def beginners_intro;end
   

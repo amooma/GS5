@@ -35,6 +35,7 @@ en:
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View all phone numbers'
+        call: 'Call'
     new:
       page_title: 'New Phone number'
     edit:

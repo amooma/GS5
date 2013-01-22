@@ -1,0 +1,5 @@
+-# Tenants
+-#
+- if can?( :index, Tenant ) && user.tenants.count > 1
+  %h2=t("tenants.index.page_title")
+  = render "tenants/index_core", :tenants => user.tenants

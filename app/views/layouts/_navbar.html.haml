@@ -1,0 +1,43 @@
+.navbar.navbar-inverse.navbar-fixed-top
+  .navbar-inner
+    .container
+      %a.brand{:href => (current_user.nil? ? '/' : tenant_path(current_user.current_tenant))}
+        Gemeinschaft 5
+
+      %a.btn.btn-navbar{"data-target" => ".nav-collapse", "data-toggle" => "collapse"}
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar   
+
+      - if current_user
+        .nav-collapse.collapse
+          %ul.nav
+            %li
+              %a{:href => "#about"} About
+            %li.pull_right
+              %a{:href => "#contact"} Contact
+
+      - if current_user
+        %ul.nav.pull-right
+          %li
+            - if current_user.image?
+              =image_tag(current_user.image_url(:mini).to_s, :class => 'img-rounded')
+            - else
+              - if current_user.male?
+                = image_tag 'icons/user-male-16x.png', :class => 'img-rounded'
+              - else
+                = image_tag 'icons/user-female-16x.png', :class => 'img-rounded'
+
+          - if current_page?(tenant_user_path(current_user.current_tenant, current_user))
+            %li.active
+              %a.navbar-link{:href => tenant_user_path(current_user.current_tenant, current_user)} 
+                = current_user
+          - else
+            %li
+              %a.navbar-link{:href => tenant_user_path(current_user.current_tenant, current_user)} 
+                = current_user
+
+          %li
+            %a.navbar-link{:href => log_out_path} 
+              %i.icon-off.icon-white
+            

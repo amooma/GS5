@@ -27,6 +27,10 @@ class Ability
           #
           cannot [:create, :destroy, :edit, :update], Tenant, :id => 1
 
+          # Can't destroy any tenant
+          #
+          cannot :destroy, Tenant
+
           cannot :manage, PhoneBook
 
           # Phonebooks and PhoneBookEntries
@@ -70,9 +74,14 @@ class Ability
 
           # Dirty hack to disable PhoneNumberRange in the GUI
           #
-          if STRICT_INTERNAL_EXTENSION_HANDLING == false
+          if GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') == false
             cannot :manage, PhoneNumberRange
           end
+
+          # GsParameter and GuiFunction can't be created or deleted via the GUI
+          #
+          cannot [:create, :destroy], GsParameter
+          cannot [:create, :destroy], GuiFunction
         else
           # Any user can do the following stuff.
           #

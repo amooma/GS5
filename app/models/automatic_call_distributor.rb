@@ -1,7 +1,7 @@
 class AutomaticCallDistributor < ActiveRecord::Base
   attr_accessible :uuid, :name, :strategy, :automatic_call_distributorable_type, :automatic_call_distributorable_id, :max_callers, :agent_timeout, :retry_timeout, :join, :leave, :gs_node_id, :announce_position, :announce_call_agents, :greeting, :goodbye, :music
 
-  belongs_to :automatic_call_distributorable, :polymorphic => true
+  belongs_to :automatic_call_distributorable, :polymorphic => true, :touch => true
 
   has_many :acd_agents, :dependent => :destroy
   has_many :phone_numbers, :as => :phone_numberable, :dependent => :destroy
@@ -26,6 +26,6 @@ class AutomaticCallDistributor < ActiveRecord::Base
     self.announce_call_agents ||= 'ivr/ivr-stay_on_line_call_answered_momentarily.wav'
     self.greeting ||= 'ivr/ivr-thank_you_for_calling.wav'
     self.goodbye ||= 'ivr/ivr-thank_you_for_calling.wav'
-    self.music ||= 'local_stream://mohl'
+    self.music ||= 'local_stream://moh'
   end
 end

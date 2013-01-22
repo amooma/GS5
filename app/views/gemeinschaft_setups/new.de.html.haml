@@ -1,4 +1,5 @@
-- title "Konfiguration einer Gemeinschaft #{GEMEINSCHAFT_VERSION} Installation"
+- content_for :title, 'Gemeinschaft 5.0'
+- content_for :meta_description, "Konfiguration einer Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')} Installation"
 
 = simple_form_for(@gemeinschaft_setup) do |f|
   = f.error_notification
@@ -20,6 +21,7 @@
 
   = f.association :country, :label => t('gemeinschaft_setups.form.country_id.label'), :hint => conditional_hint('gemeinschaft_setups.form.country_id.hint'), :include_blank => false
   = f.association :language, :label => t('gemeinschaft_setups.form.language_id.label'), :hint => conditional_hint('gemeinschaft_setups.form.language_id.hint'), :include_blank => false
+  = f.input :default_area_code, :label => t('gemeinschaft_setups.form.default_area_code.label'), :hint => conditional_hint('gemeinschaft_setups.form.default_area_code.hint')
 
   .actions
     = f.button :submit, conditional_t('gemeinschaft_setups.form.submit')

@@ -1,9 +1,9 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('calls.index.uuid')
 
-  - reset_cycle
+  
   - for call in @calls
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td
         = call.uuid

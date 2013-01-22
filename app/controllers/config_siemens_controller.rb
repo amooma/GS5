@@ -64,8 +64,8 @@ class ConfigSiemensController < ApplicationController
     if mac_address
       @phone = Phone.find_by_mac_address(mac_address.gsub(':','').upcase)
 
-      if ! @phone && PROVISIONING_AUTO_ADD_PHONE
-        tenant = Tenant.where(:id => PROVISIONING_AUTO_TENANT_ID).first
+      if ! @phone && GsParameter.get('PROVISIONING_AUTO_ADD_PHONE')
+        tenant = Tenant.where(:id => GsParameter.get('PROVISIONING_AUTO_TENANT_ID')).first
         if ! tenant
           render(
             :status => 404,
@@ -91,12 +91,12 @@ class ConfigSiemensController < ApplicationController
           return
         end
 
-        if ! PROVISIONING_AUTO_ADD_SIP_ACCOUNT
+        if ! GsParameter.get('PROVISIONING_AUTO_ADD_SIP_ACCOUNT')
           return
         end
 
         caller_name_index = 0
-        sip_account_last = tenant.sip_accounts.where('caller_name LIKE ?', "#{PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX}%").sort { |item1, item2| 
+        sip_account_last = tenant.sip_accounts.where('caller_name LIKE ?', "#{GsParameter.get('PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX')}%").sort { |item1, item2| 
           item1.caller_name.gsub(/[^0-9]/, '').to_i <=> item2.caller_name.gsub(/[^0-9]/, '').to_i
         }.last
 
@@ -106,18 +106,18 @@ class ConfigSiemensController < ApplicationController
         caller_name_index = caller_name_index + 1
 
         @sip_account = tenant.sip_accounts.build
-        @sip_account.caller_name = "#{PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX}#{caller_name_index}"
-        @sip_account.call_waiting = CALL_WAITING
-        @sip_account.clir = DEFAULT_CLIR_SETTING
-        @sip_account.clip = DEFAULT_CLIP_SETTING
+        @sip_account.caller_name = "#{GsParameter.get('PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX')}#{caller_name_index}"
+        @sip_account.call_waiting = GsParameter.get('CALL_WAITING')
+        @sip_account.clir = GsParameter.get('DEFAULT_CLIR_SETTING')
+        @sip_account.clip = GsParameter.get('DEFAULT_CLIP_SETTING')
         @sip_account.voicemail_pin = random_pin
-        @sip_account.callforward_rules_act_per_sip_account = CALLFORWARD_RULES_ACT_PER_SIP_ACCOUNT_DEFAULT
+        @sip_account.callforward_rules_act_per_sip_account = GsParameter.get('CALLFORWARD_RULES_ACT_PER_SIP_ACCOUNT_DEFAULT')
         @sip_account.hotdeskable = false
         loop do
-          @sip_account.auth_name = SecureRandom.hex(DEFAULT_LENGTH_SIP_AUTH_NAME)
+          @sip_account.auth_name = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_AUTH_NAME'))
           break unless SipAccount.exists?(:auth_name => @sip_account.auth_name)
         end
-        @sip_account.password = SecureRandom.hex(DEFAULT_LENGTH_SIP_PASSWORD)
+        @sip_account.password = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_PASSWORD'))
 
         if ! @sip_account.save
           render(
@@ -439,7 +439,7 @@ class ConfigSiemensController < ApplicationController
       @new_settings << ['XML-app-debug-prog-name', 2,  '']
       @new_settings << ['XML-app-num-tabs', 2,  '3']
       @new_settings << ['XML-app-restart', 2,  'true']
-      @new_settings << ['XML-app-tab1-display-name', 2,  "Gemeinschaft #{GEMEINSCHAFT_VERSION}"]
+      @new_settings << ['XML-app-tab1-display-name', 2,  "Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}"]
       @new_settings << ['XML-app-tab1-name', 2,  'menu']
       @new_settings << ['XML-app-tab2-display-name', 2,  'Status']
       @new_settings << ['XML-app-tab2-name', 2,  'menu_status']
@@ -816,7 +816,7 @@ class ConfigSiemensController < ApplicationController
 
     auto_reload_time = 60
 
-    SIEMENS_HISTORY_RELOAD_TIMES.each_pair do |time_range, reload_value|
+    GsParameter.get('SIEMENS_HISTORY_RELOAD_TIMES').each_pair do |time_range, reload_value|
       if time_range === Time.now.localtime.hour
         auto_reload_time = reload_value
       end

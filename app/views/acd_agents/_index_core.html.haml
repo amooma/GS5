@@ -1,4 +1,4 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('acd_agents.index.name')
     %th= t('acd_agents.index.status')
@@ -6,9 +6,9 @@
     %th= t('acd_agents.index.calls_answered')
     %th= t('acd_agents.index.destination')
 
-  - reset_cycle
+  
   - for acd_agent in acd_agents
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= acd_agent.name
       %td= acd_agent.status
       %td= acd_agent.last_call

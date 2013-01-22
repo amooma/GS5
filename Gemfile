@@ -1,18 +1,19 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.2'
-
+gem 'rails', '3.2.11'
 gem 'bcrypt-ruby'
-
 gem 'sqlite3'
-
 gem 'mysql2'
-
-gem 'cancan'
-
+gem 'cancan', '1.6.7'
 gem 'state_machine'
-
 gem 'acts_as_list'
+gem 'dalli' # memcached
+gem 'inifile'
+
+# Useful Rails 4 stuff
+#
+gem 'strong_parameters'
+gem 'cache_digests'
 
 # Nicer console output:
 gem "hirb"
@@ -22,15 +23,10 @@ gem "nokogiri"
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
+  gem 'sass-rails'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'compass-rails'
-
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyracer'
-
-  gem 'uglifier', '>= 1.0.3'
-
+  gem 'uglifier', '>= 1.3.0'
 end
 
 gem 'json'
@@ -40,7 +36,8 @@ gem 'jquery-rails'
 group :development do
   gem 'factory_girl_rails'
   gem 'factory_girl'
-  gem "rails-erd", "~> 0.4.5"
+  gem 'sextant' # Rails 4 stuff
+  gem 'quiet_assets' # turns off assets logging
 end
 
 group :test do
@@ -72,6 +69,11 @@ gem 'breadcrumbs_on_rails'
 
 # UUID Generator https://github.com/assaf/uuid
 gem 'uuid'
+
+# Application server
+gem 'unicorn'
+
+gem 'thin'
 
 # Local Variables:
 # mode: ruby

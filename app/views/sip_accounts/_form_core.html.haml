@@ -1,12 +1,13 @@
 .inputs
   = f.input :auth_name, :as => :string, :label => t('sip_accounts.form.auth_name.label'), :hint => conditional_hint('sip_accounts.form.auth_name.hint')
   = f.input :password, :as => :string, :label => t('sip_accounts.form.password.label'), :hint => conditional_hint('sip_accounts.form.password.hint')
-  = f.input :caller_name, :as => :string, :label => t('sip_accounts.form.caller_name.label'), :hint => conditional_hint('sip_accounts.form.caller_name.hint')
+  = f.input :caller_name, :as => :string, :label => t('sip_accounts.form.caller_name.label'), :hint => conditional_hint('sip_accounts.form.caller_name.hint'), :autofocus => true
   = f.input :voicemail_pin, :as => :string, :label => t('sip_accounts.form.voicemail_pin.label'), :hint => conditional_hint('sip_accounts.form.voicemail_pin.hint')
   = f.input :call_waiting, :label => t('sip_accounts.form.call_waiting.label'), :hint => conditional_hint('sip_accounts.form.call_waiting.hint')
   = f.input :clir, :label => t('sip_accounts.form.clir.label'), :hint => conditional_hint('sip_accounts.form.clir.hint')
   = f.input :clip, :label => t('sip_accounts.form.clip.label'), :hint => conditional_hint('sip_accounts.form.clip.hint')
-  = f.input :hotdeskable, :label => t('sip_accounts.form.hotdeskable.label'), :hint => conditional_hint('sip_accounts.form.hotdeskable.hint')
+  - if @sip_account.sip_accountable_type == 'User'
+    = f.input :hotdeskable, :label => t('sip_accounts.form.hotdeskable.label'), :hint => conditional_hint('sip_accounts.form.hotdeskable.hint')
   = f.input :clip_no_screening, :label => t('sip_accounts.form.clip_no_screening.label'), :hint => conditional_hint('sip_accounts.form.clip_no_screening.hint')
   - if CallForward.where(:phone_number_id => @sip_account.phone_number_ids).count == 0 || @sip_account.callforward_rules_act_per_sip_account == true
     = f.input :callforward_rules_act_per_sip_account, :label => t('sip_accounts.form.callforward_rules_act_per_sip_account.label'), :hint => conditional_hint('sip_accounts.form.callforward_rules_act_per_sip_account.hint')

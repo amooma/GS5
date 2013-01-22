@@ -15,7 +15,7 @@ class GsClusterSyncLogEntry < ActiveRecord::Base
   after_create :apply_to_local_database
 
   def apply_to_local_database
-    if self.homebase_ip_address != HOMEBASE_IP_ADDRESS
+    if self.homebase_ip_address != GsParameter.get('HOMEBASE_IP_ADDRESS')
       if self.class_name.constantize.new.attribute_names.include?('is_native')
         case self.action
         when 'create'
@@ -84,7 +84,7 @@ class GsClusterSyncLogEntry < ActiveRecord::Base
   end
 
   def populate_other_cluster_nodes
-    if self.homebase_ip_address == HOMEBASE_IP_ADDRESS && self.waiting_to_be_synced == true
+    if self.homebase_ip_address == GsParameter.get('HOMEBASE_IP_ADDRESS') && self.waiting_to_be_synced == true
       if GsNode.where(:push_updates_to => true).count > 0
         GsNode.where(:push_updates_to => true).each do |gs_node|
           RemoteGsNode::GsClusterSyncLogEntry.site = gs_node.site

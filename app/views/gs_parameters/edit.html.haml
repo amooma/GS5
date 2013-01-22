@@ -1,0 +1,15 @@
+- content_for :title, t("gs_parameters.edit.page_title")
+
+%p
+  %strong= t('gs_parameters.show.name') + ":"
+  = @gs_parameter.name
+- if !@gs_parameter.entity.blank?
+  %p
+    %strong= t('gs_parameters.show.entity') + ":"
+    = @gs_parameter.entity
+- if !@gs_parameter.section.blank?
+  %p
+    %strong= t('gs_parameters.show.section') + ":"
+    = @gs_parameter.section
+
+= render "form"

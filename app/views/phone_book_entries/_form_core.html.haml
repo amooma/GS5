@@ -1,6 +1,6 @@
 .inputs
   = f.input :is_male, :collection => [[true, t('phone_book_entries.form.gender.male')], [false, t('phone_book_entries.form.gender.female')]], :label_method => :last, :value_method => :first, :label => t('phone_book_entries.form.male.label'), :hint => conditional_hint('phone_book_entries.form.gender.hint'), :label => t('phone_book_entries.form.gender.label'), :as => :radio
-  = f.input :first_name, :label => t('phone_book_entries.form.first_name.label'), :hint => conditional_hint('phone_book_entries.form.first_name.hint')
+  = f.input :first_name, :label => t('phone_book_entries.form.first_name.label'), :hint => conditional_hint('phone_book_entries.form.first_name.hint'), :autofocus => true
   = f.input :middle_name, :label => t('phone_book_entries.form.middle_name.label'), :hint => conditional_hint('phone_book_entries.form.middle_name.hint')
   = f.input :last_name, :label => t('phone_book_entries.form.last_name.label'), :hint => conditional_hint('phone_book_entries.form.last_name.hint')
   = f.input :birth_name, :label => t('phone_book_entries.form.birth_name.label'), :hint => conditional_hint('phone_book_entries.form.birth_name.hint')

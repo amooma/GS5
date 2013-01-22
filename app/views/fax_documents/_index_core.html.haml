@@ -1,4 +1,4 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('fax_documents.index.sent_at')
     %th= t('fax_documents.index.state')
@@ -9,9 +9,9 @@
       = t('fax_documents.index.remote_station_id')
     %th= t('fax_documents.index.thumbnails')
 
-  - reset_cycle
+  
   - for fax_document in fax_documents
-    %tr{:class => cycle('odd', 'even'), :id => "fax_document_#{fax_document.id}"}
+    %tr{:id => "fax_document_#{fax_document.id}"}
       - if fax_document.sent_at
         %td= "#{fax_document.inbound ? '&#8680;' : '&#8678;'} #{fax_document.sent_at}".html_safe
         %td= t("fax_documents.states.#{fax_document.state}")

@@ -1,4 +1,4 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('gs_cluster_sync_log_entries.index.gs_node_id')
     %th= t('gs_cluster_sync_log_entries.index.class_name')
@@ -6,9 +6,9 @@
     %th= t('gs_cluster_sync_log_entries.index.content')
     %th= t('gs_cluster_sync_log_entries.index.status')
 
-  - reset_cycle
+  
   - for gs_cluster_sync_log_entry in gs_cluster_sync_log_entries
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= gs_cluster_sync_log_entry.gs_node_id
       %td= gs_cluster_sync_log_entry.class_name
       %td= gs_cluster_sync_log_entry.action

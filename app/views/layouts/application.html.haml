@@ -1,47 +1,38 @@
-!!! 5
-<!--[if lt IE 7]> <html lang="en" class="no-js ie6"> <![endif]-->
-<!--[if IE 7]>    <html lang="en" class="no-js ie7"> <![endif]-->
-<!--[if IE 8]>    <html lang="en" class="no-js ie8"> <![endif]-->
-<!--[if gt IE 8]><!-->
-%html.no-js{ :lang => "en" }
-  ~#OPTIMIZE Make html lang attribute reflect the actual language.
-  <!--<![endif]-->
-  %header
-    %meta{ :charset => "utf-8" }/
-    ~#OPTIMIZE "/" seems to be supposed to make an empty element tag, but it doesn't work. HAML bug?
-    %title
-      = content_for?(:title) ? yield(:title) : "Untitled"
-    %meta{ :name => "viewport", :content => "width=device-width, initial-scale=1.0" }/
-    = stylesheet_link_tag    "application"
+!!!
+%html
+  %head
+    %meta{:charset => "utf-8"}/
+    %title 
+      = content_for?(:title) ? yield(:title) : "Gemeinschaft 5"
+    %meta{:name => 'viewport', :content => "width=device-width, initial-scale=1.0"}
+    - if content_for?(:meta_description)
+      %meta{:description => yield(:meta_description)}/
+    %meta{:author => "AMOOMA GmbH"}/
+    = stylesheet_link_tag    "application", :media => "all"
     = javascript_include_tag "application"
-    = csrf_meta_tag
-    = yield(:head)
-
+    = csrf_meta_tags
+    / HTML5 shim, for IE6-8 support of HTML5 elements
+    /[if lt IE 9]
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   %body
-    #container
-      = render :partial => "shared/header"
-      = render :partial => "shared/flash", :locals => { :flash => flash}
+    .container
+      .row
+        .span12
+          - unless response.cache_control[:public]
+            - flash.each do |name, msg|
+              %div{:class => "alert alert-#{name == :notice ? "success" : "error"} fade in"}
+                %a.close{"data-dismiss" => "alert"} ×
+                = msg
 
-      #content{:role => 'main'}
-        .light
-          %header.main
-            .breadcrumbs= render_breadcrumbs :separator => ' » '
-            - if show_title?
-              %h1= yield(:title)
+          - if current_user
+            = render_breadcrumbs :builder => ::BootstrapBreadcrumbsBuilder, :separator => "/"
+
+          = render 'layouts/navbar'
+
           = yield
 
-      %footer#main
-        %ul
-          %li
-            %a{:href => "http://amooma.de/gemeinschaft/gs5"} Gemeinschaft #{GEMEINSCHAFT_VERSION}
-          - if GuiFunction.display?('amooma_commercial_support_link_in_footer', current_user)
-            %li
-              %a{:href => "http://amooma.de"} Kommerzieller Support und Consulting
-          - if GuiFunction.display?('gemeinschaft_mailinglist_link_in_footer', current_user)
-            %li
-              %a{:href => "https://groups.google.com/group/gs5-users/"} Kostenlose Mailingliste
-
-        .amooma-logo
-          %span brought to you by
-          %a{ :target => '_blank', :href => "http://amooma.de/" } Amooma
-
+      .row
+        .span12
+          %hr/
+          = render 'layouts/footer'
+    / /container

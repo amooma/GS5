@@ -11,7 +11,7 @@ class EmergencyNumbersGermany < ActiveRecord::Migration
     ################################################################
     # Emergency numbers which shouldn't be used as extensions
     ################################################################
-    notruf_nummern = germany.phone_number_ranges.find_or_create_by_name(SERVICE_NUMBERS)
+    notruf_nummern = germany.phone_number_ranges.find_or_create_by_name(GsParameter.get('SERVICE_NUMBERS'))
     notruf_nummern.phone_numbers.find_or_create_by_name_and_number('Polizei', '110')
     notruf_nummern.phone_numbers.find_or_create_by_name_and_number('Feuerwehr', '112')
     notruf_nummern.phone_numbers.find_or_create_by_name_and_number('Zentrale Behördenrufnummer', '115')
@@ -25,6 +25,6 @@ class EmergencyNumbersGermany < ActiveRecord::Migration
 
   def down
     germany = Country.find_by_name('Germany')
-    germany.phone_number_ranges.where(:name => SERVICE_NUMBERS).destroy_all
+    germany.phone_number_ranges.where(:name => GsParameter.get('SERVICE_NUMBERS')).destroy_all
   end
 end

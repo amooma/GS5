@@ -1,13 +1,17 @@
 class TenantsController < ApplicationController
-  load_and_authorize_resource :tenant
+  authorize_resource :tenant
   
   def index
+    @tenants = Tenant.scoped
   end
 
   def show
+    @tenant = Tenant.find(params[:id])
+    @gateways = Gateway.order(:updated_at)
   end
 
   def new
+    @tenant = Tenant.new
     @tenant.name = generate_a_new_name(@tenant)
     @tenant.sip_domain = SipDomain.last
     @tenant.country  = GemeinschaftSetup.first.country
@@ -18,6 +22,8 @@ class TenantsController < ApplicationController
   end
 
   def create
+    @tenant = Tenant.new(tenant_params)
+
     if @tenant.save
       # Become a member of this tenant.
       #
@@ -86,10 +92,12 @@ class TenantsController < ApplicationController
   end
 
   def edit
+    @tenant = Tenant.find(params[:id])
   end
 
   def update
-    if @tenant.update_attributes(params[:tenant])
+    @tenant = Tenant.find(params[:id])
+    if @tenant.update_attributes(tenant_params)
       redirect_to @tenant, :notice  => t('tenants.controller.successfuly_updated')
     else
       render :edit
@@ -97,8 +105,15 @@ class TenantsController < ApplicationController
   end
 
   def destroy
+    @tenant = Tenant.find(params[:id])
     @tenant.destroy
     redirect_to tenants_url, :notice => t('tenants.controller.successfuly_destroyed')
+  end
+
+  private
+  def tenant_params
+    params.require(:tenant).permit(:name, :description, :sip_domain_id, :country_id, :language_id, :from_field_pin_change_email, :from_field_voicemail_email
+)
   end
   
 end

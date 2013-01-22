@@ -1,11 +1,11 @@
-%table
+%table{:class => 'table table-striped'}
   %tr
     %th= t('whitelists.index.name')
     %th= t('whitelists.index.phone_numbers')
 
-  - reset_cycle
+  
   - for whitelist in whitelists
-    %tr{:class => cycle('odd', 'even')}
+    %tr
       %td= whitelist.name || '-'
       %td
         = render 'phone_numbers/listing', :phone_numbers => whitelist.phone_numbers

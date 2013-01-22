@@ -30,7 +30,7 @@ class CallthroughTest < ActiveSupport::TestCase
     @gemeinschaft_setup.save
 
     super_tenant = Tenant.create(
-                                :name => SUPER_TENANT_NAME,
+                                :name => GsParameter.get('SUPER_TENANT_NAME'),
                                 :country_id  => @gemeinschaft_setup.country.id, 
                                 :language_id => @gemeinschaft_setup.language_id,
                                 :description => I18n.t('gemeinschaft_setups.initial_setup.super_tenant_description'),
@@ -94,14 +94,14 @@ class CallthroughTest < ActiveSupport::TestCase
 
     # Check the amount of phone_numbers
     #
-    assert_equal 11, @tenant.phone_number_ranges.find_by_name(INTERNAL_EXTENSIONS).phone_numbers.count
-    assert_equal 12, @tenant.phone_number_ranges.find_by_name(DIRECT_INWARD_DIALING_NUMBERS).phone_numbers.count
+    assert_equal 11, @tenant.phone_number_ranges.find_by_name(GsParameter.get('INTERNAL_EXTENSIONS')).phone_numbers.count
+    assert_equal 12, @tenant.phone_number_ranges.find_by_name(GsParameter.get('DIRECT_INWARD_DIALING_NUMBERS')).phone_numbers.count
   end
 
   test 'that a callthrough can only be created with at least one DID' do
     assert_equal 0, Callthrough.count
  
-    did = @tenant.phone_number_ranges.find_by_name(DIRECT_INWARD_DIALING_NUMBERS).phone_numbers.first
+    did = @tenant.phone_number_ranges.find_by_name(GsParameter.get('DIRECT_INWARD_DIALING_NUMBERS')).phone_numbers.first
 
     callthrough = @tenant.callthroughs.build
 
@@ -118,7 +118,7 @@ class CallthroughTest < ActiveSupport::TestCase
   # test 'that one DID can not be used by two different callthroughs' do
   #   assert_equal 0, Callthrough.count
  
-  #   did = @tenant.phone_number_ranges.find_by_name(DIRECT_INWARD_DIALING_NUMBERS).phone_numbers.first
+  #   did = @tenant.phone_number_ranges.find_by_name(GsParameter.get('DIRECT_INWARD_DIALING_NUMBERS')).phone_numbers.first
 
   #   callthroughs = Array.new
   #   (1..2).each do |i|

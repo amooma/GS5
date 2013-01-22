@@ -1,5 +1,5 @@
 -- Gemeinschaft 5 module: conference class
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 module(...,package.seeall)
@@ -103,8 +103,9 @@ function Conference.enter(self, caller, domain)
     end;
   end
 
+  require 'common.str'
   -- Check if conference is within time frame
-  if self.record.start and self.record['end'] then
+  if not common.str.blank(self.record.start) and not common.str.blank(self.record['end']) then
     local d = {}
     _,_,d.year,d.month,d.day,d.hour,d.min,d.sec=string.find(self.record.start, "(%d+)-(%d+)-(%d+) (%d+):(%d+):(%d+)");
 
@@ -122,7 +123,6 @@ function Conference.enter(self, caller, domain)
     end
   end
 
-  require 'common.str'
   -- Owner ist always moderator
   if (tonumber(self.record.conferenceable_id) == caller.account_owner_id) and (self.record.conferenceable_type == caller.account_owner_type) then
     table.insert(flags, 'moderator');

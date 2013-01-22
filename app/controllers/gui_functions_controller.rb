@@ -1,4 +1,6 @@
 class GuiFunctionsController < ApplicationController
+  load_resource :gui_function
+
   before_filter :load_user_groups
   before_filter :spread_breadcrumbs
 
@@ -60,14 +62,10 @@ class GuiFunctionsController < ApplicationController
   end
 
   def spread_breadcrumbs
-    if @tenant
-      add_breadcrumb t("user_groups.index.page_title"), tenant_user_groups_path(@tenant)
-      if @user_group && !@user_group.new_record?
-        add_breadcrumb @user_group, tenant_user_group_path(@tenant, @user_group)
-      end
-    end
-
     add_breadcrumb t("gui_functions.index.page_title"), gui_functions_path
+    if @gui_function && !@gui_function.new_record?
+      add_breadcrumb @gui_function, gui_function_path(@gui_function)
+    end
   end
 
 end

@@ -1,5 +1,5 @@
 -- Gemeinschaft 5 module: voicemail class
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 module(...,package.seeall)
@@ -128,7 +128,7 @@ end
 function Voicemail.send_notify(self, caller)
   self.log:debug('VOICEMAIL_NOTIFY - account: ' .. self.record.auth_name .. ", id: " .. tostring(caller.uuid));
 
-  local file = io.popen("/opt/GS5/script/voicemail_new.sh '" .. tostring(self.record.auth_name) .. "' '" .. tostring(caller.uuid) .. "' 2>&1");
+  local file = io.popen("/opt/GS5/script/voicemail_new '" .. tostring(self.record.auth_name) .. "' '" .. tostring(caller.uuid) .. "' 2>&1");
   self.log:debug('VOICEMAIL_NOTIFY - result: ' .. tostring(file:read("*a")));
   file:close();
 

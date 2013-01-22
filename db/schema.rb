@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121230110747) do
+ActiveRecord::Schema.define(:version => 20130122121100) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -174,6 +174,16 @@ ActiveRecord::Schema.define(:version => 20121230110747) do
     t.boolean  "returned_flag"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
+  end
+
+  create_table "call_routes", :force => true do |t|
+    t.string   "routing_table"
+    t.string   "name"
+    t.string   "endpoint_type"
+    t.integer  "endpoint_id"
+    t.integer  "position"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "calls", :id => false, :force => true do |t|
@@ -490,13 +500,44 @@ ActiveRecord::Schema.define(:version => 20121230110747) do
     t.integer "stop_time",                    :default => 0, :null => false
   end
 
+  create_table "gateway_parameters", :force => true do |t|
+    t.integer  "gateway_id"
+    t.string   "name"
+    t.string   "value"
+    t.string   "class_type"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "gateway_settings", :force => true do |t|
+    t.integer  "gateway_id"
+    t.string   "name"
+    t.string   "value"
+    t.string   "class_type"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "gateways", :force => true do |t|
+    t.string   "name"
+    t.string   "technology"
+    t.boolean  "inbound"
+    t.boolean  "outbound"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   create_table "gemeinschaft_setups", :force => true do |t|
     t.integer  "user_id"
     t.integer  "sip_domain_id"
     t.integer  "country_id"
     t.integer  "language_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.string   "default_area_code"
   end
 
   create_table "gs_cluster_sync_log_entries", :force => true do |t|
@@ -524,6 +565,17 @@ ActiveRecord::Schema.define(:version => 20121230110747) do
     t.string   "element_name"
     t.boolean  "accepts_updates_from"
     t.datetime "last_sync"
+  end
+
+  create_table "gs_parameters", :force => true do |t|
+    t.string   "name"
+    t.string   "section"
+    t.text     "value"
+    t.string   "class_type"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "entity"
   end
 
   create_table "gui_function_memberships", :force => true do |t|
@@ -763,6 +815,19 @@ ActiveRecord::Schema.define(:version => 20121230110747) do
     t.integer  "bellcore_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+  end
+
+  create_table "route_elements", :force => true do |t|
+    t.integer  "call_route_id"
+    t.string   "var_in"
+    t.string   "var_out"
+    t.string   "pattern"
+    t.string   "replacement"
+    t.string   "action"
+    t.boolean  "mandatory"
+    t.integer  "position"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "sessions", :force => true do |t|

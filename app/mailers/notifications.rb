@@ -26,7 +26,7 @@ class Notifications < ActionMailer::Base
     @pin[:pin] = conference.pin
     @pin[:phone_numbers] = conference.phone_numbers.join(', ')
 
-    mail(from: Tenant.find(DEFAULT_API_TENANT_ID).from_field_pin_change_email,to: "#{conference.conferenceable.email}", :subject => "Conference PIN changed: #{@pin[:conference]}")
+    mail(from: Tenant.find(GsParameter.get('DEFAULT_API_TENANT_ID')).from_field_pin_change_email,to: "#{conference.conferenceable.email}", :subject => "Conference PIN changed: #{@pin[:conference]}")
   end
 
   def new_password(user, password)
@@ -39,7 +39,7 @@ class Notifications < ActionMailer::Base
       @message[:greeting] = user.user_name
     end
 
-    mail(from: Tenant.find(DEFAULT_API_TENANT_ID).from_field_pin_change_email, to: "#{user.email}", :subject => "Password recovery")
+    mail(from: Tenant.find(GsParameter.get('DEFAULT_API_TENANT_ID')).from_field_pin_change_email, to: "#{user.email}", :subject => "Password recovery")
   end
 
   def new_voicemail(freeswitch_voicemail_msg, attach_file = false)
@@ -67,7 +67,7 @@ class Notifications < ActionMailer::Base
       attachments["#{Time.at(freeswitch_voicemail_msg.created_epoch).getlocal.strftime('%Y%m%d-%H%M%S')}-#{caller_number}.wav"] = File.read(freeswitch_voicemail_msg.file_path)
     end
 
-    mail(from: Tenant.find(DEFAULT_API_TENANT_ID).from_field_voicemail_email, to: "#{user.email}", :subject => "New Voicemail from #{@voicemail[:from]}, received #{Time.at(freeswitch_voicemail_msg.created_epoch).getlocal.to_s}")
+    mail(from: Tenant.find(GsParameter.get('DEFAULT_API_TENANT_ID')).from_field_voicemail_email, to: "#{user.email}", :subject => "New Voicemail from #{@voicemail[:from]}, received #{Time.at(freeswitch_voicemail_msg.created_epoch).getlocal.to_s}")
   end
 
   def new_fax(fax_document)
@@ -104,7 +104,7 @@ class Notifications < ActionMailer::Base
       end
     end
     attachments["#{fax_document.created_at.strftime('%Y%m%d-%H%M%S')}-#{caller_number}.pdf"] = File.read(fax_document.document.path)
-    mail(from: Tenant.find(DEFAULT_API_TENANT_ID).from_field_voicemail_email, to: "#{fax_account.email}", :subject => "New Fax Document from #{@fax[:from]}, received #{fax_document.created_at}")
+    mail(from: Tenant.find(GsParameter.get('DEFAULT_API_TENANT_ID')).from_field_voicemail_email, to: "#{fax_account.email}", :subject => "New Fax Document from #{@fax[:from]}, received #{fax_document.created_at}")
   end
 
 end

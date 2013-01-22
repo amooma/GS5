@@ -1,5 +1,5 @@
 -- Gemeinschaft 5: acd call handler
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 local caller_uuid    = argv[1];

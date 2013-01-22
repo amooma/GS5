@@ -9,7 +9,7 @@ class Phone < ActiveRecord::Base
   # Associations
   #
   belongs_to :phone_model
-  belongs_to :phoneable, :polymorphic => true
+  belongs_to :phoneable, :polymorphic => true, :touch => true
 
   has_many :phone_sip_accounts, :dependent => :destroy, :uniq => true, :order => :position
   has_many :sip_accounts, :through => :phone_sip_accounts
@@ -162,7 +162,6 @@ class Phone < ActiveRecord::Base
 
     if ! self.resync(true, sip_account_resync)
       errors.add(:resync, "Resync failed")
-      return false
     end
 
     return true
@@ -201,6 +200,10 @@ class Phone < ActiveRecord::Base
   # Sanitize MAC address.
   #
   def sanitize_mac_address
+    if self.mac_address.split(/:/).count == 6 && self.mac_address.length < 17
+      splitted_mac_address = self.mac_address.split(/:/)
+      self.mac_address = splitted_mac_address.map{|part| (part.size == 1 ? "0#{part}" : part)}.join('')
+    end
     self.mac_address = self.mac_address.to_s.upcase.gsub( /[^A-F0-9]/, '' )
   end
   

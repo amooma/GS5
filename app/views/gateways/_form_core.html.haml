@@ -1,0 +1,6 @@
+.inputs
+  = f.input :name, :label => t('gateways.form.name.label'), :hint => conditional_hint('gateways.form.name.hint'), :autofocus => true
+  = f.input :technology, :label => t('gateways.form.technology.label'), :hint => conditional_hint('gateways.form.technology.hint')
+  = f.input :inbound, :label => t('gateways.form.inbound.label'), :hint => conditional_hint('gateways.form.inbound.hint')
+  = f.input :outbound, :label => t('gateways.form.outbound.label'), :hint => conditional_hint('gateways.form.outbound.hint')
+  = f.input :description, :label => t('gateways.form.description.label'), :hint => conditional_hint('gateways.form.description.hint')

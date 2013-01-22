@@ -1,4 +1,4 @@
-- title t("whitelists.index.page_title")
+- content_for :title, t("whitelists.index.page_title")
 
 - if @whitelists.count > 0
   = render "index_core", :whitelists => @whitelists

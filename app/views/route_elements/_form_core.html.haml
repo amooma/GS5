@@ -1,0 +1,7 @@
+.inputs
+  = f.input :var_in, :label => t('route_elements.form.var_in.label'), :hint => conditional_hint('route_elements.form.var_in.hint')
+  = f.input :var_out, :label => t('route_elements.form.var_out.label'), :hint => conditional_hint('route_elements.form.var_out.hint')
+  = f.input :pattern, :label => t('route_elements.form.pattern.label'), :hint => conditional_hint('route_elements.form.pattern.hint')
+  = f.input :replacement, :label => t('route_elements.form.replacement.label'), :hint => conditional_hint('route_elements.form.replacement.hint')
+  = f.input :action, :collection => RouteElement::ELEMENT_ACTIONS, :label => t('route_elements.form.action.label'), :hint => conditional_hint('route_elements.form.action.hint'), :include_blank => false
+  = f.input :mandatory, :label => t('route_elements.form.mandatory.label'), :hint => conditional_hint('route_elements.form.mandatory.hint')

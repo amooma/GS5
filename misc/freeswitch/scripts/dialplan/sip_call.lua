@@ -1,5 +1,5 @@
 -- Gemeinschaft 5 module: sip call class
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 module(...,package.seeall);
@@ -79,6 +79,8 @@ function SipCall.fork(self, destinations, arg )
   local dial_strings = {}
 
   require 'common.sip_account'
+  require 'common.str'
+
   local sip_account_class = common.sip_account.SipAccount:new{ log = self.log, database = self.database };
 
   local call_result = { code = 404, phrase = 'No destination' };
@@ -87,7 +89,12 @@ function SipCall.fork(self, destinations, arg )
   for index, destination in ipairs(destinations) do
     local origination_variables = { 'gs_fork_index=' .. index }
 
-    self.log:info('FORK ', index, '/', #destinations, ' - ', destination.type, '=', destination.id, '/', destination.gateway or destination.uuid, '@', destination.node_id, ', number: ', destination.number);
+    self.log:info('FORK ', index, '/', #destinations, ' - ', destination.type, '=', destination.id, '/', destination.gateway or destination.uuid, '@', destination.node_id, ', number: ', destination.number, ', caller_id: "', destination.caller_id_name, '" <', destination.caller_id_number, '>');
+    
+    if not common.str.to_b(arg.update_callee_display) then
+      table.insert(origination_variables, 'ignore_display_updates=true');
+    end
+
     if not destination.node_local or destination.type == 'node' then
       require 'common.node'
       local node = nil;
@@ -128,7 +135,12 @@ function SipCall.fork(self, destinations, arg )
       if destination.caller_id_name then
         table.insert(origination_variables, "origination_caller_id_name='" .. destination.caller_id_name .. "'");
       end
-      table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. destination.gateway .. '/' .. destination.number);
+      if destination.channel_variables then
+        for key, value in pairs(destination.channel_variables) do
+          table.insert(origination_variables, tostring(key) .. "='" .. tostring(value) .. "'");
+        end
+      end
+      table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. tostring(destination.gateway) .. '/' .. tostring(destination.number));
     elseif destination.type == 'dial' then
       if destination.caller_id_number then
         table.insert(origination_variables, "origination_caller_id_number='" .. destination.caller_id_number .. "'");

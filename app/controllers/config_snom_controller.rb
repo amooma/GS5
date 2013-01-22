@@ -5,13 +5,13 @@ class ConfigSnomController < ApplicationController
   KEY_REGEXP = {
     '0' => "[ -.,_0]+",
     '1' => "[ -.,_1]+",
-    '2' => "[abc2]",
-    '3' => "[def3]",
-    '4' => "[ghi4]",
+    '2' => "[abc2\xC3\xA4]",
+    '3' => "[def3\xC3\xA9]",
+    '4' => "[ghi4\xC3\xAF]",
     '5' => "[jkl5]",
-    '6' => "[mno6]",
-    '7' => "[pqrs7]",
-    '8' => "[tuv8]",
+    '6' => "[mno6\xC3\xB6]",
+    '7' => "[pqrs7\xC3\x9F]",
+    '8' => "[tuv8\xC3\xBC]",
     '9' => "[wxyz9]",
   }
 
@@ -34,8 +34,8 @@ class ConfigSnomController < ApplicationController
         @phone = Phone.where({ :mac_address => @mac_address }).first
       end
 
-      if ! @phone && PROVISIONING_AUTO_ADD_PHONE
-        tenant = Tenant.where(:id => PROVISIONING_AUTO_TENANT_ID).first
+      if ! @phone && GsParameter.get('PROVISIONING_AUTO_ADD_PHONE')
+        tenant = Tenant.where(:id => GsParameter.get('PROVISIONING_AUTO_TENANT_ID')).first
         if ! tenant
           render(
             :status => 404,
@@ -80,7 +80,7 @@ class ConfigSnomController < ApplicationController
           '00041345' => 'Snom 821',
           '00041348' => 'Snom 821',
           '00041341' => 'Snom 870',
-          '00041332' => 'snom MeetingPoint',
+          '00041332' => 'Snom meetingPoint',
         }
 
         @phone.phone_model = PhoneModel.where(:name => mac_address_to_model[@mac_address[0, 8]]).first
@@ -94,12 +94,12 @@ class ConfigSnomController < ApplicationController
           return
         end
 
-        if ! PROVISIONING_AUTO_ADD_SIP_ACCOUNT
+        if ! GsParameter.get('PROVISIONING_AUTO_ADD_SIP_ACCOUNT')
           return
         end
 
         caller_name_index = 0
-        sip_account_last = tenant.sip_accounts.where('caller_name LIKE ?', "#{PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX}%").sort { |item1, item2| 
+        sip_account_last = tenant.sip_accounts.where('caller_name LIKE ?', "#{GsParameter.get('PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX')}%").sort { |item1, item2| 
           item1.caller_name.gsub(/[^0-9]/, '').to_i <=> item2.caller_name.gsub(/[^0-9]/, '').to_i
         }.last
 
@@ -109,18 +109,18 @@ class ConfigSnomController < ApplicationController
         caller_name_index = caller_name_index + 1
 
         @sip_account = tenant.sip_accounts.build
-        @sip_account.caller_name = "#{PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX}#{caller_name_index}"
-        @sip_account.call_waiting = CALL_WAITING
-        @sip_account.clir = DEFAULT_CLIR_SETTING
-        @sip_account.clip = DEFAULT_CLIP_SETTING
+        @sip_account.caller_name = "#{GsParameter.get('PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX')}#{caller_name_index}"
+        @sip_account.call_waiting = GsParameter.get('CALL_WAITING')
+        @sip_account.clir = GsParameter.get('DEFAULT_CLIR_SETTING')
+        @sip_account.clip = GsParameter.get('DEFAULT_CLIP_SETTING')
         @sip_account.voicemail_pin = random_pin
-        @sip_account.callforward_rules_act_per_sip_account = CALLFORWARD_RULES_ACT_PER_SIP_ACCOUNT_DEFAULT
+        @sip_account.callforward_rules_act_per_sip_account = GsParameter.get('CALLFORWARD_RULES_ACT_PER_SIP_ACCOUNT_DEFAULT')
         @sip_account.hotdeskable = false
         loop do
-          @sip_account.auth_name = SecureRandom.hex(DEFAULT_LENGTH_SIP_AUTH_NAME)
+          @sip_account.auth_name = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_AUTH_NAME'))
           break unless SipAccount.exists?(:auth_name => @sip_account.auth_name)
         end
-        @sip_account.password = SecureRandom.hex(DEFAULT_LENGTH_SIP_PASSWORD)
+        @sip_account.password = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_PASSWORD'))
 
         if ! @sip_account.save
           render(
@@ -182,9 +182,9 @@ class ConfigSnomController < ApplicationController
     send_sensitve = @provisioning_authenticated || !@phone.provisioning_key_active
     @phone_settings = Hash.new()
 
-    if defined?(PROVISIONING_KEY_LENGTH) && PROVISIONING_KEY_LENGTH > 0
+    if !GsParameter.get('PROVISIONING_KEY_LENGTH').nil? && GsParameter.get('PROVISIONING_KEY_LENGTH') > 0
       if @phone.provisioning_key.blank?
-        @phone.update_attributes({ :provisioning_key => SecureRandom.hex(PROVISIONING_KEY_LENGTH), :provisioning_key_active => false })
+        @phone.update_attributes({ :provisioning_key => SecureRandom.hex(GsParameter.get('PROVISIONING_KEY_LENGTH')), :provisioning_key_active => false })
       elsif @provisioning_authenticated
         @phone.update_attributes({ :provisioning_key_active => true })
       end
@@ -199,19 +199,19 @@ class ConfigSnomController < ApplicationController
       end
     end
 
-    if defined?(PROVISIONING_SET_HTTP_USER) && @phone.http_user.blank?
-      if PROVISIONING_SET_HTTP_USER.class == Fixnum
-        @phone.update_attributes({ :http_user => SecureRandom.hex(PROVISIONING_SET_HTTP_USER) })
-      elsif PROVISIONING_SET_HTTP_USER.class == String
-        @phone.update_attributes({ :http_user => PROVISIONING_SET_HTTP_USER })
+    if !GsParameter.get('PROVISIONING_SET_HTTP_USER').nil? && @phone.http_user.blank?
+      if GsParameter.get('PROVISIONING_SET_HTTP_USER').class == Fixnum
+        @phone.update_attributes({ :http_user => SecureRandom.hex(GsParameter.get('PROVISIONING_SET_HTTP_USER')) })
+      elsif GsParameter.get('PROVISIONING_SET_HTTP_USER').class == String
+        @phone.update_attributes({ :http_user => GsParameter.get('PROVISIONING_SET_HTTP_USER') })
       end
     end
 
-    if defined?(PROVISIONING_SET_HTTP_PASSWORD) && @phone.http_password.blank?
-      if PROVISIONING_SET_HTTP_PASSWORD.class == Fixnum
-        @phone.update_attributes({ :http_password => SecureRandom.hex(PROVISIONING_SET_HTTP_PASSWORD) })
-      elsif PROVISIONING_SET_HTTP_PASSWORD.class == String
-        @phone.update_attributes({ :http_password => PROVISIONING_SET_HTTP_PASSWORD })
+    if !GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD').nil? && @phone.http_password.blank?
+      if GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD').class == Fixnum
+        @phone.update_attributes({ :http_password => SecureRandom.hex(GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD')) })
+      elsif GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD').class == String
+        @phone.update_attributes({ :http_password => GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD') })
       end
     end
 
@@ -503,6 +503,11 @@ class ConfigSnomController < ApplicationController
       :idle_down => "keyevent F_NEXT_ID",
       :idle_left => "url #{xml_applications_url}/call_history.xml?type=received",
       :idle_right => "url #{xml_applications_url}/call_history.xml?type=missed",
+      :touch_idle_adr_book => "url #{xml_applications_url}/phone_book.xml",
+      :touch_idle_list_missed => "url #{xml_applications_url}/call_history.xml?type=missed",
+      :touch_idle_list_taken => "url #{xml_applications_url}/call_history.xml?type=received",
+      :touch_idle_redial => "url #{xml_applications_url}/call_history.xml?type=dialed",
+      :touch_idle_dialog => "url #{xml_applications_url}/call_history.xml",
     }
     
     # Remap conference key to first conference if found

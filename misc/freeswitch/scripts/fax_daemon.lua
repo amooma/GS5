@@ -1,5 +1,5 @@
 -- Gemeinschaft 5.0 fax daemon
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 local MAIN_LOOP_SLEEP_TIME = 30;

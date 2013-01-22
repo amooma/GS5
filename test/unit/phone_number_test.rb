@@ -5,17 +5,17 @@ require 'test_helper'
 class PhoneNumberTest < ActiveSupport::TestCase
   
   test "should have valid factory" do
-    assert Factory.build(:phone_number).valid?
+    assert FactoryGirl.build(:phone_number).valid?
   end
   
   def test_that_the_initial_state_should_be_active
-    @phone_number = Factory.create(:phone_number)
+    @phone_number = FactoryGirl.create(:phone_number)
     assert_equal 'active', @phone_number.state
     assert @phone_number.active?
   end
   
   test "that the value_of_to_s field is filled" do
-    phone_number = Factory.create(:phone_number)
+    phone_number = FactoryGirl.create(:phone_number)
     assert_equal phone_number.value_of_to_s, phone_number.to_s
   end
   
@@ -198,9 +198,9 @@ class PhoneNumberTest < ActiveSupport::TestCase
       AreaCode.create(:country => germany, :name => "Hohenmocker", :area_code => "39993")
       
       # create a tenant
-      tenant = Factory.create(:tenant, :country_id => germany.id)
+      tenant = FactoryGirl.create(:tenant, :country_id => germany.id)
       # create some extensions
-      internal_extension_range = tenant.phone_number_ranges.create(:name => INTERNAL_EXTENSIONS)
+      internal_extension_range = tenant.phone_number_ranges.create(:name => GsParameter.get('INTERNAL_EXTENSIONS'))
       ['2000', '2001', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '5', '99'].each do |extension|
         internal_extension_range.phone_numbers.create(:name => "Extension #{extension}", :number => extension)
       end
@@ -216,7 +216,7 @@ class PhoneNumberTest < ActiveSupport::TestCase
   #   Language.create(:name => 'Deutsch', :code => 'de')
   #   AreaCode.create(:country => germany, :name => "Bendorf", :area_code => "2622")
 
-  #   @sip_domain = Factory.create(:sip_domain)
+  #   @sip_domain = FactoryGirl.create(:sip_domain)
 
   #   @tenant = @sip_domain.tenants.build(:name => 'AMOOMA GmbH')
   #   @tenant.country  = Country.first
@@ -226,8 +226,8 @@ class PhoneNumberTest < ActiveSupport::TestCase
 
   #   @tenant.generate_internal_extensions
 
-  #   sip_account = @tenant.sip_accounts.build(Factory.create(:sip_account).attributes)
-  #   phone_number = sip_account.phone_numbers.create(Factory.build(:phone_number, :number => '10').attributes)
+  #   sip_account = @tenant.sip_accounts.build(FactoryGirl.create(:sip_account).attributes)
+  #   phone_number = sip_account.phone_numbers.create(FactoryGirl.build(:phone_number, :number => '10').attributes)
   #   phone_number_evil = sip_account.phone_numbers.build(phone_number.attributes)
     
   #   assert phone_number.valid?
@@ -235,14 +235,14 @@ class PhoneNumberTest < ActiveSupport::TestCase
   # end
     
   # test "has to be unique per SIP domain even for different tenants" do
-  #   provider_sip_domain = Factory.create(:sip_domain)
+  #   provider_sip_domain = FactoryGirl.create(:sip_domain)
   #   tenants      = []
   #   sip_accounts = []
   #   2.times { |i|
-  #     tenants[i] = provider_sip_domain.tenants.create(Factory.build(:tenant, :internal_extension_ranges => '10-20').attributes)
+  #     tenants[i] = provider_sip_domain.tenants.create(FactoryGirl.build(:tenant, :internal_extension_ranges => '10-20').attributes)
   #     tenants[i].generate_internal_extensions
 
-  #     sip_accounts[i] = tenants[i].sip_accounts.build(Factory.build(:sip_account, :tenant_id => tenants[i].id).attributes)
+  #     sip_accounts[i] = tenants[i].sip_accounts.build(FactoryGirl.build(:sip_account, :tenant_id => tenants[i].id).attributes)
   #     sip_accounts[i].phone_numbers.build(:number => '10')
   #   }
   #   sip_accounts[0].save

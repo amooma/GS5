@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    @phone_books = PhoneBook.accessible_by( Ability.new( @user ) ).all
+    @phone_books = PhoneBook.accessible_by( Ability.new( @user ), :read )
   end
 
   def new
@@ -52,7 +52,7 @@ class UsersController < ApplicationController
     
   def destroy
     @user.destroy
-    redirect_to @parent, :notice => t('users.controller.successfuly_destroyed')
+    redirect_to :back, :notice => t('users.controller.successfuly_destroyed')
   end
 
   def destroy_avatar

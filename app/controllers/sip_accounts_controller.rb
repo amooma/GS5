@@ -15,21 +15,23 @@ class SipAccountsController < ApplicationController
   def new
     @sip_account = @parent.sip_accounts.build
     @sip_account.caller_name = @parent
-    @sip_account.call_waiting = CALL_WAITING
-    @sip_account.clir = DEFAULT_CLIR_SETTING
-    @sip_account.clip = DEFAULT_CLIP_SETTING
+    @sip_account.call_waiting = GsParameter.get('CALL_WAITING')
+    @sip_account.clir = GsParameter.get('DEFAULT_CLIR_SETTING')
+    @sip_account.clip = GsParameter.get('DEFAULT_CLIP_SETTING')
     @sip_account.voicemail_pin = random_pin
-    @sip_account.callforward_rules_act_per_sip_account = CALLFORWARD_RULES_ACT_PER_SIP_ACCOUNT_DEFAULT
-    @sip_account.hotdeskable = true
+    @sip_account.callforward_rules_act_per_sip_account = GsParameter.get('CALLFORWARD_RULES_ACT_PER_SIP_ACCOUNT_DEFAULT')
+    if @parent.class == User
+      @sip_account.hotdeskable = true
+    end
 
     # Make sure that we don't use an already taken auth_name
     #  
     loop do
-      @sip_account.auth_name = SecureRandom.hex(DEFAULT_LENGTH_SIP_AUTH_NAME)
+      @sip_account.auth_name = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_AUTH_NAME'))
       
       break unless SipAccount.exists?(:auth_name => @sip_account.auth_name)
     end
-    @sip_account.password = SecureRandom.hex(DEFAULT_LENGTH_SIP_PASSWORD)
+    @sip_account.password = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_PASSWORD'))
   end
 
   def create
@@ -37,13 +39,13 @@ class SipAccountsController < ApplicationController
 
     if @sip_account.auth_name.blank?
       loop do
-        @sip_account.auth_name = SecureRandom.hex(DEFAULT_LENGTH_SIP_AUTH_NAME)
+        @sip_account.auth_name = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_AUTH_NAME'))
         
         break unless SipAccount.exists?(:auth_name => @sip_account.auth_name)
       end
     end
     if @sip_account.password.blank?
-      @sip_account.password = SecureRandom.hex(DEFAULT_LENGTH_SIP_PASSWORD)
+      @sip_account.password = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_PASSWORD'))
     end
     
     if @sip_account.save
@@ -69,7 +71,7 @@ class SipAccountsController < ApplicationController
   def destroy
     @sip_account.destroy
     m = method( :"#{@parent.class.name.underscore}_sip_accounts_url" )
-    redirect_to m.( @parent ), :notice => t('sip_accounts.controller.successfuly_destroyed')
+    redirect_to :back, :notice => t('sip_accounts.controller.successfuly_destroyed')
   end
 
   private

@@ -1,5 +1,5 @@
 .inputs
-  = f.input :name, :label => t('automatic_call_distributors.form.name.label'), :hint => conditional_hint('automatic_call_distributors.form.name.hint')
+  = f.input :name, :label => t('automatic_call_distributors.form.name.label'), :hint => conditional_hint('automatic_call_distributors.form.name.hint'), :autofocus => true
   = f.input :strategy, :label => t('automatic_call_distributors.form.strategy.label'), :hint => conditional_hint('automatic_call_distributors.form.strategy.hint'), :include_blank => false, :as => :select, :collection => strategies
   = f.input :max_callers, :label => t('automatic_call_distributors.form.max_callers.label'), :hint => conditional_hint('automatic_call_distributors.form.max_callers.hint')
   = f.input :agent_timeout, :label => t('automatic_call_distributors.form.agent_timeout.label'), :hint => conditional_hint('automatic_call_distributors.form.agent_timeout.hint')

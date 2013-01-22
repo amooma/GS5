@@ -1,0 +1,7 @@
+-# User groups (only if the current user can edit or destroy them)
+-#
+- if user.user_groups.map{ |x| can?( :edit, x ) || can?( :destroy, x ) }.include?(true)
+  - if can?( :index, UserGroup )
+    %h2=t("user_groups.index.page_title")
+    - if user.user_groups.count > 0
+      = render "user_groups/index_core", :user_groups => user.user_groups.where(:tenant_id => tenant.id).order(:name)

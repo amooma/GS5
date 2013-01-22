@@ -1,16 +1,20 @@
 %p
   - if !(defined? parent).nil? && !(defined? child).nil?
     - if can? :edit, child
-      = link_to t("#{child.class.name.underscore.pluralize}.show.actions.edit"), method( :"edit_#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child)
+      %a.btn.btn-warning{:href => method( :"edit_#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child) }
+        %i.icon-edit.icon-white
+        =t("#{child.class.name.underscore.pluralize}.actions.edit")
     - if can? :destroy, child
-      - if can? :edit, child
-        |
-      = link_to t("#{child.class.name.underscore.pluralize}.show.actions.destroy"), method( :"#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child), :method => :delete
+      %a.btn.btn-danger{"data-confirm" => t("#{child.class.name.underscore.pluralize}.actions.confirm_detroy"), "data-method" => "delete", :href => method( :"#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child), :rel => "nofollow"}
+        %i.icon-trash.icon-white
+        =t("#{child.class.name.underscore.pluralize}.actions.destroy")
 
   - elsif !(defined? child).nil?
     - if can? :edit, child
-      = link_to t("#{child.class.name.underscore.pluralize}.show.actions.edit"), method( :"edit_#{child.class.name.underscore}_path" ).(child)
+      %a.btn.btn-warning{:href => method( :"edit_#{child.class.name.underscore}_path" ).(child) }
+        %i.icon-edit.icon-white
+        =t("#{child.class.name.underscore.pluralize}.actions.edit")
     - if can? :destroy, child
-      - if can? :edit, child
-        |
-      = link_to t("#{child.class.name.underscore.pluralize}.show.actions.destroy"), method( :"#{child.class.name.underscore}_path" ).(child), :method => :delete
+      %a.btn.btn-danger{"data-confirm" => t("#{child.class.name.underscore.pluralize}.actions.confirm_detroy"), "data-method" => "delete", :href => method( :"#{child.class.name.underscore}_path" ).(child), :rel => "nofollow"}
+        %i.icon-trash.icon-white
+        =t("#{child.class.name.underscore.pluralize}.actions.destroy")

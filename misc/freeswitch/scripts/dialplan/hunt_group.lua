@@ -1,5 +1,5 @@
 -- Gemeinschaft 5 module: hunt group class
--- (c) AMOOMA GmbH 2012
+-- (c) AMOOMA GmbH 2012-2013
 -- 
 
 module(...,package.seeall)
@@ -98,27 +98,42 @@ function HuntGroup.run(self, dialplan_object, caller, destination)
 
   self.log:info('HUNTGROUP ', self.record.id, ' - name: ', self.record.name, ', strategy: ', self.record.strategy,', members: ', #hunt_group_members);
 
+  local save_destination = caller.destination;
+
   local destinations = {}
   for index, hunt_group_member in ipairs(hunt_group_members) do
     local destination = dialplan_object:destination_new{ number = hunt_group_member.number };
     if destination.type == 'unknown' then
-      require 'dialplan.route'  
-      local routes = dialplan.route.Route:new{ log = self.log, database = self.database, routing_table = dialplan_object.routes }:outbound(caller, destination.number);
-      if routes and #routes > 0 then
-        destination.callee_id_number = destination.number;
-        destination.callee_id_name = nil;
-        local route = routes[1];
-        destination.gateway = route.endpoint;
-        destination.type = route.class;
-        destination.number = route.value;
-        destination.caller_id_number = route.caller_id_number;
-        destination.caller_id_name = route.caller_id_name;
+      
+      caller.destination_number = destination.number;
+
+      require 'dialplan.router'
+      local route =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = caller, variables = caller }:route_run('outbound', true);
+
+      if route then
+        destination = dialplan_object:destination_new{ ['type'] = route.type, id = route.id, number = route.destination_number }
+
+        local ignore_keys = {
+          id = true,
+          ['type'] = true,
+          channel_variables = true,
+        };
+
+        for key, value in pairs(route) do
+          if not ignore_keys[key] then
+            destination[key] = value;
+          end
+        end
+
         table.insert(destinations, destination);
       end
     else
       table.insert(destinations, destination);
     end
   end
+
+  caller.destination = save_destination;
+  caller.destination_number = save_destination.number;
 
   local forwarding_destination = nil;
   if caller.forwarding_service == 'assistant' and caller.auth_account then

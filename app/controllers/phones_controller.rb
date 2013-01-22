@@ -46,6 +46,7 @@ class PhonesController < ApplicationController
       m = method( :"#{@phoneable.class.name.underscore}_phone_path" )
       redirect_to m.( @phoneable, @phone ), :notice => t('phones.controller.successfuly_updated')
     else
+      set_fallback_sip_accounts
       render :edit
     end
   end
@@ -78,11 +79,11 @@ class PhonesController < ApplicationController
   end
 
   def set_fallback_sip_accounts
-    used_sip_account_ids = Phone.where(:fallback_sip_account_id => SipAccount.pluck(:id)).pluck(:fallback_sip_account_id) 
-    @fallback_sip_accounts = SipAccount.where(:sip_accountable_type => 'Tenant').where(:hotdeskable => true) - SipAccount.where(:id => used_sip_account_ids)
-    if @phone && !@phone.fallback_sip_account_id.blank? && SipAccount.exists?(@phone.fallback_sip_account_id)
-      @fallback_sip_accounts << SipAccount.where(:id => @phone.fallback_sip_account_id).first
+    used_sip_account_ids = Phone.pluck(:fallback_sip_account_id) + PhoneSipAccount.pluck(:sip_account_id)
+    if @phone
+      used_sip_account_ids = used_sip_account_ids - [ @phone.fallback_sip_account_id ]
     end
+    @fallback_sip_accounts = SipAccount.where(:sip_accountable_type => 'Tenant') - SipAccount.where(:id => used_sip_account_ids)
   end
   
 end

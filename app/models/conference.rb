@@ -3,7 +3,7 @@ class Conference < ActiveRecord::Base
                   :open_for_anybody, :max_members, :announce_new_member_by_name,
                   :announce_left_member_by_name
   
-  belongs_to :conferenceable, :polymorphic => true
+  belongs_to :conferenceable, :polymorphic => true, :touch => true
   has_many :conference_invitees, :dependent => :destroy
   has_many :phone_numbers, :as => :phone_numberable, :dependent => :destroy
 
@@ -15,7 +15,7 @@ class Conference < ActiveRecord::Base
   validates_presence_of  :max_members
   validates_numericality_of :max_members, :only_integer => true, 
                                           :greater_than => 0,
-                                          :less_than => (MAXIMUM_NUMBER_OF_PEOPLE_IN_A_CONFERENCE + 1),
+                                          :less_than => ((GsParameter.get('MAXIMUM_NUMBER_OF_PEOPLE_IN_A_CONFERENCE').nil? ? 10 : GsParameter.get('MAXIMUM_NUMBER_OF_PEOPLE_IN_A_CONFERENCE')) + 1),
                                           :allow_nil => false,
                                           :allow_blank => false
 
@@ -25,7 +25,7 @@ class Conference < ActiveRecord::Base
                                   :greater_than => 0,
                                   :allow_nil => true,
                                   :allow_blank => true
-  validates_length_of       :pin, :minimum => MINIMUM_PIN_LENGTH,
+  validates_length_of       :pin, :minimum => (GsParameter.get('MINIMUM_PIN_LENGTH').nil? ? 4 : GsParameter.get('MINIMUM_PIN_LENGTH')),
                                   :allow_nil => true,
                                   :allow_blank => true
   

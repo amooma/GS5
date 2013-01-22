@@ -1,4 +1,4 @@
-- title t("ringtones.index.page_title")
+- content_for :title, t("ringtones.index.page_title")
 
 - if @ringtones.count > 0
   = render "index_core", :ringtones => @ringtones

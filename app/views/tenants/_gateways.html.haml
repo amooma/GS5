@@ -1,0 +1,8 @@
+%h2= t("gateways.index.page_title")
+
+- if Gateway.count <= GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
+  = render "gateways/index_core", :gateways => Gateway.all
+  = render :partial => 'shared/create_link', :locals => {:child_class => Gateway}
+- else
+  %p
+    = link_to t("gateways.index.page_title"), gateways_path

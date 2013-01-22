@@ -28,7 +28,7 @@ class CallForward < ActiveRecord::Base
   validates_numericality_of  :depth,
     :only_integer => true,
     :greater_than_or_equal_to  =>   1,
-    :less_than_or_equal_to     =>  MAX_CALL_FORWARD_DEPTH
+    :less_than_or_equal_to     =>  (GsParameter.get('MAX_CALL_FORWARD_DEPTH').nil? ? 0 : GsParameter.get('MAX_CALL_FORWARD_DEPTH'))
   
   before_validation {
     self.timeout = nil if self.call_forward_case_id != 3

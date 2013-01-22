@@ -1,0 +1,8 @@
+%h2= t("call_routes.index.page_title")
+
+- if CallRoute.count <= GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
+  = render "call_routes/index_core", :call_routes => CallRoute.all
+  = render :partial => 'shared/create_link', :locals => {:child_class => CallRoute}
+- else
+  %p
+    = link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + t("call_routes.index.page_title"), call_routes_path

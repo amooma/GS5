@@ -1,4 +1,4 @@
-- title t("callthroughs.show.page_title")
+- content_for :title, t("callthroughs.show.page_title")
 
 %p
   %strong= t('callthroughs.show.name') + ":"
@@ -19,7 +19,7 @@
   %br
 = render :partial => 'shared/create_link', :locals => {:parent => @callthrough, :child_class => AccessAuthorization}
 
-- if CALLTHROUGH_HAS_WHITELISTS == true
+- if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
   %h2= t('callthroughs.form.whitelists.label')
   - if @callthrough.whitelisted_phone_numbers.count > 0
     = render 'whitelists/index_core', :whitelists => @callthrough.whitelists

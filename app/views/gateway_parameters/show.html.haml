@@ -1,0 +1,19 @@
+- content_for :title, t("gateway_parameters.show.page_title")
+
+%p
+  %strong= t('gateway_parameters.show.gateway_id') + ":"
+  = @gateway_parameter.gateway
+%p
+  %strong= t('gateway_parameters.show.name') + ":"
+  = @gateway_parameter.name
+%p
+  %strong= t('gateway_parameters.show.value') + ":"
+  = @gateway_parameter.value
+%p
+  %strong= t('gateway_parameters.show.class_type') + ":"
+  = @gateway_parameter.class_type
+%p
+  %strong= t('gateway_parameters.show.description') + ":"
+  = @gateway_parameter.description
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @gateway, :child => @gateway_parameter }

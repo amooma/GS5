@@ -1,7 +1,7 @@
 class PhoneBook < ActiveRecord::Base
   attr_accessible :name, :description, :uuid
   
-  belongs_to :phone_bookable, :polymorphic => true
+  belongs_to :phone_bookable, :polymorphic => true, :touch => true
   has_many :phone_book_entries, :dependent => :destroy
   
   validates_presence_of :name

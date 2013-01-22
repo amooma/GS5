@@ -22,7 +22,7 @@ class CallHistoriesController < ApplicationController
     
     @call_histories = calls.paginate(
       :page => @pagination_page_number,
-      :per_page => DEFAULT_PAGINATION_ENTRIES_PER_PAGE
+      :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
     )
 
     @calls_count = calls.count
@@ -34,6 +34,8 @@ class CallHistoriesController < ApplicationController
     if ! @type.blank?
       @call_histories = @call_histories.where(:entry_type => @type)
     end
+
+    @call_histories = @call_histories.order(:created_at).reverse_order.limit(1000)
   end
 
 
