@@ -15,7 +15,7 @@ de:
       page_title: 'Telefonbücher'
       name: 'Name des Telefonbuches'
       description: 'Beschreibung'
-      count: 'Telefonbucheinträge'
+      count: 'Anzahl Einträge'
       actions:
         confirm: 'Sind Sie sicher, dass Sie dieses Telefonbuch löschen möchten?'
         destroy: 'Löschen'
