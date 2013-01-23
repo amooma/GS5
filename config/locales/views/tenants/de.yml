@@ -1,7 +1,7 @@
 de:
   tenants:
     name: "Mandant"
-    new_name_scaffold: 'Beispiel Firma Nr. %{counter} GmbH'
+    new_name_scaffold: 'Beispiel Firma'
     controller:
       successfuly_created: 'Der Mandant "%{resource}" wurde angelegt.'
       successfuly_created_plus_delayed_jobs: 'Der Mandant "%{resource}" wurde angelegt. %{amount_of_numbers} Durchwahlen und Telefonnummern werden jetzt im Hintergrund ins System gespielt. Dies kann je nach benutzter Hardware ein paar Minuten dauern. '

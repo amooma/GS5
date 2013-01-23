@@ -1,7 +1,7 @@
 en:
   tenants:
     name: "Tenant"
-    new_name_scaffold: 'Snake Oil #%{counter}, Ltd.'
+    new_name_scaffold: 'Snake Oil Ltd.'
     controller:
       successfuly_created: 'Successfully created the tenant "%{resource}".'
       successfuly_created_plus_delayed_jobs: 'Successfully created the tenant "%{resource}". A total of %{amount_of_numbers} extensions and external numbers is being proccessed in the background. Depending on your hardware that can take a couple of minutes.'
