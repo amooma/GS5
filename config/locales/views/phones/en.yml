@@ -81,3 +81,5 @@ en:
     sip_accounts:
       title: 'Listing of connected SIP accounts'
       connect_to_sip_account: 'Connect to an existing SIP account'
+    tool_tips:
+      hot_desk: 'Hot desk triggers the ability for a user to login and out of a given phone.'

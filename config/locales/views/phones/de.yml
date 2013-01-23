@@ -81,3 +81,5 @@ de:
     sip_accounts:
       title: 'Auf dem Telefon eingetragene SIP-Konten'
       connect_to_sip_account: 'Neues SIP-Konto auf das Telefon eintragen'
+    tool_tips:
+      hot_desk: 'Mit aktivierter Hot Desk Fähigkeit können sich User der Anlage an einem Telefon ein- und ausloggen.'

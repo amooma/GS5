@@ -21,6 +21,7 @@
         %td= phone.phone_model
         %td
           %span.hidden-phone
-            = phone.hot_deskable
+            %a{:href => '#', :rel => "tooltip", :title => t('phones.tool_tips.hot_desk'), :'data-trigger' => 'hover'}
+              = phone.hot_deskable
         %td= phone.ip_address
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone.phoneable, :child => phone}
