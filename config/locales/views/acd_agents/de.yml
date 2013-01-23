@@ -17,7 +17,7 @@ de:
       destination_id: 'Ziel ID'
       destination: 'Ziel'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Agenten löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Agenten löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -34,7 +34,7 @@ de:
       destination_type: 'Zieltyp'
       destination_id: 'Ziel ID'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Agenten löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Agenten löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'

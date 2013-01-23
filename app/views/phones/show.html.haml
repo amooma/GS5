@@ -73,7 +73,7 @@
 .row
   .span12
     %h2= t("phones.sip_accounts.title")
-    - if @phone.phone_sip_accounts.count > 0
+    - if @phone.phone_sip_accounts.any?
       = render "phone_sip_accounts/index_core", :phone_sip_accounts => @phone.phone_sip_accounts
 
     = render :partial => 'shared/create_link', :locals => {:parent => @phone, :child_class => PhoneSipAccount}

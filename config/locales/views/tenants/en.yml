@@ -16,7 +16,7 @@ en:
       from_field_voicemail_email: 'Voicemail sender'
       from_field_pin_change_email: 'PIN change sender'
       actions:
-        confirm: 'Are you sure you want to delete this tenant?'
+        confirm_destroy: 'Are you sure you want to delete this tenant?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -30,7 +30,7 @@ en:
       from_field_voicemail_email: 'Voicemail sender'
       from_field_pin_change_email: 'PIN change sender'
       actions:
-        confirm: 'Are you sure you want to delete this tenant?'
+        confirm_destroy: 'Are you sure you want to delete this tenant?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View all tenants'

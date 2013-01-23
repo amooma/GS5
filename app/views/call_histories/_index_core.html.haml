@@ -66,6 +66,6 @@
         %td
           - if can? :destroy, call_history
             / = link_to t('call_histories.index.actions.destroy'), sip_account_call_history_path(@sip_account, call_history), :method => :delete
-            %a.btn.btn-mini.btn-danger{"data-confirm" => t("#{call_history.class.name.underscore.pluralize}.actions.confirm_detroy"), "data-method" => "delete", :href => sip_account_call_history_path(@sip_account, call_history), :rel => "nofollow"}
+            %a.btn.btn-mini.btn-danger{"data-confirm" => t("#{call_history.class.name.underscore.pluralize}.actions.confirm_destroy"), "data-method" => "delete", :href => sip_account_call_history_path(@sip_account, call_history), :rel => "nofollow"}
               %i.icon-trash.icon-white
               =t('call_histories.index.actions.destroy')            

@@ -35,7 +35,7 @@ de:
       available_phone_books: 'Verfügbare Telefonbücher:'
       create_new_phone_book_entry: 'Einen neuen Eintrag anlegen'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Telefonbucheintrag löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Telefonbucheintrag löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -69,7 +69,7 @@ de:
       mobileme_account: 'iCloud Konto'
       manage_phone_number: 'Telefonnummern verwalten.'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Telefonbucheintrag löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Telefonbucheintrag löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Telefonbucheinträge anzeigen'

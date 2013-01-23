@@ -14,7 +14,7 @@
             =t("#{child.class.name.underscore.pluralize}.index.actions.edit")
 
       - if can? :destroy, child
-        %a.btn.btn-small.btn-danger{"data-confirm" => t("#{child.class.name.underscore.pluralize}.index.actions.confirm_detroy"), "data-method" => "delete", :href => method( :"#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child), :rel => "nofollow"}
+        %a.btn.btn-small.btn-danger{"data-confirm" => t("#{child.class.name.underscore.pluralize}.index.actions.confirm_destroy"), "data-method" => "delete", :href => method( :"#{parent.class.name.underscore}_#{child.class.name.underscore}_path" ).(parent, child), :rel => "nofollow"}
           %i.icon-remove.icon-white
           %span.hidden-phone
             =t("#{child.class.name.underscore.pluralize}.index.actions.destroy")
@@ -35,7 +35,7 @@
             =t("#{child.class.name.underscore.pluralize}.index.actions.edit")
           
       - if can? :destroy, child
-        %a.btn.btn-small.btn-danger{"data-confirm" => t("#{child.class.name.underscore.pluralize}.index.actions.confirm_detroy"), "data-method" => "delete", :href => method( :"#{child.class.name.underscore}_path" ).(child), :rel => "nofollow"}
+        %a.btn.btn-small.btn-danger{"data-confirm" => t("#{child.class.name.underscore.pluralize}.index.actions.confirm_destroy"), "data-method" => "delete", :href => method( :"#{child.class.name.underscore}_path" ).(child), :rel => "nofollow"}
           %i.icon-trash.icon-white
           %span.hidden-phone
             =t("#{child.class.name.underscore.pluralize}.index.actions.destroy")

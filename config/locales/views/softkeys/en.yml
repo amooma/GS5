@@ -25,7 +25,7 @@ en:
       label: 'Label'
       position: 'Position'
       actions:
-        confirm: 'Are you sure you want to delete this softkey?'
+        confirm_destroy: 'Are you sure you want to delete this softkey?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -40,7 +40,7 @@ en:
       position: 'Position'
       call_forward: 'Call forward'
       actions:
-        confirm: 'Are you sure you want to delete this softkey?'
+        confirm_destroy: 'Are you sure you want to delete this softkey?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View All'

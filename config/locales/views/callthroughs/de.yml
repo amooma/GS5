@@ -14,7 +14,7 @@ de:
       access_authorized_phone_numbers: 'Zugelassene Telefonnummern'
       whitelist_phone_numbers: 'Positivliste für Zielrufnummern'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Callthrough löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Callthrough löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -25,7 +25,7 @@ de:
       name: 'Name'
       sip_account_id: 'SIP-Konto'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Callthrough löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Callthrough löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Callthrough anzeigen'

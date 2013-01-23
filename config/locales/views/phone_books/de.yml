@@ -17,7 +17,7 @@ de:
       description: 'Beschreibung'
       count: 'Anzahl Einträge'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie dieses Telefonbuch löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie dieses Telefonbuch löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -28,7 +28,7 @@ de:
       name: 'Name'
       description: 'Beschreibung'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie dieses Telefonbuch löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie dieses Telefonbuch löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Telefonbücher anzeigen'

@@ -17,7 +17,7 @@ de:
       nightly_reboot: 'Nachts automatischer Reboot'
       provisioning_key_active: 'Provisioning Schlüssel aktiv'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -36,7 +36,7 @@ de:
       fallback_sip_account_id: 'Fallback SIP Account'
       manual: 'Handbuch'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Telefone anzeigen'
@@ -79,7 +79,7 @@ de:
         hint: ''
       button: 'Absenden'
     sip_accounts:
-      title: 'Auf dem Telefon eingetragene SIP-Konten'
-      connect_to_sip_account: 'Neues SIP-Konto auf das Telefon eintragen'
+      title: 'Verknüpfte SIP-Accounts'
+      connect_to_sip_account: 'SIP-Account mit dem Telefon verknüpfen'
     tool_tips:
       hot_desk: 'Mit aktivierter Hot Desk Fähigkeit können sich User der Anlage an einem Telefon ein- und ausloggen.'
