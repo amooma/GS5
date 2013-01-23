@@ -24,7 +24,7 @@ en:
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
-        create: 'Create a new user'
+        create: 'New'
         create_for: 'Create a new user for %{resource}'
     show:
       page_title: 'Show User'
