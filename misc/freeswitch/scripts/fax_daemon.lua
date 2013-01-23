@@ -1,4 +1,4 @@
--- Gemeinschaft 5.0 fax daemon
+-- Gemeinschaft 5 fax daemon
 -- (c) AMOOMA GmbH 2012-2013
 -- 
 

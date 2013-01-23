@@ -1,4 +1,4 @@
--- Gemeinschaft 5.0 event handler
+-- Gemeinschaft 5 event handler
 -- (c) AMOOMA GmbH 2012-2013
 -- 
 

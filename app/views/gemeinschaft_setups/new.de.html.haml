@@ -1,4 +1,4 @@
-- content_for :title, 'Gemeinschaft 5.0'
+- content_for :title, "Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}"
 - content_for :meta_description, "Konfiguration einer Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')} Installation"
 
 = simple_form_for(@gemeinschaft_setup) do |f|
