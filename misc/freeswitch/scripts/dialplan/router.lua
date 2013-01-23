@@ -52,27 +52,27 @@ function Router.read_table(self, table_name)
 end
 
 
-function Router.expand_variables(self, line, variables)
+function Router.expand_variables(self, line, variables, variables2)
   return (line:gsub('{([%a%d%._]+)}', function(captured)
-    return common.str.try(variables, captured) or '';
+    return common.str.try(variables, captured) or common.str.try(variables2, captured) or '';
   end))
 end
 
 
-function Router.element_match(self, pattern, search_string, replacement)
+function Router.element_match(self, pattern, search_string, replacement, route_variables)
   local success, result = pcall(string.find, search_string, pattern);
 
   if not success then
     self.log:error('ELEMENT_MATCH - table error - pattern: ', pattern, ', search_string: ', search_string);
   elseif result then
-    return true, search_string:gsub(pattern, self:expand_variables(replacement, self.variables));
+    return true, search_string:gsub(pattern, self:expand_variables(replacement, route_variables, self.variables));
   end
 
   return false;
 end
 
 
-function Router.element_match_group(self, pattern, groups, replacement, use_key)
+function Router.element_match_group(self, pattern, groups, replacement, use_key, route_variables)
   if type(groups) ~= 'table' then
     return false;
   end
@@ -81,7 +81,7 @@ function Router.element_match_group(self, pattern, groups, replacement, use_key)
     if use_key then 
       value = key;
     end
-    result, replaced_value = self:element_match(pattern, tostring(value), replacement);
+    result, replaced_value = self:element_match(pattern, tostring(value), replacement, route_variables);
     if result then
       return true, replaced_value;
     end
@@ -94,7 +94,8 @@ function Router.route_match(self, route)
     gateway = 'gateway' .. route.endpoint_id,
     ['type'] = route.endpoint_type,
     id = route.endpoint_id,
-    channel_variables = {}
+    destination_number = common.str.try(self, 'caller.destination_number'),
+    channel_variables = {},
   };
 
   local route_matches = false;
@@ -108,13 +109,16 @@ function Router.route_match(self, route)
     if element.action ~= 'none' then
       if common.str.blank(element.var_in) or common.str.blank(element.pattern) and element.action == 'set' then
         result = true;
-        replacement = self:expand_variables(element.replacement, self.variables);
+        replacement = self:expand_variables(element.replacement, destination, self.variables);
       else
         local command, variable_name = common.str.partition(element.var_in, ':');
 
-        if not command or not variable_name or command == 'var' then
-          local search_string = tostring(common.str.try(self.caller, element.var_in))
-          result, replacement = self:element_match(tostring(element.pattern), tostring(search_string), tostring(element.replacement));
+        if not command or not variable_name then
+          local search_string = tostring(common.str.try(destination, element.var_in) or common.str.try(self.caller, element.var_in));
+          result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement), destination);
+        elseif command == 'var' then
+          local search_string = tostring(common.str.try(self.caller, element.var_in));
+          result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
         elseif command == 'key' or command == 'val' then
           local groups = common.str.try(self.caller, variable_name);
           result, replacement = self:element_match_group(tostring(element.pattern), groups, tostring(element.replacement), command == 'key');
