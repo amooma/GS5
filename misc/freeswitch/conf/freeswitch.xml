@@ -633,6 +633,7 @@
         <load module="mod_tone_stream"/>
         <load module="mod_say_en"/>
         <load module="mod_spandsp"/>
+        <load module="mod_snmp"/>
       </modules>
     </configuration>  
     <configuration name="lua.conf" description="LUA Configuration">
