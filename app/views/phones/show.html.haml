@@ -52,6 +52,11 @@
 
   .span7
     - if @phone.ip_address.blank? && @phone.phone_model.manufacturer.ieee_name == 'SNOM Technology AG'
+      %ul.thumbnails.pull-right
+        %li.span4
+          %a.thumbnail{:href => "#{image_path('screenshots/set_provisioning_url_snom.png')}"}
+            =image_tag('screenshots/set_provisioning_url_snom.png', :alt => "Screenshot Set Provisionierungs-URL Snom WebGUI")
+
       %p
         Sollten Sie Ihren DHCP-Server noch nicht für das automatische Konfigurieren der SIP-Telefone konfiguriert haben, können Sie manuell in Ihrem Telefon eine Provisionierungs-URL eingeben.
       %p
