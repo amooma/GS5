@@ -1,0 +1,7 @@
+- cache(['tenant_show_table_of_sip_accounts', I18n.locale, tenant, tenant.sip_accounts.count, tenant.sip_accounts.reorder(:updated_at).last]) do
+  -# SIP accounts
+  -#
+  %h2= t('sip_accounts.index.page_title')
+  - if tenant.sip_accounts.any?
+    = render "sip_accounts/index_core", :sip_accounts => tenant.sip_accounts
+  = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}

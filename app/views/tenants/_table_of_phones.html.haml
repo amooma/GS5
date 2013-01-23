@@ -1,0 +1,7 @@
+- cache(['tenant_show_table_of_phones', I18n.locale, tenant, tenant.phones.count, tenant.phones.reorder(:updated_at).last]) do
+  -# Phones
+  -#
+  %h2= t('phones.index.page_title')
+  - if tenant.phones.any?
+    = render "phones/index_core", :phones => tenant.phones
+  = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => Phone}

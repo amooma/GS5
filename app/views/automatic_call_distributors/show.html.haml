@@ -1,47 +1,60 @@
 - content_for :title, t("automatic_call_distributors.show.page_title")
 
 %table{:class => 'table table-striped'}
-  %tr
-    %th= t('automatic_call_distributors.show.name') + ":"
-    %td= @automatic_call_distributor.name
-  %tr
-    %th= t('automatic_call_distributors.show.strategy') + ":"
-    %td= t("automatic_call_distributors.strategies.#{@automatic_call_distributor.strategy}")
-  %tr
-    %th= t('automatic_call_distributors.show.max_callers') + ":"
-    %td= @automatic_call_distributor.max_callers
-  %tr
-    %th= t('automatic_call_distributors.show.agent_timeout') + ":"
-    %td= @automatic_call_distributor.agent_timeout
-  %tr
-    %th= t('automatic_call_distributors.show.retry_timeout') + ":"
-    %td= @automatic_call_distributor.retry_timeout
-  %tr
-    %th= t('automatic_call_distributors.show.join') + ":"
-    %td= t("automatic_call_distributors.join_on.#{@automatic_call_distributor.join}")
-  %tr
-    %th= t('automatic_call_distributors.show.leave') + ":"
-    %td= t("automatic_call_distributors.leave_on.#{@automatic_call_distributor.leave}")
+  %tbody
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.name') + ":"
+      %td= @automatic_call_distributor.name
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.strategy') + ":"
+      %td= t("automatic_call_distributors.strategies.#{@automatic_call_distributor.strategy}")
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.max_callers') + ":"
+      %td= @automatic_call_distributor.max_callers
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.agent_timeout') + ":"
+      %td= @automatic_call_distributor.agent_timeout
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.retry_timeout') + ":"
+      %td= @automatic_call_distributor.retry_timeout
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.join') + ":"
+      %td= t("automatic_call_distributors.join_on.#{@automatic_call_distributor.join}")
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.leave') + ":"
+      %td= t("automatic_call_distributors.leave_on.#{@automatic_call_distributor.leave}")
 
-  %tr
-    %th= t('automatic_call_distributors.show.announce_position') + ":"
-    %td= @automatic_call_distributor.announce_position
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.announce_position') + ":"
+      %td= @automatic_call_distributor.announce_position
 
-  %tr
-    %th= t('automatic_call_distributors.show.announce_call_agents') + ":"
-    %td= @automatic_call_distributor.announce_call_agents
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.announce_call_agents') + ":"
+      %td= @automatic_call_distributor.announce_call_agents
 
-  %tr
-    %th= t('automatic_call_distributors.show.greeting') + ":"
-    %td= @automatic_call_distributor.greeting
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.greeting') + ":"
+      %td= @automatic_call_distributor.greeting
 
-  %tr
-    %th= t('automatic_call_distributors.show.goodbye') + ":"
-    %td= @automatic_call_distributor.goodbye
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.goodbye') + ":"
+      %td= @automatic_call_distributor.goodbye
 
-  %tr
-    %th= t('automatic_call_distributors.show.music') + ":"
-    %td= @automatic_call_distributor.music
+    %tr
+      %td
+        %strong= t('automatic_call_distributors.show.music') + ":"
+      %td= @automatic_call_distributor.music
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @automatic_call_distributor.automatic_call_distributorable, :child => @automatic_call_distributor }
 

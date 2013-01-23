@@ -1,8 +1,8 @@
 - content_for :title, t("phones.show.page_title")
 
 .row
-  .span6
-    %table
+  .span5
+    %table{:class => 'table table-striped'}
       %tr
         %td
           %strong= t('phones.show.mac_address') + ":"
@@ -50,10 +50,10 @@
     = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone.phoneable, :child => @phone }
 
 
-  .span6
+  .span7
     - if @phone.ip_address.blank? && @phone.phone_model.manufacturer.ieee_name == 'SNOM Technology AG'
       %p
-        Sollten Sie Ihren DHCP-Server noch nicht für das automatische Konfigurieren der GS5 Provisionierungs-URL konfiguriert haben, können Sie manuell in Ihrem Telefon die folgende Provisionierungs-URL eingeben.
+        Sollten Sie Ihren DHCP-Server noch nicht für das automatische Konfigurieren der SIP-Telefone konfiguriert haben, können Sie manuell in Ihrem Telefon eine Provisionierungs-URL eingeben.
       %p
         Das entsprechende Eingabefeld finden Sie unter
         %br

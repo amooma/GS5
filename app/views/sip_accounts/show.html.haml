@@ -1,37 +1,59 @@
 - content_for :title, t("sip_accounts.show.page_title")
 
-%p
-  %strong= t('sip_accounts.show.auth_name') + ":"
-  = @sip_account.auth_name
-%p
-  %strong= t('sip_accounts.show.caller_name') + ":"
-  = @sip_account.caller_name
-%p
-  %strong= t('sip_accounts.show.password') + ":"
-  = @sip_account.password
-%p
-  %strong= t('sip_accounts.show.call_waiting') + ":"
-  = @sip_account.call_waiting
-%p
-  %strong= t('sip_accounts.show.clir') + ":"
-  = @sip_account.clir
-%p
-  %strong= t('sip_accounts.show.clip_no_screening') + ":"
-  = @sip_account.clip_no_screening
-%p
-  %strong= t('sip_accounts.show.hotdeskable') + ":"
-  = @sip_account.hotdeskable
-%p
-  %strong= t('sip_accounts.show.callforward_rules_act_per_sip_account') + ":"
-  = @sip_account.callforward_rules_act_per_sip_account
-- if @sip_account.registration.try(:network_ip) && @sip_account.registration.try(:network_port)
-  %p
-    %strong= t('sip_accounts.show.registration') + ":"
-    = "#{@sip_account.registration.network_ip}:#{@sip_account.registration.network_port}"
-- if @sip_account.registration.try(:expires)
-  %p
-    %strong= t('sip_accounts.show.expires') + ":"
-    = "#{@sip_account.registration.try(:expires) - Time.now.to_i} s"
+%table{:class => 'table table-striped'}
+  %tbody
+    %tr
+      %td
+        %strong= t('sip_accounts.show.caller_name') + ":"
+      %td
+        = @sip_account.caller_name
+    %tr
+      %td
+        %strong= t('sip_accounts.show.auth_name') + ":"
+      %td
+        = @sip_account.auth_name
+    %tr
+      %td
+        %strong= t('sip_accounts.show.password') + ":"
+      %td
+        = @sip_account.password
+    %tr
+      %td
+        %strong= t('sip_accounts.show.call_waiting') + ":"
+      %td
+        = @sip_account.call_waiting
+    %tr
+      %td
+        %strong= t('sip_accounts.show.clir') + ":"
+      %td
+        = @sip_account.clir
+    %tr
+      %td
+        %strong= t('sip_accounts.show.clip_no_screening') + ":"
+      %td
+        = @sip_account.clip_no_screening
+    %tr
+      %td
+        %strong= t('sip_accounts.show.hotdeskable') + ":"
+      %td
+        = @sip_account.hotdeskable
+    %tr
+      %td
+        %strong= t('sip_accounts.show.callforward_rules_act_per_sip_account') + ":"
+      %td
+        = @sip_account.callforward_rules_act_per_sip_account
+    - if @sip_account.registration.try(:network_ip) && @sip_account.registration.try(:network_port)
+      %tr
+        %td
+          %strong= t('sip_accounts.show.registration') + ":"
+      %td
+        = "#{@sip_account.registration.network_ip}:#{@sip_account.registration.network_port}"
+    - if @sip_account.registration.try(:expires)
+      %tr
+        %td
+          %strong= t('sip_accounts.show.expires') + ":"
+      %td
+        = "#{@sip_account.registration.try(:expires) - Time.now.to_i} s"
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @sip_account.sip_accountable, :child => @sip_account }
 

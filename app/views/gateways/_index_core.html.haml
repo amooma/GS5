@@ -3,18 +3,26 @@
     %thead
       %tr
         %th= t('gateways.index.name')
-        %th= t('gateways.index.technology')
+        %th
+          %span.hidden-phone
+            = t('gateways.index.technology')
         %th= t('gateways.index.inbound')
         %th= t('gateways.index.outbound')
-        %th= t('gateways.index.description')
+        %th
+          %span.hidden-phone
+            = t('gateways.index.description')
 
     %tbody
       - for gateway in gateways
         %tr
           - cache(['gateway_single_table_row_within_tr', gateway, gateways.count]) do 
             %td= gateway.name
-            %td= gateway.technology
+            %td
+              %span.hidden-phone
+                = gateway.technology
             %td= gateway.inbound
             %td= gateway.outbound
-            %td= gateway.description
+            %td
+              %span.hidden-phone
+                = gateway.description
             =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gateway}

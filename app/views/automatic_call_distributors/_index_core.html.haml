@@ -8,12 +8,6 @@
       %th= t('automatic_call_distributors.index.phone_numbers')
       %th
         %span.hidden-phone
-          = t('automatic_call_distributors.index.max_callers')
-      %th
-        %span.hidden-phone
-          = t('automatic_call_distributors.index.agent_timeout')
-      %th
-        %span.hidden-phone
           = t('automatic_call_distributors.index.acd_agents')
 
   %tbody
@@ -30,12 +24,6 @@
         %td
           - if automatic_call_distributor.phone_numbers.any?
             = render 'phone_numbers/listing', :phone_numbers => automatic_call_distributor.phone_numbers
-        %td
-          %span.hidden-phone
-            = automatic_call_distributor.max_callers
-        %td
-          %span.hidden-phone
-            = automatic_call_distributor.agent_timeout
         %td
           %span.hidden-phone
             - if automatic_call_distributor.acd_agents.count > 3

@@ -1,49 +1,38 @@
--# SIP accounts
--#
-%h2= t('sip_accounts.index.page_title')
-- if tenant.sip_accounts.any?
-  = render "sip_accounts/index_core", :sip_accounts => tenant.sip_accounts
-= render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
 
--# Phones
--#
-%h2= t('phones.index.page_title')
-- if tenant.phones.any?
-  = render "phones/index_core", :phones => tenant.phones
-= render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => Phone}
+.row
+  .span12
+    = render :partial => 'tenants/users_table', :locals => {:tenant => tenant}
+    = render :partial => 'tenants/user_groups_table', :locals => {:tenant => tenant}
 
-= render :partial => 'users_table', :locals => {:tenant => tenant}
+    = render :partial => 'tenants/table_of_sip_accounts', :locals => {:tenant => tenant}
+    = render :partial => 'tenants/table_of_phones', :locals => {:tenant => tenant}
 
-= render :partial => 'user_groups_table', :locals => {:tenant => tenant}
+    = render :partial => 'tenants/table_of_conferences', :locals => {:tenant => tenant}
+    = render :partial => 'tenants/table_of_callthroughs', :locals => {:tenant => tenant}
+    = render :partial => 'tenants/table_of_hunt_groups', :locals => {:tenant => tenant}
+    = render :partial => 'tenants/table_of_automatic_call_distributors', :locals => {:tenant => tenant}
 
-= render :partial => 'tenants/table_of_conferences', :locals => {:tenant => tenant}
+    = render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => tenant}
 
-= render :partial => 'tenants/table_of_callthroughs', :locals => {:tenant => tenant}
+    .well
+      %h2 Gemeinschaft Konfiguration
+      = render :partial => 'tenants/gs_parameter_table', :locals => {:tenant => tenant}
 
-= render :partial => 'tenants/table_of_hunt_groups', :locals => {:tenant => tenant}
+      %p
+        Das System kann  
+        = PhoneModel.count
+        verschiedene Telefonmodelle von den folgenden Herstellern verwalten:  
+        - Manufacturer.all.each do |manufacturer|
+          - if manufacturer != Manufacturer.last && manufacturer != Manufacturer.limit(Manufacturer.count - 1).last
+            = succeed ', ' do
+              =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
+          - elsif manufacturer == Manufacturer.limit(Manufacturer.count - 1).last
+            = succeed ' und ' do
+              =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
+          - else
+            = succeed '.' do
+              =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
 
-= render :partial => 'tenants/table_of_automatic_call_distributors', :locals => {:tenant => tenant}
+      = render :partial => 'call_routes', :locals => {:tenant => tenant}
 
-= render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => tenant}
-
-%h2 Gemeinschaft Konfiguration
-= render :partial => 'tenants/gs_parameter_table', :locals => {:tenant => tenant}
-
-%p
-  Das System kann  
-  = PhoneModel.count
-  verschiedene Telefonmodelle von den folgenden Herstellern verwalten:  
-  - Manufacturer.all.each do |manufacturer|
-    - if manufacturer != Manufacturer.last && manufacturer != Manufacturer.limit(Manufacturer.count - 1).last
-      = succeed ', ' do
-        =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
-    - elsif manufacturer == Manufacturer.limit(Manufacturer.count - 1).last
-      = succeed ' und ' do
-        =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
-    - else
-      = succeed '.' do
-        =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
-
-= render :partial => 'call_routes', :locals => {:tenant => tenant}
-
-= render :partial => 'gateways', :locals => {:tenant => tenant, :gateways => gateways}
+      = render :partial => 'gateways', :locals => {:tenant => tenant, :gateways => gateways}
