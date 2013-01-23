@@ -4,32 +4,35 @@
   %thead
     %tr
       %th= t('hunt_groups.index.name')
-      %th= t('hunt_groups.index.strategy')
+      %th
+        %span.hidden-phone
+          = t('hunt_groups.index.strategy')
       - if show_seconds
         %th= t('hunt_groups.index.seconds_between_jumps')
       %th= t('hunt_groups.index.phone_numbers')
-      %th= t('hunt_groups.index.hunt_group_members')
+      %th
+        %span.hidden-phone
+          = t('hunt_groups.index.hunt_group_members')
 
   %tbody
     - for hunt_group in hunt_groups
       %tr
         %td= hunt_group.name
-        %td= t("hunt_groups.strategies.#{hunt_group.strategy}")
+        %td
+          %span.hidden-phone
+            = t("hunt_groups.strategies.#{hunt_group.strategy}")
         - if show_seconds
           %td= hunt_group.seconds_between_jumps
         %td
-          - if hunt_group.phone_numbers.count > 0
+          - if hunt_group.phone_numbers.any?
             =render 'phone_numbers/listing', :phone_numbers => hunt_group.phone_numbers
-            %br
-          = render :partial => 'shared/create_link', :locals => {:parent => hunt_group, :child_class => PhoneNumber, :short_link => true}
 
         %td
-          - if hunt_group.hunt_group_members.count > 3
-            = link_to hunt_group.hunt_group_members.count, hunt_group_hunt_group_members_path(hunt_group)
-            %br
-          - elsif hunt_group.hunt_group_members.count > 0
-            =render 'hunt_group_members/listing', :hunt_group_members => hunt_group.hunt_group_members
-            %br
-          = render :partial => 'shared/create_link', :locals => {:parent => hunt_group, :child_class => HuntGroupMember, :short_link => true}
+          %span.hidden-phone
+            - if hunt_group.hunt_group_members.count > 3
+              = link_to hunt_group.hunt_group_members.count, hunt_group_hunt_group_members_path(hunt_group)
+              %br
+            - elsif hunt_group.hunt_group_members.any?
+              =render 'hunt_group_members/listing', :hunt_group_members => hunt_group.hunt_group_members
 
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => hunt_group.tenant, :child => hunt_group}

@@ -1,0 +1,8 @@
+- cache(['table_of_pbx_features_conferences_row', I18n.locale, tenant, tenant.conferences.count, tenant.conferences.reorder(:updated_at).last]) do
+  -# Conferences
+  -#
+  - if (can?( :index, Conference ) && tenant.conferences.count > 0 ) || can?( :create, Conference )
+    %h2= t('conferences.index.page_title')
+    - if can?( :index, Conference ) && tenant.conferences.count > 0
+      = render "conferences/index_core", :conferences => tenant.conferences
+    = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => Conference}
