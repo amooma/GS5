@@ -19,6 +19,8 @@
     .container
       .row
         .span12
+          = render 'layouts/navbar'
+
           - unless response.cache_control[:public]
             - flash.each do |name, msg|
               %div{:class => "alert alert-#{name == :notice ? "success" : "error"} fade in"}
@@ -27,8 +29,6 @@
 
           - if current_user
             = render_breadcrumbs :builder => ::BootstrapBreadcrumbsBuilder, :separator => "/"
-
-          = render 'layouts/navbar'
 
           = yield
 
