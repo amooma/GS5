@@ -16,7 +16,7 @@ en:
       country_id: 'Country'
       position: 'Position'
       actions:
-        confirm: 'Are you sure you want to delete this address?'
+        confirm_destroy: 'Are you sure you want to delete this address?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -32,7 +32,7 @@ en:
       country_id: 'Country'
       position: 'Position'
       actions:
-        confirm: 'Are you sure you want to delete this address?'
+        confirm_destroy: 'Are you sure you want to delete this address?'
         destroy: 'Delete address'
         edit: 'Edit address'
         view_all: 'View all addresses'

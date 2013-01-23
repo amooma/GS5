@@ -16,7 +16,7 @@ de:
       mandatory: 'Mandatory'
       position: 'Position'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Route element'
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Route element'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -33,7 +33,7 @@ de:
       mandatory: 'Mandatory'
       position: 'Position'
       actions:
-        confirm: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'

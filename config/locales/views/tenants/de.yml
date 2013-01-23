@@ -1,7 +1,7 @@
 de:
   tenants:
     name: "Mandant"
-    new_name_scaffold: 'Beispiel Firma Nr. %{counter} GmbH'
+    new_name_scaffold: 'Beispiel Firma'
     controller:
       successfuly_created: 'Der Mandant "%{resource}" wurde angelegt.'
       successfuly_created_plus_delayed_jobs: 'Der Mandant "%{resource}" wurde angelegt. %{amount_of_numbers} Durchwahlen und Telefonnummern werden jetzt im Hintergrund ins System gespielt. Dies kann je nach benutzter Hardware ein paar Minuten dauern. '
@@ -16,7 +16,7 @@ de:
       from_field_voicemail_email: 'Anrufbeantworter Absender'
       from_field_pin_change_email: 'Neue PIN Absender'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Mandant löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Mandant löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -30,7 +30,7 @@ de:
       from_field_voicemail_email: 'Anrufbeantworter Absender'
       from_field_pin_change_email: 'Neue PIN Absender'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Mandant löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Mandant löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Mandanten anzeigen'

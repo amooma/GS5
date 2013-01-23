@@ -13,7 +13,7 @@ de:
       speaker: 'Sprecher-Freischaltung'
       moderator: 'Moderator'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Teilnehmer aus der Telefonkonferenz entfernen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Teilnehmer aus der Telefonkonferenz entfernen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -27,7 +27,7 @@ de:
       speaker: 'Sprecher-Freischaltung'
       moderator: 'Moderator'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Teilnehmer aus der Telefonkonferenz entfernen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Teilnehmer aus der Telefonkonferenz entfernen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Telefonkonferenz Teilnehmer anzeigen'

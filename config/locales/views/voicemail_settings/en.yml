@@ -8,7 +8,7 @@ en:
     index:
       page_title: 'Voicemail Settings'
       actions:
-        confirm: 'Are you sure you want to delete voicemail settings?'
+        confirm_destroy: 'Are you sure you want to delete voicemail settings?'
         destroy: 'Delete'
     show:
       page_title: 'Voicemail Settings'
@@ -20,7 +20,7 @@ en:
       mark_read: 'Mark read'
       purge: 'Delete'
       actions:
-        confirm: 'Are you sure you want to delete voicemail settings?'
+        confirm_destroy: 'Are you sure you want to delete voicemail settings?'
         destroy: 'Delete'
         edit: 'Edit'
     new:

@@ -15,7 +15,7 @@ en:
       callback_number: 'Callback number'
       callback_attempts: 'Callback attempts'
       actions:
-        confirm: 'Are you sure you want to delete this negotiated caller?'
+        confirm_destroy: 'Are you sure you want to delete this negotiated caller?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -31,7 +31,7 @@ en:
       callback_number: 'Callback number'
       callback_attempts: 'Callback attempts'
       actions:
-        confirm: 'Are you sure you want to delete this negotiated caller?'
+        confirm_destroy: 'Are you sure you want to delete this negotiated caller?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View All'

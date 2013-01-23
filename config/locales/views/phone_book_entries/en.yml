@@ -35,7 +35,7 @@ en:
       available_phone_books: 'Available phone books:'
       create_new_phone_book_entry: 'create a new entry'
       actions:
-        confirm: 'Are you sure you want to delete this phone book entry?'
+        confirm_destroy: 'Are you sure you want to delete this phone book entry?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -69,7 +69,7 @@ en:
       mobileme_account: 'iCloud account'
       manage_phone_number: 'Manage phone number.'
       actions:
-        confirm: 'Are you sure you want to delete this phone book entry?'
+        confirm_destroy: 'Are you sure you want to delete this phone book entry?'
         destroy: 'Delete phone book entry'
         edit: 'Edit phone book entry'
         view_all: 'View all phone book entries'

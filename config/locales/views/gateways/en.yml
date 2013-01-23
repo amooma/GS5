@@ -13,7 +13,7 @@ en:
       outbound: 'Outbound'
       description: 'Description'
       actions:
-        confirm: 'Are you sure you want to delete this Gateway?'
+        confirm_destroy: 'Are you sure you want to delete this Gateway?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -28,7 +28,7 @@ en:
       outbound: 'Outbound'
       description: 'Description'
       actions:
-        confirm: 'Are you sure you want to delete this element?'
+        confirm_destroy: 'Are you sure you want to delete this element?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View All'

@@ -20,11 +20,11 @@ en:
       language_id: 'Language'
       send_voicemail_as_email_attachment: 'Send voicemails by e-mail'
       actions:
-        confirm: 'Are you sure you want to delete this user?'
+        confirm_destroy: 'Are you sure you want to delete this user?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
-        create: 'Create a new user'
+        create: 'New'
         create_for: 'Create a new user for %{resource}'
     show:
       page_title: 'Show User'
@@ -39,7 +39,7 @@ en:
       language_id: 'Language'
       send_voicemail_as_email_attachment: 'Send voicemails by e-mail'
       actions:
-        confirm: 'Are you sure you want to delete this user?'
+        confirm_destroy: 'Are you sure you want to delete this user?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View all users'

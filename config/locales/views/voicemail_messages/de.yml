@@ -14,7 +14,7 @@ de:
         unread: 'Ungelesen: %{count}'
         all: 'Alle: %{count}'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diese Nachricht löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Nachricht löschen möchten?'
         confirm_selected: 'Sind Sie sicher, dass Sie die markierten Nachrichten löschen möchten?'
         destroy: 'Löschen'
         destroy_multiple: 'Markierte Nachrichten löschen'

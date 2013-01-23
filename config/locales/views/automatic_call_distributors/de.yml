@@ -24,7 +24,7 @@ de:
       goodbye: 'Abschied'
       music: 'Musik'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diese Warteschleife löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Warteschleife löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -47,7 +47,7 @@ de:
       goodbye: 'Abschied'
       music: 'Musik'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diese Warteschleife löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Warteschleife löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'

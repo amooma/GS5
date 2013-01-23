@@ -8,9 +8,10 @@
       %th
         %span.hidden-phone
           = t('sip_accounts.index.phone_numbers')
-      %th
-        %span.hidden-phone
-          = t('phones.name')
+      - if sip_accounts.map{ |sip_account| sip_account.phone_sip_accounts.any? }.include?(true)
+        %th
+          %span.hidden-phone
+            = t('phones.name')
 
   %tbody
     - for sip_account in sip_accounts
@@ -26,9 +27,9 @@
         %td
           - if sip_account.phone_numbers.count > 0
             = render 'phone_numbers/listing', :phone_numbers => sip_account.phone_numbers.order(:number)
-
-        %td
-          %span.hidden-phone
-            - sip_account.phones.each do |phone|
-              = link_to phone.to_s, method( :"#{phone.phoneable_type.underscore}_phone_path" ).( phone.phoneable_id, phone )
+        - if sip_accounts.map{ |sip_account| sip_account.phone_sip_accounts.any? }.include?(true)
+          %td
+            %span.hidden-phone
+              - sip_account.phones.each do |phone|
+                = link_to phone.to_s, method( :"#{phone.phoneable_type.underscore}_phone_path" ).( phone.phoneable_id, phone )
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => sip_account.sip_accountable, :child => sip_account}

@@ -20,11 +20,11 @@ de:
       language_id: 'Sprache'
       send_voicemail_as_email_attachment: 'Sprachnachrichten per E-Mail'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen User löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen User löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
-        create: 'Neuen User anlegen'
+        create: 'Neue anlegen'
         create_for: 'Neuen User für %{resource} anlegen'
     show:
       page_title: 'User anzeigen'
@@ -39,7 +39,7 @@ de:
       language_id: 'Sprache'
       send_voicemail_as_email_attachment: 'Sprachnachrichten per E-Mail'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen User löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen User löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle User anzeigen'

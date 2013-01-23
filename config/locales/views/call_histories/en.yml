@@ -27,7 +27,7 @@ en:
         forwarded: 'Forwarded:%{calls}'
         all: 'All:%{calls}'
       actions:
-        confirm: 'Are you sure you want to delete this call log entry?'
+        confirm_destroy: 'Are you sure you want to delete this call log entry?'
         confirm_selected: 'Are you sure you want to delete all selected entries?'
         destroy: 'Delete'
         destroy_multiple: 'Delete selected entries'
@@ -41,7 +41,7 @@ en:
       name: 'Name'
       description: 'Description'
       actions:
-        confirm: 'Are you sure you want to delete this call log entry?'
+        confirm_destroy: 'Are you sure you want to delete this call log entry?'
         destroy: 'Delete call log entry'
         edit: 'Edit call log entry'
         view_all: 'View all call log entries'

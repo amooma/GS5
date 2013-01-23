@@ -1,3 +1,4 @@
 .inputs
   = f.input :name, :label => t('tenants.form.name.label'), :hint => conditional_hint('tenants.form.name.hint'), :autofocus => true
-  = f.input :description, :label => t('tenants.form.description.label'), :hint => conditional_hint('tenants.form.description.hint')
+  - if !@tenant.new_record?
+    = f.input :description, :label => t('tenants.form.description.label'), :hint => conditional_hint('tenants.form.description.hint')
