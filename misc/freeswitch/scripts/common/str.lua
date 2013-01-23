@@ -5,6 +5,10 @@
 module(...,package.seeall)
 
 function try(array, arguments)
+  if type(arguments) ~= 'string' or type(array) ~= 'table' then
+    return nil;
+  end
+
   local result = array;
   
   arguments:gsub('([^%.]+)', function(entry)
