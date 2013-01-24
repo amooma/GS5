@@ -565,6 +565,7 @@ function Dialplan.faxaccount(self, destination)
     if not fax_account:insert_document(fax_document) then
       self.log:error('FAX_RECEIVE - error inserting fax document to database - fax_account=', fax_account.id, '/', fax_account.uuid, ', file: ', fax_document.filename);
     end
+    fax_account:trigger_notification(fax_account.id, self.caller.uuid);
   end
   
   return { continue = false, code = 200, phrase = 'OK' }
