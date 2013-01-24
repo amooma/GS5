@@ -4,7 +4,7 @@ en:
     initial_setup:
       tenant_name_default: 'Snake Oil, Ltd.'
       access_denied_only_available_on_a_new_system:  'Access denied! The setup wizard is only available on a new system.'
-      successful_setup:  'Your admin account has been created. The next step is to create a tenant.'
+      successful_setup:  'Your new PBX is up and running. Have a look around and setup some SIP accounts and phones.'
       admin_name: 'admin'
       super_tenant_description: 'The members of this tenant have the power to create and delete other tenants.'
       admin_group_name: 'Admins'
@@ -28,4 +28,10 @@ en:
       default_area_code:
         label: 'Default area code'
         hint: ''
-      button: 'Submit'
+      default_company_name:
+        label: 'Name of the organisation'
+        hint: 'e.g. name of the company'
+      default_system_email:
+        label: 'System e-mail address'
+        hint: 'From field for voicemail or fax e-mails.'        
+      button: 'Create this PBX'

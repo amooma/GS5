@@ -20,6 +20,9 @@ class GemeinschaftSetupsController < ApplicationController
     )
     @gemeinschaft_setup.country  = Country.find_by_name('Germany')
     @gemeinschaft_setup.language = Language.find_by_name('Deutsch')
+
+    @gemeinschaft_setup.default_company_name = generate_a_new_name(Tenant.new)
+    @gemeinschaft_setup.default_system_email = 'admin@localhost'
   end
 
   def create
@@ -64,11 +67,34 @@ class GemeinschaftSetupsController < ApplicationController
         FreeswitchAPI.execute('fsctl', 'shutdown restart')
       end
 
+      # Create the tenant
+      tenant = Tenant.create({:name => @gemeinschaft_setup.default_company_name, 
+                              :sip_domain_id => SipDomain.last.id,
+                              :country_id => @gemeinschaft_setup.country.id,
+                              :language_id => @gemeinschaft_setup.language_id,
+                              :from_field_voicemail_email => @gemeinschaft_setup.default_system_email,
+                              :from_field_pin_change_email => @gemeinschaft_setup.default_system_email,
+                             })
+
+      # Become a member of this tenant.
+      #
+      tenant.tenant_memberships.create(:user_id => user.id)
+      
+      # Groups
+      #
+      admin_group = tenant.user_groups.create(:name => t('gemeinschaft_setups.initial_setup.admin_group_name'))
+      admin_group.users << user
+      
+      user_group = tenant.user_groups.create(:name => t('gemeinschaft_setups.initial_setup.user_group_name'))
+      user_group.users << user
+      
+      user.update_attributes!(:current_tenant_id => tenant.id)
+
       # Auto-Login:
       session[:user_id] = user.id
       
       # Redirect to the user
-      redirect_to new_tenant_url, :notice => t('gemeinschaft_setups.initial_setup.successful_setup')
+      redirect_to page_beginners_intro_path, :notice => t('gemeinschaft_setups.initial_setup.successful_setup')
     else
       render :new
     end
