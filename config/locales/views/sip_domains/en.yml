@@ -35,4 +35,4 @@ en:
       realm:
         label: 'Realm'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

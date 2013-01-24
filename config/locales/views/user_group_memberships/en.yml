@@ -32,4 +32,4 @@ en:
       name:
         user: 'User'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

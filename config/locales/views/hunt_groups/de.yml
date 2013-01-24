@@ -54,4 +54,4 @@ de:
       hunt_group_members:
         label: 'Rufgruppen-Teilnehmer'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

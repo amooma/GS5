@@ -49,4 +49,4 @@ de:
       purge:
         label: 'Löschen'
         hint: 'Nachricht löschen'
-      button: 'Absenden'
+      submit: 'Absenden'

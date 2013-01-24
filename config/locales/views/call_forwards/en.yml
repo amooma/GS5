@@ -74,4 +74,4 @@ en:
       active:
         label: 'Active'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

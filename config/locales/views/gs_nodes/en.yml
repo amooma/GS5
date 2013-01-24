@@ -62,4 +62,4 @@ en:
       accepts_updates_from:
         label: 'Accepts updates from this node?'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

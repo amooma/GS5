@@ -144,5 +144,5 @@ en:
       destination_phone_number: 
         label: 'Destination phone number'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'
 

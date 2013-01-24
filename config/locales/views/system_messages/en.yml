@@ -35,4 +35,4 @@ en:
       content:
         label: 'Content'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

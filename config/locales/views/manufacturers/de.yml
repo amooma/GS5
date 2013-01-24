@@ -46,4 +46,4 @@ de:
       state:
         label: 'Status'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

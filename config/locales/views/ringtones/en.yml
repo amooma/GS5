@@ -35,5 +35,5 @@ en:
       bellcore_id:
         label: 'Bellcore ID'
         hint: 'Build in ringtone ID. A "0" means silence.'
-      button: 'Submit'
+      submit: 'Submit'
     set_a_ringtone: 'Set a ringtone'

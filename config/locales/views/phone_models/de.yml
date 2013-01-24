@@ -47,4 +47,4 @@ de:
       product_homepage_url:
         label: 'Produkt-Homepage URL'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

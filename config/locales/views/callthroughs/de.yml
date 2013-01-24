@@ -55,4 +55,4 @@ de:
       sip_account_id:
         label: 'SIP-Konto ID'
         hint: 'Die SIP-Konto ID finden Sie in der URL des entsprechenden SIP-Kontos.'
-      button: 'Absenden'
+      submit: 'Absenden'

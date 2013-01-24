@@ -58,4 +58,4 @@ de:
       description:
         label: 'Description'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

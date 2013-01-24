@@ -73,4 +73,4 @@ en:
       destination_id:
         label: 'Destination'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

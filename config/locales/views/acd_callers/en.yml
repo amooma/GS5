@@ -67,4 +67,4 @@ en:
       callback_attempts:
         label: 'Callback attempts'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

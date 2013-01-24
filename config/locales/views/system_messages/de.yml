@@ -35,4 +35,4 @@ de:
       content:
         label: 'Nachricht'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

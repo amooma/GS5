@@ -68,6 +68,6 @@ en:
       did_list:
         label: 'External numbers'
         hint: 'These are the phone numbers which can be called from the outside (seperated by commas). The x represents all internal extensions (can be added to a trunk number). You can mix MSNs and DIDs. Examples: "0228-12345x, 0228-123450" (this would be the solution for most companies), "0228-123456", "0228-123456,0228-123999"'
-      button: 'Submit'
+      submit: 'Submit'
     
     switch_to_tenant: "Switch to tenant"

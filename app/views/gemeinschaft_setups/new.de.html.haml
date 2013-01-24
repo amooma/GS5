@@ -5,23 +5,25 @@
   = f.error_notification
 
   %h2 Admin-Konto
-  %p
-    Dieser erste Benutzer des Systems hat automatisch Admin-Rechte.
 
   = f.simple_fields_for :user, @user do |u|
     = render "users/form_core", :f => u
 
-  %h2 SIP-Domain
-  %p In den meisten Fällen sollten Sie den gleichen Wert für SIP-Realm und SIP-Domain benutzen. Wenn Sie mit diesen Begriffen nichts anfangen können, dann geben Sie hier bitte die IP-Adresse dieses Servers ein.
-
-  = f.simple_fields_for :sip_domain, @sip_domain do |s|
-    = render "sip_domains/form_core", :f => s
-
-  %h2 Allgemeine Informationen
+  %h2 Konfiguration der Telefonanlage
 
   = f.association :country, :label => t('gemeinschaft_setups.form.country_id.label'), :hint => conditional_hint('gemeinschaft_setups.form.country_id.hint'), :include_blank => false
   = f.association :language, :label => t('gemeinschaft_setups.form.language_id.label'), :hint => conditional_hint('gemeinschaft_setups.form.language_id.hint'), :include_blank => false
   = f.input :default_area_code, :label => t('gemeinschaft_setups.form.default_area_code.label'), :hint => conditional_hint('gemeinschaft_setups.form.default_area_code.hint')
+
+  = f.input :default_company_name, :label => t('gemeinschaft_setups.form.default_company_name.label'), :hint => conditional_hint('gemeinschaft_setups.form.default_company_name.hint')
+
+  = f.input :default_system_email, :label => t('gemeinschaft_setups.form.default_system_email.label'), :hint => conditional_hint('gemeinschaft_setups.form.default_system_email.hint')
+
+  %h3 SIP-Domain
+  %p In den meisten Fällen sollten Sie den gleichen Wert für SIP-Realm und SIP-Domain benutzen. Wenn Sie mit diesen Begriffen nichts anfangen können, dann geben Sie hier bitte die IP-Adresse dieses Servers ein.
+
+  = f.simple_fields_for :sip_domain, @sip_domain do |s|
+    = render "sip_domains/form_core", :f => s
 
   .actions
     = f.button :submit, conditional_t('gemeinschaft_setups.form.submit')

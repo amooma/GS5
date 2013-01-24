@@ -35,4 +35,4 @@ en:
       phone_numbers:
         label: 'Phone numbers'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

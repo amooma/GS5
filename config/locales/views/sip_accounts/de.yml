@@ -1,12 +1,12 @@
 de:
   sip_accounts:
-    name: 'SIP-Konto'
+    name: 'SIP-Account'
     controller:
-      successfuly_created: 'Ein SIP-Konto für %{resource} wurde erstellt.'
-      successfuly_updated: 'Das SIP-Konto wurde aktualisiert.'
-      successfuly_destroyed: 'Das SIP-Konto wurde gelöscht.'
+      successfuly_created: 'Ein SIP-Account für %{resource} wurde erstellt.'
+      successfuly_updated: 'Der SIP-Account wurde aktualisiert.'
+      successfuly_destroyed: 'Der SIP-Account wurde gelöscht.'
     index:
-      page_title: 'SIP-Konten'
+      page_title: 'SIP-Accounts'
       auth_name: 'Auth Name'
       caller_name: 'Caller Name'
       password: 'Passwort'
@@ -17,17 +17,17 @@ de:
       clip: 'Rufnummernanzeige (CLIP)'
       hotdeskable: 'Hot-Desk fähig'
       clip_no_screening: 'Spezifische Rufnummernanzeige (CLIP -no screening-)'
-      callforward_rules_act_per_sip_account: 'Rufweiterleitungen gelten für das gesamte SIP-Konto'
+      callforward_rules_act_per_sip_account: 'Rufweiterleitungen gelten für das gesamte SIP-Account'
       online: 'Online'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie diesen SIP-Konto löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen SIP-Account löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
         create: 'Neu anlegen'
-        create_for: 'Neues SIP-Konto für %{resource} anlegen'
+        create_for: 'Neues SIP-Account für %{resource} anlegen'
     show:
-      page_title: 'SIP-Konto anzeigen'
+      page_title: 'SIP-Account anzeigen'
       auth_name: 'Auth Name'
       caller_name: 'Caller Name'
       password: 'Passwort'
@@ -37,18 +37,18 @@ de:
       clip: 'Rufnummernanzeige (CLIP)'
       hotdeskable: 'Hot-Desk fähig'
       clip_no_screening: 'Spezifische Rufnummernanzeige (CLIP -no screening-)'
-      callforward_rules_act_per_sip_account: 'Rufweiterleitungen gelten für das gesamte SIP-Konto'
+      callforward_rules_act_per_sip_account: 'Rufweiterleitungen gelten für das gesamte SIP-Account'
       registration: 'Registrierung'
       expires: 'Läuft ab'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie diesen SIP-Konto löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen SIP-Account löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
-        view_all: 'Alle SIP-Konten anzeigen'
+        view_all: 'Alle SIP-Accounts anzeigen'
     new:
-      page_title: 'Neues SIP-Konto'
+      page_title: 'Neues SIP-Account'
     edit:
-      page_title: 'SIP-Konto bearbeiten'
+      page_title: 'SIP-Account bearbeiten'
     form:
       auth_name:
         label: 'Auth Name'
@@ -78,6 +78,6 @@ de:
         label: 'Hot-Desk fähig'
         hint: ''
       callforward_rules_act_per_sip_account: 
-        label: 'Rufweiterleitungen gelten für das gesamte SIP-Konto'
+        label: 'Rufweiterleitungen gelten für das gesamte SIP-Account'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

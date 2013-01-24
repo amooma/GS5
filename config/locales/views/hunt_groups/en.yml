@@ -54,4 +54,4 @@ en:
       hunt_group_members:
         label: 'Members of this hunt group'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

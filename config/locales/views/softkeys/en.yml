@@ -61,4 +61,4 @@ en:
       label:
         label: 'Label'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

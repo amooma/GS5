@@ -78,4 +78,4 @@ en:
       announce_left_member_by_name:
         label: 'Announce the leaving of a member'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

@@ -92,4 +92,4 @@ en:
       send_voicemail_as_email_attachment:
         label: 'Send voicemails as e-mail attachments'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

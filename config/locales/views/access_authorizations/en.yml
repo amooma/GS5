@@ -45,4 +45,4 @@ en:
       pin:
         label: 'PIN'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

@@ -46,4 +46,4 @@ en:
       state:
         label: 'State'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

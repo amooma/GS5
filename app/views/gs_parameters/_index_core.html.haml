@@ -10,8 +10,16 @@
     - for gs_parameter in gs_parameters
       - cache(['gs_parameters_table_single_row', gs_parameter]) do 
         %tr
-          %td= gs_parameter.name
+          %td
+            %span.hidden-phone
+              = truncate(gs_parameter.name, :length => GsParameter.get('DESKTOP_MAX_STRING_LENGTH'))
+            %span.visible-phone
+              = truncate(gs_parameter.name, :length => GsParameter.get('MOBILE_MAX_STRING_LENGTH'))
           - if !@sections
             %td= gs_parameter.section
-          %td= truncate(gs_parameter.value, :length => 50)
+          %td
+            %span.hidden-phone
+              = truncate(gs_parameter.value, :length => GsParameter.get('DESKTOP_MAX_STRING_LENGTH'))
+            %span.visible-phone
+              = truncate(gs_parameter.value, :length => GsParameter.get('MOBILE_MAX_STRING_LENGTH'))           
           =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gs_parameter}

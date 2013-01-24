@@ -67,4 +67,4 @@ de:
       callback_attempts:
         label: 'Vermittllungsversuche'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

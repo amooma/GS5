@@ -24,7 +24,7 @@ de:
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
-        create: 'Neue anlegen'
+        create: 'Neu anlegen'
         create_for: 'Neuen User für %{resource} anlegen'
     show:
       page_title: 'User anzeigen'
@@ -92,4 +92,4 @@ de:
       send_voicemail_as_email_attachment:
         label: 'Sprachnachrichten per E-Mail verschicken'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

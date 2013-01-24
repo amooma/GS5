@@ -158,4 +158,4 @@ de:
       image:
         label: 'Avatar Foto'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'
