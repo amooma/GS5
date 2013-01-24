@@ -29,9 +29,5 @@
           - else
             %td
               =render 'users/listing', :users => user_group.users
-              - if user_group.users.any?
-                %br
-              - if (user_group.tenant.user_ids - user_group.user_ids).any?
-                = render :partial => 'shared/create_link', :locals => {:parent => user_group, :child_class => UserGroupMembership}
 
           =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => user_group.tenant, :child => user_group}
