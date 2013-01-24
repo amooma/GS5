@@ -1,8 +1,5 @@
 - content_for :title, "Erste Schritte mit Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}!"
 
-%p
-  Sie müssen als erstes mindestens zwei neue SIP-Accounts anlegen. Dabei haben Sie die Wahl zwischen folgenden Varianten:
-
 %ul
   %li
     %strong
@@ -18,6 +15,8 @@
     Es gibt bestimmte SIP-Account, die keiner bestimmten Person zugeordnet werden können (z.B. für Telefone in einem Konferenzraum). Dafür gibt es Firmen SIP-Accounts.
     %br
     =link_to "SIP-Account für #{current_user.current_tenant} anlegen.", new_tenant_sip_account_path(current_user.current_tenant)
+
+= render :partial => 'page/docu/tenant_sip_accounts_new'
 
 %h2 Rufnummern
 
