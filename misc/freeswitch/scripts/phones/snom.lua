@@ -56,9 +56,5 @@ function Snom.resync_http(self, ip_address, http_user, http_password, http_port)
   local command = 'http_request.lua snom_resync http://' .. tostring(ip_address):gsub('[^0-9%.]', '') .. port_str .. '/advanced.htm?reboot=Reboot ' .. (http_user or '') .. ' ' .. (http_password or '');
 
   require 'common.fapi'
-  common.fapi.FApi:new():execute('luarun', command);
-
-  if result and tonumber(result) == 0  then
-    return true;
-  end
+  return common.fapi.FApi:new():execute('luarun', command);
 end
