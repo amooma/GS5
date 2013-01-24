@@ -110,7 +110,7 @@ de:
       music: 
         label: 'Musik'
         hint: '' 
-      button: 'Absenden'
+      submit: 'Absenden'
     strategies:
       round_robin: 'Ringverteilung'
       ring_all: 'Alle'

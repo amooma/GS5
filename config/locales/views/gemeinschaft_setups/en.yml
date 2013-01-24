@@ -34,4 +34,4 @@ en:
       default_system_email:
         label: 'System e-mail address'
         hint: 'From field for voicemail or fax e-mails.'        
-      button: 'Create this PBX'
+      submit: 'Create this PBX'

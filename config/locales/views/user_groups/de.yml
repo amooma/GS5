@@ -39,4 +39,4 @@ de:
       description:
         label: 'Beschreibung'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

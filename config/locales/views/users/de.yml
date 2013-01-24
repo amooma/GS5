@@ -92,4 +92,4 @@ de:
       send_voicemail_as_email_attachment:
         label: 'Sprachnachrichten per E-Mail verschicken'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

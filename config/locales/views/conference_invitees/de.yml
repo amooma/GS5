@@ -52,4 +52,4 @@ de:
       moderator:
         label: 'Moderator'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

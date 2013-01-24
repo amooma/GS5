@@ -65,4 +65,4 @@ de:
       label:
         label: 'Beschriftung'
         hint: 'Je nach Telefonmodell gibt es die Möglichkeit eine Beschriftung bzw. eine Beschreibung auf dem Telefon anzuzeigen.'
-      button: 'Absenden'
+      submit: 'Absenden'

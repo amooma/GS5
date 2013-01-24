@@ -62,4 +62,4 @@ en:
       extension:
         label: 'Extension'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

@@ -78,4 +78,4 @@ de:
       announce_left_member_by_name:
         label: 'Die Konferenz verlassende Teilnehmer werden angekündigt'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

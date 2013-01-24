@@ -62,4 +62,4 @@ de:
       extension:
         label: 'Durchwahl'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

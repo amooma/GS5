@@ -43,4 +43,4 @@ en:
         label: '<%= attribute.human_name %>'
         hint: ''
       <%- end -%>
-      button: 'Submit'
+      submit: 'Submit'

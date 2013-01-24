@@ -144,5 +144,5 @@ de:
       destination_phone_number: 
         label: 'Ziel Fax-Nummer'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'
 

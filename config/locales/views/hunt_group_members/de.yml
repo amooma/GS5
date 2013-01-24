@@ -45,4 +45,4 @@ de:
       phone_numbers:
         label: 'Telefonnummern'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

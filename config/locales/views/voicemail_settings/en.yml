@@ -49,4 +49,4 @@ en:
       purge:
         label: 'Delete'
         hint: 'Delete message after notification is sent'
-      button: 'Submit'
+      submit: 'Submit'

@@ -35,5 +35,5 @@ de:
       bellcore_id:
         label: 'Bellcore-ID'
         hint: 'Im Telefon eingebaute Klingeltöne. "0" bedeutet lautlos.'
-      button: 'Absenden'
+      submit: 'Absenden'
     set_a_ringtone: 'Klingelton einstellen'

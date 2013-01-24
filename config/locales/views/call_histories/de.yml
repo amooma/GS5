@@ -56,7 +56,7 @@ de:
       description:
         label: 'Beschreibung'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'
     call_results:
       UNSPECIFIED: ''
       ORIGINATOR_CANCEL: 'Abgebrochen'

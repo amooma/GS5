@@ -35,4 +35,4 @@ de:
       realm:
         label: 'Realm'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

@@ -80,4 +80,4 @@ de:
       callforward_rules_act_per_sip_account: 
         label: 'Rufweiterleitungen gelten für das gesamte SIP-Account'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

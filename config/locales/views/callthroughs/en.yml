@@ -55,4 +55,4 @@ en:
       sip_account_id:
         label: 'SIP account ID'
         hint: 'Please look up the SIP account ID in the URL of the SIP account.'
-      button: 'Submit'
+      submit: 'Submit'

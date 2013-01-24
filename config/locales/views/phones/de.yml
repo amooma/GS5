@@ -77,7 +77,7 @@ de:
       fallback_sip_account_id:
         label: 'Fallback SIP Account'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'
     sip_accounts:
       title: 'Verknüpfte SIP-Accounts'
       connect_to_sip_account: 'SIP-Account mit dem Telefon verknüpfen'

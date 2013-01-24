@@ -158,4 +158,4 @@ en:
       image:
         label: 'Photo'
         hint: 'Avatar photo'
-      button: 'Submit'
+      submit: 'Submit'

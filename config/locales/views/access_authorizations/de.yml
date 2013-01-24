@@ -42,4 +42,4 @@ de:
       pin:
         label: 'PIN'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

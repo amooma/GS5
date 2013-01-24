@@ -51,4 +51,4 @@ en:
       moderator:
         label: 'Moderator'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

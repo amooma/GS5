@@ -57,4 +57,4 @@ de:
       status:
         label: 'Status'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

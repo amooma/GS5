@@ -34,4 +34,4 @@ de:
       sip_account_id:
         label: 'SIP-Konto'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

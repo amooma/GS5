@@ -69,4 +69,4 @@ de:
       position:
         label: 'Position'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

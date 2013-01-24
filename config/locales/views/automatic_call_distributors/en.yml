@@ -114,7 +114,7 @@ en:
       music: 
         label: 'Music'
         hint: '' 
-      button: 'Submit'
+      submit: 'Submit'
     strategies:
       round_robin: 'Round robin'
       ring_all: 'Ring all'

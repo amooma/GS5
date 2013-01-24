@@ -57,4 +57,4 @@ en:
       position:
         label: 'Position'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

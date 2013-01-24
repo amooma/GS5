@@ -57,4 +57,4 @@ de:
       retries: 
         label: 'Max. Anzahl von Sendeversuchen'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

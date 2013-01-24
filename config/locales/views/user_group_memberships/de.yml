@@ -32,4 +32,4 @@ de:
       name:
         user: 'Benutzer'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

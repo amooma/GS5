@@ -46,4 +46,4 @@ en:
       product_homepage_url:
         label: 'Product homepage URL'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

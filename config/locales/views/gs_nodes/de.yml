@@ -62,4 +62,4 @@ de:
       accepts_updates_from:
         label: 'Änderungen empfangen'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

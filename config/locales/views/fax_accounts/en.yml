@@ -57,4 +57,4 @@ en:
       retries: 
         label: 'Retries'
         hint: 'Number of times the system retries to send the fax in case the destination is busy.'
-      button: 'Submit'
+      submit: 'Submit'

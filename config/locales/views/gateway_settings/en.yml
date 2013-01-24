@@ -57,4 +57,4 @@ en:
       description:
         label: 'Description'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'
