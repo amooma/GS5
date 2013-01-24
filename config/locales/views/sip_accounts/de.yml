@@ -3,8 +3,8 @@ de:
     name: 'SIP-Account'
     controller:
       successfuly_created: 'Ein SIP-Account für %{resource} wurde erstellt.'
-      successfuly_updated: 'Das SIP-Account wurde aktualisiert.'
-      successfuly_destroyed: 'Das SIP-Account wurde gelöscht.'
+      successfuly_updated: 'Der SIP-Account wurde aktualisiert.'
+      successfuly_destroyed: 'Der SIP-Account wurde gelöscht.'
     index:
       page_title: 'SIP-Accounts'
       auth_name: 'Auth Name'
