@@ -70,7 +70,7 @@ class TenantsController < ApplicationController
                                           :amount_of_numbers => @tenant.array_of_internal_extension_numbers.count + @tenant.array_of_dids.count
                                           )
         else
-          redirect_to page_beginners_intro_path, :notice => t('tenants.controller.successfuly_created_plus_delayed_jobs', 
+          redirect_to page_help_path, :notice => t('tenants.controller.successfuly_created_plus_delayed_jobs', 
                                           :resource => @tenant, 
                                           :amount_of_numbers => @tenant.array_of_internal_extension_numbers.count + @tenant.array_of_dids.count
                                           )
@@ -81,7 +81,7 @@ class TenantsController < ApplicationController
                                             :resource => @tenant
                                             )
         else
-          redirect_to page_beginners_intro_path, :notice => t('tenants.controller.successfuly_created', 
+          redirect_to page_help_path, :notice => t('tenants.controller.successfuly_created', 
                                             :resource => @tenant
                                             )
         end

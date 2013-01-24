@@ -144,6 +144,9 @@ class User < ActiveRecord::Base
     self.pin_hash == Digest::SHA2.hexdigest( "#{self.pin_salt}#{entered_pin}" )
   end
   
+  def admin?
+    self.user_groups.include?(UserGroup.find(2))
+  end
 
   private
   

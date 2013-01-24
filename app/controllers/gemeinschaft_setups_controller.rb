@@ -94,7 +94,7 @@ class GemeinschaftSetupsController < ApplicationController
       session[:user_id] = user.id
       
       # Redirect to the user
-      redirect_to page_beginners_intro_path, :notice => t('gemeinschaft_setups.initial_setup.successful_setup')
+      redirect_to page_help_path, :notice => t('gemeinschaft_setups.initial_setup.successful_setup')
     else
       render :new
     end
