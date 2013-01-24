@@ -5,14 +5,14 @@
     %strong
       Personalisierter SIP-Accounts 
     %br
-    Dieser wird einer bestimmten Person zugeordnet. In einer normalen Gemeinschaft-Installation sind die meisten SIP-Accounts personalisiert.
+    Dieser wird einer bestimmten Person zugeordnet und deshalb für diesen Account z.B. Telefontastenbelegungen definieren kann. In einer normalen Gemeinschaft-Installation sind die meisten SIP-Accounts personalisiert.
     %br
     =link_to "SIP-Account für #{current_user} anlegen.", new_user_sip_account_path(current_user)
   %li
     %strong
       Firmen SIP-Accounts
     %br
-    Es gibt bestimmte SIP-Account, die keiner bestimmten Person zugeordnet werden können (z.B. für Telefone in einem Konferenzraum). Dafür gibt es Firmen SIP-Accounts.
+    Es gibt bestimmte SIP-Account, die keiner bestimmten Person zugeordnet werden können (z.B. für Telefone in einem Konferenzraum oder einem Aufzug). Dafür gibt es Firmen SIP-Accounts.
     %br
     =link_to "SIP-Account für #{current_user.current_tenant} anlegen.", new_tenant_sip_account_path(current_user.current_tenant)
 
