@@ -53,11 +53,10 @@ function Snom.resync_http(self, ip_address, http_user, http_password, http_port)
     port_str = ':' .. http_port;
   end
 
-  get_command = 'wget --no-proxy -q -O /dev/null -o /dev/null -b --tries=2 --timeout=10 --user="' .. (http_user or '') .. '" --password="' .. (http_password or '') .. '"' ..
-  ' wget http://' .. tostring(ip_address):gsub('[^0-9%.]', '') .. port_str .. '/advanced.htm?reboot=Reboot' ..
-  ' 1>>/dev/null 2>>/dev/null &';
+  local command = 'http_request.lua snom_resync http://' .. tostring(ip_address):gsub('[^0-9%.]', '') .. port_str .. '/advanced.htm?reboot=Reboot ' .. (http_user or '') .. ' ' .. (http_password or '');
 
-  result = os.execute(get_command);
+  require 'common.fapi'
+  common.fapi.FApi:new():execute('luarun', command);
 
   if result and tonumber(result) == 0  then
     return true;
