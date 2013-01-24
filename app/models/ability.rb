@@ -82,6 +82,10 @@ class Ability
           #
           cannot [:create, :destroy], GsParameter
           cannot [:create, :destroy], GuiFunction
+
+          # An admin can not destroy his/her account
+          #
+          cannot [:destroy], User, :id => user.id
         else
           # Any user can do the following stuff.
           #
