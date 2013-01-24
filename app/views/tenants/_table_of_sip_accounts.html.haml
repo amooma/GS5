@@ -1,7 +1,33 @@
 - cache(['tenant_show_table_of_sip_accounts', I18n.locale, tenant, tenant.sip_accounts.count, tenant.sip_accounts.reorder(:updated_at).last]) do
-  -# SIP accounts
-  -#
-  %h2= t('sip_accounts.index.page_title')
-  - if tenant.sip_accounts.any?
-    = render "sip_accounts/index_core", :sip_accounts => tenant.sip_accounts
-  = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
+  .row
+    - if GsParameter.get('AUTO_ADMIN_ONLINE_HELP') == true && !tenant.sip_accounts.any?
+      .span6
+        -# SIP accounts
+        -#
+        %h2= t('sip_accounts.index.page_title')
+        - if tenant.sip_accounts.any?
+          = render "sip_accounts/index_core", :sip_accounts => tenant.sip_accounts
+        = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
+
+      .span6
+        %ul.thumbnails
+          %li.span6
+            %div.thumbnail
+              %a.thumbnail{:href => page_help_path}
+                =image_tag('docu/sip_accounts/help_screenshot.png', :alt => "2. Zur zentralen Firmenansicht gehen.")
+              %div.caption
+                %p
+                  In der #{link_to 'Admin-Doku', page_help_path} finden Sie ein Beschreibung, wie Sie einen neuen SIP-Account anlegen können.
+
+    - else
+      .span12
+        -# SIP accounts
+        -#
+        %h2= t('sip_accounts.index.page_title')
+        - if tenant.sip_accounts.any?
+          = render "sip_accounts/index_core", :sip_accounts => tenant.sip_accounts
+        = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
+
+
+  .row
+    .span12
