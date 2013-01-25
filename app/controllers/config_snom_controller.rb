@@ -159,7 +159,7 @@ class ConfigSnomController < ApplicationController
     if ! params[:sip_account].blank?
       @sip_account = @phone.sip_accounts.where({ :id => params[:sip_account].to_i }).first
       if ! @sip_account && @phone.fallback_sip_account && @phone.fallback_sip_account.id == params[:sip_account].to_i
-        @sip_account = @phone.fallback_sip_account.where({ :id => params[:sip_account].to_i }).first
+        @sip_account = @phone.fallback_sip_account
       end
       if ! @sip_account
         render(
