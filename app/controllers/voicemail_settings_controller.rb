@@ -71,7 +71,8 @@ class VoicemailSettingsController < ApplicationController
   end
 
   def voicemail_defaults
-    path = "/opt/freeswitch/storage/voicemail/default/#{@sip_account.sip_domain.host}/#{@sip_account.auth_name}/"
+    storage_dir = GsParameter.where(:entity => 'voicemail', :section => 'parameters', :name => 'storage-dir').first.try(:value)
+    path = "#{storage_dir}/#{@sip_account.sip_domain.host}/#{@sip_account.auth_name}/"
     @greeting_files = Dir.glob("#{path}*greeting*.wav").collect {|r| [ File.basename(r), File.expand_path(r) ] }
     @name_files = Dir.glob("#{path}*name*.wav").collect {|r| [ File.basename(r), File.expand_path(r) ] }
 
