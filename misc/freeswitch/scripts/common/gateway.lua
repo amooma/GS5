@@ -38,10 +38,14 @@ function Gateway.find_by_id(self, id)
 
   local gateway = nil;
   self.database:query(sql_query, function(entry)
+    require 'common.str';
     gateway = Gateway:new(self);
     gateway.record = entry;
     gateway.id = tonumber(entry.id);
     gateway.name = entry.name;
+    gateway.technology = entry.technology;
+    gateway.outbound = common.str.to_b(entry.outbound);
+    gateway.inbound = common.str.to_b(entry.inbound);
   end)
 
   if gateway then
@@ -59,10 +63,14 @@ function Gateway.find_by_name(self, name)
 
   local gateway = nil;
   self.database:query(sql_query, function(entry)
+    require 'common.str';
     gateway = Gateway:new(self);
     gateway.record = entry;
     gateway.id = tonumber(entry.id);
     gateway.name = entry.name;
+    gateway.technology = entry.technology;
+    gateway.outbound = common.str.to_b(entry.outbound);
+    gateway.inbound = common.str.to_b(entry.inbound);
   end)
 
   if gateway then
@@ -70,6 +78,15 @@ function Gateway.find_by_name(self, name)
   end
 
   return gateway;
+end
+
+
+function Gateway.call_url(self, destination_number)
+  if self.technology == 'sip' then
+    return 'sofia/gateway/' .. self.GATEWAY_PREFIX .. self.id .. '/' .. tostring(destination_number);
+  end
+
+  return '';
 end
 
 
