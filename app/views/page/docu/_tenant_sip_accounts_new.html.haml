@@ -1,47 +1,26 @@
-%h2 Wie wird ein Firmen SIP-Account angelegt?
+.row
+  .span12
+    %h2 Firmen Telefon mit SIP-Account und einer Telefonnummer
 
-%p
-  Es gibt bestimmte SIP-Account, die keiner bestimmten Person zugeordnet werden können (z.B. für Telefone in einem Konferenzraum). Dafür gibt es Firmen SIP-Accounts.
-  %br
-  =link_to "SIP-Account für #{current_user.current_tenant} anlegen.", new_tenant_sip_account_path(current_user.current_tenant)
+    %p
+      Es gibt Telefone die keiner bestimmten Person zugeordnet werden können (z.B. in einem Konferenzraum). Folgende Telefone werden in der von Ihnen eingesetzten Gemeinschaft Version #{GsParameter.get('GEMEINSCHAFT_VERSION')} vom automatischen Provisioning unterstützt: 
+      = nicely_joined_with_commata(PhoneModel.order(:name).map{|phone_model| "#{phone_model.to_s}"})
 
-%ul.thumbnails
-  %li.span4
-    %div.thumbnail
-      %a.thumbnail{:href => "#{image_path('docu/sip_accounts/click_on_new_sip_account.png')}"}
-        =image_tag('docu/sip_accounts/click_on_new_sip_account.png', :alt => "2. Zur zentralen Firmenansicht gehen.")
-      %div.caption
-        %p
-          Auf der zentralen Firmenansicht #{link_to tenant_url(current_user.current_tenant), current_user.current_tenant} sehen Sie eine Tabelle mit den existierenden SIP-Accounts. 
-          %br
-          Bitte klicken Sie auf den "Neu anlegen"-Button.
-  %li.span4
-    %div.thumbnail
-      %a.thumbnail{:href => "#{image_path('docu/sip_accounts/create_a_new_sip_account.png')}"}
-        =image_tag('docu/sip_accounts/create_a_new_sip_account.png', :alt => "3. SIP-Account anlegen.")
-      %div.caption
-        %p
-          In dem #{link_to new_tenant_sip_account_path(current_user.current_tenant), new_tenant_sip_account_path(current_user.current_tenant)} Formular können Sie u.a. den Caller-Name für den neuen SIP-Account einrichten. 
-          %br
-          Die Daten können später alle geändert werden.
-  %li.span4
-    %div.thumbnail
-      %a.thumbnail{:href => "#{image_path('docu/sip_accounts/click_on_new_phone_number_button.png')}"}
-        =image_tag('docu/sip_accounts/click_on_new_phone_number_button.png', :alt => "4. Neue Telefonnummer.")
-      %div.caption
-        %p
-          Auf der Ansicht des neuen SIP-Accounts bekommen Sie alle wichtigen Daten angezeigt. Unter den Daten des SIP-Accounts wird eine Tabelle der zugeordneten Telefonnummern angezeigt. Bitte klicken Sie hier auf den "Neu anlegen"-Button.
-  %li.span4
-    %div.thumbnail
-      %a.thumbnail{:href => "#{image_path('docu/sip_accounts/enter_new_phone_number.png')}"}
-        =image_tag('docu/sip_accounts/enter_new_phone_number.png', :alt => "3. SIP-Account anlegen.")
-      %div.caption
-        %p
-          In diesem Formular müssen Sie die gewünschte Telefonnummer des SIP-Accounts abspeichern.
-  %li.span4
-    %div.thumbnail
-      %a.thumbnail{:href => "#{image_path('docu/sip_accounts/sip_account_view.png')}"}
-        =image_tag('docu/sip_accounts/sip_account_view.png', :alt => "3. SIP-Account anlegen.")
-      %div.caption
-        %p
-          Auf der jetzt erscheinenden Ansicht zum SIP-Account erscheint die eben eingetragene Telefonnummer. Ein SIP-Account kann unter mehreren Telefonnummern erreicht werden. Bitte tragen Sie hier alle ein.
+.row
+  .span6
+    %h3 Kurzbeschreibung
+    %ol
+      %li
+        Unter #{link_to new_tenant_sip_account_url(current_user.current_tenant), new_tenant_sip_account_path(current_user.current_tenant)} einen neuen SIP-Account anlegen.
+      %li
+        Diesem Account eine Rufnummer zuweisen.
+      %li
+        Unter #{link_to new_tenant_sip_account_url(current_user.current_tenant), new_tenant_phone_path(current_user.current_tenant)} ein neues Telefon anlegen.
+      %li
+        Dieses Telefon mit dem SIP-Account verknüpfen.
+      %li
+        Die Provisioning URL im Telefon eintragen und das Telefon danach neu booten.
+
+  .span6
+    %h3 Screencast
+    = render :partial => 'page/docu/screencast_list', :locals => {:screencast_name => 'firmen_sip_account_und_telefon_anlegen'}
