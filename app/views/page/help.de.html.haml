@@ -1,5 +1,25 @@
 - content_for :title, "Erste Schritte mit Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}!"
 
+.row
+  .span6
+    %h2 User-Interface
+    %p
+      Die WebGUI zu Gemeinschaft ist komplex. Es gibt sehr viele Konfigurationsmöglichkeiten und Features, die bedienbar sein müssen. Wir haben uns bemüht die GUI so sauber und strukturiert wie möglich zu halten. Im Screenshot mit den wichtigsten drei Seiten-Elementen:
+    %ol
+      %li
+        Breadcrumb-Navigation. Ganz wichtig! Hiermit finden Sie immer wieder den Weg zurück.
+      %li
+        Link zum User-Account. Er führt Sie zu Ihrem persönlichen Bereich, in dem Sie z.B. Ihre Voicemails oder Faxe abrufen können. Dort können Sie ebenfalls Ihre persönlichen Telefone konfigurieren.
+      %li
+        Rechts oben können Sie sich immer ausloggen.
+    %p
+      Sie können bei der Arbeit mit Gemeinschaft selbstverständlich die Vor- und Zurück-Funktion Ihres Webbrowsers benutzen. Ebenfalls können Sie die einzelnen Seiten als Bookmarks abspeichern.
+  .span6
+    %ul.thumbnails
+      %li.span6
+        %div.thumbnail
+          %a.thumbnail{:href => "#{image_path('docu/user_interface.png')}"}
+            =image_tag('docu/user_interface.png', :alt => "Gemeinschaft User-Interface")
 
 
 = render :partial => 'page/docu/tenant_sip_accounts_new'
