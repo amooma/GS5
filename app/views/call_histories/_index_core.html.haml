@@ -6,6 +6,7 @@
       %th
         Uhrzeit
       %th
+      %th
         Teilnehmer
       %th
         Status
@@ -52,7 +53,7 @@
                 %div.thumbnail
                   %a.thumbnail{:href => call_history.display_image(:profile, phone_book_entry)}
                     =image_tag(image, :alt => phone_book_entry.to_s, :class => 'img-rounded')
-
+        %td
           - display_name = call_history.display_name
           - if display_name.blank?
             - display_name = phone_book_entry.to_s
@@ -68,7 +69,7 @@
             = t("call_histories.call_results.#{call_history.result}")
         %td
           - if @sip_account.registration && can?(:call, call_history)
-            = link_to t('call_histories.index.actions.call'), call_sip_account_call_history_path(@sip_account, call_history), :method => :put
+            = link_to raw("<i class = 'icon-bell'></i> ") + t('call_histories.index.actions.call'), call_sip_account_call_history_path(@sip_account, call_history), :method => :put, :class => 'btn btn-mini'
         %td
           - if can? :destroy, call_history
             = link_to raw("<i class = 'icon-trash icon-white'></i> ") + t('call_histories.index.actions.destroy'), [@sip_account, call_history], :method => :delete, :remote => true, :class => 'btn btn-mini btn-danger'
