@@ -1,6 +1,6 @@
-- cache(['tenant_show_table_of_sip_accounts', I18n.locale, tenant, tenant.sip_accounts.count, tenant.sip_accounts.reorder(:updated_at).last]) do
+- cache(['tenant_show_table_of_sip_accounts', I18n.locale, tenant, tenant.sip_accounts.count, SipAccount.count, tenant.sip_accounts.reorder(:updated_at).last]) do
   .row
-    - if GsParameter.get('AUTO_ADMIN_ONLINE_HELP') == true && !tenant.sip_accounts.any?
+    - if GsParameter.get('AUTO_ADMIN_ONLINE_HELP') == true && !SipAccount.any?
       .span4
         -# SIP accounts
         -#
