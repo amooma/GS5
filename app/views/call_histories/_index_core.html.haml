@@ -14,7 +14,7 @@
     - for call_history in call_histories
       - if !call_history.display_number.blank?
         - phone_book_entry = call_history.phone_book_entry_by_number(call_history.display_number)
-      %tr{:id => "call_history_id_#{call_history.id}_tr"}
+      %tr{:id => "call_history_id_#{call_history.id}_tr", :class => (call_history.duration.blank? ? 'warning' : '')}
         %td
           - if call_history.voicemail_message?
             .voicemail-message
@@ -50,7 +50,7 @@
             %ul.thumbnails
               %li.span1
                 %div.thumbnail
-                  %a.thumbnail{:href => image}
+                  %a.thumbnail{:href => call_history.display_image(:profile, phone_book_entry)}
                     =image_tag(image, :alt => phone_book_entry.to_s, :class => 'img-rounded')
 
           - display_name = call_history.display_name
@@ -63,9 +63,9 @@
           .phone= call_history.display_number
         %td
           - if call_history.display_duration
-            .duration= call_history.display_duration
+            = call_history.display_duration
           - else
-            .disposition= t("call_histories.call_results.#{call_history.result}")
+            = t("call_histories.call_results.#{call_history.result}")
         %td
           - if @sip_account.registration && can?(:call, call_history)
             = link_to t('call_histories.index.actions.call'), call_sip_account_call_history_path(@sip_account, call_history), :method => :put
