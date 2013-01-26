@@ -3,7 +3,15 @@
 .row
   .span3
     - cache(['user_show_aside', I18n.locale, @user, @user.sip_accounts, @user.conferences]) do
-      = image_tag @user.image_url(:small).to_s, :class => 'img-rounded' if @user.image? && @user.image_url(:small)
+
+      - if @user.image? && @user.image_url(:profile)
+        %span.hidden-phone
+          %ul.thumbnails
+            %li.span3
+              %div.thumbnail
+                %a.thumbnail{:href => @user.image_url(:profile).to_s}
+                  =image_tag(@user.image_url(:profile), :alt => "Avatar #{@user}")
+
       %table{:class => 'table table-striped'}
         %tbody
           %tr

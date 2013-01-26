@@ -10,7 +10,7 @@ en:
     index:
       page_title: 'Users'
       user_name: 'Username'
-      email: 'E-mail address'
+      email: 'E-mail'
       first_name: 'First name'
       middle_name: 'Middle name'
       last_name: 'Last name'
@@ -29,7 +29,7 @@ en:
     show:
       page_title: 'Show User'
       user_name: 'Username'
-      email: 'E-mail address'
+      email: 'E-mail'
       first_name: 'First name'
       middle_name: 'Middle name'
       last_name: 'Last name'
@@ -52,7 +52,7 @@ en:
         label: 'Username'
         hint: ''
       email:
-        label: 'E-mail address'
+        label: 'E-mail'
         hint: ''
       password:
         label: 'Password'
