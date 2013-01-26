@@ -8,7 +8,7 @@ de:
     index:
       page_title: 'Telefone'
       mac_address: 'MAC-Adresse'
-      phone_model_id: 'Telefonmodell'
+      phone_model_id: 'Modell'
       hot_deskable: 'Hot-Desk fähig'
       ip_address: 'IP-Adresse'
       last_ip_address: 'Letzte IP-Adresse'
@@ -26,7 +26,7 @@ de:
     show:
       page_title: 'Telefon anzeigen'
       mac_address: 'MAC-Adresse'
-      phone_model_id: 'Telefonmodell'
+      phone_model_id: 'Modell'
       hot_deskable: 'Hot-Desk fähig'
       ip_address: 'IP-Adresse'
       last_ip_address: 'Letzte IP-Adresse'
@@ -51,7 +51,7 @@ de:
         label: 'MAC-Adresse'
         hint: ''
       phone_model_id:
-        label: 'Telefonmodell'
+        label: 'Modell'
         hint: ''
       hot_deskable:
         label: 'Hot-Desk fähig'
