@@ -83,3 +83,4 @@ de:
       connect_to_sip_account: 'SIP-Account mit dem Telefon verknüpfen'
     tool_tips:
       hot_desk: 'Mit aktivierter Hot Desk Fähigkeit können sich User der Anlage an einem Telefon ein- und ausloggen.'
+      missing_ip_address: 'Das Telefon hat sich bis jetzt noch nicht bei Gemeinschaft gemeldet. Vielleicht müssen Sie das Telefon manuell rebooten.'

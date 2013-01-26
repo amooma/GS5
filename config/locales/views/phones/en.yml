@@ -83,3 +83,4 @@ en:
       connect_to_sip_account: 'Connect to an existing SIP account'
     tool_tips:
       hot_desk: 'Hot desk triggers the ability for a user to login and out of a given phone.'
+      missing_ip_address: "The phone hasn't contacted this system yet. Maybe you need to reboot the phone."
