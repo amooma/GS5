@@ -12,7 +12,7 @@
                 %a.thumbnail{:href => @user.image_url(:profile).to_s}
                   =image_tag(@user.image_url(:profile), :alt => "Avatar #{@user}")
 
-      %table{:class => 'table table-striped'}
+      %table.table.table-striped
         %tbody
           %tr
             %td

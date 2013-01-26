@@ -1,7 +1,7 @@
 = render :partial => "phone_book_entries/navigation"
 
 - cache(['phone_book_entries_table', I18n.locale, current_user, phone_book_entries]) do 
-  %table{:class => 'table table-striped'}
+  %table.table.table-striped
     - for entry in phone_book_entries
       - cache(['phone_book_entries_table_tr', I18n.locale, current_user, entry]) do
         %tr

@@ -1,5 +1,5 @@
 - cache(['user_groups_table', I18n.locale, current_user, @user, user_groups, User.order(:updated_at).last, User.count, UserGroupMembership.count, GsParameter.get('NUMBER_OF_SHOWN_ITEMS')]) do
-  %table{:class => 'table table-striped'}
+  %table.table.table-striped
     %thead
       %tr
         %th= t('user_groups.index.name')
