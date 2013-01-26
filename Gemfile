@@ -38,6 +38,10 @@ group :development do
   gem 'factory_girl'
   gem 'sextant' # Rails 4 stuff
   gem 'quiet_assets' # turns off assets logging
+
+  # Debugging http://railscasts.com/episodes/402-better-errors-railspanel
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :test do
