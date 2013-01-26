@@ -47,7 +47,11 @@
         %td
           - image = call_history.display_image(:small, phone_book_entry)
           - if image
-            = image_tag(image, :itemprop => 'image')
+            %ul.thumbnails
+              %li.span1
+                %div.thumbnail
+                  %a.thumbnail{:href => image}
+                    =image_tag(image, :alt => phone_book_entry.to_s, :class => 'img-rounded')
 
           - display_name = call_history.display_name
           - if display_name.blank?
