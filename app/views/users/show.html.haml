@@ -10,12 +10,12 @@
             %td
               %strong= t('users.show.user_name') + ":"
             %td
-              = @user.user_name
+              = truncate(@user.user_name, :length => 14)
           %tr
             %td
               %strong= t('users.show.email') + ":"
             %td
-              = @user.email
+              = truncate(@user.email, :length => 14)
 
       %p.controls
         = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @tenant, :child => @user }

@@ -15,7 +15,7 @@
 
   %tbody
     - for sip_account in sip_accounts
-      %tr
+      %tr{:class => (sip_account.registration ? '' : 'warning')}
         %td
           - if sip_account.registration
             %i.icon-ok
