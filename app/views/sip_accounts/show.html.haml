@@ -46,14 +46,14 @@
       %tr
         %td
           %strong= t('sip_accounts.show.registration') + ":"
-      %td
-        = "#{@sip_account.registration.network_ip}:#{@sip_account.registration.network_port}"
+        %td
+          = "#{@sip_account.registration.network_ip}:#{@sip_account.registration.network_port}"
     - if @sip_account.registration.try(:expires)
       %tr
         %td
           %strong= t('sip_accounts.show.expires') + ":"
-      %td
-        = "#{@sip_account.registration.try(:expires) - Time.now.to_i} s"
+        %td
+          = "#{@sip_account.registration.try(:expires) - Time.now.to_i} s"
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @sip_account.sip_accountable, :child => @sip_account }
 
