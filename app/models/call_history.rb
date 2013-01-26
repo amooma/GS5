@@ -3,6 +3,9 @@ class CallHistory < ActiveRecord::Base
   belongs_to :caller_account, :polymorphic => true
   belongs_to :callee_account, :polymorphic => true
   belongs_to :auth_account, :polymorphic => true
+
+  validates :start_stamp,
+            :presence => true
   
   def display_number
     if self.entry_type == 'dialed'
@@ -78,10 +81,11 @@ class CallHistory < ActiveRecord::Base
   end
 
   def display_call_date(date_format, date_today_format)
-    if self.start_stamp.strftime('%Y%m%d') == DateTime::now.strftime('%Y%m%d')
+    if self.start_stamp.to_date == Date.today
       return self.start_stamp.strftime(date_today_format)
+    else
+      return self.start_stamp.strftime(date_format)
     end
-    return self.start_stamp.strftime(date_format)
   end
 
   def display_duration
@@ -127,6 +131,14 @@ class CallHistory < ActiveRecord::Base
 
     return nil
       
+  end
+
+  def voicemail_message?
+    begin 
+      return self.call_historyable.voicemail_messages.where(:forwarded_by => self.caller_channel_uuid).any?
+    rescue
+      return nil
+    end
   end
 
   def voicemail_message
