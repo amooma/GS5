@@ -16,7 +16,7 @@
 
   %tbody
     - for phone in phones
-      %tr
+      %tr{:class => (phone.ip_address.blank? ? 'warning' : '')}
         %td= phone.pretty_mac_address
         %td= phone.phone_model
         %td
