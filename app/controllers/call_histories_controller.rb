@@ -44,7 +44,10 @@ class CallHistoriesController < ApplicationController
     if can?(:destroy, @call_history)
       @call_history.destroy
       m = method( :"#{@parent.class.name.underscore}_call_histories_url" )
-      redirect_to m.(), :notice => t('call_histories.controller.successfuly_destroyed')
+      respond_to do |format|
+        format.html { redirect_to m.(), :notice => t('call_histories.controller.successfuly_destroyed')}
+        format.js
+      end
     end
   end
 
