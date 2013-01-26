@@ -32,14 +32,14 @@
           %td
             %strong= t('phones.show.nightly_reboot') + ":"
           %td
-            = @phone.nightly_reboot
+            = @phone.nightly_reboot == true ? t('simple_form.yes') : t('simple_form.no')          
 
       - if !GsParameter.get('PROVISIONING_KEY_LENGTH').nil? && GsParameter.get('PROVISIONING_KEY_LENGTH') > 0
         %tr
           %td
             %strong= t('phones.show.provisioning_key_active') + ":"
           %td
-            = @phone.provisioning_key_active
+            = @phone.provisioning_key_active == true ? t('simple_form.yes') : t('simple_form.no')
 
       %tr{:class => (@phone.ip_address.blank? ? 'warning' : '')}
         %td
@@ -50,6 +50,20 @@
               = '-'
           - else
             = @phone.ip_address
+
+      - if current_user.admin? && (!@phone.http_user.blank? || !@phone.http_password.blank?)
+        %tr
+          %td
+            %strong= t('phones.show.http_user') + ":"
+          %td
+            = @phone.http_user
+
+        %tr
+          %td
+            %strong= t('phones.show.http_password') + ":"
+          %td
+            = @phone.http_password
+
 
     = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone.phoneable, :child => @phone }
 

@@ -12,8 +12,8 @@ en:
       hot_deskable: 'Hot-deskable'
       ip_address: 'IP address'
       last_ip_address: 'Last IP address'
-      http_user: 'http user'
-      http_password: 'http password'
+      http_user: 'Phone WebGUI username'
+      http_password: 'Phone WebGUI password'
       nightly_reboot: 'Nightly reboot'
       actions:
         confirm_destroy: 'Are you sure you want to delete this phone?'
