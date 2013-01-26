@@ -3,11 +3,11 @@
     %ul{:class => 'nav nav-pills'}
       - if !GsParameter.get('GEMEINSCHAFT_BUILDNAME').nil?
         %li
-          %a{:href => '#', :rel => "tooltip", :title => "Build #{GsParameter.get('GEMEINSCHAFT_BUILDNAME')}", :'data-trigger' => 'hover'}
+          %a{:href => '#', :rel => "tooltip", :title => "Build ##{GsParameter.get('GEMEINSCHAFT_BUILDNAME')}", :'data-trigger' => 'hover'}
             = "Gemeinschaft Version #{GsParameter.get('GEMEINSCHAFT_VERSION')}"
       - else
         %li
-          %a{:href => "http://amooma.de/gemeinschaft/gs5"} Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}
+          %a{:href => "http://amooma.de/gemeinschaft/gs5"} Gemeinschaft Version #{GsParameter.get('GEMEINSCHAFT_VERSION')}
       - if GuiFunction.display?('amooma_commercial_support_link_in_footer', current_user)
         %li
           %a{:href => "http://amooma.de"} Support und Consulting
