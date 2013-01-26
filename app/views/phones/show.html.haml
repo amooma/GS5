@@ -41,11 +41,15 @@
           %td
             = @phone.provisioning_key_active
 
-      %tr
+      %tr{:class => (@phone.ip_address.blank? ? 'warning' : '')}
         %td
           %strong= t('phones.show.ip_address') + ":"
         %td
-          = @phone.ip_address
+          - if @phone.ip_address.blank?
+            %a{:href => '#', :rel => "tooltip", :title => t('phones.tool_tips.missing_ip_address'), :'data-trigger' => 'hover'}
+              = '-'
+          - else
+            = @phone.ip_address
 
     = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone.phoneable, :child => @phone }
 

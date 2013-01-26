@@ -7,7 +7,7 @@
 
   %tbody
     - for phone_sip_account in phone_sip_accounts
-      %tr
+      %tr{:class => (phone_sip_account.sip_account.registration ? '' : 'warning')}
         %td= phone_sip_account.phone
         %td= phone_sip_account.sip_account
         %td= phone_sip_account.position
