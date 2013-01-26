@@ -14,7 +14,7 @@
     - for call_history in call_histories
       - if !call_history.display_number.blank?
         - phone_book_entry = call_history.phone_book_entry_by_number(call_history.display_number)
-      %tr{:id => "call_history_id_#{call_history.id}"}
+      %tr{:id => "call_history_id_#{call_history.id}_tr"}
         %td
           - if call_history.voicemail_message?
             .voicemail-message
@@ -67,8 +67,5 @@
             = link_to t('call_histories.index.actions.call'), call_sip_account_call_history_path(@sip_account, call_history), :method => :put
         %td
           - if can? :destroy, call_history
-            = link_to "remove", [@sip_account, call_history], :method => :delete, :remote => true
-            / %a.btn.btn-mini.btn-danger{"data-confirm" => t("#{call_history.class.name.underscore.pluralize}.index.actions.confirm_destroy"), "data-method" => "delete", :href => sip_account_call_history_path(@sip_account, call_history), :rel => "nofollow", remote: true}
-            /   %i.icon-trash.icon-white
-            /   =t('call_histories.index.actions.destroy')            
-
+            = link_to raw("<i class = 'icon-trash icon-white'></i> ") + t('call_histories.index.actions.destroy'), [@sip_account, call_history], :method => :delete, :remote => true, :class => 'btn btn-mini btn-danger'
+           
