@@ -9,8 +9,8 @@
           %ul.thumbnails
             %li.span3
               %div.thumbnail
-                %a.thumbnail{:href => @user.image_url(:profile).to_s}
-                  =image_tag(@user.image_url(:profile), :alt => "Avatar #{@user}")
+                %a.thumbnail{:href => @user.image_url}
+                  =image_tag(@user.image_url(:profile), :alt => "Avatar #{@user}", :class => 'img-rounded')
 
       %table.table.table-striped
         %tbody
