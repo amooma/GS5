@@ -21,12 +21,12 @@
       %td
         %strong= t('sip_accounts.show.call_waiting') + ":"
       %td
-        = @sip_account.call_waiting
+        = @sip_account.call_waiting == true ? t('simple_form.yes') : t('simple_form.no')        
     %tr
       %td
         %strong= t('sip_accounts.show.clir') + ":"
       %td
-        = @sip_account.clir
+        = @sip_account.clir == true ? t('simple_form.yes') : t('simple_form.no')
     %tr
       %td
         %strong= t('sip_accounts.show.clip_no_screening') + ":"
@@ -36,12 +36,13 @@
       %td
         %strong= t('sip_accounts.show.hotdeskable') + ":"
       %td
-        = @sip_account.hotdeskable
+        = @sip_account.hotdeskable == true ? t('simple_form.yes') : t('simple_form.no') 
     %tr
       %td
         %strong= t('sip_accounts.show.callforward_rules_act_per_sip_account') + ":"
       %td
-        = @sip_account.callforward_rules_act_per_sip_account
+        = @sip_account.callforward_rules_act_per_sip_account == true ? t('simple_form.yes') : t('simple_form.no')
+
     - if @sip_account.registration.try(:network_ip) && @sip_account.registration.try(:network_port)
       %tr
         %td

@@ -9,6 +9,6 @@
     - for phone_sip_account in phone_sip_accounts
       %tr{:class => (phone_sip_account.sip_account.registration ? '' : 'warning')}
         %td= phone_sip_account.phone
-        %td= phone_sip_account.sip_account
+        %td= link_to phone_sip_account.sip_account, method( :"#{phone_sip_account.sip_account.sip_accountable.class.name.underscore}_#{phone_sip_account.sip_account.class.name.underscore}_path" ).(phone_sip_account.sip_account.sip_accountable, phone_sip_account.sip_account)
         %td= phone_sip_account.position
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone_sip_account.phone, :child => phone_sip_account}
