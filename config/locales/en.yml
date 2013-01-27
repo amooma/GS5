@@ -4,3 +4,5 @@ en:
   # Temporal, just till we create the Voice Mail stuff.
   voice_mail: "Voice Mail"
   fax: "Fax"
+  time:
+    date_only: '%m.%d.%Y'  
