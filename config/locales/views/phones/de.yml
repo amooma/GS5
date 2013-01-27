@@ -30,8 +30,8 @@ de:
       hot_deskable: 'Hot-Desk fähig'
       ip_address: 'IP-Adresse'
       last_ip_address: 'Letzte IP-Adresse'
-      http_user: 'http user'
-      http_password: 'http password'
+      http_user: 'Phone WebGUI Username'
+      http_password: 'Phone WebGUI Passwort'
       nightly_reboot: 'Nachts automatischer Reboot'
       fallback_sip_account_id: 'Fallback SIP Account'
       manual: 'Handbuch'
@@ -66,10 +66,10 @@ de:
         label: 'Letzte IP-Adresse'
         hint: ''
       http_user:
-        label: 'http user'
+        label: 'Phone WebGUI Username'
         hint: ''
       http_password:
-        label: 'http password'
+        label: 'Phone WebGUI Passwort'
         hint: ''
       provisioning_key_active:
         label: 'Provisioning Schlüssel aktiv'
