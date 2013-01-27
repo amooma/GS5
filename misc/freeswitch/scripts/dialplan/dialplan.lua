@@ -135,7 +135,7 @@ end
 function Dialplan.auth_gateway(self)
   require 'common.gateway'
   local gateway_class = common.gateway.Gateway:new{ log = self.log, database = self.database};
-  local gateway = gateway_class:authenticate('sip', self.caller);
+  local gateway = gateway_class:authenticate(self.caller);
 
   if gateway then
     log:info('AUTH_GATEWAY - ', gateway.auth_source, ' ~ ', gateway.auth_pattern, ', gateway=', gateway.id, ', name: ', gateway.name, ', ip: ', self.caller.sip_contact_host);
