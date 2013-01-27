@@ -49,7 +49,10 @@
             %a{:href => '#', :rel => "tooltip", :title => t('phones.tool_tips.missing_ip_address'), :'data-trigger' => 'hover'}
               = '-'
           - else
-            = @phone.ip_address
+            - if current_user.admin?
+              = link_to @phone.ip_address, "http://#{@phone.http_user}:#{@phone.http_password}@#{@phone.ip_address}"
+            - else
+              = @phone.ip_address
 
       - if current_user.admin? && (!@phone.http_user.blank? || !@phone.http_password.blank?)
         %tr
@@ -63,7 +66,6 @@
             %strong= t('phones.show.http_password') + ":"
           %td
             = @phone.http_password
-
 
     = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone.phoneable, :child => @phone }
 
