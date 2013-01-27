@@ -13,6 +13,7 @@ class GatewaysController < ApplicationController
 
   def new
     @gateway = Gateway.new
+    @technologies = Gateway::TECHNOLOGIES
     spread_breadcrumbs
   end
 
@@ -28,6 +29,7 @@ class GatewaysController < ApplicationController
 
   def edit
     @gateway = Gateway.find(params[:id])
+    @technologies = Gateway::TECHNOLOGIES
     spread_breadcrumbs
   end
 

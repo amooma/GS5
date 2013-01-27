@@ -634,6 +634,7 @@
         <load module="mod_say_en"/>
         <load module="mod_spandsp"/>
         <load module="mod_snmp"/>
+        <load module="mod_dingaling"/>
       </modules>
     </configuration>  
     <configuration name="lua.conf" description="LUA Configuration">

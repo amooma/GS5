@@ -84,20 +84,30 @@ end
 function Gateway.call_url(self, destination_number)
   if self.technology == 'sip' then
     return 'sofia/gateway/' .. self.GATEWAY_PREFIX .. self.id .. '/' .. tostring(destination_number);
+  elseif self.technology == 'xmpp' then
+    local destination_str = tostring(destination_number);
+    if self.settings.destination_domain then
+      destination_str = destination_str .. '@' .. self.settings.destination_domain;
+    end
+    return 'dingaling/' .. self.GATEWAY_PREFIX .. self.id .. '/' .. destination_str;
   end
 
   return '';
 end
 
 
-function Gateway.authenticate(self, technology, caller)
+function Gateway.authenticate(self, caller, technology)
   local sql_query = 'SELECT `c`.`name`, `c`.`id`, `a`.`value` `auth_source`, `b`.`value` `auth_pattern` \
     FROM `gateway_settings` `a` \
     INNER JOIN `gateway_settings` `b` \
     ON (`a`.`gateway_id` = `b`.`gateway_id` AND `a`.`name` = "auth_source" AND `b`.`name` = "auth_pattern" ) \
     LEFT JOIN `gateways` `c` \
     ON (`a`.`gateway_id` = `c`.`id`) \
-    WHERE `c`.`inbound` IS TRUE AND `c`.`technology` = "' .. tostring(technology) .. '"';
+    WHERE `c`.`inbound` IS TRUE';
+
+  if technology then
+    sql_query = sql_query .. ' AND `c`.`technology` = "' .. tostring(technology) .. '"';
+  end
 
   local gateway = false;
 
@@ -142,39 +152,58 @@ function Gateway.config_table_get(self, config_table, gateway_id)
 end
 
 
-function Gateway.parameters_build(self, gateway_id)
+function Gateway.parameters_build(self, gateway_id, technology)
   local settings = self:config_table_get('gateway_settings', gateway_id);
-  local parameters = {
-    realm = settings.domain,
-    extension = 'auto_to_user', 
-  };
 
   require 'common.str'
+  local parameters = {};
 
-  if common.str.blank(settings.username) then
-    parameters.username = 'gateway' .. gateway_id;
-    parameters.register = false;
-  else
-    parameters.username = settings.username;
-    parameters.register = true;
-  end
+  if technology == 'sip' then
+    parameters.realm = settings.domain;
+    parameters.extension = 'auto_to_user';
+    
+    if common.str.blank(settings.username) then
+      parameters.username = 'gateway' .. gateway_id;
+      parameters.register = false;
+    else
+      parameters.username = settings.username;
+      parameters.register = true;
+    end
 
-  if not common.str.blank(settings.register) then
-    parameters.register = common.str.to_b(settings.register);
-  end
+    if not common.str.blank(settings.register) then
+      parameters.register = common.str.to_b(settings.register);
+    end
 
-  if common.str.blank(settings.password) then
-    parameters.password = 'gateway' .. gateway_id;
-  else
+    if common.str.blank(settings.password) then
+      parameters.password = 'gateway' .. gateway_id;
+    else
+      parameters.password = settings.password;
+    end
+
+    parameters['extension-in-contact'] = true;
+
+    if common.str.blank(settings.contact) then
+      parameters['extension'] = 'gateway' .. gateway_id;
+    else
+      parameters['extension'] = settings.contact;
+    end
+  elseif technology == 'xmpp' then
+    parameters.message = 'Gemeinschaft 5 by AMOOMA';
+    parameters.dialplan = 'XML';
+    parameters.context = 'default';
+    parameters['rtp-ip'] = 'auto';
+    parameters['auto-login'] = 'true';
+    parameters.sasl = 'plain';
+    parameters.tls = 'true';
+    parameters['use-rtp-timer'] = 'true';
+    parameters.vad = 'both';
+    parameters.use_jingle = 'true';
+    parameters['candidate-acl'] = 'wan.auto';
+    parameters.name = self.GATEWAY_PREFIX .. gateway_id;
+    parameters.server = settings.server;
+    parameters.login = settings.login;
     parameters.password = settings.password;
-  end
-
-  parameters['extension-in-contact'] = true;
-
-  if common.str.blank(settings.contact) then
-    parameters['extension'] = 'gateway' .. gateway_id;
-  else
-    parameters['extension'] = settings.contact;
+    parameters.exten = settings.inbound_number or parameters.name;
   end
 
   for key, value in pairs(self:config_table_get('gateway_parameters', gateway_id)) do 
