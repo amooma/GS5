@@ -195,3 +195,6 @@ de:
       short: ! '%d. %B, %H:%M Uhr'
     pm: nachmittags
     date_only: '%d.%m.%Y'
+  misc:
+    send_a_bugreport: 'Fehler melden (Bugreport).'
+    consulting: 'Consulting'

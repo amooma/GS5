@@ -4,3 +4,6 @@ en:
       date_only: '%m/%d/%Y'
       short: ! '%m/%d/%y %H:%M'
     date_only: '%m/%d/%Y'
+  misc:
+    send_a_bugreport: 'Send a bugreport.'
+    consulting: 'Consulting'
