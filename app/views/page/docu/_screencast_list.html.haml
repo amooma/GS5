@@ -7,7 +7,7 @@
         Dateigröße
 
   %tbody
-    - ['mp4', 'mov', 'gif'].each do |file_extension|
+    - ['mp4', 'mov'].each do |file_extension|
       - filename = "screencasts/de/#{screencast_name}/#{screencast_name}.#{file_extension}"
       - if File.exists?("#{Rails.root}/public/#{image_path(filename)}")
         %tr
