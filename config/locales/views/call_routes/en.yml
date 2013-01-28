@@ -9,8 +9,7 @@ en:
       page_title: 'Listing Call route'
       table: 'Table'
       name: 'Name'
-      endpoint_type: 'Endpoint type'
-      endpoint_id: 'Endpoint'
+      endpoint: 'Endpoint'
       position: 'Position'
       actions:
         confirm_destroy: 'Are you sure you want to delete this Call route?'
@@ -23,8 +22,7 @@ en:
       page_title: 'Show Call route'
       table: 'Table'
       name: 'Name'
-      endpoint_type: 'Endpoint type'
-      endpoint_id: 'Endpoint'
+      endpoint: 'Endpoint'
       position: 'Position'
       actions:
         confirm_destroy: 'Are you sure you want to delete this element?'

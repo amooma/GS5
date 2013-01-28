@@ -9,8 +9,7 @@ de:
       page_title: 'Liste aller Call Routen'
       routing_table: 'Routing Table'
       name: 'Name'
-      endpoint_type: 'Endpoint type'
-      endpoint_id: 'Endpoint'
+      endpoint: 'Endpoint'
       position: 'Position'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Call Route'
@@ -23,8 +22,7 @@ de:
       page_title: 'Call Route bearbeiten'
       routing_table: 'Routing Table'
       name: 'Name'
-      endpoint_type: 'Endpoint type'
-      endpoint_id: 'Endpoint'
+      endpoint: 'Endpoint'
       position: 'Position'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
