@@ -71,7 +71,7 @@ class SipAccountsController < ApplicationController
   def destroy
     @sip_account.destroy
     m = method( :"#{@parent.class.name.underscore}_sip_accounts_url" )
-    redirect_to :back, :notice => t('sip_accounts.controller.successfuly_destroyed')
+    redirect_to :root, :notice => t('sip_accounts.controller.successfuly_destroyed')
   end
 
   private
