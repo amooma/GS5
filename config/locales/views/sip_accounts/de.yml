@@ -40,6 +40,7 @@ de:
       callforward_rules_act_per_sip_account: 'Rufweiterleitungen gelten für das gesamte SIP-Account'
       registration: 'Registrierung'
       expires: 'Läuft ab'
+      user_agent: 'User Agent'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie diesen SIP-Account löschen möchten?'
         destroy: 'Löschen'
