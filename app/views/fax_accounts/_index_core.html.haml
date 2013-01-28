@@ -28,9 +28,11 @@
           %br
           = truncate(fax_account.station_id, :length => 20)
         %td
-          = link_to fax_account.fax_documents.inbound.count, fax_account_fax_documents_path(fax_account, :anchor => "fax_document_#{fax_account.fax_documents.inbound.first.try(:id)}")
+          - inbound_documents = fax_account.fax_documents.where(:inbound => true)
+          - outbound_documents = fax_account.fax_documents.where(:inbound => [false, nil])
+          = link_to inbound_documents.count, fax_account_fax_documents_path(fax_account, :anchor => "fax_document_#{inbound_documents.first.try(:id)}")
           = '/'
-          = link_to fax_account.fax_documents.outbound.count, fax_account_fax_documents_path(fax_account, :anchor => "fax_document_#{fax_account.fax_documents.outbound.first.try(:id)}")
+          = link_to outbound_documents.count, fax_account_fax_documents_path(fax_account, :anchor => "fax_document_#{outbound_documents.first.try(:id)}")
           - if fax_account.fax_documents.any?
             %br
             %small
