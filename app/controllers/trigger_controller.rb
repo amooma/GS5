@@ -101,6 +101,7 @@ class TriggerController < ApplicationController
             File.delete(pdf_file);
             fax_document.tiff = nil
             fax_document.save
+            fax_document.render_thumbnails
           else
             fax_document.state = 'unsuccessful'
             fax_document.save
