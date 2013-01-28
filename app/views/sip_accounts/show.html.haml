@@ -55,6 +55,13 @@
           %strong= t('sip_accounts.show.expires') + ":"
         %td
           = "#{@sip_account.registration.try(:expires) - Time.now.to_i} s"
+    - if @sip_account.registration.try(:user_agent)
+      %tr
+        %td
+          %strong= t('sip_accounts.show.user_agent') + ":"
+        %td
+          = @sip_account.registration.try(:user_agent)
+
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @sip_account.sip_accountable, :child => @sip_account }
 
