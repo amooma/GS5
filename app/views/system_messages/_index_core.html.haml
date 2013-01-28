@@ -1,11 +1,12 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('system_messages.index.created_at')
-    %th= t('system_messages.index.content')
-
-  
-  - for system_message in system_messages
+%table.table.table-striped
+  %thead
     %tr
-      %td= system_message.created_at
-      %td= system_message.content
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => system_message}
+      %th= t('system_messages.index.created_at')
+      %th= t('system_messages.index.content')
+
+  %tbody
+    - for system_message in system_messages
+      %tr
+        %td= system_message.created_at
+        %td= system_message.content
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => system_message}

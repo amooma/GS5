@@ -1,9 +1,16 @@
 - content_for :title, @tenant.name
 
-- if !@tenant.description.blank?
-  %p
-    %strong= t('tenants.show.description') + ":"
-    = @tenant.description
+%table.table.table-striped
+  %tbody
+    %tr
+      %td
+        %strong= t('tenants.show.name') + ":"
+      %td= @tenant.name
+    - if !@tenant.description.blank?
+      %tr
+        %td
+          %strong= t('tenants.show.description') + ":"
+        %td= @tenant.description
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @tenant }
 

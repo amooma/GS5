@@ -21,7 +21,7 @@ de:
       announce_new_member_by_name: 'Betreten ankündigen'
       announce_left_member_by_name: 'Verlassen ankündigen'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diese Telefonkonferenz löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Telefonkonferenz löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -39,7 +39,7 @@ de:
       announce_new_member_by_name: 'Neue Teilnehmer werden angekündigt'
       announce_left_member_by_name: 'Die Konferenz verlassende Teilnehmer werden angekündigt'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diese Telefonkonferenz löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Telefonkonferenz löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Telefonkonferenzen anzeigen'
@@ -78,4 +78,4 @@ de:
       announce_left_member_by_name:
         label: 'Die Konferenz verlassende Teilnehmer werden angekündigt'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

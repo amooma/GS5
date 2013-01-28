@@ -29,7 +29,7 @@ function nodes(database, local_node_id)
 end
 
 
-function gateways(database, profile_name)
+function sofia_gateways(database, profile_name)
   require 'configuration.simple_xml'
   local xml = configuration.simple_xml.SimpleXml:new();
 
@@ -44,8 +44,8 @@ function gateways(database, profile_name)
     local gateway = gateways[index];
     local gateway_profile = gateway_class:profile_get(gateway.id);
     if tostring(gateway_profile) == profile_name or (profile_name == 'gemeinschaft' and common.str.blank(gateway_profile)) then
-      log:debug('GATEWAY - name: ', gateway.name);
-      local parameters = gateway_class:parameters_build(gateway.id);
+      log:debug('SIP_GATEWAY - name: ', gateway.name);
+      local parameters = gateway_class:parameters_build(gateway.id, 'sip');
 
       gateways_xml = gateways_xml .. xml:element{
         'gateway',
@@ -86,7 +86,7 @@ function profile(database, sofia_ini, profile_name, index, domains, node_id)
     log:debug('SOFIA_PROFILE ', index,' - name: ', profile_name, ' - no domains');
   end
 
-  local gateways_xml = gateways(database, profile_name);
+  local gateways_xml = sofia_gateways(database, profile_name);
 
   if index == 1 then
     gateways_xml = gateways_xml .. nodes(database, node_id);
@@ -296,6 +296,65 @@ function conf_post_switch(database)
 end
 
 
+function dingaling_profiles(database)
+  local TECHNOLOGY = 'xmpp';
+  require 'common.str'
+  require 'configuration.simple_xml'
+  local xml = configuration.simple_xml.SimpleXml:new();
+
+  require 'common.gateway'
+  local gateway_class = common.gateway.Gateway:new{ log = log, database = database};
+  local gateways = gateway_class:list(TECHNOLOGY);
+
+  local gateways_xml = '';
+  for index=1, #gateways do
+    local gateway = gateways[index];
+    local gateway_profile = gateway_class:profile_get(gateway.id);   
+    log:debug('XMPP_GATEWAY - name: ', gateway.name);
+    local parameters = gateway_class:parameters_build(gateway.id, TECHNOLOGY);
+
+    gateways_xml = gateways_xml .. xml:element{
+      'profile',
+      ['type'] = 'client',
+      xml:from_hash('param', parameters, 'name', 'value'),
+    };
+  end
+
+  return gateways_xml;
+end
+
+
+function conf_dingaling(database)
+  require 'configuration.simple_xml'
+  local xml = configuration.simple_xml.SimpleXml:new();
+
+  require 'common.configuration_table';
+  local parameters = common.configuration_table.get(database, 'dingaling', 'parameters') or {};
+
+  local profiles_xml = dingaling_profiles(database) or '';
+
+  XML_STRING = xml:element{
+    'document', 
+    ['type'] = 'freeswitch/xml',
+    xml:element{
+      'section',
+      name = 'configuration',
+      description = 'Gemeinschaft 5 FreeSWITCH configuration',
+      xml:element{
+        'configuration',
+        name = 'dingaling.conf',
+        description = 'Jingle endpoint configuration',
+        xml:element{
+          'settings',
+          xml:from_hash('param', parameters, 'name', 'value'),
+        },
+      profiles_xml,  
+      },
+    },
+  };
+end
+
+
 function directory_sip_account(database)
   require 'configuration.simple_xml'
   local xml = configuration.simple_xml.SimpleXml:new();
@@ -480,6 +539,8 @@ if XML_REQUEST.section == 'configuration' and XML_REQUEST.tag_name == 'configura
 
   if XML_REQUEST.key_value == 'sofia.conf' then
     conf_sofia(database);
+  elseif XML_REQUEST.key_value == "dingaling.conf" then
+    conf_dingaling(database);  
   elseif XML_REQUEST.key_value == "conference.conf" then
     conf_conference(database);
   elseif XML_REQUEST.key_value == "voicemail.conf" then

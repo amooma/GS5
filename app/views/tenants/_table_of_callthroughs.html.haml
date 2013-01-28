@@ -1,0 +1,8 @@
+- cache(['tenant_show_table_of_callthroughs', I18n.locale, tenant, tenant.callthroughs.count, tenant.callthroughs.reorder(:updated_at).last]) do
+  -# Callthroughs
+  -#
+  - if (can?( :index, Callthrough ) && tenant.callthroughs.count > 0 ) || can?( :create, Callthrough )
+    %h2= t('callthroughs.index.page_title')
+    - if can?( :index, Callthrough ) && tenant.callthroughs.count > 0
+      = render "callthroughs/index_core", :callthroughs => tenant.callthroughs
+    = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => Callthrough}

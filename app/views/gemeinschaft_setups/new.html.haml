@@ -1,27 +1,29 @@
-- content_for :title, 'Gemeinschaft 5.0'
+- content_for :title, "Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}"
 - content_for :meta_description, "Configure a new Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')} server"
 
 = simple_form_for(@gemeinschaft_setup) do |f|
   = f.error_notification
 
-  %h3 Admin user account
-  %p
-    This is the first user of this system who has admin rights by default.
+  %h2 Admin user account
 
   = f.simple_fields_for :user, @user do |u|
     = render "users/form_core", :f => u
 
-  %h3 SIP domain
-  %p You should use the same value for the SIP realm as for the SIP domain to ensure compatibility with different phone models. In case you have no clue what we are talking about: Just enter the IP address of this server.
-
-  = f.simple_fields_for :sip_domain, @sip_domain do |s|
-    = render "sip_domains/form_core", :f => s
-
-  %h3 General information
+  %h2 Configuration of this PBX
 
   = f.association :country, :label => t('gemeinschaft_setups.form.country_id.label'), :hint => conditional_hint('gemeinschaft_setups.form.country_id.hint'), :include_blank => false
   = f.association :language, :label => t('gemeinschaft_setups.form.language_id.label'), :hint => conditional_hint('gemeinschaft_setups.form.language_id.hint'), :include_blank => false
   = f.input :default_area_code, :label => t('gemeinschaft_setups.form.default_area_code.label'), :hint => conditional_hint('gemeinschaft_setups.form.default_area_code.hint')
+
+  = f.input :default_company_name, :label => t('gemeinschaft_setups.form.default_company_name.label'), :hint => conditional_hint('gemeinschaft_setups.form.default_company_name.hint')
+
+  = f.input :default_system_email, :label => t('gemeinschaft_setups.form.default_system_email.label'), :hint => conditional_hint('gemeinschaft_setups.form.default_system_email.hint')
+
+  %h3 SIP-Domain
+  %p You should use the same value for the SIP realm as for the SIP domain to ensure compatibility with different phone models. In case you have no clue what we are talking about: Just enter the IP address of this server.
+
+  = f.simple_fields_for :sip_domain, @sip_domain do |s|
+    = render "sip_domains/form_core", :f => s
 
   .actions
     = f.button :submit, conditional_t('gemeinschaft_setups.form.submit')

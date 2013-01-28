@@ -1,19 +1,20 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('phone_models.index.name')
-    %th= t('phone_models.index.product_manual_homepage_url')
-    %th= t('phone_models.index.product_homepage_url')
-    %th= t('phone_models.index.number_of_phones')
-
-  
-  - for phone_model in phone_models
+%table.table.table-striped
+  %thead
     %tr
-      %td= phone_model.name
-      %td
-        - if phone_model.product_manual_homepage_url
-          =link_to truncate(phone_model.product_manual_homepage_url, :length => 40), phone_model.product_manual_homepage_url
-      %td
-        - if phone_model.product_homepage_url
-          =link_to truncate(phone_model.product_homepage_url, :length => 40), phone_model.product_homepage_url
-      %td= phone_model.phones.count
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => phone_model, :parent => phone_model.manufacturer}
+      %th= t('phone_models.index.name')
+      %th= t('phone_models.index.product_manual_homepage_url')
+      %th= t('phone_models.index.product_homepage_url')
+      %th= t('phone_models.index.number_of_phones')
+
+  %tbody
+    - for phone_model in phone_models
+      %tr
+        %td= phone_model.name
+        %td
+          - if phone_model.product_manual_homepage_url
+            =link_to truncate(phone_model.product_manual_homepage_url, :length => 40), phone_model.product_manual_homepage_url
+        %td
+          - if phone_model.product_homepage_url
+            =link_to truncate(phone_model.product_homepage_url, :length => 40), phone_model.product_homepage_url
+        %td= phone_model.phones.count
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => phone_model, :parent => phone_model.manufacturer}

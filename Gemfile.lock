@@ -32,6 +32,10 @@ GEM
     addressable (2.3.2)
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
+    better_errors (0.3.2)
+      coderay (>= 1.0.0)
+      erubis (>= 2.7.0)
+    binding_of_caller (0.6.8)
     breadcrumbs_on_rails (2.3.0)
     builder (3.0.4)
     cache_digests (0.2.0)
@@ -41,6 +45,7 @@ GEM
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
     chunky_png (1.2.7)
+    coderay (1.0.8)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -197,6 +202,8 @@ PLATFORMS
 DEPENDENCIES
   acts_as_list
   bcrypt-ruby
+  better_errors
+  binding_of_caller
   breadcrumbs_on_rails
   cache_digests
   cancan (= 1.6.7)

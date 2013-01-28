@@ -1,13 +1,14 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('gateway_parameters.index.name')
-    %th= t('gateway_parameters.index.value')
-    %th= t('gateway_parameters.index.description')
-
-  
-  - for gateway_parameter in gateway_parameters
+%table.table.table-striped
+  %thead
     %tr
-      %td= gateway_parameter.name
-      %td= gateway_parameter.value
-      %td= gateway_parameter.description
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => gateway_parameter.gateway, :child => gateway_parameter}
+      %th= t('gateway_parameters.index.name')
+      %th= t('gateway_parameters.index.value')
+      %th= t('gateway_parameters.index.description')
+
+  %tbody
+    - for gateway_parameter in gateway_parameters
+      %tr
+        %td= gateway_parameter.name
+        %td= gateway_parameter.value
+        %td= gateway_parameter.description
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => gateway_parameter.gateway, :child => gateway_parameter}

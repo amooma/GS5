@@ -1,0 +1,8 @@
+- cache(['table_of_pbx_features_hunt_groups_row', I18n.locale, tenant, tenant.hunt_groups.count, tenant.hunt_groups.reorder(:updated_at).last]) do
+  -# HuntGroups
+  -#
+  - if (can?( :index, HuntGroup ) && tenant.hunt_groups.count > 0 ) || can?( :create, HuntGroup )
+    %h2= t('hunt_groups.index.page_title')
+    - if can?( :index, HuntGroup ) && tenant.hunt_groups.count > 0
+      = render "hunt_groups/index_core", :hunt_groups => tenant.hunt_groups
+    = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => HuntGroup}

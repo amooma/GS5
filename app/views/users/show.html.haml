@@ -3,13 +3,27 @@
 .row
   .span3
     - cache(['user_show_aside', I18n.locale, @user, @user.sip_accounts, @user.conferences]) do
-      = image_tag @user.image_url(:small).to_s, :class => 'img-rounded' if @user.image? && @user.image_url(:small)
-      %p
-        %strong= t('users.show.user_name') + ":"
-        = @user.user_name
-      %p
-        %strong= t('users.show.email') + ":"
-        = @user.email
+
+      - if @user.image? && @user.image_url(:profile)
+        %span.hidden-phone
+          %ul.thumbnails
+            %li.span3
+              %div.thumbnail
+                %a.thumbnail{:href => @user.image_url}
+                  =image_tag(@user.image_url(:profile), :alt => "Avatar #{@user}", :class => 'img-rounded')
+
+      %table.table.table-striped
+        %tbody
+          %tr
+            %td
+              %strong= t('users.show.user_name') + ":"
+            %td
+              = truncate(@user.user_name, :length => 14)
+          %tr
+            %td
+              %strong= t('users.show.email') + ":"
+            %td
+              = truncate(@user.email, :length => 14)
 
       %p.controls
         = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @tenant, :child => @user }

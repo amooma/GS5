@@ -10,7 +10,7 @@ en:
       name: 'Name'
       phone_numbers: 'Phone numbers'
       actions:
-        confirm: 'Are you sure you want to delete this whitelist?'
+        confirm_destroy: 'Are you sure you want to delete this whitelist?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -20,7 +20,7 @@ en:
       page_title: 'Show whitelist'
       name: 'Name'
       actions:
-        confirm: 'Are you sure you want to delete this whitelist?'
+        confirm_destroy: 'Are you sure you want to delete this whitelist?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View All'
@@ -35,4 +35,4 @@ en:
       phone_numbers:
         label: 'Phone numbers'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

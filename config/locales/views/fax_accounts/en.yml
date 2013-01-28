@@ -19,7 +19,7 @@ en:
       last_update: 'last update'
       send_a_fax: 'send a fax'
       actions:
-        confirm: 'Are you sure you want to delete this fax account?'
+        confirm_destroy: 'Are you sure you want to delete this fax account?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -33,7 +33,7 @@ en:
       days_till_auto_delete: 'Day till auto delete'
       retries: 'Retries'
       actions:
-        confirm: 'Are you sure you want to delete this fax account?'
+        confirm_destroy: 'Are you sure you want to delete this fax account?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View All'
@@ -57,4 +57,4 @@ en:
       retries: 
         label: 'Retries'
         hint: 'Number of times the system retries to send the fax in case the destination is busy.'
-      button: 'Submit'
+      submit: 'Submit'

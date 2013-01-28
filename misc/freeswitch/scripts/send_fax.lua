@@ -1,4 +1,4 @@
--- Gemeinschaft 5.0
+-- Gemeinschaft 5
 -- (c) AMOOMA GmbH 2012-2013
 -- 
 

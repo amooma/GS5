@@ -10,7 +10,7 @@ de:
       page_title: 'Gruppenzugehörigkeiten'
       user: 'Benutzer'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diese Gruppenzugehörigkeit löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Gruppenzugehörigkeit löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -20,7 +20,7 @@ de:
       page_title: 'Gruppenzugehörigkeiten anzeigen'
       user: 'Benutzer'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diese Gruppenzugehörigkeit löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Gruppenzugehörigkeit löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Gruppenzugehörigkeitenen anzeigen'
@@ -32,4 +32,4 @@ de:
       name:
         user: 'Benutzer'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

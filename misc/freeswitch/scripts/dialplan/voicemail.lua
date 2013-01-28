@@ -117,6 +117,7 @@ function Voicemail.leave(self, caller, phone_number)
       caller.uuid .. "'"
     );
     caller:set_variable('voicemail_message_len', duration);
+    self:trigger_notification(caller);
   else
     caller:set_variable('voicemail_message_len');
   end 
@@ -125,14 +126,11 @@ function Voicemail.leave(self, caller, phone_number)
 end
 
 
-function Voicemail.send_notify(self, caller)
-  self.log:debug('VOICEMAIL_NOTIFY - account: ' .. self.record.auth_name .. ", id: " .. tostring(caller.uuid));
+function Voicemail.trigger_notification(self, caller)
+  local command = 'http_request.lua ' .. caller.uuid .. ' http://127.0.0.1/trigger/voicemail?sip_account_id=' .. tostring(self.id);
 
-  local file = io.popen("/opt/GS5/script/voicemail_new '" .. tostring(self.record.auth_name) .. "' '" .. tostring(caller.uuid) .. "' 2>&1");
-  self.log:debug('VOICEMAIL_NOTIFY - result: ' .. tostring(file:read("*a")));
-  file:close();
-
-  return true;
+  require 'common.fapi'
+  return common.fapi.FApi:new():execute('luarun', command);
 end
 
 

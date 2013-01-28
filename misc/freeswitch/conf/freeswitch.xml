@@ -633,11 +633,13 @@
         <load module="mod_tone_stream"/>
         <load module="mod_say_en"/>
         <load module="mod_spandsp"/>
+        <load module="mod_snmp"/>
+        <load module="mod_dingaling"/>
       </modules>
     </configuration>  
     <configuration name="lua.conf" description="LUA Configuration">
       <settings>
-        <param name="script-directory" value="$${base_dir}/scripts/?.lua"/>
+        <param name="script-directory" value="/usr/share/freeswitch/scripts/?.lua;/usr/share/lua/5.1/?.lua;"/>
         <param name="xml-handler-script" value="configuration.lua"/>
         <param name="xml-handler-bindings" value="directory|configuration"/>
         <param name="startup-script" value="fax_daemon.lua"/>

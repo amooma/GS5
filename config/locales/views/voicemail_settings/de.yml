@@ -8,7 +8,7 @@ de:
     index:
       page_title: 'Anrufbeantworter Einstellungen'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie die Einstellungen löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie die Einstellungen löschen möchten?'
         destroy: 'Löschen'
     show:
       page_title: 'Anrufbeantworter Einstellungen'
@@ -20,7 +20,7 @@ de:
       mark_read: 'Als gelesen markieren'
       purge: 'Löschen'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie die Einstellungen löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie die Einstellungen löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
     new:
@@ -49,4 +49,4 @@ de:
       purge:
         label: 'Löschen'
         hint: 'Nachricht löschen'
-      button: 'Absenden'
+      submit: 'Absenden'

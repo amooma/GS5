@@ -16,7 +16,7 @@ en:
       phone_numbers: 'Phone numbers'
       hunt_group_members: 'Members'
       actions:
-        confirm: 'Are you sure you want to delete this hunt group?'
+        confirm_destroy: 'Are you sure you want to delete this hunt group?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -30,7 +30,7 @@ en:
       phone_numbers: 'Phone numbers'
       hunt_group_members: 'Members'
       actions:
-        confirm: 'Are you sure you want to delete this hunt group?'
+        confirm_destroy: 'Are you sure you want to delete this hunt group?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View All'
@@ -54,4 +54,4 @@ en:
       hunt_group_members:
         label: 'Members of this hunt group'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

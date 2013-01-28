@@ -6,6 +6,14 @@ class GemeinschaftSetup < ActiveRecord::Base
   belongs_to :country
   belongs_to :language
 
+  validates :default_company_name,
+            :presence => true,
+            :uniqueness => true
+
+  validates :default_system_email,
+            :presence => true,
+            :uniqueness => true
+            
   # Remove the cache which was created by the heater rake task.
   #
   after_create :expire_cache

@@ -8,16 +8,16 @@ de:
     index:
       page_title: 'Telefone'
       mac_address: 'MAC-Adresse'
-      phone_model_id: 'Telefonmodell'
+      phone_model_id: 'Modell'
       hot_deskable: 'Hot-Desk fähig'
       ip_address: 'IP-Adresse'
       last_ip_address: 'Letzte IP-Adresse'
-      http_user: 'http user'
-      http_password: 'http password'
+      http_user: 'Phone WebGUI Username'
+      http_password: 'Phone WebGUI Passwort'
       nightly_reboot: 'Nachts automatischer Reboot'
       provisioning_key_active: 'Provisioning Schlüssel aktiv'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -26,17 +26,17 @@ de:
     show:
       page_title: 'Telefon anzeigen'
       mac_address: 'MAC-Adresse'
-      phone_model_id: 'Telefonmodell'
+      phone_model_id: 'Modell'
       hot_deskable: 'Hot-Desk fähig'
       ip_address: 'IP-Adresse'
       last_ip_address: 'Letzte IP-Adresse'
-      http_user: 'http user'
-      http_password: 'http password'
+      http_user: 'Phone WebGUI Username'
+      http_password: 'Phone WebGUI Passwort'
       nightly_reboot: 'Nachts automatischer Reboot'
       fallback_sip_account_id: 'Fallback SIP Account'
       manual: 'Handbuch'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Telefone anzeigen'
@@ -51,7 +51,7 @@ de:
         label: 'MAC-Adresse'
         hint: ''
       phone_model_id:
-        label: 'Telefonmodell'
+        label: 'Modell'
         hint: ''
       hot_deskable:
         label: 'Hot-Desk fähig'
@@ -66,10 +66,10 @@ de:
         label: 'Letzte IP-Adresse'
         hint: ''
       http_user:
-        label: 'http user'
+        label: 'Phone WebGUI Username'
         hint: ''
       http_password:
-        label: 'http password'
+        label: 'Phone WebGUI Passwort'
         hint: ''
       provisioning_key_active:
         label: 'Provisioning Schlüssel aktiv'
@@ -77,7 +77,10 @@ de:
       fallback_sip_account_id:
         label: 'Fallback SIP Account'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'
     sip_accounts:
-      title: 'Auf dem Telefon eingetragene SIP-Konten'
-      connect_to_sip_account: 'Neues SIP-Konto auf das Telefon eintragen'
+      title: 'Verknüpfte SIP-Accounts'
+      connect_to_sip_account: 'SIP-Account mit dem Telefon verknüpfen'
+    tool_tips:
+      hot_desk: 'Mit aktivierter Hot Desk Fähigkeit können sich User der Anlage an einem Telefon ein- und ausloggen.'
+      missing_ip_address: 'Das Telefon hat sich bis jetzt noch nicht bei Gemeinschaft gemeldet. Vielleicht müssen Sie das Telefon manuell rebooten.'

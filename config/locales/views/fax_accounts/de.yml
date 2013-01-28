@@ -19,7 +19,7 @@ de:
       last_update: 'Letzter Eintrag'
       send_a_fax: 'Fax versenden'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie dieses Software-Fax-Konto löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie dieses Software-Fax-Konto löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -33,7 +33,7 @@ de:
       days_till_auto_delete: 'Anzahl der Tage bis Faxe gelöscht werden'
       retries: 'Max. Anzahl von Sendeversuchen'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie dieses Software-Fax-Konto löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie dieses Software-Fax-Konto löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
@@ -57,4 +57,4 @@ de:
       retries: 
         label: 'Max. Anzahl von Sendeversuchen'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

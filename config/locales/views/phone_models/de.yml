@@ -13,7 +13,7 @@ de:
       product_homepage_url: 'Produkt-Homepage URL'
       number_of_phones: 'Anzahl von Telefonen'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie dieses Telefonmodell löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie dieses Telefonmodell löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -26,7 +26,7 @@ de:
       product_manual_homepage_url: 'Betriebsanleitung URL'
       product_homepage_url: 'Produkt-Homepage URL'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie dieses Telefonmodell löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie dieses Telefonmodell löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Telefonmodelle anzeigen'
@@ -47,4 +47,4 @@ de:
       product_homepage_url:
         label: 'Produkt-Homepage URL'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

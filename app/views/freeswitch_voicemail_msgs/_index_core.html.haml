@@ -1,12 +1,13 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('freeswitch_voicemail_msgs.index.created_epoch')
-    %th= t('freeswitch_voicemail_msgs.index.message_len')
-    %th= t('freeswitch_voicemail_msgs.index.file_path')
-
-  
-  - for freeswitch_voicemail_msg in freeswitch_voicemail_msgs
+%table.table.table-striped
+  %thead
     %tr
-      %td= freeswitch_voicemail_msg.created_epoch
-      %td= freeswitch_voicemail_msg.message_len
-      %td= freeswitch_voicemail_msg.file_path
+      %th= t('freeswitch_voicemail_msgs.index.created_epoch')
+      %th= t('freeswitch_voicemail_msgs.index.message_len')
+      %th= t('freeswitch_voicemail_msgs.index.file_path')
+
+  %tbody
+    - for freeswitch_voicemail_msg in freeswitch_voicemail_msgs
+      %tr
+        %td= freeswitch_voicemail_msg.created_epoch
+        %td= freeswitch_voicemail_msg.message_len
+        %td= freeswitch_voicemail_msg.file_path

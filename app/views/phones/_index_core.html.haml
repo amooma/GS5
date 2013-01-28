@@ -1,15 +1,33 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('phones.index.mac_address')
-    %th= t('phones.index.phone_model_id')
-    %th= t('phones.index.hot_deskable')
-    %th= t('phones.index.ip_address')
-
-  
-  - for phone in phones
+%table.table.table-striped
+  %thead
     %tr
-      %td= phone.pretty_mac_address
-      %td= phone.phone_model
-      %td= phone.hot_deskable
-      %td= phone.ip_address
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone.phoneable, :child => phone}
+      %th= t('phones.index.mac_address')
+      %th
+        %span.hidden-phone
+          = t('phones.index.phone_model_id')
+        %span.visible-phone
+          = truncate(t('phones.index.phone_model_id'), :length => 9)
+      %th
+        %span.hidden-phone
+          = t('phones.index.hot_deskable')
+      %th
+        %span.hidden-phone
+          = t('phones.index.ip_address')
+
+  %tbody
+    - for phone in phones
+      %tr{:class => (phone.ip_address.blank? ? 'warning' : '')}
+        %td= phone.pretty_mac_address
+        %td= phone.phone_model
+        %td
+          %span.hidden-phone
+            %a{:href => '#', :rel => "tooltip", :title => t('phones.tool_tips.hot_desk'), :'data-trigger' => 'hover'}
+              = phone.hot_deskable == true ? t('simple_form.yes') : t('simple_form.no')
+
+        %td
+          - if phone.ip_address.blank?
+            %a{:href => '#', :rel => "tooltip", :title => t('phones.tool_tips.missing_ip_address'), :'data-trigger' => 'hover'}
+              = '-'
+          - else
+            = phone.ip_address
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone.phoneable, :child => phone}

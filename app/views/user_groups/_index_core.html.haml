@@ -1,28 +1,33 @@
 - cache(['user_groups_table', I18n.locale, current_user, @user, user_groups, User.order(:updated_at).last, User.count, UserGroupMembership.count, GsParameter.get('NUMBER_OF_SHOWN_ITEMS')]) do
-  %table{:class => 'table table-striped'}
-    %tr
-      %th= t('user_groups.index.name')
-      - if user_groups.pluck(:description).uniq != [nil]
-        %th= t('user_groups.index.description')
-      - if @user
-        %th= t('user_groups.index.tenant_id')
-      - else
-        %th= t('user_groups.index.members')
-      %th{:colspan => '3'}
-    
-    - for user_group in user_groups
+  %table.table.table-striped
+    %thead
       %tr
-        %td= user_group.name
+        %th= t('user_groups.index.name')
         - if user_groups.pluck(:description).uniq != [nil]
-          %td= user_group.description
+          %th
+            %span.hidden-phone
+              = t('user_groups.index.description')
         - if @user
-          %td= user_group.tenant
+          %th
+            %span.hidden-phone
+              = t('user_groups.index.tenant_id')
         - else
-          %td
-            =render 'users/listing', :users => user_group.users
-            - if user_group.users.any?
-              %br
-            - if (user_group.tenant.user_ids - user_group.user_ids).any?
-              = render :partial => 'shared/create_link', :locals => {:parent => user_group, :child_class => UserGroupMembership}
+          %th= t('user_groups.index.members')
 
-        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => user_group.tenant, :child => user_group}
+    %tbody
+      - for user_group in user_groups
+        %tr
+          %td= user_group.name
+          - if user_groups.pluck(:description).uniq != [nil]
+            %td
+              %span.hidden-phone
+                = user_group.description
+          - if @user
+            %td
+              %span.hidden-phone
+                = user_group.tenant
+          - else
+            %td
+              =render 'users/listing', :users => user_group.users
+
+          =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => user_group.tenant, :child => user_group}

@@ -10,7 +10,7 @@ en:
       audio: 'Audio'
       bellcore_id: 'Bellcore ID'
       actions:
-        confirm: 'Are you sure you want to delete this ringtone?'
+        confirm_destroy: 'Are you sure you want to delete this ringtone?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -20,7 +20,7 @@ en:
       audio: 'Audio'
       bellcore_id: 'Bellcore ID'
       actions:
-        confirm: 'Are you sure you want to delete this ringtone?'
+        confirm_destroy: 'Are you sure you want to delete this ringtone?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View All'
@@ -35,5 +35,5 @@ en:
       bellcore_id:
         label: 'Bellcore ID'
         hint: 'Build in ringtone ID. A "0" means silence.'
-      button: 'Submit'
+      submit: 'Submit'
     set_a_ringtone: 'Set a ringtone'

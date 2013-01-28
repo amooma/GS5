@@ -158,12 +158,15 @@ class ConfigSnomController < ApplicationController
 
     if ! params[:sip_account].blank?
       @sip_account = @phone.sip_accounts.where({ :id => params[:sip_account].to_i }).first
+      if ! @sip_account && @phone.fallback_sip_account && @phone.fallback_sip_account.id == params[:sip_account].to_i
+        @sip_account = @phone.fallback_sip_account
+      end
       if ! @sip_account
         render(
           :status => 404,
           :layout => false,
           :content_type => 'text/plain',
-          :text => "<!-- SipAccount not found -->",
+          :text => "<!-- SipAccount ID:#{params[:sip_account].to_i} not found -->",
         )
       end
     end

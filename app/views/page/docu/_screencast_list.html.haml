@@ -1,0 +1,19 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th
+        Format
+      %th
+        Dateigröße
+
+  %tbody
+    - ['mp4', 'mov'].each do |file_extension|
+      - filename = "screencasts/de/#{screencast_name}/#{screencast_name}.#{file_extension}"
+      - if File.exists?("#{Rails.root}/public/#{image_path(filename)}")
+        %tr
+          %td
+            %a{:href => image_path(filename)}
+              %i{:class => 'icon-download'}
+              =file_extension.upcase
+          %td
+            = number_to_human_size(File.size("#{Rails.root}/public/#{image_path(filename)}"), :precision => 3)

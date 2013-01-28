@@ -13,7 +13,7 @@ en:
       product_homepage_url: 'Product homepage URL'
       number_of_phones: 'System count'
       actions:
-        confirm: 'Are you sure you want to delete this phone model?'
+        confirm_destroy: 'Are you sure you want to delete this phone model?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -25,7 +25,7 @@ en:
       product_manual_homepage_url: 'Product manual homepage URL'
       product_homepage_url: 'Product homepage URL'
       actions:
-        confirm: 'Are you sure you want to delete this phone model?'
+        confirm_destroy: 'Are you sure you want to delete this phone model?'
         destroy: 'Delete phone model'
         edit: 'Edit phone model'
         view_all: 'View all phone models'
@@ -46,4 +46,4 @@ en:
       product_homepage_url:
         label: 'Product homepage URL'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

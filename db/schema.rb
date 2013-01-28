@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130122121100) do
+ActiveRecord::Schema.define(:version => 20130128121800) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -535,9 +535,11 @@ ActiveRecord::Schema.define(:version => 20130122121100) do
     t.integer  "sip_domain_id"
     t.integer  "country_id"
     t.integer  "language_id"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
     t.string   "default_area_code"
+    t.string   "default_company_name"
+    t.string   "default_system_email"
   end
 
   create_table "gs_cluster_sync_log_entries", :force => true do |t|
@@ -873,6 +875,50 @@ ActiveRecord::Schema.define(:version => 20130122121100) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "sip_registrations", :id => false, :force => true do |t|
+    t.string  "call_id"
+    t.string  "sip_user"
+    t.string  "sip_host"
+    t.string  "presence_hosts"
+    t.string  "contact",          :limit => 1024
+    t.string  "status"
+    t.string  "rpid"
+    t.integer "expires"
+    t.string  "user_agent"
+    t.string  "server_user"
+    t.string  "server_host"
+    t.string  "profile_name"
+    t.string  "hostname"
+    t.string  "network_ip"
+    t.string  "network_port",     :limit => 6
+    t.string  "sip_username"
+    t.string  "sip_realm"
+    t.string  "mwi_user"
+    t.string  "mwi_host"
+    t.string  "orig_server_host"
+    t.string  "orig_hostname"
+    t.string  "sub_host"
+  end
+
+  add_index "sip_registrations", ["call_id"], :name => "sr_call_id"
+  add_index "sip_registrations", ["contact"], :name => "sr_contact"
+  add_index "sip_registrations", ["expires"], :name => "sr_expires"
+  add_index "sip_registrations", ["hostname"], :name => "sr_hostname"
+  add_index "sip_registrations", ["mwi_host"], :name => "sr_mwi_host"
+  add_index "sip_registrations", ["mwi_user"], :name => "sr_mwi_user"
+  add_index "sip_registrations", ["network_ip"], :name => "sr_network_ip"
+  add_index "sip_registrations", ["network_port"], :name => "sr_network_port"
+  add_index "sip_registrations", ["orig_hostname"], :name => "sr_orig_hostname"
+  add_index "sip_registrations", ["orig_server_host"], :name => "sr_orig_server_host"
+  add_index "sip_registrations", ["presence_hosts"], :name => "sr_presence_hosts"
+  add_index "sip_registrations", ["profile_name"], :name => "sr_profile_name"
+  add_index "sip_registrations", ["sip_host"], :name => "sr_sip_host"
+  add_index "sip_registrations", ["sip_realm"], :name => "sr_sip_realm"
+  add_index "sip_registrations", ["sip_user"], :name => "sr_sip_user"
+  add_index "sip_registrations", ["sip_username"], :name => "sr_sip_username"
+  add_index "sip_registrations", ["status"], :name => "sr_status"
+  add_index "sip_registrations", ["sub_host"], :name => "sr_sub_host"
 
   create_table "softkey_functions", :force => true do |t|
     t.string   "name"

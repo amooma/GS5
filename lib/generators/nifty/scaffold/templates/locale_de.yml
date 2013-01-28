@@ -11,7 +11,7 @@ de:
       <%= attribute.name %>: '<%= attribute.human_name %>'
       <%- end -%>
       actions:
-        confirm: 'Sind Sie sicher, dass Sie folgendes löschen möchten: <%= human_name %>'
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: <%= human_name %>'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -23,7 +23,7 @@ de:
       <%= attribute.name %>: '<%= attribute.human_name %>'
       <%- end -%>
       actions:
-        confirm: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
@@ -43,4 +43,4 @@ de:
         label: '<%= attribute.human_name %>'
         hint: ''
       <%- end -%>
-      button: 'Absenden'
+      submit: 'Absenden'

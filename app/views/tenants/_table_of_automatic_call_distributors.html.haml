@@ -1,0 +1,8 @@
+- cache(['tenant_show_table_of_automatic_call_distributors', I18n.locale, tenant, tenant.automatic_call_distributors.count, tenant.automatic_call_distributors.reorder(:updated_at).last]) do
+  -# AutomaticCallDistributors
+  -#
+  - if (can?( :index, AutomaticCallDistributor ) && tenant.automatic_call_distributors.count > 0 ) || can?( :create, AutomaticCallDistributor )
+    %h2= t('automatic_call_distributors.index.page_title')
+    - if can?( :index, AutomaticCallDistributor ) && tenant.automatic_call_distributors.count > 0
+      = render "automatic_call_distributors/index_core", :automatic_call_distributors => tenant.automatic_call_distributors
+    = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => AutomaticCallDistributor}

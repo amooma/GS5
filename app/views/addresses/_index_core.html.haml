@@ -1,23 +1,24 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('addresses.index.phone_book_entry_id')
-    %th= t('addresses.index.line1')
-    %th= t('addresses.index.line2')
-    %th= t('addresses.index.street')
-    %th= t('addresses.index.zip_code')
-    %th= t('addresses.index.city')
-    %th= t('addresses.index.country_id')
-    %th= t('addresses.index.position')
-
-  
-  - for address in addresses
+%table.table.table-striped
+  %thead
     %tr
-      %td= address.phone_book_entry_id
-      %td= address.line1
-      %td= address.line2
-      %td= address.street
-      %td= address.zip_code
-      %td= address.city
-      %td= address.country_id
-      %td= address.position
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => address.phone_book_entry, :child => address}
+      %th= t('addresses.index.phone_book_entry_id')
+      %th= t('addresses.index.line1')
+      %th= t('addresses.index.line2')
+      %th= t('addresses.index.street')
+      %th= t('addresses.index.zip_code')
+      %th= t('addresses.index.city')
+      %th= t('addresses.index.country_id')
+      %th= t('addresses.index.position')
+
+  %tbody
+    - for address in addresses
+      %tr
+        %td= address.phone_book_entry_id
+        %td= address.line1
+        %td= address.line2
+        %td= address.street
+        %td= address.zip_code
+        %td= address.city
+        %td= address.country_id
+        %td= address.position
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => address.phone_book_entry, :child => address}

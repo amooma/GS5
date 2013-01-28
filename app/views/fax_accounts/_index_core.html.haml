@@ -1,35 +1,48 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('fax_accounts.index.name')
-    %th
-      = t('fax_accounts.index.phone_numbers')
-      %br
-      = t('fax_accounts.index.station_id')
-    %th
-      = t('fax_accounts.index.received') 
-      = '/'
-      = t('fax_accounts.index.sent')
-      %br
-      %small
-        = t('fax_accounts.index.last_update')
-
-  
-  - for fax_account in fax_accounts
+%table.table.table-striped
+  %thead
     %tr
-      %td= truncate(fax_account.name, :length => 15)
-      %td
-        =render 'phone_numbers/listing', :phone_numbers => fax_account.phone_numbers.order(:number)
+      %th
+        %span.hidden-phone
+          = t('fax_accounts.index.name')
+      %th
+        = t('fax_accounts.index.phone_numbers')
         %br
-        = truncate(fax_account.station_id, :length => 20)
-      %td
-        = link_to fax_account.fax_documents.inbound.count, fax_account_fax_documents_path(fax_account, :anchor => "fax_document_#{fax_account.fax_documents.inbound.first.try(:id)}")
-        = '/'
-        = link_to fax_account.fax_documents.outbound.count, fax_account_fax_documents_path(fax_account, :anchor => "fax_document_#{fax_account.fax_documents.outbound.first.try(:id)}")
-        - if fax_account.fax_documents.count > 0
+        = t('fax_accounts.index.station_id')
+      %th
+        %span.hidden-phone
+          = t('fax_accounts.index.received') 
+          = '/'
+          = t('fax_accounts.index.sent')
           %br
           %small
-            = time_ago_in_words(fax_account.fax_documents.order(:updated_at).last.updated_at)
-      %td
-        - if can?(:new, FaxDocument, :fax_account_id => fax_account.id)
-          = link_to t('fax_accounts.index.send_a_fax'), new_fax_account_fax_document_path(fax_account)
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => fax_account.fax_accountable, :child => fax_account}
+            = t('fax_accounts.index.last_update')
+
+  %tbody
+    - for fax_account in fax_accounts
+      %tr
+        %td
+          %span.hidden-phone
+            =fax_account.name
+        %td
+          =render 'phone_numbers/listing', :phone_numbers => fax_account.phone_numbers.order(:number)
+          %br
+          = truncate(fax_account.station_id, :length => 20)
+        %td
+          - inbound_documents = fax_account.fax_documents.where(:inbound => true)
+          - outbound_documents = fax_account.fax_documents.where(:inbound => [false, nil])
+          = link_to inbound_documents.count, fax_account_fax_documents_path(fax_account, :anchor => "fax_document_#{inbound_documents.first.try(:id)}")
+          = '/'
+          = link_to outbound_documents.count, fax_account_fax_documents_path(fax_account, :anchor => "fax_document_#{outbound_documents.first.try(:id)}")
+          - if fax_account.fax_documents.any?
+            %br
+            %small
+              = time_ago_in_words(fax_account.fax_documents.order(:updated_at).last.updated_at)
+        %td
+          - if can?(:new, FaxDocument, :fax_account_id => fax_account.id)
+            %a.btn.btn-mini.btn-primary{:href => new_fax_account_fax_document_path(fax_account) }
+              %i.icon-print.icon-white
+              %span.hidden-phone
+                =t('fax_accounts.index.send_a_fax')
+
+
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => fax_account.fax_accountable, :child => fax_account}

@@ -10,7 +10,7 @@ en:
     index:
       page_title: 'Users'
       user_name: 'Username'
-      email: 'E-mail address'
+      email: 'E-mail'
       first_name: 'First name'
       middle_name: 'Middle name'
       last_name: 'Last name'
@@ -20,16 +20,16 @@ en:
       language_id: 'Language'
       send_voicemail_as_email_attachment: 'Send voicemails by e-mail'
       actions:
-        confirm: 'Are you sure you want to delete this user?'
+        confirm_destroy: 'Are you sure you want to delete this user?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
-        create: 'Create a new user'
+        create: 'New'
         create_for: 'Create a new user for %{resource}'
     show:
       page_title: 'Show User'
       user_name: 'Username'
-      email: 'E-mail address'
+      email: 'E-mail'
       first_name: 'First name'
       middle_name: 'Middle name'
       last_name: 'Last name'
@@ -39,7 +39,7 @@ en:
       language_id: 'Language'
       send_voicemail_as_email_attachment: 'Send voicemails by e-mail'
       actions:
-        confirm: 'Are you sure you want to delete this user?'
+        confirm_destroy: 'Are you sure you want to delete this user?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View all users'
@@ -52,7 +52,7 @@ en:
         label: 'Username'
         hint: ''
       email:
-        label: 'E-mail address'
+        label: 'E-mail'
         hint: ''
       password:
         label: 'Password'
@@ -92,4 +92,4 @@ en:
       send_voicemail_as_email_attachment:
         label: 'Send voicemails as e-mail attachments'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

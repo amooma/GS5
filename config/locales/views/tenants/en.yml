@@ -1,7 +1,7 @@
 en:
   tenants:
     name: "Tenant"
-    new_name_scaffold: 'Snake Oil #%{counter}, Ltd.'
+    new_name_scaffold: 'Snake Oil Ltd.'
     controller:
       successfuly_created: 'Successfully created the tenant "%{resource}".'
       successfuly_created_plus_delayed_jobs: 'Successfully created the tenant "%{resource}". A total of %{amount_of_numbers} extensions and external numbers is being proccessed in the background. Depending on your hardware that can take a couple of minutes.'
@@ -16,7 +16,7 @@ en:
       from_field_voicemail_email: 'Voicemail sender'
       from_field_pin_change_email: 'PIN change sender'
       actions:
-        confirm: 'Are you sure you want to delete this tenant?'
+        confirm_destroy: 'Are you sure you want to delete this tenant?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -30,7 +30,7 @@ en:
       from_field_voicemail_email: 'Voicemail sender'
       from_field_pin_change_email: 'PIN change sender'
       actions:
-        confirm: 'Are you sure you want to delete this tenant?'
+        confirm_destroy: 'Are you sure you want to delete this tenant?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View all tenants'
@@ -68,6 +68,6 @@ en:
       did_list:
         label: 'External numbers'
         hint: 'These are the phone numbers which can be called from the outside (seperated by commas). The x represents all internal extensions (can be added to a trunk number). You can mix MSNs and DIDs. Examples: "0228-12345x, 0228-123450" (this would be the solution for most companies), "0228-123456", "0228-123456,0228-123999"'
-      button: 'Submit'
+      submit: 'Submit'
     
     switch_to_tenant: "Switch to tenant"

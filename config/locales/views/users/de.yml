@@ -10,7 +10,7 @@ de:
     index:
       page_title: 'User'
       user_name: 'User-Name'
-      email: 'E-Mail Adresse'
+      email: 'E-Mail'
       first_name: 'Vorname'
       middle_name: 'Zweiter Vorname'
       last_name: 'Nachname'
@@ -20,16 +20,16 @@ de:
       language_id: 'Sprache'
       send_voicemail_as_email_attachment: 'Sprachnachrichten per E-Mail'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen User löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen User löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
-        create: 'Neuen User anlegen'
+        create: 'Neu anlegen'
         create_for: 'Neuen User für %{resource} anlegen'
     show:
       page_title: 'User anzeigen'
       user_name: 'User-Name'
-      email: 'E-Mail Adresse'
+      email: 'E-Mail'
       first_name: 'Vorname'
       middle_name: 'Zweiter Vorname'
       last_name: 'Nachname'
@@ -39,7 +39,7 @@ de:
       language_id: 'Sprache'
       send_voicemail_as_email_attachment: 'Sprachnachrichten per E-Mail'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen User löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen User löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle User anzeigen'
@@ -52,7 +52,7 @@ de:
         label: 'User-Name'
         hint: ''
       email:
-        label: 'E-Mail Adresse'
+        label: 'E-Mail'
         hint: ''
       password:
         label: 'Passwort'
@@ -92,4 +92,4 @@ de:
       send_voicemail_as_email_attachment:
         label: 'Sprachnachrichten per E-Mail verschicken'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

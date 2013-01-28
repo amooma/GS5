@@ -1,21 +1,22 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('phone_number_ranges.index.name')
-    %th= t('phone_number_ranges.index.description')
-    %th= t('phone_number_ranges.index.numbers')
-    %th= t('phone_number_ranges.index.amount')
-
-  
-  - for phone_number_range in phone_number_ranges
+%table.table.table-striped
+  %thead
     %tr
-      %td= t("phone_number_ranges.ranges.#{phone_number_range}.label")
-      %td= t("phone_number_ranges.ranges.#{phone_number_range}.description")
-      %td
-        - if phone_number_range.phone_numbers.count > 0
-          = render 'phone_numbers/listing', :phone_numbers => phone_number_range.phone_numbers.order(:number)
-          %br
-        = render :partial => 'shared/create_link', :locals => {:parent => phone_number_range, :child_class => PhoneNumber, :short_link => true}
+      %th= t('phone_number_ranges.index.name')
+      %th= t('phone_number_ranges.index.description')
+      %th= t('phone_number_ranges.index.numbers')
+      %th= t('phone_number_ranges.index.amount')
 
-      %td= phone_number_range.phone_numbers.count
-      - if phone_number_range.phone_number_rangeable.class != Country
-        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone_number_range.phone_number_rangeable, :child => phone_number_range}
+  %tbody
+    - for phone_number_range in phone_number_ranges
+      %tr
+        %td= t("phone_number_ranges.ranges.#{phone_number_range}.label")
+        %td= t("phone_number_ranges.ranges.#{phone_number_range}.description")
+        %td
+          - if phone_number_range.phone_numbers.count > 0
+            = render 'phone_numbers/listing', :phone_numbers => phone_number_range.phone_numbers.order(:number)
+            %br
+          = render :partial => 'shared/create_link', :locals => {:parent => phone_number_range, :child_class => PhoneNumber, :short_link => true}
+
+        %td= phone_number_range.phone_numbers.count
+        - if phone_number_range.phone_number_rangeable.class != Country
+          =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone_number_range.phone_number_rangeable, :child => phone_number_range}

@@ -28,10 +28,10 @@ function Phone.list_by_sql(self, sql_query)
 
     if phone.record.ieee_name == 'snom technology ag' then
       require 'phones.snom'
-      phone.model = phones.snom.Snom:new();
+      phone.model = phones.snom.Snom:new{ log = self.log };
     elseif account_entry.ieee_name == 'siemens enterprise communicationsgmbh & co. kg' then
       require 'phones.siemens'
-      phone.model = phones.siemens.Siemens:new();
+      phone.model = phones.siemens.Siemens:new{ log = self.log };
     end
     table.insert(account_phones, phone);
   end)
@@ -120,5 +120,8 @@ function Phone.resync(self, arg)
   end
 
   arg.ip_address = arg.ip_address or self.record.ip_address;
+  arg.http_user = arg.http_user or self.record.http_user;
+  arg.http_password = arg.http_password or self.record.http_password;
+
   return self.model:resync(arg);
 end

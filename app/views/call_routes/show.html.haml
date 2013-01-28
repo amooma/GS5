@@ -7,11 +7,12 @@
   %strong= t('call_routes.show.name') + ":"
   = @call_route.name
 %p
-  %strong= t('call_routes.show.endpoint_type') + ":"
-  = @call_route.endpoint_type
-%p
-  %strong= t('call_routes.show.endpoint_id') + ":"
-  = @call_route.endpoint_id
+  %strong= t('call_routes.show.endpoint') + ":"
+  - endpoint = @call_route.endpoint
+  - if endpoint
+    = endpoint
+  - else
+    = @call_route.endpoint_type
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @call_route }
 

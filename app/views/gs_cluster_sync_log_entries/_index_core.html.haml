@@ -1,17 +1,18 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('gs_cluster_sync_log_entries.index.gs_node_id')
-    %th= t('gs_cluster_sync_log_entries.index.class_name')
-    %th= t('gs_cluster_sync_log_entries.index.action')
-    %th= t('gs_cluster_sync_log_entries.index.content')
-    %th= t('gs_cluster_sync_log_entries.index.status')
-
-  
-  - for gs_cluster_sync_log_entry in gs_cluster_sync_log_entries
+%table.table.table-striped
+  %thead
     %tr
-      %td= gs_cluster_sync_log_entry.gs_node_id
-      %td= gs_cluster_sync_log_entry.class_name
-      %td= gs_cluster_sync_log_entry.action
-      %td= gs_cluster_sync_log_entry.content
-      %td= gs_cluster_sync_log_entry.status
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gs_cluster_sync_log_entry}
+      %th= t('gs_cluster_sync_log_entries.index.gs_node_id')
+      %th= t('gs_cluster_sync_log_entries.index.class_name')
+      %th= t('gs_cluster_sync_log_entries.index.action')
+      %th= t('gs_cluster_sync_log_entries.index.content')
+      %th= t('gs_cluster_sync_log_entries.index.status')
+
+  %tbody
+    - for gs_cluster_sync_log_entry in gs_cluster_sync_log_entries
+      %tr
+        %td= gs_cluster_sync_log_entry.gs_node_id
+        %td= gs_cluster_sync_log_entry.class_name
+        %td= gs_cluster_sync_log_entry.action
+        %td= gs_cluster_sync_log_entry.content
+        %td= gs_cluster_sync_log_entry.status
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gs_cluster_sync_log_entry}

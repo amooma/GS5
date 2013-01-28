@@ -1,13 +1,14 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('gateway_settings.index.name')
-    %th= t('gateway_settings.index.value')
-    %th= t('gateway_settings.index.description')
-
-  
-  - for gateway_setting in gateway_settings
+%table.table.table-striped
+  %thead
     %tr
-      %td= gateway_setting.name
-      %td= gateway_setting.value
-      %td= gateway_setting.description
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => gateway_setting.gateway, :child => gateway_setting}
+      %th= t('gateway_settings.index.name')
+      %th= t('gateway_settings.index.value')
+      %th= t('gateway_settings.index.description')
+
+  %tbody
+    - for gateway_setting in gateway_settings
+      %tr
+        %td= gateway_setting.name
+        %td= gateway_setting.value
+        %td= gateway_setting.description
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => gateway_setting.gateway, :child => gateway_setting}

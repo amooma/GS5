@@ -133,7 +133,7 @@ class SipAccount < ActiveRecord::Base
   end
 
   def registration
-    return FreeswitchRegistration.where(:reg_user => self.auth_name).first
+    return SipRegistration.where(:sip_user => self.auth_name).first
   end
 
   def call( phone_number )

@@ -52,7 +52,6 @@ class FaxDocument < ActiveRecord::Base
     name
   end
   
-  private
   def render_thumbnails
     directory = "/tmp/GS-#{GsParameter.get('GEMEINSCHAFT_VERSION')}/fax_thumbnails/#{self.id}"
     system('mkdir -p ' + directory)
@@ -66,7 +65,8 @@ class FaxDocument < ActiveRecord::Base
     system("rm -rf #{directory}")
     self.update_attributes(:document_total_pages => number_of_thumbnails) if self.document_total_pages.nil?
   end
-  
+
+  private
   def convert_pdf_to_tiff
     page_size_a4 = '595 842'
     page_size_command = "<< /Policies << /PageSize 3 >> /InputAttributes currentpagedevice /InputAttributes get dup { pop 1 index exch undef } forall dup 0 << /PageSize [ #{page_size_a4} ] >> put >> setpagedevice"

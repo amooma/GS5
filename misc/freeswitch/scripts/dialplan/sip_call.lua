@@ -89,20 +89,21 @@ function SipCall.fork(self, destinations, arg )
   for index, destination in ipairs(destinations) do
     local origination_variables = { 'gs_fork_index=' .. index }
 
-    self.log:info('FORK ', index, '/', #destinations, ' - ', destination.type, '=', destination.id, '/', destination.gateway or destination.uuid, '@', destination.node_id, ', number: ', destination.number, ', caller_id: "', destination.caller_id_name, '" <', destination.caller_id_number, '>');
+    self.log:info('FORK ', index, '/', #destinations, ' - ', destination.type, '=', destination.id, '/', destination.uuid, '@', destination.node_id, ', number: ', destination.number, ', caller_id: "', destination.caller_id_name, '" <', destination.caller_id_number, '>');
     
     if not common.str.to_b(arg.update_callee_display) then
       table.insert(origination_variables, 'ignore_display_updates=true');
     end
 
-    if not destination.node_local or destination.type == 'node' then
+    if not destination.node_local then
       require 'common.node'
-      local node = nil;
-      if tonumber(destination.gateway) then
-        node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(tonumber(destination.gateway));
-      else
-        node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(destination.node_id);
+      local node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(destination.node_id);
+      if node then
+        table.insert(origination_variables, 'sip_h_X-GS_node_id=' .. self.caller.local_node_id);
+        table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. node.record.name .. '/' .. destination.number);
       end
+    elseif destination.type == 'node' then
+      local node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(destination.id);
       if node then
         table.insert(origination_variables, 'sip_h_X-GS_node_id=' .. self.caller.local_node_id);
         table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. node.record.name .. '/' .. destination.number);
@@ -129,18 +130,26 @@ function SipCall.fork(self, destinations, arg )
         call_result = { code = 486, phrase = 'User busy', disposition = 'USER_BUSY' };
       end
     elseif destination.type == 'gateway' then
-      if destination.caller_id_number then
-        table.insert(origination_variables, "origination_caller_id_number='" .. destination.caller_id_number .. "'");
-      end
-      if destination.caller_id_name then
-        table.insert(origination_variables, "origination_caller_id_name='" .. destination.caller_id_name .. "'");
-      end
-      if destination.channel_variables then
-        for key, value in pairs(destination.channel_variables) do
-          table.insert(origination_variables, tostring(key) .. "='" .. tostring(value) .. "'");
+      require 'common.gateway'
+      local gateway = common.gateway.Gateway:new{ log = self.log, database = self.database}:find_by_id(destination.id);
+
+      if gateway and gateway.outbound then
+        if destination.caller_id_number then
+          table.insert(origination_variables, "origination_caller_id_number='" .. destination.caller_id_number .. "'");
         end
+        if destination.caller_id_name then
+          table.insert(origination_variables, "origination_caller_id_name='" .. destination.caller_id_name .. "'");
+        end
+        if destination.channel_variables then
+          for key, value in pairs(destination.channel_variables) do
+            table.insert(origination_variables, tostring(key) .. "='" .. tostring(value) .. "'");
+          end
+        end
+
+        table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']' .. gateway:call_url(destination.number));
+      else
+        self.log:notice('FORK - gateway not found - gateway=', destination.id);
       end
-      table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. tostring(destination.gateway) .. '/' .. tostring(destination.number));
     elseif destination.type == 'dial' then
       if destination.caller_id_number then
         table.insert(origination_variables, "origination_caller_id_number='" .. destination.caller_id_number .. "'");
@@ -173,8 +182,10 @@ function SipCall.fork(self, destinations, arg )
     self.caller:execute('ring_ready');
   end
 
+  local session_dialstring = '{local_var_clobber=true}' .. table.concat(dial_strings, ',');
+  self.log:debug('FORK SESSION_START - call_url: ', session_dialstring);
   local start_time = os.time();
-  local session_callee = freeswitch.Session('{local_var_clobber=true}' .. table.concat(dial_strings, ','), self.caller.session);
+  local session_callee = freeswitch.Session(session_dialstring, self.caller.session);
   self.log:debug('FORK SESSION_INIT - dial_time: ', os.time() - start_time);
   local answer_result = self:wait_answer(self.caller.session, session_callee, arg.timeout, start_time);
   local fork_index = nil;

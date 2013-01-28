@@ -11,7 +11,7 @@ de:
       sip_account_id: 'SIP-Konto'
       position: 'Position'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie dieses SIP-Konto von dem Telefon entfernen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie dieses SIP-Konto von dem Telefon entfernen möchten?'
         destroy: 'Entfernen'
         edit: 'Bearbeiten' 
         show: 'Anzeigen'
@@ -23,7 +23,7 @@ de:
       sip_account_id: 'SIP-Konto'
       position: 'Position'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie dieses SIP-Konto von dem Telefon entfernen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie dieses SIP-Konto von dem Telefon entfernen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
@@ -34,4 +34,4 @@ de:
       sip_account_id:
         label: 'SIP-Konto'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

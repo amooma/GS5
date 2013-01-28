@@ -1,11 +1,12 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('ringtones.index.audio')
-    %th= t('ringtones.index.bellcore_id')
-
-  
-  - for ringtone in ringtones
+%table.table.table-striped
+  %thead
     %tr
-      %td= ringtone.audio
-      %td= ringtone.bellcore_id
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => ringtone.ringtoneable, :child => ringtone}
+      %th= t('ringtones.index.audio')
+      %th= t('ringtones.index.bellcore_id')
+
+  %tbody
+    - for ringtone in ringtones
+      %tr
+        %td= ringtone.audio
+        %td= ringtone.bellcore_id
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => ringtone.ringtoneable, :child => ringtone}

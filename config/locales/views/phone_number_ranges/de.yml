@@ -22,7 +22,7 @@ de:
       amount: 'Anzahl von Rufnummern'
       phone_numbers: 'Telefonnummern'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Rufnummernbereich löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Rufnummernbereich löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -33,7 +33,7 @@ de:
       name: 'Name'
       description: 'Beschreibung'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Rufnummernbereich löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Rufnummernbereich löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Rufnummernbereiche anzeigen'
@@ -48,4 +48,4 @@ de:
       description:
         label: 'Beschreibung'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

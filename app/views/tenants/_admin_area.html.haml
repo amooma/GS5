@@ -1,32 +1,40 @@
-= render :partial => 'tenants/sip_accounts_and_phones', :locals => {:tenant => tenant}
 
-= render :partial => 'users_table', :locals => {:tenant => tenant}
+.row
+  .span12
+    = render :partial => 'tenants/table_of_sip_accounts', :locals => {:tenant => tenant}
+    - if SipAccount.any?
+      = render :partial => 'tenants/table_of_phones', :locals => {:tenant => tenant}
 
-= render :partial => 'user_groups_table', :locals => {:tenant => tenant}
+    - if SipAccount.any? || Gateway.any?
+      = render :partial => 'tenants/table_of_conferences', :locals => {:tenant => tenant}
+      = render :partial => 'tenants/table_of_callthroughs', :locals => {:tenant => tenant}
+      = render :partial => 'tenants/table_of_hunt_groups', :locals => {:tenant => tenant}
+      = render :partial => 'tenants/table_of_automatic_call_distributors', :locals => {:tenant => tenant}
 
-%h2 Features
-= render :partial => 'tenants/table_of_functions', :locals => {:tenant => tenant}
+    = render :partial => 'tenants/users_table', :locals => {:tenant => tenant}
+    = render :partial => 'tenants/user_groups_table', :locals => {:tenant => tenant}
 
-= render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => tenant}
+    = render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => tenant}
 
-%h2 Gemeinschaft Konfiguration
-= render :partial => 'tenants/gs_parameter_table', :locals => {:tenant => tenant}
+    .well
+      %h2 Gemeinschaft Konfiguration
+      = render :partial => 'tenants/gs_parameter_table', :locals => {:tenant => tenant}
 
-%p
-  Das System kann  
-  = PhoneModel.count
-  verschiedene Telefonmodelle von den folgenden Herstellern verwalten:  
-  - Manufacturer.all.each do |manufacturer|
-    - if manufacturer != Manufacturer.last && manufacturer != Manufacturer.limit(Manufacturer.count - 1).last
-      = succeed ', ' do
-        =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
-    - elsif manufacturer == Manufacturer.limit(Manufacturer.count - 1).last
-      = succeed ' und ' do
-        =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
-    - else
-      = succeed '.' do
-        =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
+      %p
+        Das System kann  
+        = PhoneModel.count
+        verschiedene Telefonmodelle von den folgenden Herstellern verwalten:  
+        - Manufacturer.all.each do |manufacturer|
+          - if manufacturer != Manufacturer.last && manufacturer != Manufacturer.limit(Manufacturer.count - 1).last
+            = succeed ', ' do
+              =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
+          - elsif manufacturer == Manufacturer.limit(Manufacturer.count - 1).last
+            = succeed ' und ' do
+              =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
+          - else
+            = succeed '.' do
+              =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
 
-= render :partial => 'call_routes', :locals => {:tenant => tenant}
+      = render :partial => 'call_routes', :locals => {:tenant => tenant}
 
-= render :partial => 'gateways', :locals => {:tenant => tenant, :gateways => gateways}
+      = render :partial => 'gateways', :locals => {:tenant => tenant, :gateways => gateways}

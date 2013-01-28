@@ -20,7 +20,7 @@ en:
       callforward_rules_act_per_sip_account: 'Callforwards work for the whole sip account'
       online: 'Online'
       actions:
-        confirm: 'Are you sure you want to delete this SIP account?'
+        confirm_destroy: 'Are you sure you want to delete this SIP account?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -40,8 +40,9 @@ en:
       callforward_rules_act_per_sip_account: 'Callforwards work for the whole sip account'
       registration: 'Registration'
       expires: 'Expires'
+      user_agent: 'User Agent'
       actions:
-        confirm: 'Are you sure you want to delete this SIP account?'
+        confirm_destroy: 'Are you sure you want to delete this SIP account?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View all SIP accounts'
@@ -80,4 +81,4 @@ en:
       hotdeskable: 
         label: 'Hotdeskable'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

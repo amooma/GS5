@@ -12,7 +12,7 @@ de:
       phone_numbers: 'Telefonnummern'
       can_switch_status_itself: 'Darf seinen Status selbst ändern'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Rufgruppen-Teilnehmer entfernen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Rufgruppen-Teilnehmer entfernen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -24,7 +24,7 @@ de:
       active: 'Aktiv'
       can_switch_status_itself: 'Darf seinen Status selber ändern'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Rufgruppen-Teilnehmer entfernen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Rufgruppen-Teilnehmer entfernen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Rufgruppen-Teilnehmer anzeigen'
@@ -45,4 +45,4 @@ de:
       phone_numbers:
         label: 'Telefonnummern'
         hint: ''
-      button: 'Absenden'
+      submit: 'Absenden'

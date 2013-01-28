@@ -1,20 +1,32 @@
-- cache(@gs_parameter) do 
-  - content_for :title, t("gs_parameters.show.page_title")
+- content_for :title, t("gs_parameters.show.page_title")
 
-  %p
-    %strong= t('gs_parameters.show.name') + ":"
-    = @gs_parameter.name
-  %p
-    %strong= t('gs_parameters.show.section') + ":"
-    = @gs_parameter.section
-  %p
-    %strong= t('gs_parameters.show.value') + ":"
-    = @gs_parameter.value
-  %p
-    %strong= t('gs_parameters.show.class_type') + ":"
-    = @gs_parameter.class_type
-  %p
-    %strong= t('gs_parameters.show.description') + ":"
-    = @gs_parameter.description
+- cache(@gs_parameter) do 
+  %table.table.table-striped
+    %tbody
+      %tr
+        %td
+          %strong= t('gs_parameters.show.name') + ":"
+        %td
+          = @gs_parameter.name
+      %tr
+        %td
+          %strong= t('gs_parameters.show.section') + ":"
+        %td
+          = @gs_parameter.section
+      %tr
+        %td
+          %strong= t('gs_parameters.show.value') + ":"
+        %td
+          = @gs_parameter.value
+      %tr
+        %td
+          %strong= t('gs_parameters.show.class_type') + ":"
+        %td
+          = @gs_parameter.class_type
+      %tr
+        %td
+          %strong= t('gs_parameters.show.description') + ":"
+        %td
+          = @gs_parameter.description
 
   = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @gs_parameter }

@@ -4,7 +4,7 @@ de:
     initial_setup:
       tenant_name_default: 'Beispiel-Firma GmbH'
       access_denied_only_available_on_a_new_system:  'Zugriff verweigert! Der Installations-Assistent ist nur auf einem frisch installierten System verfügbar.'
-      successful_setup:  'Ihr Admin-Konto wurde erstellt. Als nächsten Schritt müssen Sie einen Mandant anlegen.'
+      successful_setup:  'Ihre neue Telefonanlage ist jetzt eingerichtet. Bitte erstellen Sie jetzt ein paar SIP-Accounts und richten Sie danach Telefone dafür ein.'
       admin_name: 'admin'
       super_tenant_description: 'Die Benutzer dieses Mandanten haben besondere Rechte. Sie können andere Mandanten anlegen und löschen.'
       admin_group_name: 'Admins'
@@ -27,5 +27,11 @@ de:
         hint: ''
       default_area_code:
         label: 'Standard Ortsvorwahl'
-        hint: '030 für Berlin, 0261 für Koblenz, 02631 für Neuwied, usw.'        
-      button: 'Absenden'
+        hint: '030 für Berlin, 0261 für Koblenz, 02631 für Neuwied, usw.'
+      default_company_name:
+        label: 'Name der Organisation'
+        hint: 'z.B. Firmenname'
+      default_system_email:
+        label: 'System E-Mail Adresse'
+        hint: 'Für den E-Mail Versand von Faxen und Voicemails.'   
+      submit: 'Anlage einrichten'

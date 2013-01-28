@@ -7,15 +7,26 @@
       %a.btn.btn-navbar{"data-target" => ".nav-collapse", "data-toggle" => "collapse"}
         %span.icon-bar
         %span.icon-bar
-        %span.icon-bar   
+        %span.icon-bar
 
-      - if current_user
-        .nav-collapse.collapse
-          %ul.nav
+      .nav-collapse.collapse
+        %ul.nav
+          - if current_user && GemeinschaftSetup.any? && current_user.admin?
+            - if current_page?(page_help_path)
+              %li.active
+                =link_to 'Admin-Doku', page_help_path
+            - else
+              %li
+                =link_to 'Admin-Doku', page_help_path
+          - if current_user && current_user.sip_accounts.any?
             %li
-              %a{:href => "#about"} About
-            %li.pull_right
-              %a{:href => "#contact"} Contact
+              %a{:href => sip_account_call_histories_path(current_user.sip_accounts.first)}
+                %i.icon-list-alt.icon-white
+                =t("call_histories.index.page_title")
+            %li
+              %a{:href => sip_account_voicemail_messages_path(current_user.sip_accounts.first)}
+                %i.icon-volume-up.icon-white
+                =t("voicemail_messages.index.page_title")
 
       - if current_user
         %ul.nav.pull-right

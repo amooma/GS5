@@ -1,28 +1,36 @@
 - cache(['user_table_row_inner_td', I18n.locale, current_user, users.reorder(:updated_at).last, users.count, GsParameter.get('NUMBER_OF_SHOWN_ITEMS')]) do
-  %table{:class => 'table table-striped'}
-    %tr
-      %th
-      %th= t('users.index.user_name')
-      %th= t('users.index.email')
-      %th= t('users.index.first_name')
-      %th= t('users.index.last_name')
-      %th{:colspan => '3'}
-  
-    - for user in users
-      - cache(['user_table_row', I18n.locale, current_user, user]) do
-        %tr
-          %td
-            - if user.image?
-              =image_tag(user.image_url(:mini).to_s, :class => 'img-rounded')
-            - else
-              - if user.male?
-                = image_tag 'icons/user-male-16x.png', :class => 'img-rounded'
+  %table.table.table-striped
+    %thead
+      %tr
+        %th
+        %th= t('users.index.user_name')
+        %th
+          %span.hidden-phone
+            = t('users.index.email')
+        %th
+          %span.hidden-phone
+            = t('users.index.first_name')
+        %th= t('users.index.last_name')
+
+    %tbody
+      - for user in users
+        - cache(['user_table_row', I18n.locale, current_user, user]) do
+          %tr
+            %td
+              - if user.image?
+                =image_tag(user.image_url(:mini).to_s, :class => 'img-rounded')
               - else
-                = image_tag 'icons/user-female-16x.png', :class => 'img-rounded'
-          %td= user.user_name
-          %td
-            - if !user.email.blank?
-              = mail_to user.email, (Haml::Engine.new("%i.icon-envelope").render + ' ' + user.email)
-          %td= user.first_name
-          %td= user.last_name
-          =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => @tenant, :child => user}
+                - if user.male?
+                  = image_tag 'icons/user-male-16x.png', :class => 'img-rounded'
+                - else
+                  = image_tag 'icons/user-female-16x.png', :class => 'img-rounded'
+            %td= user.user_name
+            %td
+              - if !user.email.blank?
+                %span.hidden-phone
+                  = mail_to user.email, (Haml::Engine.new("%i.icon-envelope").render + ' ' + user.email)
+            %td
+              %span.hidden-phone
+                = user.first_name
+            %td= user.last_name
+            =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => @tenant, :child => user}

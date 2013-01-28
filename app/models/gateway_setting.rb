@@ -11,6 +11,16 @@ class GatewaySetting < ActiveRecord::Base
       'auth_pattern' =>  'String',
       'number_source' =>  'String',
     },
+   'xmpp' => { 
+      'server' => 'String', 
+      'login' => 'String', 
+      'password' => 'String',
+      'inbound_number' =>  'String',
+      'auth_source' =>  'String', 
+      'auth_pattern' =>  'String',
+      'number_source' =>  'String',
+      'destination_domain' =>  'String',
+    }, 
   }
   
   attr_accessible :gateway_id, :name, :value, :class_type, :description

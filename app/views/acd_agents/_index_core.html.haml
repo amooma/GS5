@@ -1,18 +1,19 @@
-%table{:class => 'table table-striped'}
-  %tr
-    %th= t('acd_agents.index.name')
-    %th= t('acd_agents.index.status')
-    %th= t('acd_agents.index.last_call')
-    %th= t('acd_agents.index.calls_answered')
-    %th= t('acd_agents.index.destination')
-
-  
-  - for acd_agent in acd_agents
+%table.table.table-striped
+  %thead
     %tr
-      %td= acd_agent.name
-      %td= acd_agent.status
-      %td= acd_agent.last_call
-      %td= acd_agent.calls_answered
-      %td= acd_agent.destination
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => acd_agent.automatic_call_distributor, :child => acd_agent}
+      %th= t('acd_agents.index.name')
+      %th= t('acd_agents.index.status')
+      %th= t('acd_agents.index.last_call')
+      %th= t('acd_agents.index.calls_answered')
+      %th= t('acd_agents.index.destination')
+
+  %tbody
+    - for acd_agent in acd_agents
+      %tr
+        %td= acd_agent.name
+        %td= acd_agent.status
+        %td= acd_agent.last_call
+        %td= acd_agent.calls_answered
+        %td= acd_agent.destination
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => acd_agent.automatic_call_distributor, :child => acd_agent}
       

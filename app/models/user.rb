@@ -95,6 +95,8 @@ class User < ActiveRecord::Base
 
   before_destroy :destroy_or_logout_phones
 
+  after_save :become_a_member_of_default_user_groups
+
   def destroy
     clean_whitelist_entries
     super
@@ -142,6 +144,9 @@ class User < ActiveRecord::Base
     self.pin_hash == Digest::SHA2.hexdigest( "#{self.pin_salt}#{entered_pin}" )
   end
   
+  def admin?
+    self.user_groups.include?(UserGroup.find(2))
+  end
 
   private
   
@@ -204,6 +209,14 @@ class User < ActiveRecord::Base
         phone.destroy
       end
       phone.resync
+    end
+  end
+
+  # Normaly a new user should become a member of default user groups.
+  #
+  def become_a_member_of_default_user_groups
+    UserGroup.where(:id => GsParameter.get('DEFAULT_USER_GROUPS_IDS')).each do |user_group|
+      user_group.user_group_memberships.create(:user_id => self.id)
     end
   end
 

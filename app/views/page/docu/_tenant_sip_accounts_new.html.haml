@@ -1,0 +1,26 @@
+.row
+  .span12
+    %h2 Firmen Telefon mit SIP-Account und einer Telefonnummer
+
+    %p
+      Es gibt Telefone die keiner bestimmten Person zugeordnet werden können (z.B. in einem Konferenzraum). Folgende Telefone werden in der von Ihnen eingesetzten Gemeinschaft Version #{GsParameter.get('GEMEINSCHAFT_VERSION')} vom automatischen Provisioning unterstützt: 
+      = nicely_joined_with_commata(PhoneModel.order(:name).map{|phone_model| "#{phone_model.to_s}"})
+
+.row
+  .span6
+    %h3 Kurzbeschreibung
+    %ol
+      %li
+        Unter #{link_to new_tenant_sip_account_url(current_user.current_tenant), new_tenant_sip_account_path(current_user.current_tenant)} einen neuen SIP-Account anlegen.
+      %li
+        Diesem Account eine Rufnummer zuweisen.
+      %li
+        Unter #{link_to new_tenant_sip_account_url(current_user.current_tenant), new_tenant_phone_path(current_user.current_tenant)} ein neues Telefon anlegen.
+      %li
+        Dieses Telefon mit dem SIP-Account verknüpfen.
+      %li
+        Die Provisioning URL im Telefon eintragen und das Telefon danach neu booten.
+
+  .span6
+    %h3 Screencast
+    = render :partial => 'page/docu/screencast_list', :locals => {:screencast_name => 'firmen_sip_account_und_telefon_anlegen'}

@@ -224,8 +224,7 @@ Gemeinschaft42c::Application.routes.draw do
   resources :sessions
   
   get "page/index"
-  get "page/conference"
-  get "page/beginners_intro"
+  get "page/help"
   
   root :to => "page#index"
   

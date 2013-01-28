@@ -1,5 +1,5 @@
 class Gateway < ActiveRecord::Base
-  TECHNOLOGIES = ['sip']
+  TECHNOLOGIES = ['sip', 'xmpp']
 
   attr_accessible :name, :technology, :inbound, :outbound, :description
 

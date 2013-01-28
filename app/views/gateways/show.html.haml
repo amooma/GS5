@@ -1,23 +1,37 @@
 - content_for :title, t("gateways.show.page_title")
 
-%p
-  %strong= t('gateways.show.id') + ":"
-  = @gateway.id
-%p
-  %strong= t('gateways.show.name') + ":"
-  = @gateway.name
-%p
-  %strong= t('gateways.show.technology') + ":"
-  = @gateway.technology
-%p
-  %strong= t('gateways.show.inbound') + ":"
-  = @gateway.inbound
-%p
-  %strong= t('gateways.show.outbound') + ":"
-  = @gateway.outbound
-%p
-  %strong= t('gateways.show.description') + ":"
-  = @gateway.description
+%table.table.table-striped
+  %tbody
+    %tr
+      %td
+        %strong= t('gateways.show.name') + ":"
+      %td
+        = @gateway.name
+    %tr
+      %td
+        %strong= t('gateways.show.id') + ":"
+      %td
+        = @gateway.id
+    %tr
+      %td
+        %strong= t('gateways.show.technology') + ":"
+      %td
+        = @gateway.technology
+    %tr
+      %td
+        %strong= t('gateways.show.inbound') + ":"
+      %td
+        = @gateway.inbound
+    %tr
+      %td
+        %strong= t('gateways.show.outbound') + ":"
+      %td
+        = @gateway.outbound
+    %tr
+      %td
+        %strong= t('gateways.show.description') + ":"
+      %td
+        = @gateway.description
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @gateway }
 

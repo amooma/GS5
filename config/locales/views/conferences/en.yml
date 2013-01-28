@@ -21,7 +21,7 @@ en:
       announce_new_member_by_name: 'Announce entering'
       announce_left_member_by_name: 'Announce leaving'
       actions:
-        confirm: 'Are you sure you want to delete this conference?'
+        confirm_destroy: 'Are you sure you want to delete this conference?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -39,7 +39,7 @@ en:
       announce_new_member_by_name: 'Announce new member'
       announce_left_member_by_name: 'Announce left member'
       actions:
-        confirm: 'Are you sure you want to delete this conference?'
+        confirm_destroy: 'Are you sure you want to delete this conference?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View all conferences'
@@ -78,4 +78,4 @@ en:
       announce_left_member_by_name:
         label: 'Announce the leaving of a member'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

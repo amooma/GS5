@@ -25,7 +25,7 @@ de:
       label: 'Beschriftung'
       position: 'Position'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Softkey löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Softkey löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
@@ -40,7 +40,7 @@ de:
       position: 'Position'
       call_forward: 'Rufumleitung'
       actions:
-        confirm: 'Sind Sie sicher, dass Sie diesen Softkey löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diesen Softkey löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
@@ -65,4 +65,4 @@ de:
       label:
         label: 'Beschriftung'
         hint: 'Je nach Telefonmodell gibt es die Möglichkeit eine Beschriftung bzw. eine Beschreibung auf dem Telefon anzuzeigen.'
-      button: 'Absenden'
+      submit: 'Absenden'

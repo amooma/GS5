@@ -14,7 +14,7 @@ en:
       site: 'Site'
       element_name: 'Element name'
       actions:
-        confirm: 'Are you sure you want to delete this GS Node?'
+        confirm_destroy: 'Are you sure you want to delete this GS Node?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
@@ -29,7 +29,7 @@ en:
       element_name: 'Element name'
       accepts_updates_from: 'Accepts updates from this node?'
       actions:
-        confirm: 'Are you sure you want to delete this element?'
+        confirm_destroy: 'Are you sure you want to delete this element?'
         destroy: 'Delete'
         edit: 'Edit'
         view_all: 'View All'
@@ -62,4 +62,4 @@ en:
       accepts_updates_from:
         label: 'Accepts updates from this node?'
         hint: ''
-      button: 'Submit'
+      submit: 'Submit'

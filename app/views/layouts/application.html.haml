@@ -14,10 +14,13 @@
     / HTML5 shim, for IE6-8 support of HTML5 elements
     /[if lt IE 9]
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+
   %body
     .container
       .row
         .span12
+          = render 'layouts/navbar'
+
           - unless response.cache_control[:public]
             - flash.each do |name, msg|
               %div{:class => "alert alert-#{name == :notice ? "success" : "error"} fade in"}
@@ -26,8 +29,6 @@
 
           - if current_user
             = render_breadcrumbs :builder => ::BootstrapBreadcrumbsBuilder, :separator => "/"
-
-          = render 'layouts/navbar'
 
           = yield
 
