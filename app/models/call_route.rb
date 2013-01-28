@@ -238,4 +238,15 @@ class CallRoute < ActiveRecord::Base
       end
     end
   end
+
+  def endpoint
+    if self.endpoint_id.to_i > 0 
+      begin
+        return self.endpoint_type.camelize.constantize.where(:id => self.endpoint_id.to_i).first 
+      rescue
+        return nil
+      end
+    end
+  end
+
 end
