@@ -8,8 +8,7 @@
       - else
         %a.btn.btn-small.btn-default{:href => method( :"new_#{parent.class.name.underscore}_#{child_class.name.underscore}_path" ).(parent) }
           %i.icon-plus
-          / =t("#{child_class.name.underscore.pluralize}.index.actions.create_for", :resource => parent.to_s)
-          =t("#{child_class.name.underscore.pluralize}.index.actions.create")          
+          =t("#{child_class.name.underscore.pluralize}.index.actions.create")
 
 - elsif !(defined? child_class).nil?
   - if can? :create, child_class
