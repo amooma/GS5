@@ -134,8 +134,15 @@ function conf_sofia(database)
   require 'configuration.sip'
   local domains = configuration.sip.Sip:new{ log = log, database = database}:domains();
 
-  sofia_profiles_xml = '';
+  local sofia_profiles = {};
   for profile_name, index in pairs(sofia_ini.profiles) do
+    if tonumber(index) and tonumber(index) > 0  then
+      sofia_profiles[index] = profile_name;
+    end
+  end
+
+  local sofia_profiles_xml = '';
+  for index, profile_name in ipairs(sofia_profiles) do
     if tonumber(index) and tonumber(index) > 0  then
       sofia_profiles_xml = sofia_profiles_xml .. profile(database, sofia_ini, profile_name, tonumber(index), domains, local_node_id);
     end
