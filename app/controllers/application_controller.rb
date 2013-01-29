@@ -122,11 +122,21 @@ class ApplicationController < ActionController::Base
   private  
   
   def current_user
-    if session[:user_id] && User.where(:id => session[:user_id]).any?
-      return User.where(:id => session[:user_id]).first
+    if session[:user_id] || GsParameter.get('SingleSignOnEnvUserNameKey').blank?
+      if session[:user_id] && User.where(:id => session[:user_id]).any?
+        return User.where(:id => session[:user_id]).first
+      else
+        session[:user_id] = nil
+        return nil
+      end
     else
-      session[:user_id] = nil
-      return nil
+      if User.where(:user_name => request.env[GsParameter.get('SingleSignOnEnvUserNameKey')]).any?
+        auth_user = User.where(:user_name => request.env[GsParameter.get('SingleSignOnEnvUserNameKey')]).first
+        session[:user_id] = auth_user.id
+        return auth_user
+      else
+        return nil
+      end
     end
   end  
   
