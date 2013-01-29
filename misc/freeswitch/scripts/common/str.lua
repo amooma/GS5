@@ -18,6 +18,23 @@ function try(array, arguments)
   return result;
 end
 
+
+function set(array, arguments, value)
+  local nop, arguments_count = arguments:gsub('%.', '');
+  local structure = array;
+  arguments:gsub('([^%.]+)', function(entry)
+    if arguments_count <= 0 then
+      structure[entry] = value;
+    elseif type(structure[entry]) == 'table' then
+      structure = structure[entry];
+    else
+      structure[entry] = {};
+      structure = structure[entry];
+    end
+    arguments_count = arguments_count - 1;
+  end);
+end
+
 -- to number
 function to_n(value)
   value = tostring(value):gsub('[^%d%.%+%-]', '');
