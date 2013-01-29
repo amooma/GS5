@@ -97,8 +97,16 @@ class TriggerController < ApplicationController
           
           if fax_document.save
             Notifications.new_fax(fax_document).deliver
-            File.delete("#{TMP_DIR}#{tiff_file}");
-            File.delete(pdf_file);
+            begin
+              File.delete("#{TMP_DIR}#{tiff_file}");
+            rescue => e
+              logger.error "Raw fax file could not be deleted: #{TMP_DIR}#{tiff_file} => #{e.inspect}" 
+            end
+            begin
+              File.delete(pdf_file);
+            rescue => e
+              logger.error "PDF fax file could not be deleted: #{TMP_DIR}#{pdf_file} => #{e.inspect}"
+            end
             fax_document.tiff = nil
             fax_document.save
             fax_document.render_thumbnails

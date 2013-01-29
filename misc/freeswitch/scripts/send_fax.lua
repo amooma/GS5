@@ -74,25 +74,42 @@ local origination_variables = {
   'gs_auth_account_uuid='   .. fax_account.record.uuid,
   'gs_auth_account_type='   .. 'faxaccount',
 }
-  
+
+local caller = {
+  destination_number = destination_number,
+  account_type = 'faxaccount', 
+  account_uuid = fax_account.uuid,
+  auth_account_type = 'faxaccount', 
+  auth_account_uuid = fax_account.uuid,
+}
+
+require 'dialplan.dialplan'
+local dialplan = dialplan.dialplan.Dialplan:new{ log = log, caller = caller, database = database };
+local result = dialplan:retrieve_caller_data();
+
+caller.caller_id_numbers = {}
+if not caller.clir then
+  for index, number in ipairs(caller.caller_phone_numbers) do
+    table.insert(caller.caller_id_numbers, number);
+  end
+  caller.caller_id_name = fax_account.record.station_id;
+  caller.caller_id_number = caller.caller_id_numbers[1];
+  table.insert(origination_variables, "sip_h_Privacy='none'");
+else
+  caller.caller_id_name = 'anonymous';
+  caller.caller_id_number = 'anonymous';
+  table.insert(origination_variables, "sip_h_Privacy='id'");
+end
+
+log:info('CALLER_ID_NUMBERS - clir: ', caller.clir, ', numbers: ', table.concat(caller.caller_id_numbers, ','));
+
 local session = nil
 
 if phone_number then
+  table.insert(origination_variables, "origination_caller_id_number='" .. caller.caller_id_number .. "'");
+  table.insert(origination_variables, "origination_caller_id_name='" .. caller.caller_id_name .. "'");
   session = freeswitch.Session("[" .. table.concat(origination_variables, ",") .. "]loopback/" .. destination_number .. "/default");
 else
-  local caller = {
-    destination_number = destination_number,
-    caller_id_name = fax_account.record.station_id,
-    account_type = 'faxaccount', 
-    account_uuid = fax_account.uuid,
-    auth_account_type = 'faxaccount', 
-    auth_account_uuid = fax_account.uuid,
-  }
-
-  require 'dialplan.dialplan'
-  local dialplan = dialplan.dialplan.Dialplan:new{ log = log, caller = caller, database = database };
-  local result = dialplan:retrieve_caller_data();
-
   local dialplan_router = require('dialplan.router');
   local routes =  dialplan_router.Router:new{ log = log, database = database, caller = caller, variables = caller }:route_run('outbound');
       
@@ -104,8 +121,8 @@ else
   for index, route in ipairs(routes) do
     log:info('FAX_SEND - ', route.type, '=', route.id, '/', route.gateway,', number: ', route.destination_number);
     if route.type == 'gateway' then
-      table.insert(origination_variables, "origination_caller_id_number='" .. (route.caller_id_number or caller.caller_phone_numbers[1]) .. "'");
-      table.insert(origination_variables, "origination_caller_id_name='" .. (route.caller_id_name or fax_account.record.station_id) .. "'");
+      table.insert(origination_variables, "origination_caller_id_number='" .. (route.caller_id_number or caller.caller_id_number) .. "'");
+      table.insert(origination_variables, "origination_caller_id_name='" .. (route.caller_id_name or caller.caller_id_name) .. "'");
       session = freeswitch.Session('[' .. table.concat(origination_variables, ',') .. ']sofia/gateway/' .. route.gateway .. '/' .. route.destination_number);
       log:notice('SESSION: ', session);
       break;

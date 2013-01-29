@@ -16,14 +16,14 @@
         %tbody
           %tr
             %td
-              %strong= t('users.show.user_name') + ":"
+              %strong= truncate(t('users.show.user_name'), :length => 7) + ":"
             %td
               = truncate(@user.user_name, :length => 14)
           %tr
             %td
-              %strong= t('users.show.email') + ":"
+              %strong= truncate(t('users.show.email'), :length => 7) + ":"
             %td
-              = truncate(@user.email, :length => 14)
+              = mail_to @user.email, (Haml::Engine.new("%i.icon-envelope").render + ' ' + truncate(@user.email, :length => 16))
 
       %p.controls
         = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @tenant, :child => @user }
