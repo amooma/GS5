@@ -159,6 +159,7 @@ function Router.route_match(self, route)
   end
 
   if route_matches then
+    destination.number = destination.number or destination.destination_number;
     return destination;
   end;
 
