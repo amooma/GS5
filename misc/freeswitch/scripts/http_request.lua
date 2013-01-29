@@ -28,4 +28,9 @@ if user and password then
 end
 
 local success, result, response_headers = http.request{url = url, headers = headers };
-log:debug('HTTP_REQUEST - url: ', url, ', auth: ', tostring(headers.Authorization ~= nil), ', result: ', result);
+
+if success then
+  log:debug('HTTP_REQUEST - url: ', url, ', auth: ', tostring(headers.Authorization ~= nil), ', result: ', result);
+else
+  log:notice('HTTP_REQUEST - url: ', url, ', auth: ', tostring(headers.Authorization ~= nil), ', result: ', result);
+end
