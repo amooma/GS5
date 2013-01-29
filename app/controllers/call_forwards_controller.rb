@@ -28,7 +28,7 @@ class CallForwardsController < ApplicationController
 
     @available_call_forward_cases = []
     CallForwardCase.all.each do |available_call_forward_case|
-      if GuiFunction.display?("call_forward_case_#{available_call_forward_case.value}_field_in_call_forward_form", @current_user)
+      if GuiFunction.display?("call_forward_case_#{available_call_forward_case.value}_field_in_call_forward_form", current_user)
         @available_call_forward_cases << available_call_forward_case
       end
     end
@@ -112,7 +112,7 @@ class CallForwardsController < ApplicationController
       voice_mail_destination,
     ]
 
-    if GuiFunction.display?('huntgroup_in_destination_field_in_call_forward_form', @current_user)
+    if GuiFunction.display?('huntgroup_in_destination_field_in_call_forward_form', current_user)
       HuntGroup.all.each do |hunt_group|
         hunt_group_destination = CallForwardingDestination.new()
         hunt_group_destination.id = "#{hunt_group.id}:HuntGroup"
