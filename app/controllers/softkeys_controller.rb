@@ -61,7 +61,7 @@ class SoftkeysController < ApplicationController
 
     @softkey_functions = []
     SoftkeyFunction.accessible_by(current_ability, :read).each do |softkey_function|
-      if GuiFunction.display?("softkey_function_#{softkey_function.name.downcase}_field_in_softkey_form", @current_user)
+      if GuiFunction.display?("softkey_function_#{softkey_function.name.downcase}_field_in_softkey_form", current_user)
         @softkey_functions << softkey_function
       end
     end

@@ -4,7 +4,7 @@
     = f.input :name, :collection => ['Office', 'Home', 'Mobile', 'Fax'], :include_blank => false, :label => t('phone_numbers.form.name.label'), :hint => conditional_hint('phone_numbers.form.name.hint')
     = f.input :number, :label => t('phone_numbers.form.number.label'), :hint => conditional_hint('phone_numbers.form.number.hint'), :autofocus => true
   - else
-    - if @callthrough || @hunt_group_member || @access_authorization || @current_user.current_tenant.array_of_available_internal_extensions_and_dids.count == 0 || @current_user.current_tenant.array_of_available_internal_extensions_and_dids.count > 250
+    - if @callthrough || @hunt_group_member || @access_authorization || current_user.current_tenant.array_of_available_internal_extensions_and_dids.count == 0 || current_user.current_tenant.array_of_available_internal_extensions_and_dids.count > 250
       = f.input :number, :label => t('phone_numbers.form.number.label'), :hint => conditional_hint('phone_numbers.form.number.hint'), :autofocus => true
     - else
-      = f.input :number, :collection => @current_user.current_tenant.array_of_available_internal_extensions_and_dids, :label => t('phone_numbers.form.number.label'), :hint => conditional_hint('phone_numbers.form.number.hint'), :include_blank => false, :autofocus => true
+      = f.input :number, :collection => current_user.current_tenant.array_of_available_internal_extensions_and_dids, :label => t('phone_numbers.form.number.label'), :hint => conditional_hint('phone_numbers.form.number.hint'), :include_blank => false, :autofocus => true

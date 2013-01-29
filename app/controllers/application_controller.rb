@@ -106,7 +106,7 @@ class ApplicationController < ActionController::Base
   end
   
   rescue_from CanCan::AccessDenied do |exception|
-    if @current_user
+    if current_user
       redirect_to root_url, :alert => 'Access denied! Please ask your admin to grant you the necessary rights.'
     else
       if Tenant.count == 0 && User.count == 0
@@ -121,13 +121,13 @@ class ApplicationController < ActionController::Base
   
   private  
   
-  def current_user  
-    begin
-      @current_user ||= User.find(session[:user_id]) if session[:user_id]
-    rescue ActiveRecord::RecordNotFound
+  def current_user
+    if session[:user_id] && User.where(:id => session[:user_id]).any?
+      return User.where(:id => session[:user_id]).first
+    else
       session[:user_id] = nil
+      return nil
     end
-    @current_user
   end  
   
   def go_to_setup_if_new_installation

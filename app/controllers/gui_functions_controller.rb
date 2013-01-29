@@ -58,7 +58,7 @@ class GuiFunctionsController < ApplicationController
 
   private
   def load_user_groups
-    @user_groups = Tenant.find(@current_user.current_tenant).user_groups.order(:position)
+    @user_groups = Tenant.find(current_user.current_tenant).user_groups.order(:position)
   end
 
   def spread_breadcrumbs
