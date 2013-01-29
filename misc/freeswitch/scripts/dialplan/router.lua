@@ -143,7 +143,7 @@ function Router.route_match(self, route)
         if not common.str.blank(element.var_out) then
           local command, variable_name = common.str.partition(element.var_out, ':');
           if not command or not variable_name or command == 'var' then
-            destination[element.var_out] = replacement;
+            common.str.set(destination, element.var_out, replacement);
           elseif command == 'chv' then
             destination.channel_variables[variable_name] = replacement;
           elseif command == 'hdr' then
