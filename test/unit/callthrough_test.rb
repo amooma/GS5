@@ -12,7 +12,7 @@ class CallthroughTest < ActiveSupport::TestCase
     @gemeinschaft_setup.country  = Country.first
     @gemeinschaft_setup.language = Language.first
 
-    @current_user = @gemeinschaft_setup.build_user(
+    current_user = @gemeinschaft_setup.build_user(
                                             :user_name => I18n.t('gemeinschaft_setups.initial_setup.admin_name'), 
                                             :male => true,
                                             :email => 'admin@localhost',
@@ -52,18 +52,18 @@ class CallthroughTest < ActiveSupport::TestCase
     @tenant.did_list = '02622-70648-x, 02622-706480'
     @tenant.save
 
-  @tenant.tenant_memberships.create(:user_id => @current_user.id)
-  @current_user.update_attributes!(:current_tenant_id => @tenant.id)
+  @tenant.tenant_memberships.create(:user_id => current_user.id)
+  current_user.update_attributes!(:current_tenant_id => @tenant.id)
 
   # The first user becomes a member of the 'admin' UserGroup
   #
   admin_group = @tenant.user_groups.create(:name => I18n.t('gemeinschaft_setups.initial_setup.admin_group_name'))
-  admin_group.users << @current_user
+  admin_group.users << current_user
 
   # User group
   #
   user_group = @tenant.user_groups.create(:name => I18n.t('gemeinschaft_setups.initial_setup.user_group_name'))
-  user_group.users << @current_user
+  user_group.users << current_user
 
   # Generate the internal_extensions
   #
@@ -84,7 +84,7 @@ class CallthroughTest < ActiveSupport::TestCase
     #
     assert @gemeinschaft_setup.valid?
     assert @sip_domain.valid?
-    assert @current_user.valid?
+    assert current_user.valid?
 
     assert @tenant.valid?
 
