@@ -36,10 +36,10 @@ class CallRoutesController < ApplicationController
   def edit
     @call_route = CallRoute.find(params[:id])
     @endpoints = Gateway.all.collect {|r| [ "gateway: #{r.to_s}", "gateway=#{r.id}" ] }
-    @endpoints << [ 'phonenumber', 'phonenumber' ]
-    @endpoints << [ 'dialplanfunction', 'dialplanfunction' ]
-    @endpoints << [ 'hangup', 'hangup' ]
-    @endpoints << [ 'unknown', 'unknown' ]
+    @endpoints << [ 'phonenumber', 'phonenumber=' ]
+    @endpoints << [ 'dialplanfunction', 'dialplanfunction=' ]
+    @endpoints << [ 'hangup', 'hangup=' ]
+    @endpoints << [ 'unknown', 'unknown=' ]
     spread_breadcrumbs
   end
 
