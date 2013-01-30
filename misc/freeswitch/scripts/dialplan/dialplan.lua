@@ -814,11 +814,13 @@ function Dialplan.switch(self, destination)
     self.caller:set_callee_id(destination.callee_id_number, destination.callee_id_name);
 
     for index, route in ipairs(routes) do
-      if route.endpoint_type == 'hangup' then
-        return { continue = false, code = route.endpoint, phrase = route.phrase, cause = route.value }
+      if route.type == 'hangup' then
+        self.log:notice('SWITCH_HANGUP - code: ', route.code, ', phrase: ', route.phrase, ', cause: ', route.cause);
+        return { continue = false, code = route.code or '404', phrase = route.phrase, cause = route.cause }
       end
-      if route.endpoint_type == 'forward' then
-        return { continue = true, call_forwarding = { number = route.value, service = 'route', type = 'phonenumber' }}
+      if route.type == 'forward' then
+        self.log:notice('SWITCH_CALL_FORWARDING - number: ', route.number);
+        return { continue = true, call_forwarding = { number = route.number, service = 'route', type = 'phonenumber' }}
       end
 
       for key, value in pairs(route) do
