@@ -46,10 +46,7 @@ de:
       name:
         label: 'Name'
         hint: ''
-      endpoint_type:
-        label: 'Endpoint type'
-        hint: ''
-      endpoint_id:
+      endpoint:
         label: 'Endpoint'
         hint: ''
       position:

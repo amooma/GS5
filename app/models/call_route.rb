@@ -239,6 +239,10 @@ class CallRoute < ActiveRecord::Base
     end
   end
 
+  def endpoint_str
+    "#{endpoint_type}=#{endpoint_id}"
+  end
+
   def endpoint
     if self.endpoint_id.to_i > 0 
       begin

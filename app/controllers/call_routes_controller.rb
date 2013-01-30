@@ -1,6 +1,12 @@
 class CallRoutesController < ApplicationController
   authorize_resource :call_route
 
+  before_filter { |controller|
+    if !params[:call_route].blank? and !params[:call_route][:endpoint_str].blank?
+      params[:call_route][:endpoint_type], delimeter, params[:call_route][:endpoint_id] = params[:call_route][:endpoint_str].partition('=')
+    end
+  }
+
   def index
     @call_routes = CallRoute.order([:routing_table, :position])
     @routing_tables = @call_routes.pluck(:routing_table).uniq.sort
@@ -29,6 +35,11 @@ class CallRoutesController < ApplicationController
 
   def edit
     @call_route = CallRoute.find(params[:id])
+    @endpoints = Gateway.all.collect {|r| [ "gateway: #{r.to_s}", "gateway=#{r.id}" ] }
+    @endpoints << [ 'phonenumber', 'phonenumber' ]
+    @endpoints << [ 'dialplanfunction', 'dialplanfunction' ]
+    @endpoints << [ 'hangup', 'hangup' ]
+    @endpoints << [ 'unknown', 'unknown' ]
     spread_breadcrumbs
   end
 
