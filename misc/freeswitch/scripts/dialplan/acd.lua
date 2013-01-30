@@ -194,7 +194,7 @@ function AutomaticCallDistributor.agents_available(self, strategy)
   
   local accounts = {}
   self.database:query(sql_query, function(entry)
-    if not entry.callstate then
+    if common.str.blank(entry.callstate) then
       table.insert(accounts, entry);
     end
   end);
