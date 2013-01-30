@@ -107,10 +107,10 @@ function SipCall.fork(self, destinations, arg )
       if node then
         table.insert(origination_variables, 'sip_h_X-GS_node_id=' .. self.caller.local_node_id);
         table.insert(origination_variables, 'sip_h_X-GS_account_uuid=' .. tostring(self.caller.account_uuid));
-        table.insert(origination_variables, 'sip_h_X-GS_account_type' .. tostring(self.caller.account_type));
-        table.insert(origination_variables, 'sip_h_X-GS_auth_account_type' .. tostring(self.caller.auth_account_type));
-        table.insert(origination_variables, 'sip_h_X-GS_auth_account_uuid' .. tostring(self.caller.auth_account_uuid));
-        table.insert(origination_variables, 'sip_h_X-GS_loop_count' .. tostring(self.caller.loop_count));
+        table.insert(origination_variables, 'sip_h_X-GS_account_type=' .. tostring(self.caller.account_type));
+        table.insert(origination_variables, 'sip_h_X-GS_auth_account_type=' .. tostring(self.caller.auth_account_type));
+        table.insert(origination_variables, 'sip_h_X-GS_auth_account_uuid=' .. tostring(self.caller.auth_account_uuid));
+        table.insert(origination_variables, 'sip_h_X-GS_loop_count=' .. tostring(self.caller.loop_count));
         table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. node.record.name .. '/' .. destination.number);
       end
     elseif destination.type == 'sipaccount' then
