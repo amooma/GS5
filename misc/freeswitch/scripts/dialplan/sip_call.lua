@@ -95,17 +95,22 @@ function SipCall.fork(self, destinations, arg )
       table.insert(origination_variables, 'ignore_display_updates=true');
     end
 
-    if not destination.node_local then
+    if not destination.node_local or destination.type == 'node' then
       require 'common.node'
-      local node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(destination.node_id);
-      if node then
-        table.insert(origination_variables, 'sip_h_X-GS_node_id=' .. self.caller.local_node_id);
-        table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. node.record.name .. '/' .. destination.number);
+      local node = nil;
+
+      if not destination.node_local then
+        node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(destination.node_id);
+      else
+        node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(destination.id);
       end
-    elseif destination.type == 'node' then
-      local node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(destination.id);
       if node then
         table.insert(origination_variables, 'sip_h_X-GS_node_id=' .. self.caller.local_node_id);
+        table.insert(origination_variables, 'sip_h_X-GS_account_uuid=' .. tostring(self.caller.account_uuid));
+        table.insert(origination_variables, 'sip_h_X-GS_account_type' .. tostring(self.caller.account_type));
+        table.insert(origination_variables, 'sip_h_X-GS_auth_account_type' .. tostring(self.caller.auth_account_type));
+        table.insert(origination_variables, 'sip_h_X-GS_auth_account_uuid' .. tostring(self.caller.auth_account_uuid));
+        table.insert(origination_variables, 'sip_h_X-GS_loop_count' .. tostring(self.caller.loop_count));
         table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. node.record.name .. '/' .. destination.number);
       end
     elseif destination.type == 'sipaccount' then
@@ -169,11 +174,6 @@ function SipCall.fork(self, destinations, arg )
   end
 
   self.caller:set_callee_id(arg.callee_id_number, arg.callee_id_name);
-  self.caller:set_header('X-GS_account_uuid', self.caller.account_uuid);
-  self.caller:set_header('X-GS_account_type', self.caller.account_type);
-  self.caller:set_header('X-GS_auth_account_type', self.caller.auth_account_type);
-  self.caller:set_header('X-GS_auth_account_uuid', self.caller.auth_account_uuid);
-  self.caller:set_header('X-GS_loop_count', self.caller.loop_count);
 
   self.caller:set_variable('call_timeout', arg.timeout );
   self.log:info('FORK DIAL - destinations: ', #dial_strings, ', timeout: ', arg.timeout);
