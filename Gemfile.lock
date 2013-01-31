@@ -210,8 +210,8 @@ DEPENDENCIES
   carrierwave
   coffee-rails (~> 3.2.1)
   compass-rails
+  daemons
   dalli
-  delayed_job
   delayed_job_active_record
   factory_girl
   factory_girl_rails
