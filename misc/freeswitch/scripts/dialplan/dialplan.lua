@@ -445,6 +445,8 @@ function Dialplan.dial(self, destination)
       send_ringing = ( self.send_ringing_to_gateways and self.caller.from_gateway ),
       bypass_media_network = self.config.parameters.bypass_media_network,
       update_callee_display = self.config.parameters.update_callee_display,
+      detect_dtmf_after_bridge_caller = self.detect_dtmf_after_bridge_caller,
+      detect_dtmf_after_bridge_callee = self.detect_dtmf_after_bridge_callee,
     }
   );
 end
