@@ -445,6 +445,8 @@ function Dialplan.dial(self, destination)
       send_ringing = ( self.send_ringing_to_gateways and self.caller.from_gateway ),
       bypass_media_network = self.config.parameters.bypass_media_network,
       update_callee_display = self.config.parameters.update_callee_display,
+      detect_dtmf_after_bridge_caller = self.detect_dtmf_after_bridge_caller,
+      detect_dtmf_after_bridge_callee = self.detect_dtmf_after_bridge_callee,
     }
   );
 end
@@ -759,7 +761,7 @@ function Dialplan.switch(self, destination)
   elseif not common.str.blank(destination.number) then
     local result = { continue = false, code = 404, phrase = 'No route' }
 
-    local clip_no_screening = common.str.try(caller, 'account.record.clip_no_screening');
+    local clip_no_screening = common.str.try(self.caller, 'account.record.clip_no_screening');
     self.caller.caller_id_numbers = {}
     if not common.str.blank(clip_no_screening) then
       for index, number in ipairs(common.str.strip_to_a(clip_no_screening, ',')) do
