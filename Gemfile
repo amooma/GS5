@@ -79,6 +79,9 @@ gem 'unicorn'
 
 gem 'thin'
 
+# Backup https://github.com/meskyanichi/backup
+gem 'backup'
+
 # Local Variables:
 # mode: ruby
 # End:
