@@ -4,9 +4,9 @@ class GemeinschaftSetupsController < ApplicationController
   #
   caches_page :new, :gzip => :best_compression
 
-  load_and_authorize_resource :gemeinschaft_setup
+  skip_before_filter :start_setup_if_new_installation
 
-  skip_before_filter :go_to_setup_if_new_installation
+  load_and_authorize_resource :gemeinschaft_setup
 
   def new
     @user = @gemeinschaft_setup.build_user(

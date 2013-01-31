@@ -112,7 +112,7 @@ Gemeinschaft42c::Application.routes.draw do
   end
 
   resources :gemeinschaft_setups, :only => [:new, :create]
-  
+
   resources :phone_number_ranges, :only => [] do
     resources :phone_numbers do
       member do
@@ -227,9 +227,6 @@ Gemeinschaft42c::Application.routes.draw do
   get "page/help"
   
   root :to => "page#index"
-  
-  get  "wizards/new_initial_setup"
-  post "wizards/create_initial_setup"
   
   resources :users do
     # Display all phone books that the current user owns:

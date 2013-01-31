@@ -48,7 +48,8 @@
               %a.navbar-link{:href => tenant_user_path(current_user.current_tenant, current_user)} 
                 = current_user
 
-          %li
-            %a.navbar-link{:href => log_out_path} 
-              %i.icon-off.icon-white
+          - if single_sign_on_system? == false
+            %li
+              %a.navbar-link{:href => log_out_path} 
+                %i.icon-off.icon-white
             

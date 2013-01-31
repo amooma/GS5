@@ -2,25 +2,20 @@ class ApplicationController < ActionController::Base
   
   protect_from_forgery
 
-  before_filter :set_locale
+  before_filter :start_setup_if_new_installation
 
-  before_filter :go_to_setup_if_new_installation
-  before_filter :home_breadcrumb
-  
+  before_filter :set_locale
   helper_method :current_user
-  
+
   helper_method :guess_local_ip_address
   helper_method :guess_local_host
-  
+
+  before_filter :home_breadcrumb
+
   helper_method :'have_https?'
+  helper_method :'single_sign_on_system?'
 
   helper_method :random_pin
-  
-  
-  #TODO Add check_authorization. See
-  # https://github.com/ryanb/cancan
-  # https://github.com/ryanb/cancan/wiki/Ensure-Authorization
-  # and Gemeinschaft 4
   
   # Generate a new name for an Object
   #
@@ -56,6 +51,8 @@ class ApplicationController < ActionController::Base
   def random_pin
     if GsParameter.get('MINIMUM_PIN_LENGTH') > 0
       (1..GsParameter.get('MINIMUM_PIN_LENGTH')).map{|i| (0 .. 9).to_a.sample}.join
+    else
+      (1..8).map{|i| (0 .. 9).to_a.sample}.join
     end
   end
   
@@ -109,40 +106,38 @@ class ApplicationController < ActionController::Base
     if current_user
       redirect_to root_url, :alert => 'Access denied! Please ask your admin to grant you the necessary rights.'
     else
-      if Tenant.count == 0 && User.count == 0
-        # This is a brand new system. We need to run a setup first.
-        redirect_to wizards_new_initial_setup_path
-      else
-        # You need to login first.
-        redirect_to log_in_path, :alert => 'Access denied! You need to login first.'
-      end
+      # You need to login first.
+      redirect_to log_in_path, :alert => 'Access denied! You need to login first.'
     end
   end
   
   private  
   
   def current_user
-    if session[:user_id] || GsParameter.get('SingleSignOnEnvUserNameKey').blank?
-      if session[:user_id] && User.where(:id => session[:user_id]).any?
-        return User.where(:id => session[:user_id]).first
-      else
-        session[:user_id] = nil
-        return nil
-      end
+    if session[:user_id].nil? && single_sign_on_system?
+      auth_user = User.where(:user_name => request.env[GsParameter.get('SingleSignOnEnvUserNameKey')]).first
     else
-      if User.where(:user_name => request.env[GsParameter.get('SingleSignOnEnvUserNameKey')]).any?
-        auth_user = User.where(:user_name => request.env[GsParameter.get('SingleSignOnEnvUserNameKey')]).first
-        session[:user_id] = auth_user.id
-        return auth_user
+      if session[:user_id] && User.where(:id => session[:user_id]).any?
+        auth_user = User.where(:id => session[:user_id]).first
       else
-        return nil
+        auth_user = nil
       end
     end
-  end  
+    session[:user_id] = auth_user.try(:id)
+    return auth_user
+  end
+
+  def single_sign_on_system?
+    if GsParameter.get('SingleSignOnEnvUserNameKey').blank?
+      false
+    else
+      true
+    end
+  end
   
-  def go_to_setup_if_new_installation
+  def start_setup_if_new_installation
     if Rails.env != 'test'
-      if GemeinschaftSetup.all.count == 0
+      if GemeinschaftSetup.count == 0
         redirect_to new_gemeinschaft_setup_path
       end
     end
