@@ -20,6 +20,11 @@ class CallRoutesController < ApplicationController
 
   def new
     @call_route = CallRoute.new
+    @endpoints = Gateway.all.collect {|r| [ "gateway: #{r.to_s}", "gateway=#{r.id}" ] }
+    @endpoints << [ 'phonenumber', 'phonenumber=' ]
+    @endpoints << [ 'dialplanfunction', 'dialplanfunction=' ]
+    @endpoints << [ 'hangup', 'hangup=' ]
+    @endpoints << [ 'unknown', 'unknown=' ]
     spread_breadcrumbs
   end
 
