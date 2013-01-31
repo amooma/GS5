@@ -350,10 +350,10 @@ function Dialplan.set_caller_picture(self, entry_id, entry_type, image)
     require 'dialplan.user'
     local user = dialplan.user.User:new{ log = self.log, database = self.database }:find_by_id(entry_id);
     if user then
-      self.caller:set_variable('sip_h_Call-Info', '<' .. self.user_image_url .. '/' .. tonumber(entry_id) .. '/snom_caller_picture_' .. tostring(user.record.image) .. '>;purpose=icon');
+      self.caller:export_variable('sip_h_Call-Info', '<' .. self.user_image_url .. '/' .. tonumber(entry_id) .. '/snom_caller_picture_' .. tostring(user.record.image) .. '>;purpose=icon');
     end 
   elseif entry_type == 'phonebookentry' and image then
-    self.caller:set_variable('sip_h_Call-Info', '<' .. self.phone_book_entry_image_url .. '/' .. tonumber(entry_id) .. '/snom_caller_picture_' .. tostring(image) .. '>;purpose=icon');
+    self.caller:export_variable('sip_h_Call-Info', '<' .. self.phone_book_entry_image_url .. '/' .. tonumber(entry_id) .. '/snom_caller_picture_' .. tostring(image) .. '>;purpose=icon');
   end
 end
 
