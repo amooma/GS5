@@ -1,32 +1,43 @@
 # encoding: utf-8
 
-##
-# Backup
-# Generated Main Config Template
-#
-# For more information:
-#
-# View the Git repository at https://github.com/meskyanichi/backup
-# View the Wiki/Documentation at https://github.com/meskyanichi/backup/wiki
-# View the issue log at https://github.com/meskyanichi/backup/issues
+require 'inifile'
+SYSTEM_ODBC_CONFIGURATION = IniFile.load('/var/lib/freeswitch/.odbc.ini')
 
-##
-# Global Configuration
-# Add more (or remove) global configuration below
-#
-# Backup::Storage::S3.defaults do |s3|
-#   s3.access_key_id     = "my_access_key_id"
-#   s3.secret_access_key = "my_secret_access_key"
-# end
-#
-# Backup::Encryptor::OpenSSL.defaults do |encryption|
-#   encryption.password = "my_password"
-#   encryption.base64   = true
-#   encryption.salt     = true
-# end
+Backup::Model.new(:gs5, 'GS5 backup') do
+ 
+  ##
+  # Split [Splitter]
+  #
+  # Split the backup file in to chunks of 2 GB
+  # if the backup file size exceeds 2 GB
+  #
+  split_into_chunks_of 2048
 
-##
-# Load all models from the models directory (after the above global configuration blocks)
-Dir[File.join(File.dirname(Config.config_file), "models", "*.rb")].each do |model|
-  instance_eval(File.read(model))
+  ##
+  # MySQL [Database]
+  #
+  database MySQL do |db|
+    # To dump all databases, set `db.name = :all` (or leave blank)
+    db.name               = SYSTEM_ODBC_CONFIGURATION['gemeinschaft']['DATABASE']
+    db.username           = SYSTEM_ODBC_CONFIGURATION['gemeinschaft']['USER']
+    db.password           = SYSTEM_ODBC_CONFIGURATION['gemeinschaft']['PASSWORD']
+    db.host               = "localhost"
+    db.port               = 3306
+    db.socket             = "/var/run/mysqld/mysqld.sock"
+  end
+
+  ##
+  # Local (Copy) [Storage]
+  #
+  store_with Local do |local|
+    local.path       = "/var/backups/"
+    local.keep       = 5
+  end
+
+  ##
+  # Gzip [Compressor]
+  #
+  compress_with Gzip
+
 end
+
