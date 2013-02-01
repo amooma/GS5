@@ -27,6 +27,21 @@ Backup::Model.new(:gs5, 'GS5 backup') do
   end
 
   ##
+  # Faxes
+  #
+  archive :faxes do |archive|
+    archive.add     '/opt/gemeinschaft/public/uploads/fax_document/'
+    archive.add     '/opt/gemeinschaft/public/uploads/fax_thumbnail/'
+  end
+
+  ##
+  # Voicemails
+  #
+  archive :voicemails do |archive|
+    archive.add     '/var/opt/gemeinschaft/freeswitch/voicemail/'
+  end
+
+  ##
   # Local (Copy) [Storage]
   #
   store_with Local do |local|
