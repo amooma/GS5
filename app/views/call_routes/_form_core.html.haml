@@ -2,3 +2,4 @@
   = f.input :routing_table, :collection => CallRoute::ROUTING_TABLES, :label => t('call_routes.form.table.label'), :hint => conditional_hint('call_routes.form.table.hint'), :include_blank => false, :autofocus => true
   = f.input :name, :label => t('call_routes.form.name.label'), :hint => conditional_hint('call_routes.form.name.hint')
   = f.input :endpoint_str, :collection => @endpoints, :label => t('call_routes.form.endpoint.label'), :hint => conditional_hint('call_routes.form.endpoint.hint'), :include_blank => false
+  = f.input :position, :label => t('call_routes.form.position.label'), :hint => conditional_hint('call_routes.form.position.hint')

@@ -2,6 +2,7 @@
   %table.table.table-striped
     %thead
       %tr
+        %th
         %th= t('call_routes.index.name')
         %th= t('route_elements.index.pattern')
         %th= t('call_routes.index.endpoint')
@@ -10,6 +11,7 @@
       - for call_route in call_routes
         - cache(['call_route_single_table_row', call_route, call_routes.count]) do 
           %tr
+            %td= call_route.position
             %td= call_route.name
             %td
               - if call_route.route_elements.any?

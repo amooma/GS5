@@ -1,6 +1,9 @@
 - content_for :title, t("call_routes.show.page_title")
 
 %p
+  %strong= t('call_routes.show.position') + ":"
+  = @call_route.position
+%p
   %strong= t('call_routes.show.table') + ":"
   = @call_route.routing_table
 %p
