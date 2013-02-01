@@ -1,6 +1,7 @@
 %table.table.table-striped
   %thead
     %tr
+      %th
       %th= t('route_elements.index.var_in')
       %th= t('route_elements.index.var_out')
       %th= t('route_elements.index.pattern')
@@ -11,6 +12,7 @@
   %tbody
     - for route_element in route_elements
       %tr
+        %td= route_element.position
         %td= route_element.var_in
         %td= route_element.var_out
         %td= route_element.pattern

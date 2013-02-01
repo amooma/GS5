@@ -1,6 +1,9 @@
 - content_for :title, t("route_elements.show.page_title")
 
 %p
+  %strong= t('route_elements.show.position') + ":"
+  = @route_element.position
+%p
   %strong= t('route_elements.show.var_in') + ":"
   = @route_element.var_in
 %p
