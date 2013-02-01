@@ -5,7 +5,7 @@ class RouteElementsController < ApplicationController
   before_filter :spread_breadcrumbs
 
   def index
-    @route_elements = @call_route.route_elements
+    @route_elements = @call_route.route_elements.order([:position])
   end
 
   def show
