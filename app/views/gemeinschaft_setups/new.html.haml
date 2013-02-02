@@ -14,6 +14,7 @@
   = f.association :country, :label => t('gemeinschaft_setups.form.country_id.label'), :hint => conditional_hint('gemeinschaft_setups.form.country_id.hint'), :include_blank => false
   = f.association :language, :label => t('gemeinschaft_setups.form.language_id.label'), :hint => conditional_hint('gemeinschaft_setups.form.language_id.hint'), :include_blank => false
   = f.input :default_area_code, :label => t('gemeinschaft_setups.form.default_area_code.label'), :hint => conditional_hint('gemeinschaft_setups.form.default_area_code.hint')
+  = f.input :trunk_access_code, :label => t('gemeinschaft_setups.form.trunk_access_code.label'), :hint => conditional_hint('gemeinschaft_setups.form.trunk_access_code.hint')
 
   = f.input :default_company_name, :label => t('gemeinschaft_setups.form.default_company_name.label'), :hint => conditional_hint('gemeinschaft_setups.form.default_company_name.hint')
 

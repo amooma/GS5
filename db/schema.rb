@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130130185300) do
+ActiveRecord::Schema.define(:version => 20130202140927) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -540,6 +540,7 @@ ActiveRecord::Schema.define(:version => 20130130185300) do
     t.string   "default_area_code"
     t.string   "default_company_name"
     t.string   "default_system_email"
+    t.string   "trunk_access_code"
   end
 
   create_table "gs_cluster_sync_log_entries", :force => true do |t|

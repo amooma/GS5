@@ -28,6 +28,9 @@ en:
       default_area_code:
         label: 'Default area code'
         hint: ''
+      trunk_access_code:
+        label: 'Trunk access code'
+        hint: ''
       default_company_name:
         label: 'Name of the organisation'
         hint: 'e.g. name of the company'
