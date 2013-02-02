@@ -1,11 +1,11 @@
 class CallRoutesController < ApplicationController
   authorize_resource :call_route
 
-  before_filter { |controller|
-    if !params[:call_route].blank? and !params[:call_route][:endpoint_str].blank?
-      params[:call_route][:endpoint_type], delimeter, params[:call_route][:endpoint_id] = params[:call_route][:endpoint_str].partition('=')
-    end
-  }
+  # before_filter { |controller|
+  #   if !params[:call_route].blank? and !params[:call_route][:endpoint_str].blank?
+  #     params[:call_route][:endpoint_type], delimeter, params[:call_route][:endpoint_id] = params[:call_route][:endpoint_str].partition('=')
+  #   end
+  # }
 
   def index
     @call_routes = CallRoute.order([:routing_table, :position])
@@ -64,21 +64,16 @@ class CallRoutesController < ApplicationController
     redirect_to call_routes_url, :notice => t('call_routes.controller.successfuly_destroyed')
   end
 
-  def move_higher
-    @call_route = CallRoute.find(params[:id])
-    @call_route.move_higher
-    redirect_to :back
-  end
-
-  def move_lower
-    @call_route = CallRoute.find(params[:id])
-    @call_route.move_lower
-    redirect_to :back
+  def sort
+    params[:call_route].each_with_index do |id, index|
+      CallRoute.update_all({position: index+1}, {id: id})
+    end
+    render nothing: true
   end
 
   private
   def call_route_parameter_params
-    params.require(:call_route).permit(:routing_table, :name, :endpoint_type, :endpoint_id)
+    params.require(:call_route).permit(:routing_table, :name, :endpoint_type, :endpoint_id, :position)
   end
 
   def spread_breadcrumbs
