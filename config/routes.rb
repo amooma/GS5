@@ -6,16 +6,8 @@ Gemeinschaft42c::Application.routes.draw do
   end
 
   resources :call_routes do
-    resources :route_elements do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
-    member do
-      put 'move_higher'
-      put 'move_lower'
-    end
+    collection { post :sort }
+    resources :route_elements
   end
 
   resources :gateways do
