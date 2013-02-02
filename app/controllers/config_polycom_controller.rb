@@ -26,12 +26,15 @@ class ConfigPolycomController < ApplicationController
 
     if ! params[:sip_account].blank?
       @sip_account = @phone.sip_accounts.where({ :id => params[:sip_account].to_i }).first
+      if ! @sip_account && @phone.fallback_sip_account && @phone.fallback_sip_account.id == params[:sip_account].to_i
+        @sip_account = @phone.fallback_sip_account
+      end
       if ! @sip_account
         render(
           :status => 404,
           :layout => false,
           :content_type => 'text/plain',
-          :text => "<!-- SipAccount not found -->",
+          :text => "<!-- SipAccount ID:#{params[:sip_account]} not found -->",
         )
         return false
       end
@@ -113,37 +116,41 @@ class ConfigPolycomController < ApplicationController
     softkey_index = 1
     blf_index = 0
 
-    @phone.sip_accounts.each do |sip_account|
-      sip_account_index = 0
-      if (sip_account.sip_accountable_type == @phone.phoneable_type) and (sip_account.sip_accountable_id == @phone.phoneable_id)
-        sip_account_index += 1
-        if sip_account_index == 1
-          xml_applications_url = "#{request.protocol}#{request.host_with_port}/config_polycom/#{@phone.id}/#{sip_account.id}"
-          @settings['voIpProt.SIP.outboundProxy.address'] = sip_account.host
-          @settings['voIpProt.SIP.outboundProxy.port'] = SIP_DEFAULT_PORT
+    phone_sip_accounts = Array.new()
+    if @phone.sip_accounts && @phone.sip_accounts.count > 0
+      phone_sip_accounts = @phone.sip_accounts
+    elsif @phone.fallback_sip_account
+      phone_sip_accounts.push( @phone.fallback_sip_account )
+    end
+    sip_account_index = 0
+    phone_sip_accounts.each do |sip_account|
+      sip_account_index += 1
+      if sip_account_index == 1
+        xml_applications_url = "#{request.protocol}#{request.host_with_port}/config_polycom/#{@phone.id}/#{sip_account.id}"
+        @settings['voIpProt.SIP.outboundProxy.address'] = sip_account.host
+        @settings['voIpProt.SIP.outboundProxy.port'] = SIP_DEFAULT_PORT
+      end
+
+      @settings["reg.#{sip_account_index}.address"] = "#{sip_account.auth_name}@#{sip_account.host}"
+      @settings["reg.#{sip_account_index}.auth.password"] = sip_account.password
+      @settings["reg.#{sip_account_index}.auth.userId"] = sip_account.auth_name
+      @settings["reg.#{sip_account_index}.displayName"] = 'Call'
+      @settings["reg.#{sip_account_index}.label"] = sip_account.caller_name
+      @settings["voIpProt.server.#{sip_account_index}.address"] = sip_account.host
+      @settings["voIpProt.server.#{sip_account_index}.port"] = SIP_DEFAULT_PORT
+      @settings["call.missedCallTracking.#{sip_account_index}.enabled"] = 0 
+
+      sip_account.softkeys.order(:position).each do |softkey|
+        softkey_index += 1
+        if softkey.softkey_function
+          softkey_function = softkey.softkey_function.name
         end
-
-        @settings["reg.#{sip_account_index}.address"] = "#{sip_account.auth_name}@#{sip_account.host}"
-        @settings["reg.#{sip_account_index}.auth.password"] = sip_account.password
-        @settings["reg.#{sip_account_index}.auth.userId"] = sip_account.auth_name
-        @settings["reg.#{sip_account_index}.displayName"] = 'Call'
-        @settings["reg.#{sip_account_index}.label"] = sip_account.caller_name
-        @settings["voIpProt.server.#{sip_account_index}.address"] = sip_account.host
-        @settings["voIpProt.server.#{sip_account_index}.port"] = SIP_DEFAULT_PORT
-        @settings["call.missedCallTracking.#{sip_account_index}.enabled"] = 0 
-
-        sip_account.softkeys.order(:position).each do |softkey|
-          softkey_index += 1
-          if softkey.softkey_function
-            softkey_function = softkey.softkey_function.name
-          end
-          case softkey_function
-          when 'blf'
-            blf_index += 1
-            @settings["lineKey.#{softkey_index}.category"] = 'BLF'
-            @settings["attendant.resourceList.#{blf_index}.address"] = "#{softkey.number}@#{sip_account.host}"
-            @settings["attendant.resourceList.#{blf_index}.label"] = softkey.label
-          end
+        case softkey_function
+        when 'blf'
+          blf_index += 1
+          @settings["lineKey.#{softkey_index}.category"] = 'BLF'
+          @settings["attendant.resourceList.#{blf_index}.address"] = "#{softkey.number}@#{sip_account.host}"
+          @settings["attendant.resourceList.#{blf_index}.label"] = softkey.label
         end
       end
     end
