@@ -91,7 +91,7 @@ end
 
 function Perimeter.check(self, event)
   event.record = self:record_load(event);
-  -- self.log:debug('[', event.sequence, '] PERIMETER_CHECK - received: ', event.received_ip, ':', event.received_port, ', contacts: ', event.record.contact_count, ', since: ', self:format_date(event.record.contact_first), ', points: ', event.record.points);
+  -- self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_CHECK - received: ', event.received_ip, ':', event.received_port, ', contacts: ', event.record.contact_count, ', since: ', self:format_date(event.record.contact_first), ', points: ', event.record.points);
   
   if event.record.banned <= self.ban_tries then
     for check_name, check_points in pairs(self.checks) do
@@ -106,9 +106,9 @@ function Perimeter.check(self, event)
 
   if (event.points or event.record.points) > self.ban_threshold and event.record.banned <= self.ban_tries then
     if event.record.banned > 0 and event.record.banned == self.ban_tries then
-      self.log:warning('[', event.sequence, '] PERIMETER_BAN_FUTILE - points: ', event.points,', event: ', event.class, ', ip: ', event.received_ip, ', to: ', event.to_user, '@', event.to_host);
+      self.log:warning('[', event.key, '/', event.sequence, '] PERIMETER_BAN_FUTILE - points: ', event.points,', event: ', event.class, ', from: ', event.from_user, '@', event.from_host, ', to: ', event.to_user, '@', event.to_host);
     else  
-      self.log:notice('[', event.sequence, '] PERIMETER_BAN - threshold reached: ', event.points,', event: ', event.class, ', ip: ', event.received_ip, ', to: ', event.to_user, '@', event.to_host);
+      self.log:notice('[', event.key, '/', event.sequence, '] PERIMETER_BAN - threshold reached: ', event.points,', event: ', event.class, ', from: ', event.from_user, '@', event.from_host, ', to: ', event.to_user, '@', event.to_host);
       if event.record.banned == 0 then
         self:append_blacklist_file(event);
       end
@@ -127,7 +127,7 @@ end
 
 function Perimeter.check_frequency(self, event)
   if event.record.span_contact_count >= self.contact_count_threshold then
-    self.log:info('[', event.sequence, '] PERIMETER_FREQUENCY_CHECK - contacts: ', event.record.span_contact_count, ' in < ', (event.timestamp - event.record.span_start)/1000000, ' sec, threshold: ', self.contact_count_threshold, ' in ', self.contact_span_threshold, ' sec');
+    self.log:info('[', event.key, '/', event.sequence, '] PERIMETER_FREQUENCY_CHECK - contacts: ', event.record.span_contact_count, ' in < ', (event.timestamp - event.record.span_start)/1000000, ' sec, threshold: ', self.contact_count_threshold, ' in ', self.contact_span_threshold, ' sec');
     event.span_contact_count = 0;
     event.span_start = event.timestamp;
     return 1;
@@ -149,7 +149,7 @@ function Perimeter.check_username_scan(self, event)
   end
 
   if #event.record.users >= self.name_changes_threshold then
-    self.log:info('[', event.sequence, '] PERIMETER_USER_SCAN - user names: ', #event.record.users, ', threshold: ', self.name_changes_threshold);
+    self.log:info('[', event.key, '/', event.sequence, '] PERIMETER_USER_SCAN - user names: ', #event.record.users, ', threshold: ', self.name_changes_threshold);
     event.users = {};
     return 1;
   else
@@ -172,7 +172,7 @@ function Perimeter.check_bad_headers(self, event)
   for name, pattern in pairs(self.bad_headers) do
     local success, result = pcall(string.find, event[name], pattern);
     if success and result then
-      self.log:info('[', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
+      self.log:info('[', event.key, '/', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
       points = (points or 0) + 1;
     end
   end
@@ -184,7 +184,7 @@ end
 function Perimeter.append_blacklist_file(self, event)
   local blacklist = io.open(self.blacklist_file, 'a');
   if not blacklist then
-    self.log:error('[', event.sequence, '] PERIMETER_APPEND_BLACKLIST - could not open file: ', self.blacklist_file);
+    self.log:error('[', event.key, '/', event.sequence, '] PERIMETER_APPEND_BLACKLIST - could not open file: ', self.blacklist_file);
     return false;
   end
 
@@ -194,7 +194,7 @@ function Perimeter.append_blacklist_file(self, event)
     blacklist:write(self:expand_variables(self.blacklist_file_comment, event), '\n');
   end
 
-  self.log:debug('[', event.sequence, '] PERIMETER_APPEND_BLACKLIST - ip: ', event.received_ip);
+  self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_APPEND_BLACKLIST - file: ', self.blacklist_file);
   blacklist:write(self:expand_variables(self.blacklist_file_entry, event), '\n');
   blacklist:close();
 end
@@ -202,7 +202,7 @@ end
 
 function Perimeter.execute_ban(self, event)
   local command = self:expand_variables(self.ban_command, event);
-  self.log:debug('[', event.sequence, '] PERIMETER_EXECUTE_BAN - ip: ', event.received_ip, ', command: ', command);
+  self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_EXECUTE_BAN - command: ', command);
   local result = os.execute(command);
 end
 
