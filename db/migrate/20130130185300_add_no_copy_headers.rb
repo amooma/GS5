@@ -4,6 +4,6 @@ class AddNoCopyHeaders < ActiveRecord::Migration
   end
 
   def down
-  	GsParameter.create(:entity => 'dialplan', :section => 'variables', :name => 'sip_copy_custom_headers').destroy_all
+  	GsParameter.where(:entity => 'dialplan', :section => 'variables', :name => 'sip_copy_custom_headers').destroy_all
   end
 end
