@@ -143,7 +143,7 @@ function Perimeter.check_username_scan(self, event)
     return;
   end
 
-  if not event.record.users then
+  if not event.record.users or tostring(event.auth_result) == 'SUCCESS' or tostring(event.auth_result) == 'RENEWED' then
     event.users = { event.to_user };
     return;
   end
