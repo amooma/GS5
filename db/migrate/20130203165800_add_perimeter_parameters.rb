@@ -2,7 +2,7 @@ class AddPerimeterParameters < ActiveRecord::Migration
   def up
     GsParameter.create(:entity => 'perimeter', :section => 'general', :name => 'contact_count_threshold', :value => '10', :class_type => 'Integer', :description => '')
     GsParameter.create(:entity => 'perimeter', :section => 'general', :name => 'contact_span_threshold', :value => '2', :class_type => 'Integer', :description => '')
-    GsParameter.create(:entity => 'perimeter', :section => 'general', :name => 'name_changes_threshold', :value => '2', :class_type => 'Integer', :description => '')
+    GsParameter.create(:entity => 'perimeter', :section => 'general', :name => 'name_changes_threshold', :value => '5', :class_type => 'Integer', :description => '')
     GsParameter.create(:entity => 'perimeter', :section => 'general', :name => 'ban_threshold', :value => '20', :class_type => 'Integer', :description => '')
     GsParameter.create(:entity => 'perimeter', :section => 'general', :name => 'ban_tries', :value => '1', :class_type => 'Integer', :description => '')
     GsParameter.create(:entity => 'perimeter', :section => 'general', :name => 'blacklist_file', :value => '/var/opt/gemeinschaft/firewall/blacklist', :class_type => 'String', :description => '')
