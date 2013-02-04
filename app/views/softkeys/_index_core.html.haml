@@ -12,8 +12,9 @@
         - cache(['softkeys_table_tr', I18n.locale, current_user, softkey]) do
           = content_tag_for :tr, softkey do
             %td
-              %span.handle
-                %i.icon-resize-vertical      
+              - if softkeys.count > 1
+                %span.handle
+                  %i.icon-resize-vertical      
             %td= softkey.function
             %td= softkey.number
             %td= softkey.label
