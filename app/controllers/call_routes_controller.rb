@@ -1,11 +1,11 @@
 class CallRoutesController < ApplicationController
   authorize_resource :call_route, :except => [:sort]
 
-  # before_filter { |controller|
-  #   if !params[:call_route].blank? and !params[:call_route][:endpoint_str].blank?
-  #     params[:call_route][:endpoint_type], delimeter, params[:call_route][:endpoint_id] = params[:call_route][:endpoint_str].partition('=')
-  #   end
-  # }
+  before_filter { |controller|
+    if !params[:call_route].blank? && !params[:call_route][:endpoint_str].blank?
+      params[:call_route][:endpoint_type], delimeter, params[:call_route][:endpoint_id] = params[:call_route][:endpoint_str].partition('=')
+    end
+  }
 
   def index
     @call_routes = CallRoute.order([:routing_table, :position])
