@@ -42,6 +42,8 @@ function Perimeter.setup(self, event)
   self.ban_command = 'sudo /sbin/service shorewall refresh';
   self.ban_threshold = 20;
   self.ban_tries = 1;
+  self.checks = { register = {}, call = {} };
+  self.bad_headers = { register = {}, call = {} };
 
   if config and config.general then
     for key, value in pairs(config.general) do
@@ -49,8 +51,10 @@ function Perimeter.setup(self, event)
     end
   end
 
-  self.checks = config.checks;
-  self.bad_headers = config.bad_headers;
+  self.checks.register = config.checks_register or {};
+  self.checks.call = config.checks_call or {};
+  self.bad_headers.register = config.bad_headers_register;
+  self.bad_headers.call = config.bad_headers_call;
 
   self.log:info('[perimeter] PERIMETER - setup perimeter defense');
 end
@@ -66,7 +70,7 @@ function Perimeter.record_load(self, event)
       span_start = event.timestamp,
       points = 0,
       banned = 0,
-    }
+    };
   end
 
   return self.sources[event.key];
@@ -90,11 +94,14 @@ end
 
 
 function Perimeter.check(self, event)
-  event.record = self:record_load(event);
-  -- self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_CHECK - received: ', event.received_ip, ':', event.received_port, ', contacts: ', event.record.contact_count, ', since: ', self:format_date(event.record.contact_first), ', points: ', event.record.points);
-  
+  if not event or not event.key then
+    self.log:warning('[perimeter] PERIMETER_CHECK - no event/key');
+    return;
+  end
+
+  event.record = self:record_load(event); 
   if event.record.banned <= self.ban_tries then
-    for check_name, check_points in pairs(self.checks) do
+    for check_name, check_points in pairs(self.checks[event.action]) do
       if self.checks_available[check_name] then
         local result = self.checks_available[check_name](self, event);
         if tonumber(result) then
@@ -169,7 +176,7 @@ end
 
 function Perimeter.check_bad_headers(self, event)
   local points = nil;
-  for name, pattern in pairs(self.bad_headers) do
+  for name, pattern in pairs(self.bad_headers[event.action]) do
     local success, result = pcall(string.find, event[name], pattern);
     if success and result then
       self.log:info('[', event.key, '/', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
