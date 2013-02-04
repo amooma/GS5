@@ -13,4 +13,5 @@
  *= require bootstrap/bootstrap-responsive
  *= require gemeinschaft-generic
  *= require call_routes
+ *= require softkeys
  */

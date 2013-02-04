@@ -271,6 +271,10 @@ Gemeinschaft42c::Application.routes.draw do
     end
   end
 
+  resources :softkeys, :only => [ :sort ] do
+    collection { post :sort }
+  end
+
   resources :sip_accounts, :only => [] do
     resources :phones_sip_accounts
     resources :phone_numbers do
@@ -279,12 +283,7 @@ Gemeinschaft42c::Application.routes.draw do
         put 'move_lower'
       end
     end
-    resources :softkeys do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
+    resources :softkeys
     resources :call_histories do
       collection do
         delete 'destroy_multiple'

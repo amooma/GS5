@@ -1,9 +1,9 @@
 class SoftkeysController < ApplicationController
-  load_and_authorize_resource :sip_account
-  load_and_authorize_resource :softkey, :through => [:sip_account]
+  load_and_authorize_resource :sip_account, :except => [:sort]
+  load_and_authorize_resource :softkey, :through => [:sip_account], :except => [:sort]
 
   before_filter :set_available_call_forwards_and_softkey_functions, :only => [ :new, :edit, :update ]
-  before_filter :spread_breadcrumbs
+  before_filter :spread_breadcrumbs, :except => [:sort]
   
   def index
   end
@@ -44,15 +44,16 @@ class SoftkeysController < ApplicationController
     redirect_to sip_account_softkeys_path(@softkey.sip_account), :notice => t('softkeys.controller.successfuly_destroyed')
   end
 
-  def move_higher
-    @softkey.move_higher
-    redirect_to :back
+  def sort
+    sip_account = Softkey.find(params[:softkey].first).sip_account
+
+    params[:softkey].each do |softkey_id|
+      sip_account.softkeys.find(softkey_id).move_to_bottom
+    end
+
+    render nothing: true
   end
 
-  def move_lower
-    @softkey.move_lower
-    redirect_to :back
-  end
 
   private
 
