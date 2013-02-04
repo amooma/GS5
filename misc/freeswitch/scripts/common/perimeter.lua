@@ -111,6 +111,14 @@ function Perimeter.check(self, event)
     end
   end
 
+  if tonumber(event.points) and event.points < 0 then
+    event.points = 0;
+  end
+
+  if event.points then
+    self.log:info('[', event.key, '/', event.sequence, '] PERIMETER suspicion rising - points: ', event.points,', ', event.action, '=', event.class, ', from: ', event.from_user, '@', event.from_host, ', to: ', event.to_user, '@', event.to_host, ', user_agent: ', event.user_agent);
+  end
+
   if (event.points or event.record.points) > self.ban_threshold and event.record.banned <= self.ban_tries then
     if event.record.banned > 0 and event.record.banned == self.ban_tries then
       self.log:warning('[', event.key, '/', event.sequence, '] PERIMETER_BAN_FUTILE - points: ', event.points,', event: ', event.class, ', from: ', event.from_user, '@', event.from_host, ', to: ', event.to_user, '@', event.to_host);
@@ -134,7 +142,7 @@ end
 
 function Perimeter.check_frequency(self, event)
   if event.record.span_contact_count >= self.contact_count_threshold then
-    self.log:info('[', event.key, '/', event.sequence, '] PERIMETER_FREQUENCY_CHECK - contacts: ', event.record.span_contact_count, ' in < ', (event.timestamp - event.record.span_start)/1000000, ' sec, threshold: ', self.contact_count_threshold, ' in ', self.contact_span_threshold, ' sec');
+    self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_FREQUENCY_CHECK - contacts: ', event.record.span_contact_count, ' in < ', (event.timestamp - event.record.span_start)/1000000, ' sec, threshold: ', self.contact_count_threshold, ' in ', self.contact_span_threshold, ' sec');
     event.span_contact_count = 0;
     event.span_start = event.timestamp;
     return 1;
@@ -156,7 +164,7 @@ function Perimeter.check_username_scan(self, event)
   end
 
   if #event.record.users >= self.name_changes_threshold then
-    self.log:info('[', event.key, '/', event.sequence, '] PERIMETER_USER_SCAN - user names: ', #event.record.users, ', threshold: ', self.name_changes_threshold);
+    self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_USER_SCAN - user names: ', #event.record.users, ', threshold: ', self.name_changes_threshold);
     event.users = {};
     return 1;
   else
@@ -180,7 +188,7 @@ function Perimeter.check_bad_headers(self, event)
     pattern = self:expand_variables(pattern, event);
     local success, result = pcall(string.find, event[name], pattern);
     if success and result then
-      self.log:info('[', event.key, '/', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
+      self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
       points = (points or 0) + 1;
     end
   end
