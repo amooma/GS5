@@ -10,8 +10,9 @@
     - for phone_number in phone_numbers.order(:position)
       = content_tag_for :tr, phone_number do
         %td
-          %span.handle
-            %i.icon-resize-vertical
+          - if phone_numbers.count > 1
+            %span.handle
+              %i.icon-resize-vertical
         - if phone_number.phone_numberable_type == 'PhoneBookEntry'
           %td= phone_number.name
         %td= phone_number
