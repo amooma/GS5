@@ -177,6 +177,7 @@ end
 function Perimeter.check_bad_headers(self, event)
   local points = nil;
   for name, pattern in pairs(self.bad_headers[event.action]) do
+    pattern = self:expand_variables(pattern, event);
     local success, result = pcall(string.find, event[name], pattern);
     if success and result then
       self.log:info('[', event.key, '/', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
