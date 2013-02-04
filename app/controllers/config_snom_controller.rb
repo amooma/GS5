@@ -247,6 +247,7 @@ class ConfigSnomController < ApplicationController
       elsif @phone.fallback_sip_account
         phone_sip_accounts.push( @phone.fallback_sip_account )
       end
+      expiry_seconds = GsParameter.get('SIP_EXPIRY_SECONDS')
       phone_sip_accounts.each do |sip_account|
         if (sip_account.sip_accountable_type == @phone.phoneable_type) and (sip_account.sip_accountable_id == @phone.phoneable_id)
         	snom_sip_account = {
@@ -259,7 +260,8 @@ class ConfigSnomController < ApplicationController
         		:name       => sip_account.auth_name,
         		:realname   => 'Call',
         		:idle_text  => sip_account.caller_name,
-            :mailbox    => "<sip:#{sip_account.auth_name}@#{sip_account.host}>"
+            :mailbox    => "<sip:#{sip_account.auth_name}@#{sip_account.host}>",
+            :expiry     => expiry_seconds, 
           }
           @sip_accounts.push(snom_sip_account)
           sip_account_index = @sip_accounts.length

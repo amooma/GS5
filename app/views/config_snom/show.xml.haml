@@ -121,7 +121,7 @@
       %user_realname{:idx => index, :perm => 'R'}= sip_account[:realname]
       %user_idle_text{:idx => index, :perm => 'R'}= sip_account[:idle_text]
       %user_mailbox{:idx => index, :perm => 'R'}= sip_account[:mailbox]
-      %user_expiry{:idx => index, :perm => 'R'}= ''
+      %user_expiry{:idx => index, :perm => 'R'}= sip_account[:expiry]
       %user_server_type{:idx => index, :perm => 'R'}= 'default'
       %user_send_local_name{:idx => index, :perm => 'RW'}= 'on'
       %user_dtmf_info{:idx => index, :perm => 'RW'}= 'off'
