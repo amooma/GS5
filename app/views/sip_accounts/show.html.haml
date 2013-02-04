@@ -65,16 +65,16 @@
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @sip_account.sip_accountable, :child => @sip_account }
 
-- if @sip_account.phone_numbers.count > 0 || can?(:create, @sip_account.phone_numbers.build)
+- if @sip_account.phone_numbers.any? || can?(:create, @sip_account.phone_numbers.build)
   %h2= t('phone_numbers.index.page_title')
-  - if @sip_account.phone_numbers.count > 0
+  - if @sip_account.phone_numbers.any?
     = render "phone_numbers/index_core", :phone_numbers => @sip_account.phone_numbers
     %br
   = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => PhoneNumber }
 
-- if @sip_account.softkeys.count > 0 || can?(:create, @sip_account.softkeys.build)
+- if @sip_account.softkeys.any? || can?(:create, @sip_account.softkeys.build)
   %h2= t("softkeys.index.page_title")
-  - if @sip_account.softkeys.count > 0
+  - if @sip_account.softkeys.any?
     = render "softkeys/index_core", :softkeys => @sip_account.softkeys
     %br
   = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => Softkey }
