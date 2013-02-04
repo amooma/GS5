@@ -1,5 +1,5 @@
-- cache(['softkeys', I18n.locale, current_user, softkeys]) do
-  %table.table.table-striped{ :id => "softkeys" }
+- cache(['softkeys_table', I18n.locale, current_user, softkeys]) do
+  %table.table.table-striped
     %thead
       %tr
         %th
@@ -7,13 +7,14 @@
         %th= t('softkeys.index.number')
         %th= t('softkeys.index.label')
 
-    %tbody
+    %tbody{ :id => "softkeys", :'data-update-url' => sort_softkeys_url}
       - for softkey in softkeys
-        = content_tag_for :tr, softkey do
-          %td
-            %span.handle
-              %i.icon-resize-vertical      
-          %td= softkey.function
-          %td= softkey.number
-          %td= softkey.label
-          =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => softkey.sip_account, :child => softkey}
+        - cache(['softkeys_table_tr', I18n.locale, current_user, softkey]) do
+          = content_tag_for :tr, softkey do
+            %td
+              %span.handle
+                %i.icon-resize-vertical      
+            %td= softkey.function
+            %td= softkey.number
+            %td= softkey.label
+            =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => softkey.sip_account, :child => softkey}

@@ -1,6 +1,6 @@
 jQuery ->
-  $("table tbody").sortable
+  $('#softkeys').sortable
     axis: 'y'
     handle: '.handle'
     update: ->
-      $.post('/softkeys/sort', $(this).sortable('serialize'))
+      $.post($(this).data('update-url'), $(this).sortable('serialize'))

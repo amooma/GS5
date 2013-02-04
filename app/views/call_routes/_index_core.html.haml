@@ -1,31 +1,31 @@
-/ - cache(['call_routes_table', call_routes.count, call_routes.reorder(:updated_at).last]) do 
-%table.table.table-striped{ :id => "call_routes" }
-  %thead
-    %tr
-      %th
-      %th= t('call_routes.index.name')
-      %th= t('route_elements.index.pattern')
-      %th= t('call_routes.index.endpoint')
+- cache(['call_routes_table', I18n.locale, call_routes.count, call_routes.reorder(:updated_at).last]) do 
+  %table.table.table-striped
+    %thead
+      %tr
+        %th
+        %th= t('call_routes.index.name')
+        %th= t('route_elements.index.pattern')
+        %th= t('call_routes.index.endpoint')
 
-  %tbody
-    - for call_route in call_routes
-      / - cache(['call_route_single_table_row', call_route, call_routes.count]) do
-      = content_tag_for :tr, call_route do
-        %td
-          %span.handle
-            %i.icon-resize-vertical
-        %td= call_route.name
-        %td
-          - if call_route.route_elements.any?
-            = call_route.route_elements.first.pattern
-            - if call_route.route_elements.count > 1
-              = ', ...'
-          - else
-            = '-'
-        %td 
-          - endpoint = call_route.endpoint
-          - if endpoint
-            = endpoint
-          - else
-            = call_route.endpoint_type
-        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => call_route}
+    %tbody{ :id => "call_routes", :'data-update-url' => sort_call_routes_url}
+      - for call_route in call_routes
+        - cache(['call_route_single_table_row', I18n.locale, call_route]) do
+          = content_tag_for :tr, call_route do
+            %td
+              %span.handle
+                %i.icon-resize-vertical
+            %td= call_route.name
+            %td
+              - if call_route.route_elements.any?
+                = call_route.route_elements.first.pattern
+                - if call_route.route_elements.count > 1
+                  = ', ...'
+              - else
+                = '-'
+            %td 
+              - endpoint = call_route.endpoint
+              - if endpoint
+                = endpoint
+              - else
+                = call_route.endpoint_type
+            =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => call_route}

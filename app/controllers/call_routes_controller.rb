@@ -1,5 +1,5 @@
 class CallRoutesController < ApplicationController
-  authorize_resource :call_route
+  authorize_resource :call_route, :except => [:sort]
 
   # before_filter { |controller|
   #   if !params[:call_route].blank? and !params[:call_route][:endpoint_str].blank?
@@ -67,6 +67,7 @@ class CallRoutesController < ApplicationController
   def sort
     params[:call_route].each_with_index do |id, index|
       CallRoute.update_all({position: index+1}, {id: id})
+      #CallRoute.find(:id).move_to_bottom
     end
     render nothing: true
   end
