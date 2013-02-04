@@ -1,13 +1,17 @@
 %table.table.table-striped
   %thead
     %tr
+      %th
       - if phone_numbers.count > 1 && phone_numbers.first.phone_numberable_type == 'PhoneBookEntry'
         %th= t('phone_numbers.index.name')
       %th= t('phone_numbers.index.number')
 
-  %tbody
+  %tbody{ :id => "phone_numbers", :'data-update-url' => sort_phone_numbers_url}
     - for phone_number in phone_numbers.order(:position)
-      %tr
+      = content_tag_for :tr, phone_number do
+        %td
+          %span.handle
+            %i.icon-resize-vertical
         - if phone_number.phone_numberable_type == 'PhoneBookEntry'
           %td= phone_number.name
         %td= phone_number

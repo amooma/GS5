@@ -33,95 +33,54 @@ Gemeinschaft42c::Application.routes.draw do
     resources :rows 
   end
 
+  resources :phone_numbers, :only => [:sort] do
+    collection { post :sort }
+  end
+
   resources :acd_agents, :only => [] do
-    resources :phone_numbers do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
+    resources :phone_numbers
   end
 
   resources :automatic_call_distributors, :only => [] do
     resources :acd_agents
-    resources :phone_numbers do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
+    resources :phone_numbers
   end
 
   resources :hunt_group_members, :only => [] do
-    resources :phone_numbers do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
+    resources :phone_numbers
   end
 
   resources :hunt_groups, :only => [] do
     resources :hunt_group_members
-    resources :phone_numbers do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
+    resources :phone_numbers
   end
 
   if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
     resources :whitelists, :only => [] do
-      resources :phone_numbers do
-        member do
-          put 'move_higher'
-          put 'move_lower'
-        end
-      end
+      resources :phone_numbers
     end
   end
 
   resources :access_authorizations, :only => [] do
-    resources :phone_numbers do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
+    resources :phone_numbers
   end
 
   resources :fax_documents
 
   resources :fax_accounts, :only => [] do
     resources :fax_documents
-    resources :phone_numbers do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
+    resources :phone_numbers
   end
 
   resources :gemeinschaft_setups, :only => [:new, :create]
 
   resources :phone_number_ranges, :only => [] do
-    resources :phone_numbers do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
+    resources :phone_numbers
   end
   
   resources :conferences, :only => [] do
     resources :conference_invitees
-    resources :phone_numbers do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
+    resources :phone_numbers
   end
   
   resources :phone_numbers, :only => [] do
@@ -260,12 +219,7 @@ Gemeinschaft42c::Application.routes.draw do
 
   resources :callthroughs, :only => [] do
     resources :access_authorizations
-    resources :phone_numbers do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
+    resources :phone_numbers
     if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
       resources :whitelists
     end
@@ -277,12 +231,7 @@ Gemeinschaft42c::Application.routes.draw do
 
   resources :sip_accounts, :only => [] do
     resources :phones_sip_accounts
-    resources :phone_numbers do
-      member do
-        put 'move_higher'
-        put 'move_lower'
-      end
-    end
+    resources :phone_numbers
     resources :softkeys
     resources :call_histories do
       collection do
@@ -313,8 +262,6 @@ Gemeinschaft42c::Application.routes.draw do
   resources :phone_book_entries, :only => [ :index, :show ] do
     resources :phone_numbers do
       member do
-        put 'move_higher'
-        put 'move_lower'
         put 'call'
       end
     end
