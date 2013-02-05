@@ -8,7 +8,10 @@ Gemeinschaft42c::Application.routes.draw do
   end
 
   resources :call_routes do
-    collection { post :sort }
+    collection { 
+      post :sort 
+      get :show_variables
+    }
     resources :route_elements
   end
 

@@ -1,0 +1,13 @@
+%h3= 'Channel Variables'
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th= 'Variable'
+      %th= 'Value'
+
+  %tbody{ :id => "show_variables" }
+    - @channel_variables.each do |key, value|
+      %tr
+        %td= key
+        %td= value.gsub(/\n/, '<br/>').html_safe
