@@ -3,7 +3,7 @@
 require 'inifile'
 SYSTEM_ODBC_CONFIGURATION = IniFile.load('/var/lib/freeswitch/.odbc.ini')
 
-Backup::Model.new(:gs5, 'GS5 backup') do
+Backup::Model.new(:GS5, 'GS5 backup') do
  
   ##
   # Split [Splitter]
@@ -45,7 +45,7 @@ Backup::Model.new(:gs5, 'GS5 backup') do
   # Local (Copy) [Storage]
   #
   store_with Local do |local|
-    local.path       = "/var/backups/GS5/"
+    local.path       = "/var/backups/"
     local.keep       = 3
   end
 

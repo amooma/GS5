@@ -64,6 +64,10 @@ class Ability
           #
           cannot [:edit, :update], FaxDocument
 
+          # Backups can't be edited
+          #
+          cannot [:edit, :update], BackupJob
+
           # Can manage GsNodes
           #
           can :manage, GsNode
