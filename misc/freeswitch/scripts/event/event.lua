@@ -27,18 +27,26 @@ function EventManager.register(self)
 end
 
 
-function EventManager.load_event_modules(self)
-  require 'common.configuration_table'
-  self.config = common.configuration_table.get(self.database, 'events');
+function EventManager.load_event_modules(self, modules)
+  local event_modules = {};
 
-  return self.config.modules;
+  for module_name, index in pairs(modules) do
+    if tonumber(index) and index > 0 then
+      event_modules[index] = module_name;
+      self.log:debug('[event] EVENT_MANAGER - enabled handler module: ', module_name);
+    else
+      self.log:debug('[event] EVENT_MANAGER - disabled handler module: ', module_name);
+    end
+  end
+
+  return event_modules;
 end
 
 
 function EventManager.load_event_handlers(self, event_modules)
   event_handlers = {}
-
-  for event_module_name, index in pairs(event_modules) do
+  for index, event_module_name in ipairs(event_modules) do
+    package.loaded['event.' .. event_module_name] = nil;
     event_module = require('event.' .. event_module_name);
     if event_module then
       self.log:info('[event] EVENT_MANAGER - loading handler module: ', event_module_name);
@@ -71,8 +79,12 @@ end
 
 
 function EventManager.run(self)
+  require 'common.configuration_table'
+  self.config = common.configuration_table.get(self.database, 'events');
 
-  local event_modules = self:load_event_modules();
+  local event_modules = self:load_event_modules(self.config.modules);
+  self.log:info('[event] EVENT_MANAGER_START - handler modules: ', #event_modules);
+
   local event_handlers = self:load_event_handlers(event_modules);
 
   if not event_handlers then
@@ -104,4 +116,7 @@ function EventManager.run(self)
       end
     end
   end
+
+  self.consumer = nil;
+  self.log:info('[event] EVENT_MANAGER_EXIT - action: ', freeswitch.getGlobalVariable('gs_event_manager'));
 end
