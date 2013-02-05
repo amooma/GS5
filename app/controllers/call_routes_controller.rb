@@ -52,12 +52,7 @@ class CallRoutesController < ApplicationController
     @call_route = CallRoute.find(params[:id])
     spread_breadcrumbs
 
-    logger.error "ENDPOINT TYPE: #{params[:call_route][:endpoint_type]}"
-    logger.error "ENDPOINT ID: #{params[:call_route][:endpoint_id]}"
-    logger.error "ENDPOINT STR: #{params[:call_route][:endpoint_str]}"
-
     if @call_route.update_attributes(call_route_parameter_params)
-      logger.error "CALL_ROUTE: #{@call_route.inspect}"
       redirect_to @call_route, :notice  => t('call_routes.controller.successfuly_updated')
     else
       render :edit
