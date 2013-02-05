@@ -16,13 +16,16 @@ function EventManager.new(self, arg)
   self.class = 'eventmanager'
   self.database = arg.database;
   self.domain = arg.domain;
+  self.consumer = arg.consumer;
 
   return object;
 end
 
 
 function EventManager.register(self)
-  self.consumer = freeswitch.EventConsumer('all');
+  if not self.consumer then
+    self.consumer = freeswitch.EventConsumer('all');
+  end
   return (self.consumer ~= nil);
 end
 
@@ -117,6 +120,5 @@ function EventManager.run(self)
     end
   end
 
-  self.consumer = nil;
   self.log:info('[event] EVENT_MANAGER_EXIT - action: ', freeswitch.getGlobalVariable('gs_event_manager'));
 end
