@@ -1,0 +1,17 @@
+%table.table.table-striped
+  %tr
+    %th= t('backup_jobs.index.started_at')
+    %th= t('backup_jobs.index.finished_at')
+    %th= t('backup_jobs.index.state')
+    %th= t('backup_jobs.index.directory')
+    %th= t('backup_jobs.index.size_of_the_backup')
+
+  
+  - for backup_job in backup_jobs
+    %tr
+      %td= backup_job.started_at
+      %td= backup_job.finished_at
+      %td= backup_job.state
+      %td= backup_job.directory
+      %td= backup_job.size_of_the_backup
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => backup_job}

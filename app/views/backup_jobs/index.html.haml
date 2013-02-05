@@ -1,0 +1,6 @@
+- content_for :title, t("backup_jobs.index.page_title")
+
+- if @backup_jobs && @backup_jobs.count > 0
+  = render "index_core", :backup_jobs => @backup_jobs
+
+= render :partial => 'shared/create_link', :locals => {:child_class => BackupJob}
