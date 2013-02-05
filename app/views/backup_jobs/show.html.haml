@@ -1,0 +1,19 @@
+- content_for :title, t("backup_jobs.show.page_title")
+
+%p
+  %strong= t('backup_jobs.show.started_at') + ":"
+  = @backup_job.started_at
+%p
+  %strong= t('backup_jobs.show.finished_at') + ":"
+  = @backup_job.finished_at
+%p
+  %strong= t('backup_jobs.show.state') + ":"
+  = @backup_job.state
+%p
+  %strong= t('backup_jobs.show.directory') + ":"
+  = @backup_job.directory
+%p
+  %strong= t('backup_jobs.show.size_of_the_backup') + ":"
+  = @backup_job.size_of_the_backup
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @backup_job }

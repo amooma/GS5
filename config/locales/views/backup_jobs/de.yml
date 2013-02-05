@@ -1,0 +1,60 @@
+de:
+  backup_jobs:
+    name: 'Backup job'
+    controller:
+      successfuly_created: 'Backup job wurde angelegt.'
+      successfuly_updated: 'Backup job wurde aktualisiert.'
+      successfuly_destroyed: 'Backup job wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von Backup job'
+      started_at: 'Started at'
+      finished_at: 'Finished at'
+      state: 'State'
+      directory: 'Directory'
+      size_of_the_backup: 'Size of the backup'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Backup job'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Backup job neu anlegen für %{resource}'
+    show:
+      page_title: 'Backup job bearbeiten'
+      started_at: 'Started at'
+      finished_at: 'Finished at'
+      state: 'State'
+      directory: 'Directory'
+      size_of_the_backup: 'Size of the backup'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Backup job neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Backup job bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      started_at:
+        label: 'Started at'
+        hint: ''
+      finished_at:
+        label: 'Finished at'
+        hint: ''
+      state:
+        label: 'State'
+        hint: ''
+      directory:
+        label: 'Directory'
+        hint: ''
+      size_of_the_backup:
+        label: 'Size of the backup'
+        hint: ''
+      submit: 'Absenden'
