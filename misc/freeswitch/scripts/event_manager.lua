@@ -26,13 +26,15 @@ else
   log:error('[event] EVENT_MANAGER_LOADER - No SIP domains found!');
 end
 
+local event_consumer = nil;
 freeswitch.setGlobalVariable('gs_event_manager', 'true');
 while freeswitch.getGlobalVariable('gs_event_manager') ~= 'false' do
   package.loaded['event.event'] = nil;
   local manager_class = require('event.event');
-  local event_manager = manager_class.EventManager:new{ log = log, database = database, domain = domain }
+  local event_manager = manager_class.EventManager:new{ log = log, database = database, domain = domain, consumer = event_consumer };
   freeswitch.setGlobalVariable('gs_event_manager', 'true');
   event_manager:run();
+  event_consumer = event_manager.consumer;
 end
 
 -- ensure database handle is released on exit
