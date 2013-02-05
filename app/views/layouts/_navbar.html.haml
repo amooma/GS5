@@ -14,10 +14,10 @@
           - if current_user && GemeinschaftSetup.any? && current_user.admin?
             - if current_page?(page_help_path)
               %li.active
-                =link_to 'Admin-Doku', page_help_path
+                =link_to t('navigation.admin_docu'), page_help_path
             - else
               %li
-                =link_to 'Admin-Doku', page_help_path
+                =link_to t('navigation.admin_docu'), page_help_path
           - if current_user && current_user.sip_accounts.any?
             %li
               %a{:href => sip_account_call_histories_path(current_user.sip_accounts.first)}

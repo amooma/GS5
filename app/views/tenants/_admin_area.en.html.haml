@@ -17,19 +17,19 @@
     = render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => tenant}
 
     .well
-      %h2 Gemeinschaft Konfiguration
+      %h2 Gemeinschaft Configuration
       = render :partial => 'tenants/gs_parameter_table', :locals => {:tenant => tenant}
 
       %p
-        Das System kann  
+        This system can provision a total of   
         = PhoneModel.count
-        verschiedene Telefonmodelle von den folgenden Herstellern verwalten:  
+        different phone models of the following manufacturers:  
         - Manufacturer.all.each do |manufacturer|
           - if manufacturer != Manufacturer.last && manufacturer != Manufacturer.limit(Manufacturer.count - 1).last
             = succeed ', ' do
               =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
           - elsif manufacturer == Manufacturer.limit(Manufacturer.count - 1).last
-            = succeed ' und ' do
+            = succeed ' and ' do
               =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
           - else
             = succeed '.' do
