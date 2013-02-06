@@ -302,6 +302,7 @@ function Functions.user_login(self, caller, number, pin)
 
   if not caller_phone then
     self.log:notice('LOGIN - caller phone not found or not hot-deskable');
+    local result = phone_class:resync{ auth_name = caller_sip_account.record.auth_name, domain = caller_sip_account.record.host };
     return { continue = false, code = 403, phrase = 'Phone not hot-deskable', no_cdr = true }
   end
 
@@ -409,8 +410,9 @@ function Functions.user_logout(self, caller)
   
   local caller_phones = phone_class:find_all_hot_deskable_by_account(caller_sip_account.id);
   
-  if caller_phones == 0 then
+  if #caller_phones == 0 then
     self.log:notice('LOGOUT - caller phones not found or not hot-deskable');
+    local result = phone_class:resync{ auth_name = caller_sip_account.record.auth_name, domain = caller_sip_account.record.host };
     return { continue = false, code = 403, phrase = 'Phone not hot-deskable', no_cdr = true }
   end
 
