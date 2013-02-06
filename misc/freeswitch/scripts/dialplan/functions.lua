@@ -264,7 +264,7 @@ function Functions.account_node_change(self, caller)
 
   -- resync caller phones
   for index, phone_caller in ipairs(caller_phones) do
-    local result = phone_caller:resync{ auth_name = caller_sip_account.auth_name, domain = caller.domain };
+    local result = phone_caller:resync{ auth_name = caller_sip_account.record.auth_name, domain = caller_sip_account.record.host };
     self.log:info('NODE_CHANGE - resync phone - mac: ', phone_caller.record.mac_address, ', ip_address: ', phone_caller.record.ip_address, ', result: ', result);
   end
 
@@ -302,6 +302,7 @@ function Functions.user_login(self, caller, number, pin)
 
   if not caller_phone then
     self.log:notice('LOGIN - caller phone not found or not hot-deskable');
+    local result = phone_class:resync{ auth_name = caller_sip_account.record.auth_name, domain = caller_sip_account.record.host };
     return { continue = false, code = 403, phrase = 'Phone not hot-deskable', no_cdr = true }
   end
 
@@ -374,13 +375,13 @@ function Functions.user_login(self, caller, number, pin)
 
   -- resync destination phones
   for index, phone_destination in ipairs(destination_phones) do
-    local result = phone_destination:resync{ auth_name = destination_sip_account.auth_name, domain = caller.domain_local };
+    local result = phone_destination:resync{ auth_name = destination_sip_account.record.auth_name, domain = destination_sip_account.record.host };
     self.log:info('LOGIN - resync destination phone - mac: ', phone_destination.record.mac_address, ', ip_address: ', phone_destination.record.ip_address, ', result: ', result);
   end
 
   -- resync caller phones
   for index, phone_caller in ipairs(caller_phones) do
-    local result = phone_caller:resync{ auth_name = caller_sip_account.auth_name, domain = caller.domain };
+    local result = phone_caller:resync{ auth_name = caller_sip_account.record.auth_name, domain = caller_sip_account.record.host };
     self.log:info('LOGIN - resync caller phone - mac: ', phone_caller.record.mac_address, ', ip_address: ', phone_caller.record.ip_address, ', result: ', result);
   end
 
@@ -409,8 +410,9 @@ function Functions.user_logout(self, caller)
   
   local caller_phones = phone_class:find_all_hot_deskable_by_account(caller_sip_account.id);
   
-  if caller_phones == 0 then
+  if #caller_phones == 0 then
     self.log:notice('LOGOUT - caller phones not found or not hot-deskable');
+    local result = phone_class:resync{ auth_name = caller_sip_account.record.auth_name, domain = caller_sip_account.record.host };
     return { continue = false, code = 403, phrase = 'Phone not hot-deskable', no_cdr = true }
   end
 
@@ -426,7 +428,7 @@ function Functions.user_logout(self, caller)
 
   -- resync caller phones
   for index, phone_caller in ipairs(caller_phones) do
-    local result = phone_caller:resync{ auth_name = caller_sip_account.auth_name, domain = caller.domain };
+    local result = phone_caller:resync{ auth_name = caller_sip_account.record.auth_name, domain = caller_sip_account.record.host };
     self.log:info('LOGIN - resync caller phone - mac: ', phone_caller.record.mac_address, ', ip_address: ', phone_caller.record.ip_address, ', result: ', result);
   end
 
