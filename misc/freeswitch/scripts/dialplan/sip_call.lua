@@ -195,6 +195,12 @@ function SipCall.fork(self, destinations, arg )
     fork_index = tonumber(session_callee:getVariable('gs_fork_index')) or 0;
     local destination = destinations[fork_index];
 
+    if arg.detect_dtmf_after_bridge_caller then
+      session:execute('start_dtmf');
+    end
+    if arg.detect_dtmf_after_bridge_callee then
+      session_callee:execute('start_dtmf');
+    end
     if arg.bypass_media_network then
       local callee_uuid = session_callee:get_uuid();
 
