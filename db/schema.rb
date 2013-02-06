@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130202140927) do
+ActiveRecord::Schema.define(:version => 20130206144829) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -122,6 +122,26 @@ ActiveRecord::Schema.define(:version => 20130202140927) do
     t.string   "greeting"
     t.string   "goodbye"
     t.string   "music"
+  end
+
+  create_table "backup_jobs", :force => true do |t|
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.string   "state"
+    t.string   "directory"
+    t.integer  "size_of_the_backup"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.string   "backup_file"
+  end
+
+  create_table "backups", :force => true do |t|
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.string   "directory"
+    t.string   "size"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "call_forward_cases", :force => true do |t|
@@ -358,6 +378,7 @@ ActiveRecord::Schema.define(:version => 20130202140927) do
     t.string   "locked_by"
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
+    t.string   "queue"
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
