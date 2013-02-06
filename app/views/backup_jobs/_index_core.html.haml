@@ -8,10 +8,21 @@
 
   
   - for backup_job in backup_jobs
-    %tr
-      %td= backup_job.started_at
-      %td= backup_job.finished_at
+    - if backup_job.state == 'queued'
+      - row_marker = 'warning'
+    - else
+      - if backup_job.state == 'failed'
+        - row_marker = 'error'
+      - else
+        - row_marker = ''
+    %tr{:class => row_marker}
+      %td
+        - if backup_job.finished_at.blank?
+          = time_ago_in_words(backup_job.finished_at)
+        - else
+          = l backup_job.started_at, :format => :short
+      %td= l backup_job.finished_at, :format => :short 
       %td= backup_job.state
       %td= backup_job.directory
-      %td= backup_job.size_of_the_backup
+      %td= number_to_human_size(backup_job.size_of_the_backup, :precision => 2)
       =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => backup_job}

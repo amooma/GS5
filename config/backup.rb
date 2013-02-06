@@ -46,7 +46,6 @@ Backup::Model.new(:GS5, 'GS5 backup') do
   #
   store_with Local do |local|
     local.path       = "/var/backups/"
-    local.keep       = 3
   end
 
   ##
