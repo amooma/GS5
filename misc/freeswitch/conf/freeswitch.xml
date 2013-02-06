@@ -639,6 +639,7 @@
     </configuration>  
     <configuration name="lua.conf" description="LUA Configuration">
       <settings>
+        <param name="module-directory" value="/usr/lib/i386-linux-gnu/lua/5.1/?.so;"/>
         <param name="script-directory" value="/usr/share/freeswitch/scripts/?.lua;/usr/share/lua/5.1/?.lua;"/>
         <param name="xml-handler-script" value="configuration.lua"/>
         <param name="xml-handler-bindings" value="directory|configuration"/>
