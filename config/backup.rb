@@ -11,7 +11,7 @@ Backup::Model.new(:GS5, 'GS5 backup') do
   # Split the backup file in to chunks of 2 GB
   # if the backup file size exceeds 2 GB
   #
-  split_into_chunks_of 2048
+  # split_into_chunks_of 2048
 
   ##
   # MySQL [Database]
