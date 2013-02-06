@@ -5,7 +5,7 @@ class CreateBackupJobs < ActiveRecord::Migration
       t.datetime :finished_at
       t.string :state
       t.string :directory
-      t.string :size_of_the_backup
+      t.integer :size_of_the_backup
       t.timestamps
     end
   end
