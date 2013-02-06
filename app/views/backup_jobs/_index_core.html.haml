@@ -3,7 +3,6 @@
     %th= t('backup_jobs.index.started_at')
     %th= t('backup_jobs.index.finished_at')
     %th= t('backup_jobs.index.state')
-    %th= t('backup_jobs.index.directory')
     %th= t('backup_jobs.index.size_of_the_backup')
     %th{:colspan => '2'}
 
@@ -17,13 +16,16 @@
       - else
         - row_marker = ''
     %tr{:class => row_marker}
-      %td
-        - if backup_job.finished_at.blank?
-          = time_ago_in_words(backup_job.finished_at)
-        - else
+      - if backup_job.finished_at.blank?
+        %td{:colspan => '2'}
+          = time_ago_in_words(backup_job.started_at)
+      - else
+        %td
           = l backup_job.started_at, :format => :short
-      %td= l backup_job.finished_at, :format => :short 
+        %td
+          = l backup_job.finished_at, :format => :short 
       %td= backup_job.state
-      %td= backup_job.directory
-      %td= number_to_human_size(backup_job.size_of_the_backup, :precision => 2)
+      %td
+        - if !backup_job.size_of_the_backup.blank?
+          = number_to_human_size(backup_job.size_of_the_backup, :precision => 2)
       =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => backup_job}
