@@ -33,9 +33,9 @@ function Dtmf.detect(self, caller, sequence, digit, duration, calee)
   caller.dtmf_digits = sequence.digits;
 
   if calee then
-    self.log:info('DTMF_RECEIVER callee - digit: [', digit, '][', duration, '], sequence: ', sequence.digits);
+    self.log:debug('DTMF_RECEIVER callee - digit: [', digit, '][', duration, '], sequence: ', sequence.digits);
   else
-    self.log:info('DTMF_RECEIVER caller - digit: [', digit, '][', duration, '], sequence: ', sequence.digits);
+    self.log:debug('DTMF_RECEIVER caller - digit: [', digit, '][', duration, '], sequence: ', sequence.digits);
   end
 
   local route = self.router:route_run('dtmf', true);
