@@ -26,6 +26,6 @@
           = l backup_job.finished_at, :format => :short 
       %td= backup_job.state
       %td
-        - if !backup_job.size_of_the_backup.blank?
-          = number_to_human_size(backup_job.size_of_the_backup, :precision => 2)
+        - if backup_job.backup_file?
+          = number_to_human_size(backup_job.backup_file.size, :precision => 2)
       =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => backup_job}

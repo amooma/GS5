@@ -1,5 +1,5 @@
 class BackupJob < ActiveRecord::Base
-  attr_accessible :started_at, :finished_at, :state, :directory, :size_of_the_backup
+  attr_accessible :started_at, :finished_at, :state, :directory
 
   mount_uploader :backup_file, BackupFileUploader
 
