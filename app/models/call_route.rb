@@ -2,7 +2,7 @@ class CallRoute < ActiveRecord::Base
   # https://github.com/rails/strong_parameters
   include ActiveModel::ForbiddenAttributesProtection
 
-  ROUTING_TABLES = ['prerouting', 'outbound', 'inbound']
+  ROUTING_TABLES = ['prerouting', 'outbound', 'inbound', 'dtmf']
 
   has_many :route_elements, :dependent => :destroy
 
