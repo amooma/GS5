@@ -29,7 +29,7 @@ end
 
 local success, result, response_headers = http.request{url = url, headers = headers };
 
-if success then
+if success and tostring(result) == '200' then
   log:debug('HTTP_REQUEST - url: ', url, ', auth: ', tostring(headers.Authorization ~= nil), ', result: ', result);
 else
   log:notice('HTTP_REQUEST - url: ', url, ', auth: ', tostring(headers.Authorization ~= nil), ', result: ', result);
