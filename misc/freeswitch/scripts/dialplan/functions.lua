@@ -111,6 +111,8 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = "+" .. tostring(parameters[3]);
   elseif fid == "hangup" then
     result = self:hangup(caller, parameters[3], parameters[4]);
+  elseif fid == "park" then
+    result = self:park(caller, parameters[3]);
   end
 
   return result;
@@ -910,4 +912,10 @@ function Functions.hangup(self, caller, code, phrase)
 
   self.log:info("FUNCTION_HANGUP code: ", code, ', phrase: ', phrase);
   return { continue = false, code = code, phrase = phrase:gsub('_', ' '), no_cdr = true }
+end
+
+function Functions.park(self, caller, lot)
+  self.log:info("FUNCTION_PARK lot: ", lot);
+  caller:execute("valet_park", 'valet_lot ' .. lot);
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
