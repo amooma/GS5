@@ -82,6 +82,9 @@ gem 'thin'
 # Backup https://github.com/meskyanichi/backup
 gem 'backup'
 
+# Cronjobs
+gem 'whenever'
+
 # Local Variables:
 # mode: ruby
 # End:
