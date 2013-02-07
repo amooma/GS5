@@ -29,8 +29,8 @@ Backup::Model.new(:GS5, 'GS5 backup') do
   ##
   # Faxes
   #
-  archive :faxes do |archive|
-    if File.exists?('/opt/gemeinschaft/public/uploads/fax_document')
+  if File.exists?('/opt/gemeinschaft/public/uploads/fax_document')
+    archive :faxes do |archive|
       archive.add     '/opt/gemeinschaft/public/uploads/fax_document'
     end
   end
@@ -38,8 +38,8 @@ Backup::Model.new(:GS5, 'GS5 backup') do
   ##
   # Voicemails
   #
-  archive :voicemails do |archive|
-    if File.exists?('/var/opt/gemeinschaft/freeswitch/voicemail')
+  if File.exists?('/var/opt/gemeinschaft/freeswitch/voicemail')
+    archive :voicemails do |archive|
       archive.add     '/var/opt/gemeinschaft/freeswitch/voicemail'
     end
   end
