@@ -5,7 +5,6 @@ class BackupJob < ActiveRecord::Base
 
   before_create :set_state_to_queued
   after_create :initiate_backup
-  after_destroy :delete_the_backup_directory
 
   private
   def set_state_to_queued
@@ -29,14 +28,14 @@ class BackupJob < ActiveRecord::Base
       if tmp_backup_directory.blank?
         self.state = 'failed'
       else
-        system "cd #{backup_directory} && tar czf #{backup_name_prefix}#{tmp_backup_directory}.tar.gz #{tmp_backup_directory}"
+        system "cd #{backup_directory} && tar czf #{backup_name_prefix}#{File.basename(tmp_backup_directory)}.tar.gz #{File.basename(tmp_backup_directory)}"
         require 'fileutils'
         FileUtils.rm_rf tmp_backup_directory
-        file = File::Stat.new("#{backup_directory}/#{backup_name_prefix}#{tmp_backup_directory}.tar.gz")
+        file = File::Stat.new("#{backup_directory}/#{backup_name_prefix}#{File.basename(tmp_backup_directory)}.tar.gz")
 
-        self.size_of_the_backup = file.size
+        self.directory = File.basename(tmp_backup_directory)
 
-        self.backup_file = File.open("#{backup_directory}/#{backup_name_prefix}#{tmp_backup_directory}.tar.gz")
+        self.backup_file = File.open("#{backup_directory}/#{backup_name_prefix}#{File.basename(tmp_backup_directory)}.tar.gz")
 
         self.finished_at = Time.now
         self.state = 'successful'
@@ -45,10 +44,4 @@ class BackupJob < ActiveRecord::Base
     end
   end
 
-  def delete_the_backup_directory
-    # if !tmp_backup_directory.blank?
-    #   require 'fileutils'
-    #   FileUtils.rm_rf tmp_backup_directory
-    # end
-  end
 end
