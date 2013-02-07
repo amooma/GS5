@@ -29,10 +29,9 @@ Backup::Model.new(:GS5, 'GS5 backup') do
   ##
   # Faxes
   #
-  #archive :faxes do |archive|
-  #  archive.add     '/opt/gemeinschaft/public/uploads/fax_document/'
-  #  archive.add     '/opt/gemeinschaft/public/uploads/fax_thumbnail/'
-  #end
+  archive :faxes do |archive|
+    archive.add     '/opt/gemeinschaft/public/uploads/fax_document'
+  end
 
   ##
   # Voicemails
