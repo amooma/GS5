@@ -232,10 +232,15 @@ function SipCall.fork(self, destinations, arg )
     self.caller:set_variable('gs_destination_id', destination.id);
     self.caller:set_variable('gs_destination_uuid', destination.uuid);
 
+    if arg.detect_dtmf_after_bridge_callee then
+      session_callee:setInputCallback('input_call_back_callee', 'session_callee');
+    end
+
     self.log:info('FORK ', fork_index, 
       ' BRIDGE - destination: ', destination.type, '=', destination.id, '/', destination.uuid,'@', destination.node_id, 
       ', number: ', destination.number,
       ', dial_time: ', os.time() - start_time);
+
     freeswitch.bridge(self.caller.session, session_callee);
     self:wait_hangup(self.caller.session, session_callee);
   end
