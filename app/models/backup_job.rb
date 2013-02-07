@@ -6,6 +6,10 @@ class BackupJob < ActiveRecord::Base
   before_create :set_state_to_queued
   after_create :initiate_backup
 
+  def to_s
+    self.started_at.to_s
+  end
+
   private
   def set_state_to_queued
     self.state = 'queued'
