@@ -85,6 +85,7 @@ class Softkey < ActiveRecord::Base
         self.softkeyable_type = nil
       end
       if ['call_forwarding'].include?(self.softkey_function.name)
+        self.softkeyable = CallForward.where(:id => self.softkeyable_id).first
         self.number = nil
       end
     end
