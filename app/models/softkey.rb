@@ -79,14 +79,18 @@ class Softkey < ActiveRecord::Base
   # And make sure that there is no CallForward connected when not needed.
   #
   def clean_up_and_leave_only_values_which_make_sense_for_the_current_softkey_function_id
-    if self.softkey_function_id != nil 
-      if ['blf','speed_dial','dtmf','conference'].include?(self.softkey_function.name)
-        self.softkeyable_id = nil
-        self.softkeyable_type = nil
-      end
-      if ['call_forwarding'].include?(self.softkey_function.name)
+    if self.softkey_function_id != nil
+      case self.softkey_function.name
+      when 'blf'
+        self.softkeyable = PhoneNumber.where(:number => self.number, :phone_numberable_type => 'SipAccount').first.try(:phone_numberable)
+      when 'conference'
+        self.softkeyable = PhoneNumber.where(:number => self.number, :phone_numberable_type => 'Conference').first.try(:phone_numberable)
+      when 'call_forwarding'
         self.softkeyable = CallForward.where(:id => self.softkeyable_id).first
         self.number = nil
+      else
+        self.softkeyable_id = nil
+        self.softkeyable_type = nil  
       end
     end
   end
