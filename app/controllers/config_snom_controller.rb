@@ -282,23 +282,47 @@ class ConfigSnomController < ApplicationController
               @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => "speed f-li-#{softkey.number}"})
             when 'conference'
               @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => "blf <sip:#{softkey.number}@#{sip_account.host}>|f-ta-"})
-            when 'call_forwarding'
+            when 'call_parking'
               @softkeys.push({
                 :context => sip_account_index,
-                :function => softkey.function,
+                :function => softkey.softkey_function.name,
                 :label => softkey.label,
                 :softkey => softkey,
                 :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
                 :subscription => {
-                  :to => "f-cftg-#{softkey.call_forward_id}@#{sip_account.host}",
+                  :to => "park+#{@softkeys.softkeyable_id}@#{sip_account.host}",
                   :for => "#{sip_account.auth_name}@#{sip_account.host}"
                 },
                 :actions => [{
-                  :type => :url, 
-                  :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/call_forwarding.xml?id=#{softkey.call_forward_id}&function=toggle",
+                  :type => :dial, 
+                  :target => "f-tpark-#{@softkeys.softkeyable_id}",
+                  :when => 'on press',
+                  :states => 'connected,holding',
+                },{
+                  :type => :dial, 
+                  :target => "f-park-#{@softkeys.softkeyable_id}",
                   :when => 'on press',
                 }],
               })
+            when 'call_forwarding'
+              if softkey.softkeyable.class == CallForward then
+                @softkeys.push({
+                  :context => sip_account_index,
+                  :function => softkey.softkey_function.name,
+                  :label => softkey.label,
+                  :softkey => softkey,
+                  :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
+                  :subscription => {
+                    :to => "f-cftg-#{softkey.softkeyable_id}@#{sip_account.host}",
+                    :for => "#{sip_account.auth_name}@#{sip_account.host}"
+                  },
+                  :actions => [{
+                    :type => :url, 
+                    :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/call_forwarding.xml?id=#{softkey.softkeyable_id}&function=toggle",
+                    :when => 'on press',
+                  }],
+                })
+              end
             when 'call_forwarding_always'
               phone_number = PhoneNumber.where(:number => softkey.number, :phone_numberable_type => 'SipAccount').first
               if phone_number
@@ -310,7 +334,7 @@ class ConfigSnomController < ApplicationController
 
               @softkeys.push({
                 :context => sip_account_index,
-                :function => softkey.function,
+                :function => softkey.softkey_function.name,
                 :label => softkey.label,
                 :softkey => softkey,
                 :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
@@ -335,7 +359,7 @@ class ConfigSnomController < ApplicationController
 
               @softkeys.push({
                 :context => sip_account_index,
-                :function => softkey.function,
+                :function => softkey.softkey_function.name,
                 :label => softkey.label,
                 :softkey => softkey,
                 :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
@@ -375,7 +399,7 @@ class ConfigSnomController < ApplicationController
               if hunt_group_member 
                 @softkeys.push({
                   :context => sip_account_index,
-                  :function => softkey.function,
+                  :function => softkey.softkey_function.name,
                   :label => softkey.label,
                   :softkey => softkey,
                   :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
@@ -405,7 +429,7 @@ class ConfigSnomController < ApplicationController
               if acd_agent
                 @softkeys.push({
                   :context => sip_account_index,
-                  :function => softkey.function,
+                  :function => softkey.softkey_function.name,
                   :label => softkey.label,
                   :softkey => softkey,
                   :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
@@ -924,7 +948,7 @@ AAAA'
       if @call_forwarding_id 
         call_forwarding = @sip_account.call_forwards.where(:id => @call_forwarding_id).first
 
-        if !call_forwarding and @sip_account.softkeys.where(:call_forward_id => @call_forwarding_id).count > 0
+        if !call_forwarding and @sip_account.softkeys.where(:softkeyable_id => @call_forwarding_id, :softkeyable_type => 'CallForward').count > 0
           call_forwarding = CallForward.where(:id => @call_forwarding_id).first
         end
 

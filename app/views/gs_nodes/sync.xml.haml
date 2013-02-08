@@ -60,7 +60,7 @@
   - if !@softkeys.blank?
     %softkeys
       - @softkeys.each do |softkey|
-        %softkey{ :uuid => softkey.uuid, :function => softkey.softkey_function.try(:name), :number => softkey.number, :label => softkey.label, :position => softkey.position, :created_at => softkey.created_at, :updated_at => softkey.updated_at, :sip_account_uuid => softkey.sip_account.try(:uuid), :call_forward_uuid => softkey.call_forward.try(:uuid) }
+        %softkey{ :uuid => softkey.uuid, :function => softkey.softkey_function.try(:name), :number => softkey.number, :label => softkey.label, :position => softkey.position, :created_at => softkey.created_at, :updated_at => softkey.updated_at, :sip_account_uuid => softkey.sip_account.try(:uuid), :softkeyable_uuid => softkey.softkeyable.try(:uuid), :softkeyable_type => softkey.softkeyable_type) }
 
   - if !@ringtones.blank?
     %ringtones

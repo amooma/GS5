@@ -145,7 +145,7 @@ class CallForward < ActiveRecord::Base
     softkey_function_deactivated = SoftkeyFunction.find_by_name('deactivated')
     self.softkeys.each do |softkey|
       if softkey.softkey_function_id != softkey_function_deactivated.id
-        softkey.update_attributes(:call_forward_id => nil, :softkey_function_id => softkey_function_deactivated.id)
+        softkey.update_attributes(:softkeyable_id => nil, :softkeyable_type => nil, :softkey_function_id => softkey_function_deactivated.id)
       end
     end
   end
