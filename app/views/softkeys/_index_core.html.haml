@@ -15,7 +15,7 @@
               - if softkeys.count > 1
                 %span.handle
                   %i.icon-resize-vertical      
-            %td= softkey.function
+            %td= t("softkeys.functions.#{softkey.softkey_function}")
             %td= softkey.number
             %td= softkey.label
             =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => softkey.sip_account, :child => softkey}
