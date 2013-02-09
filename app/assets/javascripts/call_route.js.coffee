@@ -1,5 +1,5 @@
 jQuery ->
-  $('#call_routes').sortable
+  $('.call_routes').sortable
     axis: 'y'
     handle: '.handle'
     update: ->
