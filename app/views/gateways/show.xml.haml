@@ -1,5 +1,5 @@
 !!! XML
-%gateway{ :id => @gateway.id, :name => @gateway.name, :technology => @gateway.technology, :inbound => @gateway.inbound.to_s, :outbound => @gateway.outbound.to_s, :description => @gateway.description }
+%gateway{ :identifier => @gateway.identifier, :name => @gateway.name, :technology => @gateway.technology, :inbound => @gateway.inbound.to_s, :outbound => @gateway.outbound.to_s, :description => @gateway.description }
 
   %gateway_settings{ :count => @gateway.gateway_settings.count }
     - @gateway.gateway_settings.each do |setting|

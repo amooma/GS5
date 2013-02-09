@@ -1,5 +1,6 @@
 class Gateway < ActiveRecord::Base
   TECHNOLOGIES = ['sip', 'xmpp']
+  GATEWAY_PREFIX = 'gateway'
 
   attr_accessible :name, :technology, :inbound, :outbound, :description
 
@@ -20,6 +21,10 @@ class Gateway < ActiveRecord::Base
 
   def to_s
     name
+  end
+
+  def identifier
+    "#{GATEWAY_PREFIX}#{self.id}"
   end
 
   private
