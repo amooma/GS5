@@ -18,6 +18,8 @@ class CreateIntruders < ActiveRecord::Migration
       t.string :comment
       t.timestamps
     end
+
+    add_index :intruders, :key, :unique => true
   end
 
   def self.down
