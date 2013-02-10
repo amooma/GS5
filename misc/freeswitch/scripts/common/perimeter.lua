@@ -128,12 +128,17 @@ function Perimeter.check(self, event)
         self:append_blacklist_file(event);
       end
       self:execute_ban(event);
+      event.ban_time = os.time();
     end
         
     event.record.banned = event.record.banned + 1;
     event.span_start = event.timestamp;
     event.span_contact_count = 0;
     event.points = 0;
+  end
+
+  if event.points then
+    self:update_intruder(event);
   end
 
   self:record_update(event);
@@ -145,6 +150,7 @@ function Perimeter.check_frequency(self, event)
     self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_FREQUENCY_CHECK - contacts: ', event.record.span_contact_count, ' in < ', (event.timestamp - event.record.span_start)/1000000, ' sec, threshold: ', self.contact_count_threshold, ' in ', self.contact_span_threshold, ' sec');
     event.span_contact_count = 0;
     event.span_start = event.timestamp;
+    event.contacts_per_second = event.record.span_contact_count / ((event.timestamp - event.record.span_start)/1000000)
     return 1;
   elseif (event.timestamp - event.record.span_start) > (self.contact_span_threshold * 1000000) then    
     event.span_contact_count = 0;
@@ -220,6 +226,11 @@ function Perimeter.execute_ban(self, event)
   local command = self:expand_variables(self.ban_command, event);
   self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_EXECUTE_BAN - command: ', command);
   local result = os.execute(command);
+end
+
+function Perimeter.update_intruder(self, event)
+  require 'common.intruder';
+  local result = common.intruder.Intruder:new{ log = self.log, database = self.database }:update_blacklist(event);
 end
 
 
