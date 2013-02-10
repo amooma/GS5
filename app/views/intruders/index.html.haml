@@ -1,0 +1,6 @@
+- content_for :title, t("intruders.index.page_title")
+
+- if @intruders && @intruders.count > 0
+  = render "index_core", :intruders => @intruders
+
+= render :partial => 'shared/create_link', :locals => {:child_class => Intruder}

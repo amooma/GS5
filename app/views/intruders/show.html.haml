@@ -1,0 +1,49 @@
+- content_for :title, t("intruders.show.page_title")
+
+%p
+  %strong= t('intruders.show.list_type') + ":"
+  = @intruder.list_type
+%p
+  %strong= t('intruders.show.key') + ":"
+  = @intruder.key
+%p
+  %strong= t('intruders.show.points') + ":"
+  = @intruder.points
+%p
+  %strong= t('intruders.show.bans') + ":"
+  = @intruder.bans
+%p
+  %strong= t('intruders.show.ban_last') + ":"
+  = @intruder.ban_last
+%p
+  %strong= t('intruders.show.ban_end') + ":"
+  = @intruder.ban_end
+%p
+  %strong= t('intruders.show.contact_ip') + ":"
+  = @intruder.contact_ip
+%p
+  %strong= t('intruders.show.contact_port') + ":"
+  = @intruder.contact_port
+%p
+  %strong= t('intruders.show.contact_count') + ":"
+  = @intruder.contact_count
+%p
+  %strong= t('intruders.show.contact_last') + ":"
+  = @intruder.contact_last
+%p
+  %strong= t('intruders.show.contacts_per_second') + ":"
+  = @intruder.contacts_per_second
+%p
+  %strong= t('intruders.show.contacts_per_second_max') + ":"
+  = @intruder.contacts_per_second_max
+%p
+  %strong= t('intruders.show.user_agent') + ":"
+  = @intruder.user_agent
+%p
+  %strong= t('intruders.show.to_user') + ":"
+  = @intruder.to_user
+%p
+  %strong= t('intruders.show.comment') + ":"
+  = @intruder.comment
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @intruder }
