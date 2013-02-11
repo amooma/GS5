@@ -39,8 +39,8 @@
               = time_ago_in_words(fax_account.fax_documents.order(:updated_at).last.updated_at)
         %td
           - if can?(:new, FaxDocument, :fax_account_id => fax_account.id)
-            %a.btn.btn-mini.btn-primary{:href => new_fax_account_fax_document_path(fax_account) }
-              %i.icon-print.icon-white
+            %a.btn.btn-small{:href => new_fax_account_fax_document_path(fax_account) }
+              %i.icon-print
               %span.hidden-phone
                 =t('fax_accounts.index.send_a_fax')
 
