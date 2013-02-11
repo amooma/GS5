@@ -156,10 +156,6 @@ class Ability
           #
           can :manage, CallForward, :phone_number_id => user.phone_number_ids
 
-          # SystemMessages
-          #
-          can :read, SystemMessage, :user_id => user.id
-
           # SoftkeyFunctions
           #
           can :read, SoftkeyFunction
