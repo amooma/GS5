@@ -38,3 +38,5 @@
       = render :partial => 'call_routes', :locals => {:tenant => tenant}
 
       = render :partial => 'gateways', :locals => {:tenant => tenant, :gateways => gateways}
+
+      = render :partial => 'table_of_backup_jobs', :locals => {:tenant => tenant, :backup_jobs => backup_jobs}

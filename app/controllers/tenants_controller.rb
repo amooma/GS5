@@ -8,6 +8,7 @@ class TenantsController < ApplicationController
   def show
     @tenant = Tenant.find(params[:id])
     @gateways = Gateway.order(:updated_at)
+    @backup_jobs = BackupJob.order(:finished_at).last(5)
   end
 
   def new
