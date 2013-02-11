@@ -62,9 +62,6 @@ gem 'will_paginate'
 gem 'daemons'
 gem 'delayed_job_active_record'
 
-# Private Pub http://railscasts.com/episodes/316-private-pub
-gem 'private_pub'
-
 # https://github.com/iain/http_accept_language
 gem 'http_accept_language'
 
