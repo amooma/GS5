@@ -17,6 +17,17 @@ class Intruder < ActiveRecord::Base
 
   before_validation :set_key_if_empty
 
+
+  def whois
+    if ! self.contact_ip.blank?
+      begin
+        return Whois.whois(self.contact_ip)
+      rescue
+        return nil
+      end
+    end
+  end
+
   private
   def set_key_if_empty
     if self.key.blank?

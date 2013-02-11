@@ -46,4 +46,7 @@
   %strong= t('intruders.show.comment') + ":"
   = @intruder.comment
 
+%p
+  %pre= @intruder.whois
+
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @intruder }
