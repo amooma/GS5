@@ -56,10 +56,6 @@ class Ability
             can :read, PhoneBookEntry, :phone_book => { :id => user_group.phone_book_ids }
           end
 
-          # SystemMessages
-          #
-          cannot [:destroy, :edit, :update], SystemMessage
-
           # A FacDocument can't be changed
           #
           cannot [:edit, :update], FaxDocument
@@ -159,10 +155,6 @@ class Ability
           # own SipAccounts:
           #
           can :manage, CallForward, :phone_number_id => user.phone_number_ids
-
-          # SystemMessages
-          #
-          can :read, SystemMessage, :user_id => user.id
 
           # SoftkeyFunctions
           #
