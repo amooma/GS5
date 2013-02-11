@@ -44,8 +44,8 @@ class FreeswitchEventSocket
     @socket.close
   end
 
-  def read()
-    return @socket.recv(1024)
+  def read(read_bytes=1024)
+    return @socket.recv(read_bytes)
   end
 
   def result()
@@ -130,4 +130,20 @@ class FreeswitchAPI
 
     return false
   end
+
+  def self.channel_variable_get(channel_uuid, variable_name)
+    result = nil
+    event = FreeswitchEventSocket.new()
+    if event && event.connect()
+      event.command( "api uuid_getvar #{channel_uuid} #{variable_name}")
+      event_result = event.result()
+      if event_result && event_result["Content-Type"] == 'api/response' && event_result["Content-Length"].to_i > 0
+        result = event.read(event_result["Content-Length"].to_i)
+      end
+      event.close()
+    end
+
+    return result
+  end
+
 end
