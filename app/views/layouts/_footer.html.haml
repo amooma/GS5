@@ -16,4 +16,4 @@
       %li
         =link_to t('misc.send_a_bugreport'), URI::escape("https://github.com/amooma/GS5/issues/new?title=Bugreport&body=URL which triggered the bugreport is: #{request.fullpath}\nGS5 buildname: #{(GsParameter.get('GEMEINSCHAFT_BUILDNAME').blank? ? 'unknown' : GsParameter.get('GEMEINSCHAFT_BUILDNAME'))} (#{GsParameter.get('GEMEINSCHAFT_VERSION')})\n\nPlease provide your bugreport below this line and update the title of this issue to a more specific one.")
     %li{:class => 'pull-right'}
-      = link_to 'brought to you by AMOOMA GmbH', 'http://amooma.de'
+      = link_to '© AMOOMA GmbH', 'http://amooma.de'
