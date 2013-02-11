@@ -4,29 +4,34 @@ class BackupJobsController < ApplicationController
   before_filter :spread_breadcrumbs
 
   def index
-    # @backup_jobs = BackupJob.all
   end
 
   def show
-    # @backup_job = BackupJob.find(params[:id])
   end
 
   def new
-    @backup_job = BackupJob.new
+    # Do the same as create.
+    #
+    @backup_job = BackupJob.new(:started_at => Time.now)
+
+    if @backup_job.save
+      redirect_to backup_jobs_path, :notice => t('backup_jobs.controller.successfuly_created')
+    else
+      render :new
+    end
   end
 
   def create
     @backup_job = BackupJob.new(:started_at => Time.now)
 
     if @backup_job.save
-      redirect_to @backup_job, :notice => t('backup_jobs.controller.successfuly_created')
+      redirect_to backup_jobs_path, :notice => t('backup_jobs.controller.successfuly_created')
     else
       render :new
     end
   end
 
   def destroy
-    # @backup_job = BackupJob.find(params[:id])
     @backup_job.destroy
     redirect_to backup_jobs_url, :notice => t('backup_jobs.controller.successfuly_destroyed')
   end

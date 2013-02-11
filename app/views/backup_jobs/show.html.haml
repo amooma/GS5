@@ -15,6 +15,8 @@
 %p
   %strong= t('backup_jobs.show.size_of_the_backup') + ":"
   - if @backup_job.backup_file?
-    = number_to_human_size(@backup_job.backup_file.size, :precision => 2)
+    %a{:href => backup_job.backup_file.current_path}
+      %i{:class => 'icon-download'}
+      = number_to_human_size(backup_job.backup_file.size, :precision => 2)  
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @backup_job }
