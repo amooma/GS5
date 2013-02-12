@@ -1,0 +1,6 @@
+- content_for :title, t("parking_stalls.index.page_title")
+
+- if @parking_stalls && @parking_stalls.count > 0
+  = render "index_core", :parking_stalls => @parking_stalls
+
+= render :partial => 'shared/create_link', :locals => {:child_class => ParkingStall}

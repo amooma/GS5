@@ -1,0 +1,7 @@
+= simple_form_for(@parking_stall) do |f|
+  = f.error_notification
+
+  = render "form_core", :f => f
+
+  .actions
+    = f.button :submit, conditional_t('parking_stalls.form.submit')

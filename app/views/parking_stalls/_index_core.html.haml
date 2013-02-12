@@ -1,0 +1,17 @@
+%table.table.table-striped
+  %tr
+    %th= t('parking_stalls.index.name')
+    %th= t('parking_stalls.index.lot')
+    %th= t('parking_stalls.index.parking_stallable_id')
+    %th= t('parking_stalls.index.parking_stallable_type')
+    %th= t('parking_stalls.index.comment')
+
+  
+  - for parking_stall in parking_stalls
+    %tr
+      %td= parking_stall.name
+      %td= parking_stall.lot
+      %td= parking_stall.parking_stallable_id
+      %td= parking_stall.parking_stallable_type
+      %td= parking_stall.comment
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => parking_stall}
