@@ -111,8 +111,8 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = "+" .. tostring(parameters[3]);
   elseif fid == "hangup" then
     result = self:hangup(caller, parameters[3], parameters[4]);
-  elseif fid == "park" then
-    result = self:park(caller, parameters[3]);
+  elseif fid == "cpa" then
+    result = self:call_parking_inout(caller, parameters[3], parameters[4]);
   end
 
   return result;
@@ -898,6 +898,7 @@ function Functions.acd_membership_toggle(self, caller, agent_id, phone_number)
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
 
+
 function Functions.hangup(self, caller, code, phrase)
   require 'common.str'
 
@@ -914,8 +915,20 @@ function Functions.hangup(self, caller, code, phrase)
   return { continue = false, code = code, phrase = phrase:gsub('_', ' '), no_cdr = true }
 end
 
-function Functions.park(self, caller, lot)
-  self.log:info("FUNCTION_PARK lot: ", lot);
-  caller:execute("valet_park", 'valet_lot ' .. lot);
+
+function Functions.call_parking_inout(self, caller, stall_name, lot_name)
+  require 'dialplan.call_parking';
+  local parking_stall = dialplan.call_parking.CallParking:new{ log = self.log, database = self.database, caller = caller }:find_by_name(stall_name);
+  
+  if not parking_stall then
+    return { continue = false, code = 404, phrase = 'Parking stall not found', no_cdr = true }
+  end
+
+  if lot_name and parking_stall.lot ~= lot_name then
+    return { continue = false, code = 404, phrase = 'Parking lot not found', no_cdr = true }
+  end
+
+  parking_stall:park_retrieve();
+
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
