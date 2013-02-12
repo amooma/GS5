@@ -39,6 +39,8 @@ class Tenant < ActiveRecord::Base
   has_many :automatic_call_distributors, :as => :automatic_call_distributorable, :dependent => :destroy
   has_many :acd_agents, :through => :automatic_call_distributors
 
+  has_many :parking_stalls, :as => :parking_stallable, :dependent => :destroy
+
   # Phone numbers of the tenant.
   #
   has_many :phone_number_ranges_phone_numbers, :through => :phone_number_ranges, :source => :phone_numbers, :readonly => true

@@ -3,4 +3,4 @@
 - if @parking_stalls && @parking_stalls.count > 0
   = render "index_core", :parking_stalls => @parking_stalls
 
-= render :partial => 'shared/create_link', :locals => {:child_class => ParkingStall}
+= render :partial => 'shared/create_link', :locals => {:parent => @parent, :child_class => ParkingStall}

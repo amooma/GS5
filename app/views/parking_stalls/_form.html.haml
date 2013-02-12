@@ -1,4 +1,4 @@
-= simple_form_for(@parking_stall) do |f|
+= simple_form_for([@parent, @parking_stall]) do |f|
   = f.error_notification
 
   = render "form_core", :f => f
