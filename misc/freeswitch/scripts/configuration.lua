@@ -415,7 +415,7 @@ function directory_sip_account(database)
       end
     else
       require 'common.sip_account'
-      local sip_account = common.sip_account.SipAccount:new{ log = log, database = database}:find_by_auth_name(auth_name, domain);
+      local sip_account = common.sip_account.SipAccount:new{ log = log, database = database}:find_by_auth_name(auth_name);
 
       require 'common.configuration_table'
       local user_parameters = common.configuration_table.get(database, 'sip_accounts', 'parameters');
