@@ -10,6 +10,7 @@ class GatewaySetting < ActiveRecord::Base
       'auth_source' =>  'String', 
       'auth_pattern' =>  'String',
       'number_source' =>  'String',
+      'profile' =>  'String',
     },
    'xmpp' => { 
       'server' => 'String', 

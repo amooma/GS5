@@ -1,0 +1,17 @@
+!!! XML
+%gateway{ :identifier => @gateway.identifier, :name => @gateway.name, :technology => @gateway.technology, :inbound => @gateway.inbound.to_s, :outbound => @gateway.outbound.to_s, :description => @gateway.description }
+
+  %gateway_settings{ :count => @gateway.gateway_settings.count }
+    - @gateway.gateway_settings.each do |setting|
+      %setting{ :name => setting.name, :value => setting.value, :class_type => setting.class_type, :description => setting.description }
+
+  %gateway_parameters{ :count => @gateway.gateway_parameters.count }
+    - @gateway.gateway_parameters.each do |parameter|
+      %parameter{ :name => parameter.name, :value => parameter.value, :class_type => parameter.class_type, :description => parameter.description }
+
+  %call_routes{ :count => @gateway.call_routes.count }
+    - @gateway.call_routes.each do |call_route|
+      %call_route{ :name => call_route.name, :routing_table =>  call_route.routing_table, :position => call_route.position }
+        %route_elements{ :count => call_route.route_elements.count }
+          - call_route.route_elements.each do |route_element|
+            %route_element{ :var_in => route_element.var_in, :var_out => route_element.var_out, :pattern => route_element.pattern, :replacement => route_element.replacement, :action => route_element.action, :mandatory => route_element.mandatory.to_s, :position => route_element.position }

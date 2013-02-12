@@ -58,12 +58,9 @@ gem "mini_magick"
 # Pagination https://github.com/mislav/will_paginate/wiki/Installation
 gem 'will_paginate'
 
-# DelayedJob
-gem 'delayed_job'
+# DelayedJob https://github.com/collectiveidea/delayed_job
+gem 'daemons'
 gem 'delayed_job_active_record'
-
-# Private Pub http://railscasts.com/episodes/316-private-pub
-gem 'private_pub'
 
 # https://github.com/iain/http_accept_language
 gem 'http_accept_language'
@@ -78,6 +75,12 @@ gem 'uuid'
 gem 'unicorn'
 
 gem 'thin'
+
+# Backup https://github.com/meskyanichi/backup
+gem 'backup'
+
+# Cronjobs
+gem 'whenever'
 
 # Local Variables:
 # mode: ruby

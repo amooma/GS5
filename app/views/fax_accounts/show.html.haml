@@ -12,7 +12,11 @@
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @parent, :child => @fax_account }
 
-= render :partial => 'shared/create_link', :locals => { :parent => @fax_account, :child_class => FaxDocument }
+%p
+  %a.btn.btn-small{:href => new_fax_account_fax_document_path(@fax_account) }
+    %i.icon-print
+    %span.hidden-phone
+      =t('fax_accounts.index.send_a_fax')
 
 %h2= t('phone_numbers.index.page_title')  
 - if @fax_account.phone_numbers.count > 0

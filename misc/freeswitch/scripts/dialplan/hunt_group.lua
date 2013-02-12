@@ -98,6 +98,18 @@ function HuntGroup.run(self, dialplan_object, caller, destination)
 
   self.log:info('HUNTGROUP ', self.record.id, ' - name: ', self.record.name, ', strategy: ', self.record.strategy,', members: ', #hunt_group_members);
 
+  local clip_no_screening = common.str.try(caller, 'account.record.clip_no_screening');
+  caller.caller_id_numbers = {}
+  if not common.str.blank(clip_no_screening) then
+    for index, number in ipairs(common.str.strip_to_a(clip_no_screening, ',')) do
+      table.insert(caller.caller_id_numbers, number);
+    end
+  end
+  for index, number in ipairs(caller.caller_phone_numbers) do
+    table.insert(caller.caller_id_numbers, number);
+  end
+  self.log:info('CALLER_ID_NUMBERS - clir: ', caller.clir, ', numbers: ', table.concat(caller.caller_id_numbers, ','));
+
   local save_destination = caller.destination;
 
   local destinations = {}
@@ -172,6 +184,7 @@ function HuntGroup.run(self, dialplan_object, caller, destination)
         self.log:info('HUNTGROUP ', self.record.id, ' - all members busy');
         run_queue = false;
       end
+      caller:sleep(500);
     end
   else
     if forwarding_destination then

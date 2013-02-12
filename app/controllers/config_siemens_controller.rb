@@ -610,15 +610,21 @@ class ConfigSiemensController < ApplicationController
       @new_settings << ['stimulus-led-control-uri', key_idx, '' ]
       @new_settings << ['stimulus-DTMF-sequence', key_idx, '' ]
     when 'call_forwarding'
+      if sk.softkeyable.class == CallForward then
         @new_settings << ['function-key-def', key_idx, '63']
-        @new_settings << ['stimulus-led-control-uri', key_idx, "f-cftg-#{sk.call_forward_id}" ]
+        @new_settings << ['stimulus-led-control-uri', key_idx, "f-cftg-#{sk.softkeyable.id}" ]
         @new_settings << ['send-url-address', key_idx, request.host]
         @new_settings << ['send-url-protocol', key_idx, 3]
         @new_settings << ['send-url-port', key_idx, '80']
         @new_settings << ['send-url-path', key_idx, "/config_siemens/#{@phone.id}/#{@sip_account.id}/call_forwarding.xml"]
-        @new_settings << ['send-url-query', key_idx, "id=#{sk.call_forward_id}&function=toggle"]
+        @new_settings << ['send-url-query', key_idx, "id=#{sk.softkeyable.id}&function=toggle"]
         @new_settings << ['send-url-method', key_idx, '0']
         @new_settings << ['blf-popup', key_idx, 'false']
+      else
+        @new_settings << ['function-key-def', key_idx, '0']
+        @new_settings << ['stimulus-led-control-uri', key_idx, '' ]
+        @new_settings << ['stimulus-DTMF-sequence', key_idx, '' ]
+      end
     when 'call_forwarding_always'
       phone_number = PhoneNumber.where(:number => sk.number, :phone_numberable_type => 'SipAccount').first
       if phone_number
@@ -887,7 +893,7 @@ class ConfigSiemensController < ApplicationController
       if @call_forwarding_id 
         call_forwarding = @sip_account.call_forwards.where(:id => @call_forwarding_id).first
 
-        if !call_forwarding and @sip_account.softkeys.where(:call_forward_id => @call_forwarding_id).count > 0
+        if !call_forwarding and @sip_account.softkeys.where(:softkeyable_id => @call_forwarding_id, :softkeyable_type => 'CallForward').count > 0
           call_forwarding = CallForward.where(:id => @call_forwarding_id).first
         end
 

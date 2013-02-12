@@ -4,9 +4,9 @@ class GemeinschaftSetupsController < ApplicationController
   #
   caches_page :new, :gzip => :best_compression
 
-  load_and_authorize_resource :gemeinschaft_setup
+  skip_before_filter :start_setup_if_new_installation
 
-  skip_before_filter :go_to_setup_if_new_installation
+  load_and_authorize_resource :gemeinschaft_setup
 
   def new
     @user = @gemeinschaft_setup.build_user(
@@ -23,6 +23,7 @@ class GemeinschaftSetupsController < ApplicationController
 
     @gemeinschaft_setup.default_company_name = generate_a_new_name(Tenant.new)
     @gemeinschaft_setup.default_system_email = 'admin@localhost'
+    @gemeinschaft_setup.trunk_access_code = '0'
   end
 
   def create
@@ -52,7 +53,7 @@ class GemeinschaftSetupsController < ApplicationController
       CallRoute.factory_defaults_prerouting(@gemeinschaft_setup.country.country_code, 
                                             @gemeinschaft_setup.country.trunk_prefix, 
                                             @gemeinschaft_setup.country.international_call_prefix, 
-                                            '', 
+                                            @gemeinschaft_setup.trunk_access_code, 
                                             @gemeinschaft_setup.default_area_code
                                             )
 

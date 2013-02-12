@@ -201,10 +201,14 @@ namespace :gs_cluster do
     remote_objects(remote_site, local_node_id, last_sync, Softkey).each do |remote_object|
       attributes = make_hash(remote_object.attributes)
       attributes[:sip_account_id] = SipAccount.where(:uuid => attributes[:sip_account_uuid]).first.try(:id)
-      attributes[:call_forward_id] = CallForward.where(:uuid => attributes[:call_forward_uuid]).first.try(:id)
+
+      if ! attributes[:softkeyable_uuid].blank?
+        attributes[:softkeyable_id] = attributes[:softkeyable_type].constantize.where(:uuid => attributes[:softkeyable_uuid]).first.try(:id)
+      end
+
       attributes[:softkey_function_id] = SoftkeyFunction.where(:name => attributes[:function]).first.try(:id)
       attributes.delete(:sip_account_uuid)
-      attributes.delete(:call_forward_uuid)
+      attributes.delete(:softkeyable_uuid)
       attributes.delete(:softkey_function)
       process_object(Softkey, Softkey, Softkey.where(:uuid => attributes[:uuid]).first, attributes)
     end

@@ -5,7 +5,7 @@ class RouteElementsController < ApplicationController
   before_filter :spread_breadcrumbs
 
   def index
-    @route_elements = @call_route.route_elements
+    @route_elements = @call_route.route_elements.order([:position])
   end
 
   def show
@@ -44,14 +44,14 @@ class RouteElementsController < ApplicationController
     redirect_to call_route_route_elements_path(@call_route), :notice => t('route_elements.controller.successfuly_destroyed')
   end
 
-  def move_higher
-    @route_element.move_higher
-    redirect_to :back
-  end
+  def sort
+    #call_route = RouteElement.find(params[:route_element].first).call_route
 
-  def move_lower
-    @route_element.move_lower
-    redirect_to :back
+    params[:route_element].each do |route_element_id|
+      @call_route.route_elements.find(route_element_id).move_to_bottom
+    end
+
+    render nothing: true
   end
 
   private

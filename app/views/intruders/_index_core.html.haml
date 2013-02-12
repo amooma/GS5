@@ -1,0 +1,37 @@
+%table.table.table-striped
+  %tr
+    %th= t('intruders.index.list_type')
+    %th= t('intruders.index.key')
+    %th= t('intruders.index.points')
+    %th= t('intruders.index.bans')
+    %th= t('intruders.index.ban_last')
+    %th= t('intruders.index.ban_end')
+    %th= t('intruders.index.contact_ip')
+    %th= t('intruders.index.contact_port')
+    %th= t('intruders.index.contact_count')
+    %th= t('intruders.index.contact_last')
+    %th= t('intruders.index.contacts_per_second')
+    %th= t('intruders.index.contacts_per_second_max')
+    %th= t('intruders.index.user_agent')
+    %th= t('intruders.index.to_user')
+    %th= t('intruders.index.comment')
+
+  
+  - for intruder in intruders
+    %tr
+      %td= intruder.list_type
+      %td= intruder.key
+      %td= intruder.points
+      %td= intruder.bans
+      %td= intruder.ban_last
+      %td= intruder.ban_end
+      %td= intruder.contact_ip
+      %td= intruder.contact_port
+      %td= intruder.contact_count
+      %td= intruder.contact_last
+      %td= intruder.contacts_per_second
+      %td= intruder.contacts_per_second_max
+      %td= intruder.user_agent
+      %td= intruder.to_user
+      %td= intruder.comment
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => intruder}

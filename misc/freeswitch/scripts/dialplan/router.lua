@@ -18,11 +18,16 @@ function Router.new(self, arg)
   self.routes = arg.routes or {};
   self.caller = arg.caller;
   self.variables = arg.variables or {};
+  self.routing_tables = {};
   return object;
 end
 
 
-function Router.read_table(self, table_name)
+function Router.read_table(self, table_name, force_reload)
+  if not force_reload and self.routing_tables[table_name] then
+    return self.routing_tables[table_name];
+  end
+
   local routing_table = {};
 
   local sql_query = 'SELECT * \
@@ -47,6 +52,8 @@ function Router.read_table(self, table_name)
       mandatory = common.str.to_b(route.mandatory),
     }); 
   end);
+
+  self.routing_tables[table_name] = routing_table;
 
   return routing_table;
 end
@@ -143,7 +150,7 @@ function Router.route_match(self, route)
         if not common.str.blank(element.var_out) then
           local command, variable_name = common.str.partition(element.var_out, ':');
           if not command or not variable_name or command == 'var' then
-            destination[element.var_out] = replacement;
+            common.str.set(destination, element.var_out, replacement);
           elseif command == 'chv' then
             destination.channel_variables[variable_name] = replacement;
           elseif command == 'hdr' then
@@ -159,6 +166,7 @@ function Router.route_match(self, route)
   end
 
   if route_matches then
+    destination.number = destination.number or destination.destination_number;
     return destination;
   end;
 

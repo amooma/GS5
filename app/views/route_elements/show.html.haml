@@ -1,22 +1,37 @@
 - content_for :title, t("route_elements.show.page_title")
 
-%p
-  %strong= t('route_elements.show.var_in') + ":"
-  = @route_element.var_in
-%p
-  %strong= t('route_elements.show.var_out') + ":"
-  = @route_element.var_out
-%p
-  %strong= t('route_elements.show.pattern') + ":"
-  = @route_element.pattern
-%p
-  %strong= t('route_elements.show.replacement') + ":"
-  = @route_element.replacement
-%p
-  %strong= t('route_elements.show.action') + ":"
-  = @route_element.action
-%p
-  %strong= t('route_elements.show.mandatory') + ":"
-  = @route_element.mandatory
+.row
+  .span6
+    %table.table.table-striped
+      %tr
+        %td
+          %strong= t('route_elements.show.var_in') + ":"
+        %td
+          = @route_element.var_in
+      %tr
+        %td
+          %strong= t('route_elements.show.var_out') + ":"
+        %td
+          = @route_element.var_out
+      %tr
+        %td
+          %strong= t('route_elements.show.pattern') + ":"
+        %td
+          = @route_element.pattern
+      %tr
+        %td
+          %strong= t('route_elements.show.replacement') + ":"
+        %td
+          = @route_element.replacement
+      %tr
+        %td
+          %strong= t('route_elements.show.action') + ":"
+        %td
+          = @route_element.action
+      %tr
+        %td
+          %strong= t('route_elements.show.mandatory') + ":"
+        %td
+          = @route_element.mandatory
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => {:parent => @call_route, :child => @route_element }

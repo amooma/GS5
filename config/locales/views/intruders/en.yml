@@ -1,0 +1,110 @@
+en:
+  intruders:
+    name: 'Intruder'
+    controller:
+      successfuly_created: 'Successfully created Intruder.'
+      successfuly_updated: 'Successfully updated Intruder.'
+      successfuly_destroyed: 'Successfully destroyed Intruder.'
+    index:
+      page_title: 'Listing Intruder'
+      list_type: 'List type'
+      key: 'Key'
+      points: 'Points'
+      bans: 'Bans'
+      ban_last: 'Ban last'
+      ban_end: 'Ban end'
+      contact_ip: 'Contact ip'
+      contact_port: 'Contact port'
+      contact_count: 'Contact count'
+      contact_last: 'Contact last'
+      contacts_per_second: 'Contacts per second'
+      contacts_per_second_max: 'Contacts per second max'
+      user_agent: 'User agent'
+      to_user: 'To user'
+      comment: 'Comment'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this Intruder?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New Intruder for %{resource}'
+    show:
+      page_title: 'Show Intruder'
+      list_type: 'List type'
+      key: 'Key'
+      points: 'Points'
+      bans: 'Bans'
+      ban_last: 'Ban last'
+      ban_end: 'Ban end'
+      contact_ip: 'Contact ip'
+      contact_port: 'Contact port'
+      contact_count: 'Contact count'
+      contact_last: 'Contact last'
+      contacts_per_second: 'Contacts per second'
+      contacts_per_second_max: 'Contacts per second max'
+      user_agent: 'User agent'
+      to_user: 'To user'
+      comment: 'Comment'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this element?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New Intruder'
+      actions:
+        back_to_list: 'Back to Index'
+    edit:
+      page_title: 'Editing Intruder'
+      actions:
+        back_to_list: 'Back to Index'
+        edit: 'Edit'
+        view_all: 'View All'
+    form:
+      list_type:
+        label: 'List type'
+        hint: ''
+      key:
+        label: 'Key'
+        hint: ''
+      points:
+        label: 'Points'
+        hint: ''
+      bans:
+        label: 'Bans'
+        hint: ''
+      ban_last:
+        label: 'Ban last'
+        hint: ''
+      ban_end:
+        label: 'Ban end'
+        hint: ''
+      contact_ip:
+        label: 'Contact ip'
+        hint: ''
+      contact_port:
+        label: 'Contact port'
+        hint: ''
+      contact_count:
+        label: 'Contact count'
+        hint: ''
+      contact_last:
+        label: 'Contact last'
+        hint: ''
+      contacts_per_second:
+        label: 'Contacts per second'
+        hint: ''
+      contacts_per_second_max:
+        label: 'Contacts per second max'
+        hint: ''
+      user_agent:
+        label: 'User agent'
+        hint: ''
+      to_user:
+        label: 'To user'
+        hint: ''
+      comment:
+        label: 'Comment'
+        hint: ''
+      submit: 'Submit'

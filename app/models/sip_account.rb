@@ -21,7 +21,7 @@ class SipAccount < ActiveRecord::Base
   belongs_to :tenant
   belongs_to :sip_domain
 
-  has_many :softkeys, :dependent => :destroy
+  has_many :softkeys, :dependent => :destroy, :order => :position
 
   has_many :voicemail_messages, :foreign_key => 'username', :primary_key => 'auth_name'
 

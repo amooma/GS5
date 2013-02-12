@@ -1,0 +1,2 @@
+module IntrudersHelper
+end

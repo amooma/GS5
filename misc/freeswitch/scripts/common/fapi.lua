@@ -32,8 +32,10 @@ function FApi.return_result(self, result, positive, negative, unspecified)
     return negative;
   elseif result:match('^+OK') then
     return positive;
-  else
+  elseif type(unspecified) ~= 'nil' then
     return unspecified;
+  else
+    return result;
   end
 end
 
@@ -75,6 +77,7 @@ function FApi.create_uuid(self, uuid)
 end
 
 function FApi.execute(self, function_name, function_parameters)
+  function_parameters = function_parameters or '';
   local result = self.fs_api:execute(function_name, function_parameters);
   return self:return_result(result, true);
 end

@@ -1,0 +1,5 @@
+.inputs
+  = f.input :started_at, :label => t('backup_jobs.form.started_at.label'), :hint => conditional_hint('backup_jobs.form.started_at.hint')
+  = f.input :finished_at, :label => t('backup_jobs.form.finished_at.label'), :hint => conditional_hint('backup_jobs.form.finished_at.hint')
+  = f.input :state, :label => t('backup_jobs.form.state.label'), :hint => conditional_hint('backup_jobs.form.state.hint')
+  = f.input :directory, :label => t('backup_jobs.form.directory.label'), :hint => conditional_hint('backup_jobs.form.directory.hint')

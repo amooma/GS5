@@ -1,0 +1,11 @@
+-# BackupJobs
+-#
+- if (can?( :index, BackupJob ) && backup_jobs.count > 0 ) || can?( :create, BackupJob )
+  - if backup_jobs.count == BackupJob.count
+    %h2= t('backup_jobs.index.page_title')
+  - else
+    %h2= t('backup_jobs.index.page_title_with_limit', :limit => '5')
+
+  - if can?( :index, BackupJob ) && backup_jobs.count > 0
+    = render "backup_jobs/index_core", :backup_jobs => backup_jobs
+  = render :partial => 'shared/create_link', :locals => {:child_class => BackupJob}

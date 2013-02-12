@@ -1,25 +1,25 @@
 de:
   call_routes:
-    name: 'Call Route'
+    name: 'Call-Route'
     controller:
-      successfuly_created: 'Call Route wurde angelegt.'
-      successfuly_updated: 'Call Route wurde aktualisiert.'
-      successfuly_destroyed: 'Call Route wurde gelöscht.'
+      successfuly_created: 'Call-Route wurde angelegt.'
+      successfuly_updated: 'Call-Route wurde aktualisiert.'
+      successfuly_destroyed: 'Call-Route wurde gelöscht.'
     index:
-      page_title: 'Liste aller Call Routen'
-      routing_table: 'Routing Table'
+      page_title: 'Liste Call-Routen'
+      routing_table: 'Routing Tabelle'
       name: 'Name'
-      endpoint: 'Endpoint'
+      endpoint: 'Endpunkt'
       position: 'Position'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Call Route'
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Call-Route'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
         create: 'Neu anlegen'
-        create_for: 'Call Route neu anlegen für %{resource}'
+        create_for: 'Call-Route neu anlegen für %{resource}'
     show:
-      page_title: 'Call Route bearbeiten'
+      page_title: 'Call-Route bearbeiten'
       routing_table: 'Routing Table'
       name: 'Name'
       endpoint: 'Endpoint'
@@ -30,11 +30,11 @@ de:
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     new:
-      page_title: 'Call Route neu anlegen'
+      page_title: 'Call-Route neu anlegen'
       actions:
         back_to_list: 'Zurück zur Übersicht'
     edit:
-      page_title: 'Call Route bearbeiten'
+      page_title: 'Call-Route bearbeiten'
       actions:
         back_to_list: 'Zurück zur Übersicht'
         edit: 'Bearbeiten'
@@ -46,10 +46,7 @@ de:
       name:
         label: 'Name'
         hint: ''
-      endpoint_type:
-        label: 'Endpoint type'
-        hint: ''
-      endpoint_id:
+      endpoint:
         label: 'Endpoint'
         hint: ''
       position:

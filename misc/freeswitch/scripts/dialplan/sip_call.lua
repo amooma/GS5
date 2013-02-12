@@ -95,39 +95,50 @@ function SipCall.fork(self, destinations, arg )
       table.insert(origination_variables, 'ignore_display_updates=true');
     end
 
-    if not destination.node_local then
+    if not destination.node_local or destination.type == 'node' then
       require 'common.node'
-      local node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(destination.node_id);
-      if node then
-        table.insert(origination_variables, 'sip_h_X-GS_node_id=' .. self.caller.local_node_id);
-        table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. node.record.name .. '/' .. destination.number);
+      local node = nil;
+
+      if not destination.node_local then
+        node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(destination.node_id);
+      else
+        node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(destination.id);
       end
-    elseif destination.type == 'node' then
-      local node = common.node.Node:new{ log = self.log, database = self.database }:find_by_id(destination.id);
       if node then
         table.insert(origination_variables, 'sip_h_X-GS_node_id=' .. self.caller.local_node_id);
+        table.insert(origination_variables, 'sip_h_X-GS_account_uuid=' .. tostring(self.caller.account_uuid));
+        table.insert(origination_variables, 'sip_h_X-GS_account_type=' .. tostring(self.caller.account_type));
+        table.insert(origination_variables, 'sip_h_X-GS_auth_account_type=' .. tostring(self.caller.auth_account_type));
+        table.insert(origination_variables, 'sip_h_X-GS_auth_account_uuid=' .. tostring(self.caller.auth_account_uuid));
+        table.insert(origination_variables, 'sip_h_X-GS_loop_count=' .. tostring(self.caller.loop_count));
         table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. node.record.name .. '/' .. destination.number);
       end
     elseif destination.type == 'sipaccount' then
       local callee_id_params = '';
       local sip_account = sip_account_class:find_by_id(destination.id);
-      local call_waiting = self:call_waiting_busy(sip_account);
-      if not call_waiting then
-        destinations[index].numbers = sip_account:phone_numbers();
+      if not sip_account then
+        self.log:notice('FORK - sip_account not found - sip_account=', destination.id);
+      elseif common.str.blank(sip_account.record.profile_name) or common.str.blank(sip_account.record.sip_host) then
+        call_result = { code = 480, phrase = 'User offline', disposition = 'USER_NOT_REGISTERED' };
+      else
+        local call_waiting = self:call_waiting_busy(sip_account);
+        if not call_waiting then
+          destinations[index].numbers = sip_account:phone_numbers();
 
-        if not arg.callee_id_name then
-          table.insert(origination_variables, "effective_callee_id_name='" .. sip_account.record.caller_name .. "'");
+          if not arg.callee_id_name then
+            table.insert(origination_variables, "effective_callee_id_name='" .. sip_account.record.caller_name .. "'");
+          end
+          if not arg.callee_id_number then
+            table.insert(origination_variables, "effective_callee_id_number='" .. destination.number .. "'");
+          end
+          if destination.alert_info then
+            table.insert(origination_variables, "alert_info='" .. destination.alert_info .. "'");
+          end
+          table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/' .. sip_account.record.profile_name .. '/' .. sip_account.record.auth_name .. '%' .. sip_account.record.sip_host);
+        else 
+          some_destinations_busy = true;
+          call_result = { code = 486, phrase = 'User busy', disposition = 'USER_BUSY' };
         end
-        if not arg.callee_id_number then
-          table.insert(origination_variables, "effective_callee_id_number='" .. destination.number .. "'");
-        end
-        if destination.alert_info then
-          table.insert(origination_variables, "alert_info='" .. destination.alert_info .. "'");
-        end
-        table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']user/' .. sip_account.record.auth_name);
-      else 
-        some_destinations_busy = true;
-        call_result = { code = 486, phrase = 'User busy', disposition = 'USER_BUSY' };
       end
     elseif destination.type == 'gateway' then
       require 'common.gateway'
@@ -169,11 +180,6 @@ function SipCall.fork(self, destinations, arg )
   end
 
   self.caller:set_callee_id(arg.callee_id_number, arg.callee_id_name);
-  self.caller:set_header('X-GS_account_uuid', self.caller.account_uuid);
-  self.caller:set_header('X-GS_account_type', self.caller.account_type);
-  self.caller:set_header('X-GS_auth_account_type', self.caller.auth_account_type);
-  self.caller:set_header('X-GS_auth_account_uuid', self.caller.auth_account_uuid);
-  self.caller:set_header('X-GS_loop_count', self.caller.loop_count);
 
   self.caller:set_variable('call_timeout', arg.timeout );
   self.log:info('FORK DIAL - destinations: ', #dial_strings, ', timeout: ', arg.timeout);
@@ -195,6 +201,12 @@ function SipCall.fork(self, destinations, arg )
     fork_index = tonumber(session_callee:getVariable('gs_fork_index')) or 0;
     local destination = destinations[fork_index];
 
+    if arg.detect_dtmf_after_bridge_caller then
+      session:execute('start_dtmf');
+    end
+    if arg.detect_dtmf_after_bridge_callee then
+      session_callee:execute('start_dtmf');
+    end
     if arg.bypass_media_network then
       local callee_uuid = session_callee:get_uuid();
 
@@ -226,10 +238,15 @@ function SipCall.fork(self, destinations, arg )
     self.caller:set_variable('gs_destination_id', destination.id);
     self.caller:set_variable('gs_destination_uuid', destination.uuid);
 
+    if arg.detect_dtmf_after_bridge_callee then
+      session_callee:setInputCallback('input_call_back_callee', 'session_callee');
+    end
+
     self.log:info('FORK ', fork_index, 
       ' BRIDGE - destination: ', destination.type, '=', destination.id, '/', destination.uuid,'@', destination.node_id, 
       ', number: ', destination.number,
       ', dial_time: ', os.time() - start_time);
+
     freeswitch.bridge(self.caller.session, session_callee);
     self:wait_hangup(self.caller.session, session_callee);
   end

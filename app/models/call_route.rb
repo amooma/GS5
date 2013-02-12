@@ -2,9 +2,9 @@ class CallRoute < ActiveRecord::Base
   # https://github.com/rails/strong_parameters
   include ActiveModel::ForbiddenAttributesProtection
 
-  ROUTING_TABLES = ['prerouting', 'outbound', 'inbound']
+  ROUTING_TABLES = ['prerouting', 'outbound', 'inbound', 'dtmf']
 
-  has_many :route_elements, :dependent => :destroy
+  has_many :route_elements, :dependent => :destroy, :order => :position
 
   validates :name,
   					:presence => true
@@ -237,6 +237,10 @@ class CallRoute < ActiveRecord::Base
         )
       end
     end
+  end
+
+  def endpoint_str
+    "#{endpoint_type}=#{endpoint_id}"
   end
 
   def endpoint

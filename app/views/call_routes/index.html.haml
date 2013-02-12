@@ -1,11 +1,8 @@
 - content_for :title, t("call_routes.index.page_title")
 
-- if @call_routes && @call_routes.count > 0
-  %table.table.table-striped
-    - @routing_tables.each do |routing_table|
-      %tr
-        %td{:colspan => 3}
-          %h3= routing_table
-      = render "index_core", :call_routes => @call_routes.where(:routing_table => routing_table)
+- if @call_routes && @call_routes.any?
+  - @routing_tables.each do |routing_table|
+    %h3= routing_table
+    = render "index_core", :call_routes => @call_routes.where(:routing_table => routing_table), :routing_table => routing_table
  
 = render :partial => 'shared/create_link', :locals => {:child_class => CallRoute}

@@ -1,0 +1,110 @@
+de:
+  intruders:
+    name: 'Intruder'
+    controller:
+      successfuly_created: 'Intruder wurde angelegt.'
+      successfuly_updated: 'Intruder wurde aktualisiert.'
+      successfuly_destroyed: 'Intruder wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von Intruder'
+      list_type: 'List type'
+      key: 'Key'
+      points: 'Points'
+      bans: 'Bans'
+      ban_last: 'Ban last'
+      ban_end: 'Ban end'
+      contact_ip: 'Contact ip'
+      contact_port: 'Contact port'
+      contact_count: 'Contact count'
+      contact_last: 'Contact last'
+      contacts_per_second: 'Contacts per second'
+      contacts_per_second_max: 'Contacts per second max'
+      user_agent: 'User agent'
+      to_user: 'To user'
+      comment: 'Comment'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Intruder'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Intruder neu anlegen für %{resource}'
+    show:
+      page_title: 'Intruder bearbeiten'
+      list_type: 'List type'
+      key: 'Key'
+      points: 'Points'
+      bans: 'Bans'
+      ban_last: 'Ban last'
+      ban_end: 'Ban end'
+      contact_ip: 'Contact ip'
+      contact_port: 'Contact port'
+      contact_count: 'Contact count'
+      contact_last: 'Contact last'
+      contacts_per_second: 'Contacts per second'
+      contacts_per_second_max: 'Contacts per second max'
+      user_agent: 'User agent'
+      to_user: 'To user'
+      comment: 'Comment'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Intruder neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Intruder bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      list_type:
+        label: 'List type'
+        hint: ''
+      key:
+        label: 'Key'
+        hint: ''
+      points:
+        label: 'Points'
+        hint: ''
+      bans:
+        label: 'Bans'
+        hint: ''
+      ban_last:
+        label: 'Ban last'
+        hint: ''
+      ban_end:
+        label: 'Ban end'
+        hint: ''
+      contact_ip:
+        label: 'Contact ip'
+        hint: ''
+      contact_port:
+        label: 'Contact port'
+        hint: ''
+      contact_count:
+        label: 'Contact count'
+        hint: ''
+      contact_last:
+        label: 'Contact last'
+        hint: ''
+      contacts_per_second:
+        label: 'Contacts per second'
+        hint: ''
+      contacts_per_second_max:
+        label: 'Contacts per second max'
+        hint: ''
+      user_agent:
+        label: 'User agent'
+        hint: ''
+      to_user:
+        label: 'To user'
+        hint: ''
+      comment:
+        label: 'Comment'
+        hint: ''
+      submit: 'Absenden'

@@ -350,10 +350,10 @@ function Dialplan.set_caller_picture(self, entry_id, entry_type, image)
     require 'dialplan.user'
     local user = dialplan.user.User:new{ log = self.log, database = self.database }:find_by_id(entry_id);
     if user then
-      self.caller:set_variable('sip_h_Call-Info', '<' .. self.user_image_url .. '/' .. tonumber(entry_id) .. '/snom_caller_picture_' .. tostring(user.record.image) .. '>;purpose=icon');
+      self.caller:export_variable('sip_h_Call-Info', '<' .. self.user_image_url .. '/' .. tonumber(entry_id) .. '/snom_caller_picture_' .. tostring(user.record.image) .. '>;purpose=icon');
     end 
   elseif entry_type == 'phonebookentry' and image then
-    self.caller:set_variable('sip_h_Call-Info', '<' .. self.phone_book_entry_image_url .. '/' .. tonumber(entry_id) .. '/snom_caller_picture_' .. tostring(image) .. '>;purpose=icon');
+    self.caller:export_variable('sip_h_Call-Info', '<' .. self.phone_book_entry_image_url .. '/' .. tonumber(entry_id) .. '/snom_caller_picture_' .. tostring(image) .. '>;purpose=icon');
   end
 end
 
@@ -445,6 +445,8 @@ function Dialplan.dial(self, destination)
       send_ringing = ( self.send_ringing_to_gateways and self.caller.from_gateway ),
       bypass_media_network = self.config.parameters.bypass_media_network,
       update_callee_display = self.config.parameters.update_callee_display,
+      detect_dtmf_after_bridge_caller = self.detect_dtmf_after_bridge_caller,
+      detect_dtmf_after_bridge_callee = self.detect_dtmf_after_bridge_callee,
     }
   );
 end
@@ -759,7 +761,7 @@ function Dialplan.switch(self, destination)
   elseif not common.str.blank(destination.number) then
     local result = { continue = false, code = 404, phrase = 'No route' }
 
-    local clip_no_screening = common.str.try(caller, 'account.record.clip_no_screening');
+    local clip_no_screening = common.str.try(self.caller, 'account.record.clip_no_screening');
     self.caller.caller_id_numbers = {}
     if not common.str.blank(clip_no_screening) then
       for index, number in ipairs(common.str.strip_to_a(clip_no_screening, ',')) do
@@ -814,11 +816,13 @@ function Dialplan.switch(self, destination)
     self.caller:set_callee_id(destination.callee_id_number, destination.callee_id_name);
 
     for index, route in ipairs(routes) do
-      if route.endpoint_type == 'hangup' then
-        return { continue = false, code = route.endpoint, phrase = route.phrase, cause = route.value }
+      if route.type == 'hangup' then
+        self.log:notice('SWITCH_HANGUP - code: ', route.code, ', phrase: ', route.phrase, ', cause: ', route.cause);
+        return { continue = false, code = route.code or '404', phrase = route.phrase, cause = route.cause }
       end
-      if route.endpoint_type == 'forward' then
-        return { continue = true, call_forwarding = { number = route.value, service = 'route', type = 'phonenumber' }}
+      if route.type == 'forward' then
+        self.log:notice('SWITCH_CALL_FORWARDING - number: ', route.number);
+        return { continue = true, call_forwarding = { number = route.number, service = 'route', type = 'phonenumber' }}
       end
 
       for key, value in pairs(route) do

@@ -63,7 +63,12 @@ function profile(database, sofia_ini, profile_name, index, domains, node_id)
   require 'configuration.simple_xml'
   local xml = configuration.simple_xml.SimpleXml:new();
 
-  local parameters = sofia_ini['profile:' .. profile_name];
+  local profile_template = sofia_ini['profile'] or {};
+  local parameters = sofia_ini['profile:' .. profile_name] or {};
+
+  for key, value in pairs(profile_template) do
+    parameters[key] = parameters[key] or value;
+  end
 
   if not parameters then
     log:error('SOFIA_PROFILE ', index,' - name: ', profile_name, ' - no parameters');
@@ -134,8 +139,15 @@ function conf_sofia(database)
   require 'configuration.sip'
   local domains = configuration.sip.Sip:new{ log = log, database = database}:domains();
 
-  sofia_profiles_xml = '';
+  local sofia_profiles = {};
   for profile_name, index in pairs(sofia_ini.profiles) do
+    if tonumber(index) and tonumber(index) > 0  then
+      sofia_profiles[index] = profile_name;
+    end
+  end
+
+  local sofia_profiles_xml = '';
+  for index, profile_name in ipairs(sofia_profiles) do
     if tonumber(index) and tonumber(index) > 0  then
       sofia_profiles_xml = sofia_profiles_xml .. profile(database, sofia_ini, profile_name, tonumber(index), domains, local_node_id);
     end
@@ -403,7 +415,7 @@ function directory_sip_account(database)
       end
     else
       require 'common.sip_account'
-      local sip_account = common.sip_account.SipAccount:new{ log = log, database = database}:find_by_auth_name(auth_name, domain);
+      local sip_account = common.sip_account.SipAccount:new{ log = log, database = database}:find_by_auth_name(auth_name);
 
       require 'common.configuration_table'
       local user_parameters = common.configuration_table.get(database, 'sip_accounts', 'parameters');

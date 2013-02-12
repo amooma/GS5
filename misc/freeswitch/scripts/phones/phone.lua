@@ -115,8 +115,9 @@ end
 
 function Phone.resync(self, arg)
   if not self.model then
-    self.log:notice('PHONE_RESYNC - unsupported phone model');
-    return false;
+    self.log:notice('PHONE_RESYNC phone model not found - trying Snom resync');
+    require 'phones.snom'
+    return phones.snom.Snom:new{ log = self.log }:resync(arg);
   end
 
   arg.ip_address = arg.ip_address or self.record.ip_address;

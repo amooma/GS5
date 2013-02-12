@@ -1,15 +1,21 @@
-%table.table.table-striped
-  %thead
-    %tr
-      %th= t('softkeys.index.function')
-      %th= t('softkeys.index.number')
-      %th= t('softkeys.index.label')
-
-  %tbody
-    - for softkey in softkeys.order(:position)
+- cache(['softkeys_table', I18n.locale, current_user, softkeys]) do
+  %table.table.table-striped
+    %thead
       %tr
-        %td
-          =softkey.to_s
-        %td= softkey.number
-        %td= softkey.label
-        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => softkey.sip_account, :child => softkey}
+        %th
+        %th= t('softkeys.index.function')
+        %th= t('softkeys.index.number')
+        %th= t('softkeys.index.label')
+
+    %tbody{ :id => "softkeys", :'data-update-url' => sort_softkeys_url}
+      - for softkey in softkeys
+        - cache(['softkeys_table_tr', I18n.locale, current_user, softkey]) do
+          = content_tag_for :tr, softkey do
+            %td
+              - if softkeys.count > 1
+                %span.handle
+                  %i.icon-resize-vertical      
+            %td= t("softkeys.functions.#{softkey.softkey_function}")
+            %td= softkey.number
+            %td= softkey.label
+            =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => softkey.sip_account, :child => softkey}

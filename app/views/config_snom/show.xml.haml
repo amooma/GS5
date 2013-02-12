@@ -40,7 +40,11 @@
     %mwi_notification{:perm => 'RW'}= 'silent'
     %mwi_dialtone{:perm => 'RW'}= 'normal'
     %prefer_saved_over_received_photo{:perm => 'RW'}= 'off'
-    %no_dnd{:perm => 'RW'}= 'on'
+    %no_dnd{:perm => 'RW'}= 'off'
+    %transfer_on_hangup{:perm => 'RW'}= 'on'
+    %transfer_on_hangup_non_pots{:perm => 'RW'}= 'off'
+    %call_join_xfer{:perm => 'RW'}= 'on'
+    %conf_hangup{:perm => 'RW'}= 'on'
     %logon_wizard{:perm => 'RW'}= 'off'
     %disable_deflection{:perm => 'RW'}= 'off'
     %csta_control{:perm => 'RW'}= 'on'
@@ -117,7 +121,7 @@
       %user_realname{:idx => index, :perm => 'R'}= sip_account[:realname]
       %user_idle_text{:idx => index, :perm => 'R'}= sip_account[:idle_text]
       %user_mailbox{:idx => index, :perm => 'R'}= sip_account[:mailbox]
-      %user_expiry{:idx => index, :perm => 'R'}= ''
+      %user_expiry{:idx => index, :perm => 'R'}= sip_account[:expiry]
       %user_server_type{:idx => index, :perm => 'R'}= 'default'
       %user_send_local_name{:idx => index, :perm => 'RW'}= 'on'
       %user_dtmf_info{:idx => index, :perm => 'RW'}= 'off'

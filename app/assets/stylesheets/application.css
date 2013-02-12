@@ -12,4 +12,8 @@
  *= require bootstrap/bootstrap
  *= require bootstrap/bootstrap-responsive
  *= require gemeinschaft-generic
+ *= require call_routes
+ *= require softkeys
+ *= require phone_numbers
+ *= require route_elements
  */

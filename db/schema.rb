@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130128121800) do
+ActiveRecord::Schema.define(:version => 20130212071000) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -122,6 +122,16 @@ ActiveRecord::Schema.define(:version => 20130128121800) do
     t.string   "greeting"
     t.string   "goodbye"
     t.string   "music"
+  end
+
+  create_table "backup_jobs", :force => true do |t|
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.string   "state"
+    t.string   "directory"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "backup_file"
   end
 
   create_table "call_forward_cases", :force => true do |t|
@@ -358,6 +368,7 @@ ActiveRecord::Schema.define(:version => 20130128121800) do
     t.string   "locked_by"
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
+    t.string   "queue"
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
@@ -540,6 +551,7 @@ ActiveRecord::Schema.define(:version => 20130128121800) do
     t.string   "default_area_code"
     t.string   "default_company_name"
     t.string   "default_system_email"
+    t.string   "trunk_access_code"
   end
 
   create_table "gs_cluster_sync_log_entries", :force => true do |t|
@@ -633,6 +645,28 @@ ActiveRecord::Schema.define(:version => 20130128121800) do
     t.string "syntax",      :limit => 4096
     t.string "hostname",    :limit => 256
   end
+
+  create_table "intruders", :force => true do |t|
+    t.string   "list_type"
+    t.string   "key"
+    t.integer  "points"
+    t.integer  "bans"
+    t.datetime "ban_last"
+    t.datetime "ban_end"
+    t.string   "contact_ip"
+    t.integer  "contact_port"
+    t.integer  "contact_count"
+    t.datetime "contact_last"
+    t.float    "contacts_per_second"
+    t.float    "contacts_per_second_max"
+    t.string   "user_agent"
+    t.string   "to_user"
+    t.string   "comment"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
+
+  add_index "intruders", ["key"], :name => "index_intruders_on_key", :unique => true
 
   create_table "languages", :force => true do |t|
     t.string   "name"
@@ -939,15 +973,9 @@ ActiveRecord::Schema.define(:version => 20130128121800) do
     t.datetime "updated_at",          :null => false
     t.integer  "sip_account_id"
     t.integer  "softkey_function_id"
-    t.integer  "call_forward_id"
     t.string   "uuid"
-  end
-
-  create_table "system_messages", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "content"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "softkeyable_type"
+    t.integer  "softkeyable_id"
   end
 
   create_table "tasks", :id => false, :force => true do |t|

@@ -1,0 +1,49 @@
+%table.table.table-striped
+  %tr
+    %th= t('backup_jobs.index.started_at')
+    %th
+      %span.hidden-phone
+        = t('backup_jobs.index.finished_at')
+    %th= t('backup_jobs.index.state')
+    %th
+      %span.hidden-phone
+        = t('backup_jobs.index.size_of_the_backup')
+    %th{:colspan => '2'}
+
+  - for backup_job in backup_jobs
+    - if backup_job.state == 'queued'
+      - row_marker = 'warning'
+    - else
+      - if backup_job.state == 'failed'
+        - row_marker = 'error'
+      - else
+        - row_marker = ''
+    %tr{:class => row_marker}
+      - if backup_job.finished_at.blank?
+        %td{:colspan => '2'}
+          - if (Time.now - 1.day) > backup_job.started_at
+            = l backup_job.started_at, :format => :short
+          - else
+            - case I18n.locale
+            - when :de
+              = "vor #{time_ago_in_words(backup_job.started_at)}"
+            - when :en
+              = "#{time_ago_in_words(backup_job.started_at)} ago"
+            - else
+              = l backup_job.started_at, :format => :short            
+      - else
+        %td
+          = l backup_job.started_at, :format => :short
+        %td
+          %span.hidden-phone
+            = l backup_job.finished_at, :format => :short 
+      %td= backup_job.state
+      %td
+        %span.hidden-phone
+          - if backup_job.backup_file?
+            %a{:href => backup_job.backup_file.url}
+              %i{:class => 'icon-download'}
+              = number_to_human_size(backup_job.backup_file.size, :precision => 2)
+          - else
+            = '-'
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => backup_job}

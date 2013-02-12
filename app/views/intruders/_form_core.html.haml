@@ -1,0 +1,5 @@
+.inputs
+  = f.input :list_type, :collection => Intruder::LIST_TYPES, :label => t('intruders.form.list_type.label'), :hint => conditional_hint('intruders.form.list_type.hint'), :include_blank => false
+  = f.input :contact_ip, :label => t('intruders.form.contact_ip.label'), :hint => conditional_hint('intruders.form.contact_ip.hint')
+  = f.input :ban_end, :label => t('intruders.form.ban_end.label'), :hint => conditional_hint('intruders.form.ban_end.hint')
+  = f.input :comment, :label => t('intruders.form.comment.label'), :hint => conditional_hint('intruders.form.comment.hint')

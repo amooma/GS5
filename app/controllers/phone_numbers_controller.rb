@@ -1,22 +1,22 @@
 class PhoneNumbersController < ApplicationController
-  load_resource :phone_book_entry
-  load_resource :sip_account
-  load_resource :conference
-  load_resource :fax_account
-  load_resource :phone_number_range
-  load_resource :callthrough
-  load_resource :whitelist
-  load_resource :access_authorization
-  load_resource :hunt_group
-  load_resource :hunt_group_member
-  load_resource :automatic_call_distributor
-  load_and_authorize_resource :phone_number, :through => [:phone_book_entry, :sip_account, :conference, 
+  load_resource :phone_book_entry, :except => [:sort]
+  load_resource :sip_account, :except => [:sort]
+  load_resource :conference, :except => [:sort]
+  load_resource :fax_account, :except => [:sort]
+  load_resource :phone_number_range, :except => [:sort]
+  load_resource :callthrough, :except => [:sort]
+  load_resource :whitelist, :except => [:sort]
+  load_resource :access_authorization, :except => [:sort]
+  load_resource :hunt_group, :except => [:sort]
+  load_resource :hunt_group_member, :except => [:sort]
+  load_resource :automatic_call_distributor, :except => [:sort]
+  load_and_authorize_resource :phone_number, :except => [:sort], :through => [:phone_book_entry, :sip_account, :conference, 
                                                           :fax_account, :phone_number_range, :callthrough,
                                                           :whitelist, :access_authorization, :hunt_group,
                                                           :hunt_group_member, :automatic_call_distributor]
 
-  before_filter :set_and_authorize_parent
-  before_filter :spread_breadcrumbs
+  before_filter :set_and_authorize_parent, :except => [:sort]
+  before_filter :spread_breadcrumbs, :except => [:sort]
   
   def index
   end
@@ -67,16 +67,6 @@ class PhoneNumbersController < ApplicationController
     redirect_to m.(), :notice => t('phone_numbers.controller.successfuly_destroyed')
   end
 
-  def move_higher
-    @phone_number.move_higher
-    redirect_to :back
-  end
-
-  def move_lower
-    @phone_number.move_lower
-    redirect_to :back
-  end
-
   def call
     sip_account = nil
     current_user.sip_accounts.each do |user_sip_account|
@@ -92,6 +82,13 @@ class PhoneNumbersController < ApplicationController
       end
     end
     redirect_to(:back)
+  end
+
+  def sort
+    params[:phone_number].each_with_index do |id, index|
+      PhoneNumber.update_all({position: index+1}, {id: id})
+    end
+    render nothing: true
   end
 
   private

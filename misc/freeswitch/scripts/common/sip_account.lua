@@ -38,8 +38,12 @@ function SipAccount.find_by_sql(self, where)
     `a`.`sip_accountable_id`, \
     `a`.`hotdeskable`, \
     `a`.`gs_node_id`, \
-    `b`.`host` \
-    FROM `sip_accounts` `a` JOIN `sip_domains` `b` ON `a`.`sip_domain_id` = `b`.`id`  \
+    `b`.`host`, \
+    `c`.`sip_host`, \
+    `c`.`profile_name` \
+    FROM `sip_accounts` `a` \
+    JOIN `sip_domains` `b` ON `a`.`sip_domain_id` = `b`.`id`  \
+    LEFT JOIN `sip_registrations` `c` ON `a`.`auth_name` = `c`.`sip_user` \
     WHERE ' .. where .. ' LIMIT 1';
 
   local sip_account = nil;

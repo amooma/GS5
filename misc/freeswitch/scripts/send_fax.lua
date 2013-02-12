@@ -6,9 +6,9 @@ local FAX_FILE_PATH = "/opt/GS5/public/uploads/fax_document/tiff/";
 local FAX_ANSWERING_TIMEOUT = 20;
 
 -- Set logger
-require "common.log"
+require 'common.log'
 local log = common.log.Log:new()
-log.prefix = "### [sendfax] "
+log.prefix = '#F# [sendfax] '
 
 local document_id = argv[1];
 
@@ -16,12 +16,12 @@ require 'common.database'
 local database = common.database.Database:new{ log = log }:connect();
 
 if not database:connected() then
-  log:error('cannot connect to Gemeinschaft database');
+  log:error('FAX_SEND - cannot connect to Gemeinschaft database');
   return
 end
 
 if not tonumber(document_id) then
-  log:error('document id not specified');
+  log:error('FAX_SEND - document id not specified');
   return
 end
 
@@ -32,7 +32,7 @@ local fax_class = dialplan.fax.Fax:new(defaults);
 local fax_document = fax_class:find_document_by_id(document_id);
 
 if not fax_document then
-  log:error('document ' .. document_id .. ' not found');
+  log:error('FAX_SEND - document ' .. document_id .. ' not found');
   return
 end
 
@@ -45,14 +45,14 @@ end
 local fax_account = fax_class:find_by_id(fax_document.fax_account_id);
 
 if not fax_account then
-  log:error('fax account ' .. fax_document.fax_account_id .. ' not found');
+  log:error('FAX_SEND - fax account ' .. fax_document.fax_account_id .. ' not found');
   return
 end
 
 local destination_number = fax_class:destination_number(document_id);
 
 if not destination_number or tostring(destination_number) == '' then
-  log:error('destination number not found');
+  log:error('FAX_SEND - destination number not found');
   return
 end
 

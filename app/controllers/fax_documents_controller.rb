@@ -58,23 +58,18 @@ class FaxDocumentsController < ApplicationController
   end
   
   private
+
   def spread_breadcrumbs
-    breadcrumbs = []
-    breadcrumbs = case @fax_account.fax_accountable.class.to_s
-      when 'User'      ; [
-                           [@fax_account.fax_accountable.to_s, user_path(@fax_account.fax_accountable)], 
-                           [t('fax_accounts.name').pluralize, user_fax_accounts_path(@fax_account.fax_accountable)],
-                           [t('fax_documents.name').pluralize, fax_account_fax_documents_path(@fax_account)],
-                         ]
-      when 'UserGroup' ; [
-                           [@fax_account.fax_accountable, user_group_path(@fax_account.fax_accountable)], 
-                           [t('fax_accounts.name').pluralize, user_group_fax_accounts_path(@fax_account.fax_accountable)],
-                           [t('fax_documents.name').pluralize, fax_account_fax_documents_path(@fax_account)],
-                         ]
+    if @fax_account && @fax_account.fax_accountable.class == User
+      add_breadcrumb t("users.index.page_title"), tenant_users_path(@fax_account.fax_accountable.current_tenant)
+      add_breadcrumb @fax_account.fax_accountable, tenant_user_path(@fax_account.fax_accountable.current_tenant, @fax_account.fax_accountable)
     end
-    if !breadcrumbs.blank?
-      breadcrumbs.each do |breadcrumb|
-        add_breadcrumb breadcrumb[0], breadcrumb[1]
+
+    if @fax_account
+      add_breadcrumb t("fax_accounts.index.page_title"), user_fax_accounts_path(@fax_account.fax_accountable)
+      add_breadcrumb @fax_account, user_fax_account_path(@fax_account.fax_accountable, @fax_account)
+      if @fax_document && !@fax_document.new_record?
+        add_breadcrumb @fax_document, fax_account_fax_document_path(@fax_account, @fax_document)
       end
     end
   end

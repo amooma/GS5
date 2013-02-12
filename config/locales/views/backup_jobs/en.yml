@@ -1,0 +1,61 @@
+en:
+  backup_jobs:
+    name: 'Backup job'
+    controller:
+      successfuly_created: 'Successfully created backup job.'
+      successfuly_updated: 'Successfully updated backup job.'
+      successfuly_destroyed: 'Successfully destroyed backup job.'
+    index:
+      page_title: 'Listing backup jobs'
+      page_title_with_limit: 'Listing of the last %{limit} backup jobs'
+      started_at: 'Started at'
+      finished_at: 'Finished at'
+      state: 'State'
+      directory: 'Directory'
+      size_of_the_backup: 'Size of the backup'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this backup job?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New backup job for %{resource}'
+    show:
+      page_title: 'Show backup job'
+      started_at: 'Started at'
+      finished_at: 'Finished at'
+      state: 'State'
+      directory: 'Directory'
+      size_of_the_backup: 'Size of the backup'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this element?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New backup job'
+      actions:
+        back_to_list: 'Back to Index'
+    edit:
+      page_title: 'Editing backup job'
+      actions:
+        back_to_list: 'Back to Index'
+        edit: 'Edit'
+        view_all: 'View All'
+    form:
+      started_at:
+        label: 'Started at'
+        hint: ''
+      finished_at:
+        label: 'Finished at'
+        hint: ''
+      state:
+        label: 'State'
+        hint: ''
+      directory:
+        label: 'Directory'
+        hint: ''
+      size_of_the_backup:
+        label: 'Size of the backup'
+        hint: ''
+      submit: 'Submit'

@@ -8,6 +8,7 @@ class TenantsController < ApplicationController
   def show
     @tenant = Tenant.find(params[:id])
     @gateways = Gateway.order(:updated_at)
+    @backup_jobs = BackupJob.order(:finished_at).last(5)
   end
 
   def new
@@ -27,17 +28,17 @@ class TenantsController < ApplicationController
     if @tenant.save
       # Become a member of this tenant.
       #
-      @tenant.tenant_memberships.create(:user_id => @current_user.id)
+      @tenant.tenant_memberships.create(:user_id => current_user.id)
       
       # Groups
       #
       admin_group = @tenant.user_groups.create(:name => t('gemeinschaft_setups.initial_setup.admin_group_name'))
-      admin_group.users << @current_user
+      admin_group.users << current_user
       
       user_group = @tenant.user_groups.create(:name => t('gemeinschaft_setups.initial_setup.user_group_name'))
-      user_group.users << @current_user
+      user_group.users << current_user
       
-      @current_user.update_attributes!(:current_tenant_id => @tenant.id)
+      current_user.update_attributes!(:current_tenant_id => @tenant.id)
       
       # Generate the internal_extensions
       #
