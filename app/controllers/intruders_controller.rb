@@ -5,6 +5,12 @@ class IntrudersController < ApplicationController
 
   def show
     @intruder = Intruder.find(params[:id])
+    if ! params[:whois].blank?
+      @whois = @intruder.whois(params[:whois])
+      if @whois.blank?
+        @whois = 'no information'
+      end
+    end
   end
 
   def new
