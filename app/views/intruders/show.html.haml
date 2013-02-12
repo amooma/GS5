@@ -21,10 +21,6 @@
 %p
   %strong= t('intruders.show.contact_ip') + ":"
   = @intruder.contact_ip
-  - if ! @intruder.contact_ip.blank? && Object.const_defined?('Whois')
-    %a.btn.btn-small.btn-success{ :href => intruder_path(@intruder, :whois => @intruder.contact_ip) }
-      %i.icon-info-sign.icon-white
-      = 'Whois'
 %p
   %strong= t('intruders.show.contact_port') + ":"
   = @intruder.contact_port
@@ -55,3 +51,8 @@
 - if ! @whois.blank?
   %p
     %pre= @whois
+
+- elsif ! @intruder.contact_ip.blank? && Object.const_defined?('Whois')
+  %a.btn.btn-small.btn-success{ :href => intruder_path(@intruder, :whois => @intruder.contact_ip) }
+    %i.icon-info-sign.icon-white
+    = 'Whois'
