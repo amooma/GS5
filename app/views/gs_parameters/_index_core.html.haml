@@ -1,6 +1,9 @@
-- cache(['gs_parameters_table_section', gs_parameters.first.section, gs_parameters.reorder(:updated_at).last, gs_parameters.pluck(:id)]) do
+- cache(['gs_parameter_sub_table', I18n.locale, gs_parameters.count, gs_parameters.reorder(:updated_at).first, gs_parameters.reorder(:updated_at).last]) do
   %thead
     %tr
+      %th
+        %span.hidden-phone
+          = t('gs_parameters.index.entity')
       %th= t('gs_parameters.index.name')
       - if !@sections
         %th= t('gs_parameters.index.section')
@@ -8,8 +11,15 @@
 
   %tbody
     - for gs_parameter in gs_parameters
-      - cache(['gs_parameters_table_single_row', gs_parameter]) do 
+      - cache(['gs_parameters_table_single_row', I18n.locale, gs_parameter]) do 
         %tr
+          %td
+            - if gs_parameter.entity.blank?
+              %span.hidden-phone
+                = '-'
+            - else
+              %span.hidden-phone
+                = truncate(gs_parameter.entity, :length => GsParameter.get('DESKTOP_MAX_STRING_LENGTH'))       
           %td
             %span.hidden-phone
               = truncate(gs_parameter.name, :length => GsParameter.get('DESKTOP_MAX_STRING_LENGTH'))

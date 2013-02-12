@@ -1,60 +1,61 @@
 de:
   backup_jobs:
-    name: 'Backup job'
+    name: 'Backup-Auftrag'
     controller:
-      successfuly_created: 'Backup job wurde angelegt.'
-      successfuly_updated: 'Backup job wurde aktualisiert.'
-      successfuly_destroyed: 'Backup job wurde gelöscht.'
+      successfuly_created: 'Backup-Auftrag wurde angelegt.'
+      successfuly_updated: 'Backup-Auftrag wurde aktualisiert.'
+      successfuly_destroyed: 'Backup-Auftrag wurde gelöscht.'
     index:
-      page_title: 'Übersicht von Backup job'
-      started_at: 'Started at'
-      finished_at: 'Finished at'
-      state: 'State'
-      directory: 'Directory'
-      size_of_the_backup: 'Size of the backup'
+      page_title: 'Liste aller Backup-Aufträge'
+      page_title_with_limit: 'Liste der letzten %{limit} Backup-Aufträge'
+      started_at: 'Start'
+      finished_at: 'Ende'
+      state: 'Status'
+      directory: 'Verzeichnis'
+      size_of_the_backup: 'Größe'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Backup job'
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Backup-Auftrag'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
         create: 'Neu anlegen'
-        create_for: 'Backup job neu anlegen für %{resource}'
+        create_for: 'Backup-Auftrag neu anlegen für %{resource}'
     show:
-      page_title: 'Backup job bearbeiten'
-      started_at: 'Started at'
-      finished_at: 'Finished at'
-      state: 'State'
-      directory: 'Directory'
-      size_of_the_backup: 'Size of the backup'
+      page_title: 'Backup-Auftrag bearbeiten'
+      started_at: 'Start'
+      finished_at: 'Ende'
+      state: 'Status'
+      directory: 'Verzeichnis'
+      size_of_the_backup: 'Größe'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     new:
-      page_title: 'Backup job neu anlegen'
+      page_title: 'Backup-Auftrag neu anlegen'
       actions:
         back_to_list: 'Zurück zur Übersicht'
     edit:
-      page_title: 'Backup job bearbeiten'
+      page_title: 'Backup-Auftrag bearbeiten'
       actions:
         back_to_list: 'Zurück zur Übersicht'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     form:
       started_at:
-        label: 'Started at'
+        label: 'Start'
         hint: ''
       finished_at:
-        label: 'Finished at'
+        label: 'Ende'
         hint: ''
       state:
-        label: 'State'
+        label: 'Status'
         hint: ''
       directory:
-        label: 'Directory'
+        label: 'Verzeichnis'
         hint: ''
       size_of_the_backup:
-        label: 'Size of the backup'
+        label: 'Größe'
         hint: ''
       submit: 'Absenden'

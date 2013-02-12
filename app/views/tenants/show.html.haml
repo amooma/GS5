@@ -15,4 +15,4 @@
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @tenant }
 
 - if @tenant.user_groups.where(:name => 'Admins').any? && @tenant.user_groups.where(:name => 'Admins').first.users.include?(current_user)
-  = render :partial => 'admin_area', :locals => { :tenant => @tenant, :gateways => @gateways}
+  = render :partial => 'admin_area', :locals => { :tenant => @tenant, :gateways => @gateways, :backup_jobs => @backup_jobs}
