@@ -17,11 +17,14 @@ class Intruder < ActiveRecord::Base
 
   before_validation :set_key_if_empty
 
+  def to_s
+    key
+  end
 
   def whois(ip_address = self.contact_ip)
     if ! ip_address.blank?
       begin
-        return Whois.whois(ip_address).to_s.gsub(/[^A-Za-z0-9\:\_\-\ \+\.\,\n]/, '')
+        return Whois.whois(ip_address).to_s.gsub(/[^\u{0000}-\u{007F}]/, '')
       rescue
         return nil
       end
