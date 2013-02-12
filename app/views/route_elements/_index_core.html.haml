@@ -1,7 +1,8 @@
 %table.table.table-striped
   %thead
     %tr
-      %th
+      - if route_elements.count > 1
+        %th
       %th= t('route_elements.index.var_in')
       %th= t('route_elements.index.var_out')
       %th= t('route_elements.index.pattern')
@@ -9,10 +10,13 @@
       %th= t('route_elements.index.action')
       %th= t('route_elements.index.mandatory')
 
-  %tbody
+  %tbody{ :id => "route_elements", :'data-update-url' => sort_call_route_route_elements_url(route_elements.first.call_route)}
     - for route_element in route_elements
-      %tr
-        %td= route_element.position
+      = content_tag_for :tr, route_element do
+        - if route_elements.count > 1
+          %td
+            %span.handle
+              %i.icon-resize-vertical  
         %td= route_element.var_in
         %td= route_element.var_out
         %td= route_element.pattern
