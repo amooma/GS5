@@ -538,7 +538,7 @@
                 <action function="play-file" data="voicemail/vm-press.wav"/>
                 <action function="say" data="$1" method="pronounced" type="name_spelled"/>
                 <action function="execute" data="sleep(100)"/>
-                <action function="play-file" data="voicemail/vm-listen_saved2.wav"/>
+                <action function="play-file" data="voicemail/vm-listen_saved.wav"/>
                 <action function="play-file" data="voicemail/vm-press.wav"/>
                 <action function="say" data="$2" method="pronounced" type="name_spelled"/>
                 <action function="execute" data="sleep(100)"/>
@@ -784,7 +784,7 @@
             <input pattern="^(saved)$">
               <match>
                 <action function="play-file" data="voicemail/vm-message.wav"/>
-                <action function="play-file" data="voicemail/vm-$1.wav"/>
+                <action function="play-file" data="voicemail/vm-saved2.wav"/>
               </match>
             </input>
             <input pattern="^(emailed)$">
