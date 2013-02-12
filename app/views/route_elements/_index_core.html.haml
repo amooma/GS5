@@ -3,12 +3,22 @@
     %tr
       - if route_elements.count > 1
         %th
-      %th= t('route_elements.index.var_in')
-      %th= t('route_elements.index.var_out')
+      %th
+        %span.hidden-phone
+          = t('route_elements.index.var_in')
+      %th
+        %span.hidden-phone
+          = t('route_elements.index.var_out')
       %th= t('route_elements.index.pattern')
-      %th= t('route_elements.index.replacement')
-      %th= t('route_elements.index.action')
-      %th= t('route_elements.index.mandatory')
+      %th
+        %span.hidden-phone
+          = t('route_elements.index.replacement')
+      %th
+        %span.hidden-phone
+          = t('route_elements.index.action')
+      %th
+        %span.hidden-phone
+          = t('route_elements.index.mandatory')
 
   %tbody{ :id => "route_elements", :'data-update-url' => sort_call_route_route_elements_url(route_elements.first.call_route)}
     - for route_element in route_elements
@@ -17,10 +27,20 @@
           %td
             %span.handle
               %i.icon-resize-vertical  
-        %td= route_element.var_in
-        %td= route_element.var_out
+        %td
+          %span.hidden-phone
+            = route_element.var_in
+        %td
+          %span.hidden-phone
+            = route_element.var_out
         %td= route_element.pattern
-        %td= route_element.replacement
-        %td= route_element.action
-        %td= route_element.mandatory
+        %td
+          %span.hidden-phone
+            = route_element.replacement
+        %td
+          %span.hidden-phone
+            = route_element.action
+        %td
+          %span.hidden-phone
+            = route_element.mandatory
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => @call_route, :child => route_element}
