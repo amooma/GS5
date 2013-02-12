@@ -22,7 +22,7 @@
         - phone_book_entry = call_history.phone_book_entry_by_number(call_history.display_number)
       %tr{:id => "call_history_id_#{call_history.id}_tr", :class => (call_history.duration.blank? ? 'warning' : '')}
         %td
-          = l call_history.start_stamp, :format => :date_only
+          = l call_history.start_stamp, :format => :short
         %td
           = l call_history.start_stamp, :format => :short          
         %td
