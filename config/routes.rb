@@ -1,5 +1,7 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  resources :parking_stalls
+
   resources :intruders
 
   resources :backup_jobs, :except => [:edit, :update]
