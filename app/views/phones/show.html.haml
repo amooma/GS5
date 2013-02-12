@@ -34,7 +34,7 @@
           %td
             = @phone.nightly_reboot == true ? t('simple_form.yes') : t('simple_form.no')          
 
-      - if !GsParameter.get('PROVISIONING_KEY_LENGTH').nil? && GsParameter.get('PROVISIONING_KEY_LENGTH') > 0
+      - if GsParameter.get('PROVISIONING_KEY_LENGTH') == 0
         %tr
           %td
             %strong= t('phones.show.provisioning_key_active') + ":"
