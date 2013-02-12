@@ -18,10 +18,10 @@ class Intruder < ActiveRecord::Base
   before_validation :set_key_if_empty
 
 
-  def whois
-    if ! self.contact_ip.blank?
+  def whois(ip_address = self.contact_ip)
+    if ! ip_address.blank?
       begin
-        return Whois.whois(self.contact_ip)
+        return Whois.whois(ip_address).to_s.gsub(/[^A-Za-z0-9\:\_\-\ \+\.\,\n]/, '')
       rescue
         return nil
       end
