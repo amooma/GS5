@@ -784,7 +784,7 @@
             <input pattern="^(saved)$">
               <match>
                 <action function="play-file" data="voicemail/vm-message.wav"/>
-                <action function="play-file" data="voicemail/vm-$1.wav"/>
+                <action function="play-file" data="voicemail/vm-saved2.wav"/>
               </match>
             </input>
             <input pattern="^(emailed)$">
