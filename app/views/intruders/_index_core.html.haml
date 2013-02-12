@@ -1,37 +1,38 @@
 %table.table.table-striped
   %tr
-    %th= t('intruders.index.list_type')
-    %th= t('intruders.index.key')
+    %th
+    %th= t('intruders.index.contact_ip')
+    %th= t('intruders.index.contact_port')
     %th= t('intruders.index.points')
     %th= t('intruders.index.bans')
     %th= t('intruders.index.ban_last')
     %th= t('intruders.index.ban_end')
-    %th= t('intruders.index.contact_ip')
-    %th= t('intruders.index.contact_port')
     %th= t('intruders.index.contact_count')
     %th= t('intruders.index.contact_last')
     %th= t('intruders.index.contacts_per_second')
-    %th= t('intruders.index.contacts_per_second_max')
     %th= t('intruders.index.user_agent')
     %th= t('intruders.index.to_user')
-    %th= t('intruders.index.comment')
 
   
   - for intruder in intruders
     %tr
-      %td= intruder.list_type
-      %td= intruder.key
-      %td= intruder.points
-      %td= intruder.bans
-      %td= intruder.ban_last
-      %td= intruder.ban_end
+      %td= intruder.list_type.chars.first
       %td= intruder.contact_ip
       %td= intruder.contact_port
+      %td= intruder.points
+      %td= intruder.bans
+      %td 
+        - if intruder.ban_last
+          = l intruder.ban_last, :format => :short
+      %td
+        - if intruder.ban_end
+          = l intruder.ban_end, :format => :short
+
       %td= intruder.contact_count
-      %td= intruder.contact_last
+      %td
+        - if intruder.contact_last
+          = l intruder.contact_last, :format => :short
       %td= intruder.contacts_per_second
-      %td= intruder.contacts_per_second_max
       %td= intruder.user_agent
       %td= intruder.to_user
-      %td= intruder.comment
       =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => intruder}
