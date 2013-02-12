@@ -1,26 +1,33 @@
 - content_for :title, t("call_routes.show.page_title")
 
-%p
-  %strong= t('call_routes.show.position') + ":"
-  = @call_route.position
-%p
-  %strong= t('call_routes.show.table') + ":"
-  = @call_route.routing_table
-%p
-  %strong= t('call_routes.show.name') + ":"
-  = @call_route.name
-%p
-  %strong= t('call_routes.show.endpoint') + ":"
-  - endpoint = @call_route.endpoint
-  - if endpoint
-    = endpoint
-  - else
-    = @call_route.endpoint_type
+.row
+  .span5
+    %table.table.table-striped
+      %tr
+        %td
+          %strong= t('call_routes.show.table') + ":"
+        %td
+          = @call_route.routing_table
+      %tr
+        %td
+          %strong= t('call_routes.show.name') + ":"
+        %td
+          = @call_route.name
+      %tr
+        %td
+          %strong= t('call_routes.show.endpoint') + ":"
+        %td
+          - if @call_route.endpoint.blank?
+            = @call_route.endpoint_type
+          - else
+            = @call_route.endpoint
 
-= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @call_route }
+    = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @call_route }
 
-%h3= t('route_elements.index.page_title')
-- if @call_route.route_elements && @call_route.route_elements.count > 0
-  = render "route_elements/index_core", :route_elements => @call_route.route_elements
+.row
+  .span12
+    %h3= t('route_elements.index.page_title')
+    - if @call_route.route_elements && @call_route.route_elements.count > 0
+      = render "route_elements/index_core", :route_elements => @call_route.route_elements
 
-= render :partial => 'shared/create_link', :locals => { :parent =>  @call_route, :child_class => RouteElement }
+    = render :partial => 'shared/create_link', :locals => { :parent =>  @call_route, :child_class => RouteElement }

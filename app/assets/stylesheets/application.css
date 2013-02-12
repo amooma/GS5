@@ -15,4 +15,5 @@
  *= require call_routes
  *= require softkeys
  *= require phone_numbers
+ *= require route_elements
  */

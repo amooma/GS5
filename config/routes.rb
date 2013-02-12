@@ -16,7 +16,9 @@ Gemeinschaft42c::Application.routes.draw do
       post :sort 
       get :show_variables
     }
-    resources :route_elements
+    resources :route_elements do
+      collection { post :sort }
+    end
   end
 
   resources :gateways do

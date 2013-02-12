@@ -1,12 +1,12 @@
 de:
   route_elements:
-    name: 'Route element'
+    name: 'Routen-Element'
     controller:
-      successfuly_created: 'Route element wurde angelegt.'
-      successfuly_updated: 'Route element wurde aktualisiert.'
-      successfuly_destroyed: 'Route element wurde gelöscht.'
+      successfuly_created: 'Routen-Element wurde angelegt.'
+      successfuly_updated: 'Routen-Element wurde aktualisiert.'
+      successfuly_destroyed: 'Routen-Element wurde gelöscht.'
     index:
-      page_title: 'Übersicht von Route element'
+      page_title: 'Liste Routen-Elemente'
       call_route_id: 'Call route'
       var_in: 'Var in'
       var_out: 'Var out'
@@ -16,14 +16,14 @@ de:
       mandatory: 'Mandatory'
       position: 'Position'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Route element'
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Routen-Element'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
         create: 'Neu anlegen'
-        create_for: 'Route element neu anlegen für %{resource}'
+        create_for: 'Routen-Element neu anlegen für %{resource}'
     show:
-      page_title: 'Route element bearbeiten'
+      page_title: 'Routen-Element bearbeiten'
       call_route_id: 'Call route'
       var_in: 'Var in'
       var_out: 'Var out'
@@ -38,11 +38,11 @@ de:
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     new:
-      page_title: 'Route element neu anlegen'
+      page_title: 'Routen-Element neu anlegen'
       actions:
         back_to_list: 'Zurück zur Übersicht'
     edit:
-      page_title: 'Route element bearbeiten'
+      page_title: 'Routen-Element bearbeiten'
       actions:
         back_to_list: 'Zurück zur Übersicht'
         edit: 'Bearbeiten'
