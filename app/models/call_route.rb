@@ -4,7 +4,7 @@ class CallRoute < ActiveRecord::Base
 
   ROUTING_TABLES = ['prerouting', 'outbound', 'inbound', 'dtmf']
 
-  has_many :route_elements, :dependent => :destroy
+  has_many :route_elements, :dependent => :destroy, :order => :position
 
   validates :name,
   					:presence => true
