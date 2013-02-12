@@ -63,7 +63,12 @@ function profile(database, sofia_ini, profile_name, index, domains, node_id)
   require 'configuration.simple_xml'
   local xml = configuration.simple_xml.SimpleXml:new();
 
-  local parameters = sofia_ini['profile:' .. profile_name];
+  local profile_template = sofia_ini['profile'] or {};
+  local parameters = sofia_ini['profile:' .. profile_name] or {};
+
+  for key, value in pairs(profile_template) do
+    parameters[key] = parameters[key] or value;
+  end
 
   if not parameters then
     log:error('SOFIA_PROFILE ', index,' - name: ', profile_name, ' - no parameters');
