@@ -116,23 +116,29 @@ function SipCall.fork(self, destinations, arg )
     elseif destination.type == 'sipaccount' then
       local callee_id_params = '';
       local sip_account = sip_account_class:find_by_id(destination.id);
-      local call_waiting = self:call_waiting_busy(sip_account);
-      if not call_waiting then
-        destinations[index].numbers = sip_account:phone_numbers();
+      if not sip_account then
+        self.log:notice('FORK - sip_account not found - sip_account=', destination.id);
+      elseif common.str.blank(sip_account.record.profile_name) or common.str.blank(sip_account.record.sip_host) then
+        call_result = { code = 480, phrase = 'User offline', disposition = 'USER_NOT_REGISTERED' };
+      else
+        local call_waiting = self:call_waiting_busy(sip_account);
+        if not call_waiting then
+          destinations[index].numbers = sip_account:phone_numbers();
 
-        if not arg.callee_id_name then
-          table.insert(origination_variables, "effective_callee_id_name='" .. sip_account.record.caller_name .. "'");
+          if not arg.callee_id_name then
+            table.insert(origination_variables, "effective_callee_id_name='" .. sip_account.record.caller_name .. "'");
+          end
+          if not arg.callee_id_number then
+            table.insert(origination_variables, "effective_callee_id_number='" .. destination.number .. "'");
+          end
+          if destination.alert_info then
+            table.insert(origination_variables, "alert_info='" .. destination.alert_info .. "'");
+          end
+          table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/' .. sip_account.record.profile_name .. '/' .. sip_account.record.auth_name .. '%' .. sip_account.record.sip_host);
+        else 
+          some_destinations_busy = true;
+          call_result = { code = 486, phrase = 'User busy', disposition = 'USER_BUSY' };
         end
-        if not arg.callee_id_number then
-          table.insert(origination_variables, "effective_callee_id_number='" .. destination.number .. "'");
-        end
-        if destination.alert_info then
-          table.insert(origination_variables, "alert_info='" .. destination.alert_info .. "'");
-        end
-        table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']user/' .. sip_account.record.auth_name);
-      else 
-        some_destinations_busy = true;
-        call_result = { code = 486, phrase = 'User busy', disposition = 'USER_BUSY' };
       end
     elseif destination.type == 'gateway' then
       require 'common.gateway'
