@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="freeswitch/xml">
-  <X-PRE-PROCESS cmd="set" data="sound_prefix=/opt/freeswitch/sounds/en/us/callie"/>
   <section name="languages" description="Language Management">
-    <language name="en" say-module="en" sound-prefix="/opt/freeswitch/sounds/en/us/callie">
+    <language name="en" say-module="en">
       <phrases>
         <macros>
           <macro name="voicemail_hello">
@@ -463,10 +462,55 @@
               </match>
             </input>
           </macro>
+                    <macro name="conference_welcome">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="conference/conf-welcome.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_goodbye">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="conference/conf-goodbye.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_bad_pin">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="conference/conf-bad-pin.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_record_name">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-record_name1.wav"/>
+                <action function="play-file" data="tone_stream://%(1000,0,500)"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_has_joined">
+            <input pattern="^(.+)$">
+              <match>
+                <action function="play-file" data="$1"/>
+                <action function="play-file" data="conference/conf-has_joined.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_has_left">
+            <input pattern="^(.+)$">
+              <match>
+                <action function="play-file" data="$1"/>
+                <action function="play-file" data="conference/conf-has_left.wav"/>
+              </match>
+            </input>
+          </macro>
         </macros>
       </phrases>
     </language>
-    <language name="de" say-module="de" sound-prefix="/opt/freeswitch/sounds/de/de/callie">
+    <language name="de" say-module="de">
       <phrases>
         <macros>
           <macro name="voicemail_hello">
@@ -924,6 +968,51 @@
             <input pattern="^inactive$">
               <match>
                 <action function="play-file" data="ivr/ivr-you_are_now_logged_out.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_welcome">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="conference/conf-welcome.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_goodbye">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="conference/conf-goodbye.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_bad_pin">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="conference/conf-bad-pin.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_record_name">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-record_name1.wav"/>
+                <action function="play-file" data="tone_stream://%(1000,0,500)"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_has_joined">
+            <input pattern="^(.+)$">
+              <match>
+                <action function="play-file" data="$1"/>
+                <action function="play-file" data="conference/conf-has_joined.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_has_left">
+            <input pattern="^(.+)$">
+              <match>
+                <action function="play-file" data="$1"/>
+                <action function="play-file" data="conference/conf-has_left.wav"/>
               </match>
             </input>
           </macro>

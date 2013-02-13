@@ -157,7 +157,7 @@ function Conference.enter(self, caller, domain)
 
   caller:answer();
   caller:sleep(1000);
-  caller.session:streamFile('conference/conf-welcome.wav');
+  caller.session:sayPhrase('conference_welcome');
 
   if pin and pin ~= "" then
     local digits = "";
@@ -165,12 +165,12 @@ function Conference.enter(self, caller, domain)
       if digits == pin then
         break
       elseif digits ~= "" then
-        caller.session:streamFile('conference/conf-bad-pin.wav');
+        caller.session:sayPhrase('conference_bad_pin');
       end
       digits = caller.session:read(PIN_LENGTH_MIN, PIN_LENGTH_MAX, 'conference/conf-enter_conf_pin.wav', PIN_TIMEOUT, '#');
     end
     if digits ~= pin then
-      caller.session:streamFile("conference/conf-goodbye.wav");
+      caller.session:sayPhrase('conference_goodbye');
       return "CALL_REJECTED";
     end
   end
@@ -192,8 +192,7 @@ function Conference.enter(self, caller, domain)
   if common.str.to_b(self.record.announce_new_member_by_name) or common.str.to_b(self.record.announce_left_member_by_name) then
     local uid = session:get_uuid();
     name_file = "/tmp/conference_caller_name_" .. uid .. ".wav";
-    caller.session:streamFile("voicemail/vm-record_name1.wav");
-    caller.session:execute("playback", "tone_stream://%(1000,0,500)");
+    caller.session:sayPhrase('conference_record_name');
     session:recordFile(name_file, ANNOUNCEMENT_MAX_LEN, ANNOUNCEMENT_SILENCE_THRESHOLD, ANNOUNCEMENT_SILENCE_LEN);
     caller.session:streamFile(name_file);
   end
@@ -209,7 +208,7 @@ function Conference.enter(self, caller, domain)
 
   local result =  caller.session:execute('conference', self.record.id .. "@profile_" .. self.record.id .. "++flags{" .. table.concat(flags, '|') .. "}");
   self.log:debug('exited conference - result: ' .. tostring(result));
-  caller.session:streamFile("conference/conf-goodbye.wav")
+  caller.session:sayPhrase('conference_goodbye');
 
   -- Play leaving caller's name if recorded
   if name_file then

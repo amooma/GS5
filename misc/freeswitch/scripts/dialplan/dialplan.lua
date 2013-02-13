@@ -270,7 +270,10 @@ function Dialplan.retrieve_caller_data(self)
       for index, caller_number in ipairs(self.caller.caller_phone_numbers) do
         self.caller.caller_phone_numbers_hash[caller_number] = true;
       end
-      self.log:info('CALLER_DATA - caller account: ', self.caller.account.class, '=', self.caller.account.id, '/', self.caller.account.uuid, ', phone_numbers: ', #self.caller.caller_phone_numbers);
+      if not common.str.blank(self.caller.account.record.language_code) then
+        self.caller.language = self.caller.account.record.language_code;
+      end
+      self.log:info('CALLER_DATA - caller account: ', self.caller.account.class, '=', self.caller.account.id, '/', self.caller.account.uuid, ', phone_numbers: ', #self.caller.caller_phone_numbers, ', language: ', self.caller.language);
       if self.caller.account.owner then
         self.log:info('CALLER_DATA - caller owner: ', self.caller.account.owner.class, '=', self.caller.account.owner.id, '/', self.caller.account.owner.uuid);
       else
@@ -859,7 +862,6 @@ function Dialplan.run(self, destination)
   
   self.caller:set_variable('hangup_after_bridge', false);
   self.caller:set_variable('bridge_early_media', 'true');
-  self.caller:set_variable('default_language', self.default_language);
   self.caller:set_variable('gs_save_cdr', true);
   self.caller:set_variable('gs_call_service', 'dial');
   self.caller.session:setAutoHangup(false);
@@ -875,6 +877,8 @@ function Dialplan.run(self, destination)
   self.caller.domain_local = self.domain;
   self:retrieve_caller_data();
   self.route_failover = common.configuration_table.get(self.database, 'call_route', 'failover');
+
+  self.caller.language = self.caller.language or self.default_language;
 
   if not destination or destination.type == 'unknown' then
     local route = nil;
@@ -937,7 +941,9 @@ function Dialplan.run(self, destination)
     end
   end
 
-  self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name, '" , number: ', destination.number);
+  self.caller:set_variable('default_language', self.caller.language);
+  self.caller:set_variable('sound_prefix', common.str.try(self.config, 'sounds.' .. tostring(self.caller.language)));
+  self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name, '" , number: ', destination.number, ', language: ', self.caller.language);
 
   local result = { continue = false };
   local loop = self.caller.loop_count;
