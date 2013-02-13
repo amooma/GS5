@@ -17,6 +17,16 @@ li.display {
   }
 }
 
+// SimpleForm Inline Checkbox Fix
+.simple-checkbox .checkbox {
+  text-align: left;
+  width: auto;
+  float: none;
+}
+input, textarea, .uneditable-input {
+  width: 500px;
+}
+
 @media (max-width: 979px) {
   body {
     padding-top: 0px;
