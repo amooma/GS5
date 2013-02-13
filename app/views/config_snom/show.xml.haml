@@ -176,7 +176,9 @@
             %action
               - softkey[:actions].each do |action|
                 - if action[:type] == :url
-                  %url{:target => action[:target], :when => action[:when]}
+                  %url{:target => action[:target], :when => action[:when], :states => action[:states]}
+                - elsif action[:type] == :dial
+                  %dial{:target => action[:target], :when => action[:when], :states => action[:states], :request_uri => '$(remote_uri)'}
 
   %uploads
     - if @state_settings_url
