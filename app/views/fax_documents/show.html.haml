@@ -2,35 +2,49 @@
 - child = @fax_document
 - parent = @fax_document.fax_account
 
-%p
-  %strong= t('fax_documents.index.state') + ":"
-  = t("fax_documents.states.#{@fax_document.state}")
-
-%p
-  %strong= t('fax_documents.index.result_code') + ":"
-  = @fax_document.result_code
-
-%p
-  %strong= t('fax_documents.index.result_text') + ":"
-  = t("fax_documents.result_codes.code_#{@fax_document.result_code}")
-
-%p
-  %strong= t('fax_documents.show.document_transferred_pages') + ":"
-  = @fax_document.document_transferred_pages
-%p
-  %strong= t('fax_documents.show.remote_station_id') + ":"
-  = @fax_document.remote_station_id
-%p
-  %strong= t('fax_documents.show.fax_resolution') + ":"
-  = @fax_document.fax_resolution
+%table.table.table-striped
+  %tr
+    %td
+      %strong= t('fax_documents.index.state') + ":"
+    %td
+      = t("fax_documents.states.#{@fax_document.state}")
+  %tr
+    %td
+      %strong= t('fax_documents.index.result_code') + ":"
+    %td
+      = @fax_document.result_code
+  %tr
+    %td
+      %strong= t('fax_documents.index.result_text') + ":"
+    %td
+      = t("fax_documents.result_codes.code_#{@fax_document.result_code}")
+  %tr
+    %td
+      %strong= t('fax_documents.show.document_transferred_pages') + ":"
+    %td
+      = @fax_document.document_transferred_pages
+  %tr
+    %td
+      %strong= t('fax_documents.show.remote_station_id') + ":"
+    %td
+      = @fax_document.remote_station_id
+  %tr
+    %td
+      %strong= t('fax_documents.show.fax_resolution') + ":"
+    %td
+      = @fax_document.fax_resolution
 
 - if @fax_document.fax_thumbnails.count > 0
   - i = @fax_document.fax_thumbnails.count
   - i = 10 if i > 10
-  - @fax_document.fax_thumbnails.limit(i).each do |fax_thumbnail|
-    =image_tag fax_thumbnail.thumbnail_url(:medium), :class => 'FaxThumbnail', :alt => "Thumbnail of page \##{fax_thumbnail.position}"
+  %p
+    - @fax_document.fax_thumbnails.limit(i).each do |fax_thumbnail|
+      =image_tag fax_thumbnail.thumbnail_url(:medium), :class => 'FaxThumbnail', :alt => "Thumbnail of page \##{fax_thumbnail.position}"
 
 - if @fax_document.document.path
-  = link_to t("fax_documents.index.actions.download_pdf"), "#{request.protocol}#{request.host_with_port}#{request.fullpath.split("?")[0]}.pdf"
+  %p
+    %a{:href => "#{request.protocol}#{request.host_with_port}#{request.fullpath.split("?")[0]}.pdf"}
+      %i{:class => 'icon-download'}
+      = t("fax_documents.index.actions.download_pdf")
   
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @fax_document.fax_account, :child => @fax_document }
