@@ -1,11 +1,19 @@
 - content_for :title, t("fax_documents.show.page_title")
-- child = @fax_document
-- parent = @fax_document.fax_account
 
 .row
   .span12
     %table.table.table-striped
-      %tr
+      - case @fax_document.state
+        - when 'unsuccessful'
+          - current_status = 'error'
+        - when 'sending'
+          - current_status = 'success'
+        - when 'queued_for_sending'
+          - current_status = 'warning'
+        - else
+          - current_status = ''
+
+      %tr{:class => current_status}
         %td
           %strong= t('fax_documents.index.state') + ":"
         %td
@@ -46,7 +54,7 @@
   .span12
     - if @fax_document.fax_thumbnails.any?
       %ul.thumbnails
-        - @fax_document.fax_thumbnails.each do |fax_thumbnail|
+        - @fax_document.fax_thumbnails.limit(50).each do |fax_thumbnail|
           %li.span4
             %div.thumbnail
               %a.thumbnail{:href => fax_thumbnail.thumbnail.url}
