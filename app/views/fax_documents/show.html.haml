@@ -2,49 +2,58 @@
 - child = @fax_document
 - parent = @fax_document.fax_account
 
-%table.table.table-striped
-  %tr
-    %td
-      %strong= t('fax_documents.index.state') + ":"
-    %td
-      = t("fax_documents.states.#{@fax_document.state}")
-  %tr
-    %td
-      %strong= t('fax_documents.index.result_code') + ":"
-    %td
-      = @fax_document.result_code
-  %tr
-    %td
-      %strong= t('fax_documents.index.result_text') + ":"
-    %td
-      = t("fax_documents.result_codes.code_#{@fax_document.result_code}")
-  %tr
-    %td
-      %strong= t('fax_documents.show.document_transferred_pages') + ":"
-    %td
-      = @fax_document.document_transferred_pages
-  %tr
-    %td
-      %strong= t('fax_documents.show.remote_station_id') + ":"
-    %td
-      = @fax_document.remote_station_id
-  %tr
-    %td
-      %strong= t('fax_documents.show.fax_resolution') + ":"
-    %td
-      = @fax_document.fax_resolution
+.row
+  .span12
+    %table.table.table-striped
+      %tr
+        %td
+          %strong= t('fax_documents.index.state') + ":"
+        %td
+          = t("fax_documents.states.#{@fax_document.state}")
+      %tr
+        %td
+          %strong= t('fax_documents.index.result_code') + ":"
+        %td
+          = @fax_document.result_code
+      %tr
+        %td
+          %strong= t('fax_documents.index.result_text') + ":"
+        %td
+          = t("fax_documents.result_codes.code_#{@fax_document.result_code}")
+      %tr
+        %td
+          %strong= t('fax_documents.show.document_transferred_pages') + ":"
+        %td
+          = @fax_document.document_transferred_pages
+      %tr
+        %td
+          %strong= t('fax_documents.show.remote_station_id') + ":"
+        %td
+          = @fax_document.remote_station_id
+      %tr
+        %td
+          %strong= t('fax_documents.show.fax_resolution') + ":"
+        %td
+          = @fax_document.fax_resolution
 
-- if @fax_document.fax_thumbnails.count > 0
-  - i = @fax_document.fax_thumbnails.count
-  - i = 10 if i > 10
-  %p
-    - @fax_document.fax_thumbnails.limit(i).each do |fax_thumbnail|
-      =image_tag fax_thumbnail.thumbnail_url(:medium), :class => 'FaxThumbnail', :alt => "Thumbnail of page \##{fax_thumbnail.position}"
+    - if @fax_document.document?
+      %p
+        %a{:href => @fax_document.document.url}
+          %i{:class => 'icon-download'}
+          = t("fax_documents.index.actions.download_pdf") + " (#{number_to_human_size(@fax_document.document.size, :precision => 2)})"
 
-- if @fax_document.document.path
-  %p
-    %a{:href => "#{request.protocol}#{request.host_with_port}#{request.fullpath.split("?")[0]}.pdf"}
-      %i{:class => 'icon-download'}
-      = t("fax_documents.index.actions.download_pdf")
-  
-= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @fax_document.fax_account, :child => @fax_document }
+.row
+  .span12
+    - if @fax_document.fax_thumbnails.any?
+      %ul.thumbnails
+        - @fax_document.fax_thumbnails.each do |fax_thumbnail|
+          %li.span4
+            %div.thumbnail
+              %a.thumbnail{:href => fax_thumbnail.thumbnail.url}
+                =image_tag(fax_thumbnail.thumbnail.url, :alt => "Page #{fax_thumbnail.position}")
+              %p
+                = "#{fax_thumbnail.position}/#{@fax_document.fax_thumbnails.count}"
+
+.row
+  .span12
+    = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @fax_document.fax_account, :child => @fax_document }
