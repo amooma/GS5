@@ -48,10 +48,6 @@ class FaxDocument < ActiveRecord::Base
     end  
   end
   
-  def to_s
-    name
-  end
-  
   def render_thumbnails
     directory = "/tmp/GS-#{GsParameter.get('GEMEINSCHAFT_VERSION')}/fax_thumbnails/#{self.id}"
     system('mkdir -p ' + directory)
