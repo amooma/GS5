@@ -38,6 +38,7 @@ function SipAccount.find_by_sql(self, where)
     `a`.`sip_accountable_id`, \
     `a`.`hotdeskable`, \
     `a`.`gs_node_id`, \
+    `a`.`language_code`, \
     `b`.`host`, \
     `c`.`sip_host`, \
     `c`.`profile_name` \
