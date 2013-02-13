@@ -48,14 +48,14 @@ class Softkey < ActiveRecord::Base
   end
 
   def to_s
-    if (['call_forwarding'].include?(self.softkey_function.name))
-      "#{self.softkeyable}"
-    else
+    if self.softkeyable.blank?
       if ['log_out', 'log_in'].include?(self.softkey_function.name)
         I18n.t("softkeys.functions.#{self.softkey_function.name}")        
       else
-  	    "#{self.softkey_function.name} : #{self.number.to_s}"
+        "#{self.softkey_function.name} : #{self.number.to_s}"
       end
+    else
+      "#{self.softkeyable}"
     end
   end
 
