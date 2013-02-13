@@ -18,8 +18,8 @@ class FaxDocument < ActiveRecord::Base
 
   has_many :fax_thumbnails, :order => :position, :dependent => :destroy
 
-  after_create :render_thumbnails
   after_create :convert_pdf_to_tiff
+  after_create :render_thumbnails
   
   # Scopes
   scope :inbound, where(:state => 'inbound')
@@ -51,8 +51,12 @@ class FaxDocument < ActiveRecord::Base
   def to_s
     "#{self.remote_station_id}-#{self.created_at}-#{self.id}".gsub(/[^a-zA-Z0-9]/,'')
   end
-  
+
   def render_thumbnails
+    self.delay.create_thumbnails_and_save_them
+  end
+  
+  def create_thumbnails_and_save_them
     tmp_dir = "/tmp/fax_convertions/#{self.id}"
     FileUtils.mkdir_p tmp_dir
     system("cd #{tmp_dir} && convert #{self.document.path} -colorspace Gray PNG:'fax_page.png'")
