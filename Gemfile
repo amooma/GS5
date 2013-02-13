@@ -48,8 +48,9 @@ group :test do
   gem 'factory_girl_rails'
 end
 
-gem "haml"
-gem "simple_form", github: 'plataformatec/simple_form', branch: 'v2.1'
+gem 'haml'
+gem 'simple_form', github: 'plataformatec/simple_form', branch: 'v2.1'
+
 # Image Upload
 gem 'carrierwave'
 gem "mini_magick"
