@@ -24,18 +24,18 @@
           %td
             - if ! voicemail_message.flags.blank?
               = t("voicemail_messages.index.flags.#{voicemail_message.flags}")
-          %td.actions
+          %td.form-actions
             - if can?(:show, voicemail_message) && File.readable?(voicemail_message.file_path)
               = link_to t('voicemail_messages.index.actions.download'), sip_account_voicemail_message_path(@sip_account, voicemail_message, :format => :wav), :method => :get
           %td.actions  
             - if @sip_account.registration && can?(:call, voicemail_message)
               = link_to t('voicemail_messages.index.actions.call'), call_sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :put
-          %td.actions
+          %td.form-actions
             - if can?(:edit, voicemail_message) && voicemail_message.read_epoch > 0
               = link_to t('voicemail_messages.index.actions.mark_unread'), mark_unread_sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :put
             - else
               = link_to t('voicemail_messages.index.actions.mark_read'), mark_read_sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :put
-          %td.actions
+          %td.form-actions
             - if can? :destroy, voicemail_message
               = link_to t('voicemail_messages.index.actions.destroy'), sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :delete
 
