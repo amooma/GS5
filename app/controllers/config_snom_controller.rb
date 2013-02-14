@@ -292,8 +292,8 @@ class ConfigSnomController < ApplicationController
                   :softkey => softkey,
                   :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
                   :subscription => {
-                    :to => "park+#{parking_stall.name}@#{sip_account.host}",
-                    :for => "#{sip_account.auth_name}@#{sip_account.host}"
+                    :to => "sip:park+#{parking_stall.name}@#{sip_account.host}",
+                    :for => "sip:park+#{parking_stall.name}@#{sip_account.host}",
                   },
                   :actions => [{
                     :type => :dial, 
@@ -316,8 +316,8 @@ class ConfigSnomController < ApplicationController
                   :softkey => softkey,
                   :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
                   :subscription => {
-                    :to => "f-cftg-#{softkey.softkeyable_id}@#{sip_account.host}",
-                    :for => "#{sip_account.auth_name}@#{sip_account.host}"
+                    :to => "sip:f-cftg-#{softkey.softkeyable_id}@#{sip_account.host}",
+                    :for => "sip:f-cftg-#{softkey.softkeyable_id}@#{sip_account.host}"
                   },
                   :actions => [{
                     :type => :url, 

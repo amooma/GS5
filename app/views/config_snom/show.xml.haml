@@ -90,6 +90,23 @@
     %backlight_idle{:perm => 'RW'}= '0'
     %dim_timer{:perm => 'RW'}= '300'
 
+    / LED
+    %led_on{:perm => 'RW'}= 'ON BUSY IN_A_CALL CALLING IN_A_MEETING URGENT_INTERRUPTIONS_ONLY HOLDING DND ACTIVE INACTIVE BE_RIGHT_BACK AWAY UNAVAILABLE AVAILABLE PhoneHasCall CurrentIdentityHasVoiceMessages PhoneHasVoiceMessages'
+    %led_blink_slow{:perm => 'RW'}= 'PARKED HOLDING_BOSSADMIN Wrap-Up'
+    %led_blink_medium{:perm => 'RW'}= ''
+    %led_blink_fast{:perm => 'RW'}= 'RINGING PhoneHasCallInStateRinging'
+    %led_blink_short_off{:perm => 'RW'}= 'PhoneHasMissedCalls'
+    %led_red{:perm => 'RW'}= 'BUSY IN_A_CALL CALLING IN_A_MEETING URGENT_INTERRUPTIONS_ONLY HOLDING DND'
+    %led_green{:perm => 'RW'}= 'Wrap-Up'
+    %led_orange{:perm => 'RW'}= 'AWAY INACTIVE BE_RIGHT_BACK INACTIVE'
+    %led_blue{:perm => 'RW'}= ''
+    %led_red_green{:perm => 'RW'}= ''
+    %led_red_orange{:perm => 'RW'}= ''
+    %led_green_orange{:perm => 'RW'}= ''
+    %led_call_indicator_usage{:perm => 'RW'}= 'PhoneHasCallInStateRinging PhoneHasCall PhoneHasMissedCalls'
+    %led_message_usage{:perm => 'RW'}= 'CurrentIdentityHasVoiceMessages PhoneHasVoiceMessages'
+
+
     - if @phone.phone_model.name == 'Snom 870'
       / Snom 870 idle icons
       %idle_icon_01{:perm => 'RW'}= '9'
@@ -165,9 +182,9 @@
           - if softkey[:subscription]
             %subscription{:type => 'dialog', :to => softkey[:subscription][:to], :for => softkey[:subscription][:for]}
               %NotifyParsingRules{:type => 'applies'}
-                %level1{:translates_to => 'OK'}= "/dialog-info[@entity=\"sip:#{softkey[:subscription][:to]}\"]"
+                %level1{:translates_to => 'OK'}= "/dialog-info[@entity=\"#{softkey[:subscription][:to]}\"]"
               %NotifyParsingRules{:type => 'state'}
-                %level1{:translates_to => 'available'}= '/dialog-info/dialog/state[.="terminated"]'
+                %level1{:translates_to => 'unknown'}= '/dialog-info/dialog/state[.="terminated"]'
                 %level2{:translates_to => 'ringing'}= '/dialog-info/dialog/state[.="early"]'
                 %level3{:translates_to => 'active'}= '/dialog-info/dialog/state[.="confirmed"]'
                 %level4{:fetch_content => 'true'}= '/dialog-info/dialog/state'
