@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130212071000) do
+ActiveRecord::Schema.define(:version => 20130213110000) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -701,6 +701,16 @@ ActiveRecord::Schema.define(:version => 20130212071000) do
     t.datetime "updated_at",      :null => false
   end
 
+  create_table "parking_stalls", :force => true do |t|
+    t.string   "name"
+    t.string   "lot"
+    t.integer  "parking_stallable_id"
+    t.string   "parking_stallable_type"
+    t.string   "comment"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+  end
+
   create_table "phone_book_entries", :force => true do |t|
     t.integer  "phone_book_id"
     t.string   "first_name"
@@ -899,6 +909,7 @@ ActiveRecord::Schema.define(:version => 20130212071000) do
     t.integer  "gs_node_original_id"
     t.string   "uuid"
     t.boolean  "is_native"
+    t.string   "language_code"
   end
 
   add_index "sip_accounts", ["uuid"], :name => "index_sip_accounts_on_uuid"

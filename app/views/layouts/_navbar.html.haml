@@ -28,9 +28,9 @@
 
       - if current_user
         %ul.nav.pull-right
-          %li
+          %li.display
             - if current_user.image?
-              =image_tag(current_user.image_url(:mini).to_s, :class => 'img-rounded')
+              = image_tag(current_user.image_url(:mini).to_s, :class => 'img-rounded')
             - else
               - if current_user.male?
                 = image_tag 'icons/user-male-16x.png', :class => 'img-rounded'
@@ -39,15 +39,15 @@
 
           - if current_page?(tenant_user_path(current_user.current_tenant, current_user))
             %li.active
-              %a.navbar-link{:href => tenant_user_path(current_user.current_tenant, current_user)} 
+              %a.navbar-link{:href => tenant_user_path(current_user.current_tenant, current_user)}
                 = current_user
           - else
             %li
-              %a.navbar-link{:href => tenant_user_path(current_user.current_tenant, current_user)} 
+              %a.navbar-link{:href => tenant_user_path(current_user.current_tenant, current_user)}
                 = current_user
 
           - if single_sign_on_system? == false
             %li
-              %a.navbar-link{:href => log_out_path} 
+              %a.navbar-link{:href => log_out_path}
                 %i.icon-off.icon-white
-            
+

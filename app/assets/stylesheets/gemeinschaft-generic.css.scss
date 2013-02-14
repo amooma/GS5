@@ -6,6 +6,27 @@ body {
   padding-top: 60px;
   padding-bottom: 40px;
 }
+
+// Nav
+li.display {
+  line-height: 40px;
+  img {
+    vertical-align: middle;
+    width: 26px;
+    margin-top: -2px;
+  }
+}
+
+// SimpleForm Inline Checkbox Fix
+.simple-checkbox .checkbox {
+  text-align: left;
+  width: auto;
+  float: none;
+}
+input, textarea, .uneditable-input {
+  width: 500px;
+}
+
 @media (max-width: 979px) {
   body {
     padding-top: 0px;
