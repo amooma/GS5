@@ -5,6 +5,11 @@
     %table.table.table-striped
       %tr
         %td
+          %strong= t('sim_cards.show.sim_number') + ":"
+        %td
+          = @sim_card.sim_number
+      %tr
+        %td
           %strong= t('sim_cards.show.sip_account_id') + ":"
         %td
           = @sim_card.sip_account
