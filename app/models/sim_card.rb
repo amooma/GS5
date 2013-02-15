@@ -22,4 +22,15 @@ class SimCard < ActiveRecord::Base
   validates :sim_number,
             :presence => true
 
+  after_initialize :set_defaults
+
+  def to_s
+    self.sim_number.to_s
+  end
+
+  private
+  def set_defaults 
+    self.state ||= 'not activated'
+  end
+
 end

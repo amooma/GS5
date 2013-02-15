@@ -150,6 +150,10 @@ class User < ActiveRecord::Base
     self.user_groups.include?(UserGroup.find(2))
   end
 
+  def sim_cards
+    SimCard.where(:sip_account_id => self.sip_account_ids)
+  end
+
   private
   
   def hash_new_pin
