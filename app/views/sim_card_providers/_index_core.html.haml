@@ -1,0 +1,21 @@
+%table.table.table-striped
+  %tr
+    %th= t('sim_card_providers.index.name')
+    %th= t('sim_card_providers.index.api_server_url')
+    %th= t('sim_card_providers.index.api_username')
+    %th= t('sim_card_providers.index.api_password')
+    %th= t('sim_card_providers.index.sip_server')
+    %th
+
+  - for sim_card_provider in sim_card_providers
+    %tr
+      %td
+        - if sim_card_provider.homepage_url.blank?
+          = sim_card_provider.name
+        - else
+          = link_to sim_card_provider.name, sim_card_provider.homepage_url 
+      %td= sim_card_provider.api_server_url
+      %td= sim_card_provider.api_username
+      %td= sim_card_provider.api_password
+      %td= sim_card_provider.sip_server
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => sim_card_provider}

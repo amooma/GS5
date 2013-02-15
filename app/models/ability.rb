@@ -86,6 +86,10 @@ class Ability
           # An admin can not destroy his/her account
           #
           cannot [:destroy], User, :id => user.id
+
+          # SIM cards
+          #
+          cannot [:edit, :update], SimCard
         else
           # Any user can do the following stuff.
           #

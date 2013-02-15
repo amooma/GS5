@@ -67,6 +67,9 @@
     - cache(['user_show_phones_overview', I18n.locale, @user, @user.phones]) do
       = render :partial => 'phones', :locals => {:user => @user}
 
+    / - cache(['user_show_sim_cards_overview', I18n.locale, @user, @user.phones]) do
+    /   = render :partial => 'phones', :locals => {:user => @user}
+
     - cache(['user_show_fax_accounts_overview', I18n.locale, @user, @user.fax_accounts]) do
       = render :partial => 'fax_accounts', :locals => {:user => @user}
 
