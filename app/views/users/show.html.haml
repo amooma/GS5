@@ -70,7 +70,8 @@
     - if GsParameter.get('SIM_CARDS') == true
       - cache(['user_show_sim_cards_overview', I18n.locale, @user, @user.sim_cards]) do
         %h2=t('sim_cards.index.page_title')
-        = render :partial => 'sim_cards/index_core', :locals => {:parent => @user.sim_cards.first.sim_card_provider, :sim_cards => @user.sim_cards}
+        = render :partial => 'sim_cards/index_core', :locals => {:parent => SimCardProvider.first, :sim_cards => @user.sim_cards}
+        = render :partial => 'shared/create_link', :locals => {:parent => SimCardProvider.first, :child_class => SimCard}
 
     - cache(['user_show_fax_accounts_overview', I18n.locale, @user, @user.fax_accounts]) do
       = render :partial => 'fax_accounts', :locals => {:user => @user}
