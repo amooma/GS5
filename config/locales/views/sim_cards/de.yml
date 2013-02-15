@@ -1,0 +1,70 @@
+de:
+  sim_cards:
+    name: 'SIM-Karte'
+    controller:
+      successfuly_created: 'SIM-Karte wurde angelegt.'
+      successfuly_updated: 'SIM-Karte wurde aktualisiert.'
+      successfuly_destroyed: 'SIM-Karte wurde gelöscht.'
+      no_existing_sip_accounts_warning: 'Es existiert kein freier SIP-Account zum Anlegen einer neuen SIM-Karte.'
+    index:
+      page_title: 'Liste SIM-Karten'
+      sim_card_provider_id: 'SIM-Karten Provider'
+      auto_order_card: 'Auto order card'
+      sip_account_id: 'SIP-Account'
+      auth_key: 'Auth key'
+      state: 'Status'
+      log: 'Log'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: SIM-Karte'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'SIM-Karte neu anlegen für %{resource}'
+    show:
+      page_title: 'SIM-Karte bearbeiten'
+      sim_card_provider_id: 'SIM-Karten Provider'
+      auto_order_card: 'Auto order card'
+      sip_account_id: 'SIP-Account'
+      auth_key: 'Auth key'
+      state: 'Status'
+      log: 'Log'
+      sim_number: 'SIM-No.'      
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'SIM-Karte neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'SIM-Karte bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      sim_card_provider_id:
+        label: 'SIM-Karten Provider'
+        hint: ''
+      sim_number:
+        label: 'SIM-Nr.'
+        hint: ''
+      auto_order_card:
+        label: 'Auto order card'
+        hint: ''
+      sip_account_id:
+        label: 'SIP-Account'
+        hint: ''
+      auth_key:
+        label: 'Auth key'
+        hint: ''
+      state:
+        label: 'Status'
+        hint: ''
+      log:
+        label: 'Log'
+        hint: ''
+      submit: 'Absenden'

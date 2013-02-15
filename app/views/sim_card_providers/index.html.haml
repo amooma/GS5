@@ -1,0 +1,6 @@
+- content_for :title, t("sim_card_providers.index.page_title")
+
+- if @sim_card_providers && @sim_card_providers.count > 0
+  = render "index_core", :sim_card_providers => @sim_card_providers
+
+= render :partial => 'shared/create_link', :locals => {:child_class => SimCardProvider}

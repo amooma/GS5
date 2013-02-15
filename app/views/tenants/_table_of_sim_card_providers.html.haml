@@ -1,0 +1,7 @@
+- cache(['tenant_show_table_of_sim_card_providers', I18n.locale, SimCardProvider.count, SimCardProvider.reorder(:updated_at).last]) do
+  -# SIM card providers
+  -#
+  %h2= t('sim_card_providers.index.page_title')
+  - if SimCardProvider.any?
+    = render "sim_card_providers/index_core", :sim_card_providers => SimCardProvider.all
+  = render :partial => 'shared/create_link', :locals => {:child_class => SimCardProvider}

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130213110000) do
+ActiveRecord::Schema.define(:version => 20130215133749) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -885,6 +885,32 @@ ActiveRecord::Schema.define(:version => 20130213110000) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "sim_card_providers", :force => true do |t|
+    t.string   "name"
+    t.string   "homepage_url"
+    t.string   "docu_url"
+    t.string   "api_server_url"
+    t.string   "api_username"
+    t.string   "api_password"
+    t.string   "ref"
+    t.string   "sip_server"
+    t.boolean  "include_order_card_function"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  create_table "sim_cards", :force => true do |t|
+    t.integer  "sim_card_provider_id"
+    t.string   "sim_number"
+    t.boolean  "auto_order_card"
+    t.integer  "sip_account_id"
+    t.string   "auth_key"
+    t.string   "state"
+    t.text     "log"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
 
   create_table "sip_accounts", :force => true do |t|
     t.string   "sip_accountable_type"

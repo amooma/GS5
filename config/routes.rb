@@ -1,5 +1,9 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  resources :sim_card_providers do
+    resources :sim_cards, :except => [:edit, :update]
+  end
+
   resources :intruders
 
   resources :backup_jobs, :except => [:edit, :update]
