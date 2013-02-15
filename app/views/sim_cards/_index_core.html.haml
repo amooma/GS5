@@ -1,5 +1,6 @@
 %table.table.table-striped
   %tr
+    %th= t('sim_cards.show.sim_number')
     %th= t('sim_cards.index.sip_account_id')
     %th= t('sip_accounts.index.phone_numbers')
     %th= t('sim_cards.index.auth_key')
@@ -8,6 +9,7 @@
   
   - for sim_card in sim_cards
     %tr
+      %td= sim_card.sim_number
       %td= sim_card.sip_account
       %td
         = render 'phone_numbers/listing', :phone_numbers => sim_card.sip_account.phone_numbers.order(:number)
