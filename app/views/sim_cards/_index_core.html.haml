@@ -13,4 +13,4 @@
         = render 'phone_numbers/listing', :phone_numbers => sim_card.sip_account.phone_numbers.order(:number)
       %td= sim_card.auth_key
       %td= sim_card.state
-      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => @parent, :child => sim_card}
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => sim_card.sim_card_provider, :child => sim_card}
