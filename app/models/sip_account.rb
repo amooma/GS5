@@ -6,7 +6,7 @@ class SipAccount < ActiveRecord::Base
   attr_accessible :auth_name, :caller_name, :password, :voicemail_pin, 
                   :tenant_id, :call_waiting, :clir, :clip_no_screening,
                   :clip, :description, :callforward_rules_act_per_sip_account,
-                  :hotdeskable, :gs_node_id
+                  :hotdeskable, :gs_node_id, :language_code
 
   # Associations:
   #
@@ -30,6 +30,8 @@ class SipAccount < ActiveRecord::Base
   has_one :voicemail_setting, :class_name => "VoicemailSetting", :primary_key => 'auth_name', :foreign_key => 'username', :dependent => :destroy
 
   belongs_to :gs_node
+
+  belongs_to :language, :foreign_key => 'language_code', :primary_key => 'code'
 
   # Delegations:
   #

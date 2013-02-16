@@ -1,0 +1,60 @@
+de:
+  parking_stalls:
+    name: 'Parkingstall'
+    controller:
+      successfuly_created: 'Parkingstall wurde angelegt.'
+      successfuly_updated: 'Parkingstall wurde aktualisiert.'
+      successfuly_destroyed: 'Parkingstall wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von Parkingstall'
+      name: 'Name'
+      lot: 'Lot'
+      parking_stallable_id: 'Parking stallable'
+      parking_stallable_type: 'Parking stallable type'
+      comment: 'Comment'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Parkingstall'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Parkingstall neu anlegen für %{resource}'
+    show:
+      page_title: 'Parkingstall bearbeiten'
+      name: 'Name'
+      lot: 'Lot'
+      parking_stallable_id: 'Parking stallable'
+      parking_stallable_type: 'Parking stallable type'
+      comment: 'Comment'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Parkingstall neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Parkingstall bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      lot:
+        label: 'Lot'
+        hint: ''
+      parking_stallable_id:
+        label: 'Parking stallable'
+        hint: ''
+      parking_stallable_type:
+        label: 'Parking stallable type'
+        hint: ''
+      comment:
+        label: 'Comment'
+        hint: ''
+      submit: 'Absenden'

@@ -4,5 +4,5 @@
   = t.input :login_data, :label => t('sessions.form.email'), :autofocus => true
   = t.input :password, :label => t('sessions.form.password'), :required => false
   = t.input :reset_password, :label => t('sessions.form.reset_password'), :as => :boolean
-  .actions
+  .form-actions
     = t.button :submit, :value => 'Login'

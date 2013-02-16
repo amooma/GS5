@@ -20,5 +20,5 @@
     - if GsParameter.get('STRICT_DID_HANDLING') == true
       = f.input :did_list, :label => t('tenants.form.did_list.label'), :hint => conditional_hint('tenants.form.did_list.hint')
 
-  .actions
+  .form-actions
     = f.button :submit, conditional_t('tenants.form.submit')

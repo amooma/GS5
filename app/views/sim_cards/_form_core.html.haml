@@ -1,0 +1,3 @@
+.inputs
+  = f.input :sim_number, :label => t('sim_cards.form.sim_number.label'), :hint => conditional_hint('sim_cards.form.sim_number.hint'), :autofocus => true
+  = f.association :sip_account, :collection => @available_sip_accounts, :label => t('phone_sip_accounts.form.sip_account_id.label'), :hint => conditional_hint('phone_sip_accounts.form.sip_account_id.hint'), :include_blank => false

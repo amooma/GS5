@@ -81,4 +81,7 @@ en:
       hotdeskable: 
         label: 'Hotdeskable'
         hint: ''
+      language_code: 
+        label: 'Language'
+        hint: ''
       submit: 'Submit'

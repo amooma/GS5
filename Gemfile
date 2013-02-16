@@ -1,6 +1,11 @@
+if RUBY_VERSION =~ /1.9/
+  Encoding.default_external = Encoding::UTF_8
+  Encoding.default_internal = Encoding::UTF_8
+end
+
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.12'
 gem 'bcrypt-ruby'
 gem 'sqlite3'
 gem 'mysql2'
@@ -48,8 +53,9 @@ group :test do
   gem 'factory_girl_rails'
 end
 
-gem "haml"
-gem "simple_form", '2.0.1'
+gem 'haml'
+# gem 'simple_form', '~> 2.0.1'
+gem 'simple_form', github: 'plataformatec/simple_form', branch: 'v2.1'
 
 # Image Upload
 gem 'carrierwave'

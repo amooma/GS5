@@ -11,7 +11,7 @@
   .field
     = f.label :password
     = f.password_field :password
-  .actions
+  .form-actions
     = f.submit "Log in"
 <%- else -%>
 - form_tag <%= session_plural_name %>_path do
@@ -21,6 +21,6 @@
   .field
     = label_tag :password
     = password_field_tag :password
-  .actions
+  .form-actions
     = submit_tag "Log in"
 <%- end -%>

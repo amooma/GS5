@@ -1,0 +1,13 @@
+- content_for :title, t("parking_stalls.show.page_title")
+
+%p
+  %strong= t('parking_stalls.show.name') + ":"
+  = @parking_stall.name
+%p
+  %strong= t('parking_stalls.show.lot') + ":"
+  = @parking_stall.lot
+%p
+  %strong= t('parking_stalls.show.comment') + ":"
+  = @parking_stall.comment
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @parking_stall.parking_stallable, :child => @parking_stall }

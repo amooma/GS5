@@ -1,5 +1,9 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  resources :sim_card_providers do
+    resources :sim_cards, :except => [:edit, :update]
+  end
+
   resources :intruders
 
   resources :backup_jobs, :except => [:edit, :update]
@@ -197,6 +201,7 @@ Gemeinschaft42c::Application.routes.draw do
     resources :conferences
     resources :fax_accounts
     resources :system_messages, :except => [ :edit, :update, :destroy ]
+    resources :parking_stalls
   end
   
   resources :user_groups do
@@ -224,6 +229,7 @@ Gemeinschaft42c::Application.routes.draw do
     end
     resources :hunt_groups
     resources :automatic_call_distributors
+    resources :parking_stalls
   end
 
   resources :callthroughs, :only => [] do

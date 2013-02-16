@@ -35,6 +35,9 @@
             = succeed '.' do
               =link_to link_to Haml::Engine.new("%i.icon-list").render + ' ' + manufacturer, manufacturer_path(manufacturer)
 
+      - if GsParameter.get('SIM_CARDS') == true
+        = render :partial => 'tenants/table_of_sim_card_providers'
+
       = render :partial => 'call_routes', :locals => {:tenant => tenant}
 
       = render :partial => 'gateways', :locals => {:tenant => tenant, :gateways => gateways}

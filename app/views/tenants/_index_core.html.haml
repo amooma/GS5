@@ -13,6 +13,6 @@
           - if current_user && current_user.current_tenant != tenant && current_user.tenants.include?(tenant)
             = simple_form_for([current_user.current_tenant, current_user]) do |f|
               = f.hidden_field :current_tenant_id, :value => tenant.id
-              .actions
+              .form-actions
                 = f.button :submit, conditional_t('tenants.switch_to_tenant')
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => tenant}

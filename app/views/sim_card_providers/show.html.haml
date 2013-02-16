@@ -1,0 +1,72 @@
+- content_for :title, t("sim_card_providers.show.page_title")
+
+.row
+  .span6
+    %table.table.table-striped
+      %tr
+        %td
+          %strong= t('sim_card_providers.show.name') + ":"
+        %td
+          = @sim_card_provider.name
+      %tr
+        %td
+          %strong= t('sim_card_providers.show.homepage_url') + ":"
+        %td
+          = @sim_card_provider.homepage_url
+      %tr
+        %td
+          %strong= t('sim_card_providers.show.docu_url') + ":"
+        %td
+          = @sim_card_provider.docu_url
+      %tr
+        %td
+          %strong= t('sim_card_providers.show.api_server_url') + ":"
+        %td
+          = @sim_card_provider.api_server_url
+      %tr
+        %td
+          %strong= t('sim_card_providers.show.api_username') + ":"
+        %td
+          = @sim_card_provider.api_username
+      %tr
+        %td
+          %strong= t('sim_card_providers.show.api_password') + ":"
+        %td
+          = @sim_card_provider.api_password
+      %tr
+        %td
+          %strong= t('sim_card_providers.show.ref') + ":"
+        %td
+          = @sim_card_provider.ref
+      %tr
+        %td
+          %strong= t('sim_card_providers.show.sip_server') + ":"
+        %td
+          = @sim_card_provider.sip_server
+      %tr
+        %td
+          %strong= t('sim_card_providers.show.include_order_card_function') + ":"
+        %td
+          = @sim_card_provider.include_order_card_function
+
+    = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @sim_card_provider }
+
+.row
+  .span12
+    %h2= t("sim_cards.index.page_title")
+
+    %table.table.table-striped
+      %tr
+        %th= t('sim_cards.index.sip_account_id')
+        %th= t('sim_cards.index.auth_key')
+        %th= t('sim_cards.index.state')
+        %th
+      
+      - for sim_card in @sim_card_provider.sim_cards
+        %tr
+          %td= sim_card.sip_account
+          %td= sim_card.auth_key
+          %td= sim_card.state
+          =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => @sim_card_provider, :child => sim_card}
+
+    = render :partial => 'shared/create_link', :locals => {:parent => @sim_card_provider, :child_class => SimCard}

@@ -46,7 +46,13 @@
   %strong= t('intruders.show.comment') + ":"
   = @intruder.comment
 
-%p
-  %pre= @intruder.whois
-
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @intruder }
+
+- if ! @whois.blank?
+  %p
+    %pre= @whois
+
+- elsif ! @intruder.contact_ip.blank? && Object.const_defined?('Whois')
+  %a.btn.btn-small.btn-success{ :href => intruder_path(@intruder, :whois => @intruder.contact_ip) }
+    %i.icon-info-sign.icon-white
+    = 'Whois'

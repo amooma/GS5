@@ -1,0 +1,37 @@
+- content_for :title, t("sim_cards.show.page_title")
+
+.row
+  .span6
+    %table.table.table-striped
+      %tr
+        %td
+          %strong= t('sim_cards.show.sim_number') + ":"
+        %td
+          = @sim_card.sim_number
+      %tr
+        %td
+          %strong= t('sim_cards.show.sip_account_id') + ":"
+        %td
+          = @sim_card.sip_account
+      %tr
+        %td
+          %strong= t('sip_accounts.index.phone_numbers')
+        %td
+          = render 'phone_numbers/listing', :phone_numbers => @sim_card.sip_account.phone_numbers.order(:number)
+      %tr
+        %td
+          %strong= t('sim_cards.show.auth_key') + ":"
+        %td
+          = @sim_card.auth_key
+      %tr
+        %td
+          %strong= t('sim_cards.show.state') + ":"
+        %td
+          = @sim_card.state
+      %tr
+        %td
+          %strong= t('sim_cards.show.log') + ":"
+        %td
+          = @sim_card.log
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => {:parent => @parent, :child => @sim_card }

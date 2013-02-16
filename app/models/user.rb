@@ -87,6 +87,8 @@ class User < ActiveRecord::Base
   validate :current_tenant_is_included_in_tenants, :if => Proc.new{ |user| user.current_tenant_id }
 
   belongs_to :gs_node
+
+  has_many :parking_stalls, :as => :parking_stallable, :dependent => :destroy
   
   # Avatar like photo  
   mount_uploader :image, ImageUploader  
@@ -146,6 +148,10 @@ class User < ActiveRecord::Base
   
   def admin?
     self.user_groups.include?(UserGroup.find(2))
+  end
+
+  def sim_cards
+    SimCard.where(:sip_account_id => self.sip_account_ids)
   end
 
   private
