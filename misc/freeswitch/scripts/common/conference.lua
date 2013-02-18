@@ -191,7 +191,7 @@ function Conference.enter(self, caller, domain)
   -- Record caller's name
   if common.str.to_b(self.record.announce_new_member_by_name) or common.str.to_b(self.record.announce_left_member_by_name) then
     local uid = session:get_uuid();
-    name_file = "/tmp/conference_caller_name_" .. uid .. ".wav";
+    name_file = "/var/spool/freeswitch/conference_caller_name_" .. uid .. ".wav";
     caller.session:sayPhrase('conference_record_name');
     session:recordFile(name_file, ANNOUNCEMENT_MAX_LEN, ANNOUNCEMENT_SILENCE_THRESHOLD, ANNOUNCEMENT_SILENCE_LEN);
     caller.session:streamFile(name_file);
