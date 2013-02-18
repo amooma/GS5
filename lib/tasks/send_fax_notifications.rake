@@ -6,7 +6,7 @@ task :send_fax_notifications => :environment do
   FaxDocument.where(:state => 'received').each do |fax_document|
     TIFF_FUFFIX = ".tiff"
     PDF_SUFFIX = ".pdf"
-    TMP_DIR = "/tmp/"
+    TMP_DIR = "/var/spool/freeswitch/"
 
     tiff_file = File.basename(fax_document.tiff.to_s)
 

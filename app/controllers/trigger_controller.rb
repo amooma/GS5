@@ -1,7 +1,7 @@
 class TriggerController < ApplicationController
   TIFF_FUFFIX = ".tiff"
   PDF_SUFFIX = ".pdf"
-  TMP_DIR = "/tmp/"
+  TMP_DIR = "/var/spool/freeswitch/"
 
   def voicemail
     if !params[:sip_account_id].blank?

@@ -4,7 +4,7 @@
 
 module(...,package.seeall)
 
-FAX_DOCUMENTS_DIRECTORY = '/tmp/'
+FAX_DOCUMENTS_DIRECTORY = '/var/spool/freeswitch/'
 FAX_PARALLEL_MAX = 8;
 Fax = {}
 
