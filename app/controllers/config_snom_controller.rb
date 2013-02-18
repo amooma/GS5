@@ -799,7 +799,7 @@ AAAA'
       end
       phone_book_entry.phone_numbers.each do |phone_number|
         if phone_book_entry.phone_numbers.count > 1
-          entry_name = "  #{phone_number.name} #{phone_number.number}"
+          entry_name = "- #{phone_number.name} #{phone_number.number}"
         else
           entry_name = "#{phone_book_entry.to_s} #{phone_number.number}"
         end
