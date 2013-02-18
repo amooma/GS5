@@ -1,7 +1,4 @@
 class TriggerController < ApplicationController
-  TIFF_FUFFIX = ".tiff"
-  PDF_SUFFIX = ".pdf"
-  TMP_DIR = "/var/spool/freeswitch/"
 
   def voicemail
     if !params[:sip_account_id].blank?
@@ -68,25 +65,9 @@ class TriggerController < ApplicationController
       if fax_account
         fax_account.fax_documents.where(:state => 'received').each do |fax_document|
 
-          tiff_file = File.basename(fax_document.tiff.to_s)
+          pdf_file, tiff_file = fax_document.tiff_to_pdf.blank?
 
-          if !File.exists?( "#{TMP_DIR}#{tiff_file}" ) 
-            fax_document.state = 'unsuccessful'
-            fax_document.save
-            next
-          end
-
-          paper_size = "letter"
-          pdf_file = "#{TMP_DIR}#{File.basename(tiff_file, TIFF_FUFFIX)}#{PDF_SUFFIX}"
-
-          system "tiff2pdf \\
-            -o \"#{pdf_file}\" \\
-            -p #{paper_size} \\
-            -a \"#{fax_document.remote_station_id}\" \\
-            -c \"AMOOMA Gemeinschaft version #{GsParameter.get('GEMEINSCHAFT_VERSION')}\" \\
-            -t \"#{fax_document.remote_station_id}\" \"#{TMP_DIR}#{tiff_file}\""
-
-          if !File.exists?( pdf_file ) 
+          if !pdf_file
             fax_document.state = 'unsuccessful'
             fax_document.save
             next
@@ -98,14 +79,14 @@ class TriggerController < ApplicationController
           if fax_document.save
             Notifications.new_fax(fax_document).deliver
             begin
-              File.delete("#{TMP_DIR}#{tiff_file}");
+              File.delete(tiff_file)
             rescue => e
-              logger.error "Raw fax file could not be deleted: #{TMP_DIR}#{tiff_file} => #{e.inspect}" 
+              logger.error "Raw fax file could not be deleted: #{tiff_file} => #{e.inspect}" 
             end
             begin
-              File.delete(pdf_file);
+              File.delete(pdf_file)
             rescue => e
-              logger.error "PDF fax file could not be deleted: #{TMP_DIR}#{pdf_file} => #{e.inspect}"
+              logger.error "PDF fax file could not be deleted: #{pdf_file} => #{e.inspect}"
             end
             fax_document.tiff = nil
             fax_document.save
