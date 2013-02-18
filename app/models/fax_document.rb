@@ -57,7 +57,7 @@ class FaxDocument < ActiveRecord::Base
   end
   
   def create_thumbnails_and_save_them
-    tmp_dir = "/tmp/fax_convertions/#{self.id}"
+    tmp_dir = "/var/spool/gemeinschaft/fax_convertions/#{self.id}"
     FileUtils.mkdir_p tmp_dir
     system("cd #{tmp_dir} && convert #{self.document.path} -colorspace Gray PNG:'fax_page.png'")
     Dir.glob("#{tmp_dir}/fax_page*.png").each do |thumbnail|
@@ -72,7 +72,7 @@ class FaxDocument < ActiveRecord::Base
   def convert_pdf_to_tiff
     page_size_a4 = '595 842'
     page_size_command = "<< /Policies << /PageSize 3 >> /InputAttributes currentpagedevice /InputAttributes get dup { pop 1 index exch undef } forall dup 0 << /PageSize [ #{page_size_a4} ] >> put >> setpagedevice"
-    directory = "/tmp/GS-#{GsParameter.get('GEMEINSCHAFT_VERSION')}/faxes/#{self.id}"
+    directory = "/var/spool/gemeinschaft/GS-#{GsParameter.get('GEMEINSCHAFT_VERSION')}/faxes/#{self.id}"
     FileUtils.mkdir_p directory
     tiff_file_name = File.basename(self.document.to_s.downcase, ".pdf") + '.tiff'
     system "cd #{directory} && gs -q -r#{self.fax_resolution.resolution_value} -dNOPAUSE -dBATCH -dSAFER -sDEVICE=tiffg3 -sOutputFile=\"#{tiff_file_name}\" -c \"#{page_size_command}\" -- \"#{Rails.root.to_s}/public#{self.document.to_s}\""
