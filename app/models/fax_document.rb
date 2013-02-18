@@ -68,6 +68,29 @@ class FaxDocument < ActiveRecord::Base
     FileUtils.rm_rf tmp_dir
   end
 
+  def tiff_to_pdf()
+    tiff_file = self.tiff.to_s.gsub(self.tiff.store_path, '')
+    if !File.exists?(tiff_file)
+      return nil
+    end
+
+    working_path, file_name = File.split(tiff_file)
+    pdf_file = "#{working_path}/#{File.basename(tiff_file, '.tiff')}.pdf"
+
+    system "tiff2pdf \\
+      -o \"#{pdf_file}\" \\
+      -p letter \\
+      -a \"#{self.remote_station_id}\" \\
+      -c \"AMOOMA Gemeinschaft version #{GsParameter.get('GEMEINSCHAFT_VERSION')}\" \\
+      -t \"#{self.remote_station_id}\" \"#{tiff_file}\""
+
+    if !File.exists?(pdf_file)
+      return nil
+    end
+
+    return pdf_file, tiff_file
+  end
+
   private
   def convert_pdf_to_tiff
     page_size_a4 = '595 842'
