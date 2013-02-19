@@ -62,7 +62,7 @@ de:
       transmission_time: 'Übertragungszeit'
       sent_at: 'Sendezeit'
       document_total_pages: 'Seitenanzahl'
-      document_transferred_pages: 'Übertragende Seiten'
+      document_transferred_pages: 'Übertragene Seiten'
       ecm_requested: 'Fehlerkorrektur (ECM) angefragt'
       ecm_used: 'Fehlerkorrektur (ECM) verwendet'
       image_resolution: 'Bildauflösung'
