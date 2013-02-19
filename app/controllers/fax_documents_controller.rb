@@ -31,6 +31,24 @@ class FaxDocumentsController < ApplicationController
           )
         end
       }
+      format.tiff {
+        caller_number = @fax_document.caller_id_number.to_s.gsub(/[^0-9]/, '')
+        if caller_number.blank?
+          caller_number = 'anonymous'
+        end
+
+        if @fax_document.tiff
+          send_file @fax_document.tiff, :type => "image/tiff", 
+            :filename => "#{@fax_document.created_at.strftime('%Y%m%d-%H%M%S')}-#{caller_number}.tiff"
+        else
+          render(
+            :status => 404,
+            :layout => false,
+            :content_type => 'text/plain',
+            :text => "<!-- Raw image not found -->",
+          )
+        end
+      }
     end
   end
 
