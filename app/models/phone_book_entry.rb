@@ -1,6 +1,8 @@
 # encoding: UTF-8
 
 class PhoneBookEntry < ActiveRecord::Base
+  PHONE_NUMBER_NAMES = ['Phone', 'Office', 'Home', 'Mobile', 'Fax']
+
   before_save :run_phonetic_algorithm
   before_save :save_value_of_to_s
   
