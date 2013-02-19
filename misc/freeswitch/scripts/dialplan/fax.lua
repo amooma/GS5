@@ -4,7 +4,7 @@
 
 module(...,package.seeall)
 
-FAX_DOCUMENTS_DIRECTORY = '/var/spool/freeswitch/'
+FAX_SPOOL_DIRECTORY = '/var/spool/freeswitch/'
 FAX_PARALLEL_MAX = 8;
 Fax = {}
 
@@ -18,7 +18,7 @@ function Fax.new(self, arg)
   self.log = arg.log;
   self.database = arg.database;
   self.record = arg.record;
-  self.fax_directory = arg.fax_directory or FAX_DOCUMENTS_DIRECTORY;
+  self.fax_spool_directory = arg.fax_spool_directory or FAX_SPOOL_DIRECTORY;
   return object;
 end
 
@@ -79,7 +79,7 @@ end
 -- List waiting fax documents
 function Fax.queued_for_sending(self, limit)
   limit = limit or FAX_PARALLEL_MAX;
-  local sql_query = 'SELECT * FROM `fax_documents` WHERE `state` IN ("queued_for_sending","unsuccessful") AND `retry_counter` > 0 ORDER BY `sent_at` ASC LIMIT ' .. limit;
+  local sql_query = 'SELECT * FROM `fax_documents` WHERE `state` IN ("queued_for_sending","unsuccessful") AND `retry_counter` > 0  AND `tiff` IS NOT NULL AND `tiff` != "" ORDER BY `sent_at` ASC LIMIT ' .. limit;
   local fax_documents = {}
   self.database:query(sql_query, function(fax_entry)
     fax_entry['destination_numbers'] = Fax:destination_numbers(fax_entry.id)
@@ -136,7 +136,7 @@ end
   
 -- Receive Fax
 function Fax.receive(self, caller, file_name)
-  file_name = file_name or self.fax_directory .. 'fax_in_' .. caller.uuid .. '.tiff';
+  file_name = file_name or self.fax_spool_directory .. 'fax_in_' .. caller.uuid .. '.tiff';
 
   caller:set_variable('fax_ident',   self.record.station_id)
   caller:set_variable('fax_verbose', 'false')

@@ -50,7 +50,7 @@
 
           - if fax_document.document?
             %p
-              %a{:href => fax_document.document.url}
+              %a{:href => fax_account_fax_document_path(@fax_account, fax_document, :format => :pdf), :method => :get}
                 %i{:class => 'icon-download'}
                 = t("fax_documents.index.actions.download_pdf") + " (#{number_to_human_size(fax_document.document.size, :precision => 2)})"
 

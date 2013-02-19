@@ -65,7 +65,7 @@ class TriggerController < ApplicationController
       if fax_account
         fax_account.fax_documents.where(:state => 'received').each do |fax_document|
 
-          pdf_file, tiff_file = fax_document.tiff_to_pdf
+          pdf_file = fax_document.tiff_to_pdf
 
           if !pdf_file
             fax_document.state = 'unsuccessful'
