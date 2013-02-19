@@ -159,7 +159,7 @@ function Conference.enter(self, caller, domain)
   caller:sleep(1000);
   caller.session:sayPhrase('conference_welcome');
 
-  if pin and pin ~= "" then
+  if not common.str.blank(pin) then
     local digits = "";
     for i = 1, 3, 1 do
       if digits == pin then
@@ -167,7 +167,7 @@ function Conference.enter(self, caller, domain)
       elseif digits ~= "" then
         caller.session:sayPhrase('conference_bad_pin');
       end
-      digits = caller.session:read(PIN_LENGTH_MIN, PIN_LENGTH_MAX, 'conference/conf-enter_conf_pin.wav', PIN_TIMEOUT, '#');
+      digits = caller.session:read(PIN_LENGTH_MIN, PIN_LENGTH_MAX, 'conference/conf-pin.wav', PIN_TIMEOUT, '#');
     end
     if digits ~= pin then
       caller.session:sayPhrase('conference_goodbye');
