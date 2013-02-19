@@ -73,16 +73,17 @@ class TriggerController < ApplicationController
             next
           end
 
+          working_path, tiff_file = File.split(fax_document.tiff)
+          if fax_document.store_dir != working_path
+            FileUtils.mkdir(fax_document.store_dir)
+            FileUtils.mv(fax_document.tiff, fax_document.store_dir)
+            fax_document.tiff = "#{fax_document.store_dir}/#{tiff_file}"
+          end
+
           fax_document.document = File.open(pdf_file)
           fax_document.state = 'successful'
           
           if fax_document.save
-            Notifications.new_fax(fax_document).deliver
-            begin
-              File.delete(tiff_file)
-            rescue => e
-              logger.error "Raw fax file could not be deleted: #{tiff_file} => #{e.inspect}" 
-            end
             begin
               File.delete(pdf_file)
             rescue => e

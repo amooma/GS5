@@ -19,6 +19,8 @@ class FaxDocument < ActiveRecord::Base
 
   after_save :convert_to_tiff
   after_create :render_thumbnails
+
+  after_destroy :remove_storage_dir
   
   # Scopes
   scope :inbound, where(:state => 'inbound')
@@ -105,9 +107,9 @@ class FaxDocument < ActiveRecord::Base
 
   def store_dir
     if self.try(:inbound)
-      "/var/opt/gemeinschaft/fax/in/#{self.id}"
+      "/var/opt/gemeinschaft/fax/in/#{self.id.to_i}"
     else
-      "/var/opt/gemeinschaft/fax/out/#{self.id}"
+      "/var/opt/gemeinschaft/fax/out/#{self.id.to_i}"
     end
   end
 
@@ -118,6 +120,12 @@ class FaxDocument < ActiveRecord::Base
       if self.tiff
         return self.save
       end
+    end
+  end
+
+  def remove_storage_dir
+    if File.directory?(self.store_dir)
+      FileUtils.rm_rf(self.store_dir)  
     end
   end
 
