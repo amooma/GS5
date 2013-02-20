@@ -32,6 +32,11 @@ input, textarea, .uneditable-input {
     width: 96%;
   }
 }
+input, textarea {
+  &.invalid {
+    box-shadow: inset -9px 0px 0px rgb(255, 219, 219), inset -14px 0px 0px rgb(255, 245, 245) !important;
+  }
+}
 
 select {
   width: 520px;
