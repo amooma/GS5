@@ -17,12 +17,17 @@ function Dtmf.new(self, arg)
   self.bleg = arg.bleg
   self.digit_timeout = arg.digit_timeout or 5;
   self.router = arg.router;
+  self.digit_duration_min = arg.digit_duration_min or 500;
 
   return object;
 end
 
 
 function Dtmf.detect(self, caller, sequence, digit, duration, calee)
+  if not tonumber(duration) or duration < self.digit_duration_min then
+    return;
+  end
+
   local timestamp = os.time();
   if timestamp - sequence.updated > self.digit_timeout then
     sequence.digits = digit;
