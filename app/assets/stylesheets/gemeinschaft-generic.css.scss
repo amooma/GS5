@@ -25,6 +25,23 @@ li.display {
 }
 input, textarea, .uneditable-input {
   width: 500px;
+  @media (max-width: 979px) {
+    width: 200px;
+  }
+  @media (max-width: 480px) {
+    width: 96%;
+  }
+}
+
+select {
+  width: 520px;
+  @media (max-width: 979px) {
+    width: 220px;
+  }
+  @media (max-width: 480px) {
+    width: 99.5%;
+  }
+
 }
 
 @media (max-width: 979px) {
