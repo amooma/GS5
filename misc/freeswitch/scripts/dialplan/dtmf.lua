@@ -68,6 +68,9 @@ function Dtmf.transfer(self, caller, destination, calee)
     caller:execute('transfer', destination);
     fapi:execute('uuid_kill', callee_uuid);
   else
+    if caller.account then
+      fapi:execute('uuid_setvar_multi', callee_uuid .. ' gs_auth_account_type=' .. caller.account.class .. ';gs_auth_account_uuid=' .. caller.account.uuid);
+    end
     fapi:execute('uuid_transfer', callee_uuid .. ' ' .. destination);
     caller.session:hangup();
   end
