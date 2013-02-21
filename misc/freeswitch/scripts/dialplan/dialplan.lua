@@ -362,65 +362,74 @@ end
 
 
 function Dialplan.dial(self, destination)
+  local user_id = nil; 
+  local tenant_id = nil;
+
   require 'common.str'
   destination.caller_id_number = destination.caller_id_number or self.caller.caller_phone_numbers[1];
 
+  if destination.node_local and destination.type == 'sipaccount' then
+    destination.pickup_groups = {};
+
+    destination.account = self:object_find(destination.type, destination.id);
+    if destination.account then
+      if destination.account.class == 'sipaccount' then
+        destination.callee_id_name = destination.account.record.caller_name;
+        self.caller:set_callee_id(destination.number, destination.account.record.caller_name);
+        table.insert(destination.pickup_groups, 's' .. destination.account.id );
+      end
+    end
+
+    if destination.account and destination.account.owner then
+      if destination.account.owner.class == 'user' then
+        user_id = destination.account.owner.id;
+        tenant_id = tonumber(destination.account.owner.record.current_tenant_id);
+        local user = self:object_find(destination.account.owner.class, tonumber(user_id));
+        if user then
+          group_ids = user:list_group_ids();
+          for index=1, #group_ids do
+            table.insert(destination.pickup_groups, 'g' .. group_ids[index]);
+          end
+        end
+      elseif destination.account.owner.class == 'tenant' then
+        tenant_id = destination.account.owner.id;
+      end
+    end
+  end
+
   if not self.caller.clir then
-    if destination.node_local and destination.type == 'sipaccount' then
-      local user_id = nil; 
-      local tenant_id = nil;
+    if user_id or tenant_id then
+      require 'common.str'
+      local phone_book_entry = nil;
 
-      destination.account = self:object_find(destination.type, destination.id);
-      if destination.account then
-        if destination.account.class == 'sipaccount' then
-          destination.callee_id_name = destination.account.record.caller_name;
-          self.caller:set_callee_id(destination.number, destination.account.record.caller_name);
-          destination.pickup_groups = { 's' .. destination.account.id };
-        end
+      if self.phonebook_number_lookup then
+        require 'dialplan.phone_book'
+        phone_book_entry = dialplan.phone_book.PhoneBook:new{ log = self.log, database = self.database }:find_entry_by_number_user_tenant(self.caller.caller_phone_numbers, user_id, tenant_id);
       end
 
-      if destination.account and destination.account.owner then
-        if destination.account.owner.class == 'user' then
-          user_id = destination.account.owner.id;
-          tenant_id = tonumber(destination.account.owner.record.current_tenant_id);
-        elseif destination.account.owner.class == 'tenant' then
-          tenant_id = destination.account.owner.id;
+      if phone_book_entry then
+        self.log:info('PHONE_BOOK_ENTRY - phone_book=', phone_book_entry.phone_book_id, ' (', phone_book_entry.phone_book_name, '), caller_id_name: ', phone_book_entry.caller_id_name, ', ringtone: ', phone_book_entry.bellcore_id);
+        destination.caller_id_name = common.str.to_ascii(phone_book_entry.caller_id_name);
+        if tonumber(phone_book_entry.bellcore_id) then
+          self.log:debug('RINGTONE - phonebookentry, index: ', phone_book_entry.bellcore_id);
+          self.caller:export_variable('alert_info', 'http://amooma.de;info=Ringer' .. phone_book_entry.bellcore_id .. ';x-line-id=0');
         end
-      end
-
-      if user_id or tenant_id then
-        require 'common.str'
-        local phone_book_entry = nil;
-
-        if self.phonebook_number_lookup then
-          require 'dialplan.phone_book'
-          phone_book_entry = dialplan.phone_book.PhoneBook:new{ log = self.log, database = self.database }:find_entry_by_number_user_tenant(self.caller.caller_phone_numbers, user_id, tenant_id);
-        end
-
-        if phone_book_entry then
-          self.log:info('PHONE_BOOK_ENTRY - phone_book=', phone_book_entry.phone_book_id, ' (', phone_book_entry.phone_book_name, '), caller_id_name: ', phone_book_entry.caller_id_name, ', ringtone: ', phone_book_entry.bellcore_id);
-          destination.caller_id_name = common.str.to_ascii(phone_book_entry.caller_id_name);
-          if tonumber(phone_book_entry.bellcore_id) then
-            self.log:debug('RINGTONE - phonebookentry, index: ', phone_book_entry.bellcore_id);
-            self.caller:export_variable('alert_info', 'http://amooma.de;info=Ringer' .. phone_book_entry.bellcore_id .. ';x-line-id=0');
-          end
-          if phone_book_entry.image then
-            self:set_caller_picture(phone_book_entry.id, 'phonebookentry', phone_book_entry.image);
-          elseif self.caller.account and self.caller.account.owner then
-            self:set_caller_picture(self.caller.account.owner.id, self.caller.account.owner.class);
-          end
+        if phone_book_entry.image then
+          self:set_caller_picture(phone_book_entry.id, 'phonebookentry', phone_book_entry.image);
         elseif self.caller.account and self.caller.account.owner then
           self:set_caller_picture(self.caller.account.owner.id, self.caller.account.owner.class);
-        elseif self.geo_number_lookup then
-          require 'dialplan.geo_number'
-          local geo_number = dialplan.geo_number.GeoNumber:new{ log = self.log, database = self.database }:find(destination.caller_id_number);
-          if geo_number then
-            self.log:info('GEO_NUMBER - found: ', geo_number.name, ', ', geo_number.country);
-            if geo_number.name then
-              destination.caller_id_name = common.str.to_ascii(geo_number.name) .. ', ' .. common.str.to_ascii(geo_number.country);
-            else
-              destination.caller_id_name = common.str.to_ascii(geo_number.country);
-            end
+        end
+      elseif self.caller.account and self.caller.account.owner then
+        self:set_caller_picture(self.caller.account.owner.id, self.caller.account.owner.class);
+      elseif self.geo_number_lookup then
+        require 'dialplan.geo_number'
+        local geo_number = dialplan.geo_number.GeoNumber:new{ log = self.log, database = self.database }:find(destination.caller_id_number);
+        if geo_number then
+          self.log:info('GEO_NUMBER - found: ', geo_number.name, ', ', geo_number.country);
+          if geo_number.name then
+            destination.caller_id_name = common.str.to_ascii(geo_number.name) .. ', ' .. common.str.to_ascii(geo_number.country);
+          else
+            destination.caller_id_name = common.str.to_ascii(geo_number.country);
           end
         end
       end

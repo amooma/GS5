@@ -69,6 +69,23 @@ function User.list_groups(self, id)
 end
 
 
+function User.list_group_ids(self, id)
+  require 'common.str'
+  id = id or self.id;
+  local sql_query = 'SELECT `b`.`id` FROM `user_group_memberships` `a` \
+    JOIN `user_groups` `b` ON `a`.`user_group_id` = `b`.`id` \
+    WHERE `a`.`state` = "active" AND `a`.`user_id`= ' .. tonumber(id) .. ' ORDER BY `b`.`position` LIMIT ' .. MAX_GROUP_MEMBERSHIPS;
+  
+  local groups = {};
+
+  self.database:query(sql_query, function(entry)
+    table.insert(groups, common.str.downcase(entry.id));
+  end);
+
+  return groups;
+end
+
+
 function User.check_pin(self, pin_to_check)
   if not self.record then
     return nil
