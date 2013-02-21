@@ -236,16 +236,12 @@ function Functions.intercept_any_number(self, caller, destination_number)
     return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
   end
 
-  require 'common.sip_account'
-  local sip_account = common.sip_account.SipAccount:new{ log = self.log, database = self.database }:find_by_id(phone_number.record.phone_numberable_id)
-  
-  if not sip_account then
-    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - no sip_account found for number: ', destination_number);
-    return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
-  end
+  self.log:info('FUNCTION_INTERCEPT_ANY_NUMBER intercepting call - to: ', phone_number.record.phone_numberable_type:lower(), '=', phone_number.record.phone_numberable_id, ', number: ', destination_number);
 
-  self.log:info('FUNCTION_INTERCEPT_ANY_NUMBER intercepting call - to: ', phone_number.record.phone_numberable_type:lower(), '=', phone_number.record.phone_numberable_id, ', name: ', sip_account.record.auth_name);
-  return self:intercept_destination(caller, sip_account.record.auth_name);
+  caller:set_variable('gs_pickup_group_pick', 's' .. phone_number.record.phone_numberable_id);
+  caller:execute('pickup', 's' .. phone_number.record.phone_numberable_id);
+  
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
 
 

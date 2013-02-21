@@ -375,6 +375,7 @@ function Dialplan.dial(self, destination)
         if destination.account.class == 'sipaccount' then
           destination.callee_id_name = destination.account.record.caller_name;
           self.caller:set_callee_id(destination.number, destination.account.record.caller_name);
+          destination.pickup_groups = { 's' .. destination.account.id };
         end
       end
 

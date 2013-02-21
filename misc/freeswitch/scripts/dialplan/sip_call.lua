@@ -76,7 +76,8 @@ end
 
 
 function SipCall.fork(self, destinations, arg )
-  local dial_strings = {}
+  local dial_strings = {};
+  local pickup_groups = {};
 
   require 'common.sip_account'
   require 'common.str'
@@ -135,6 +136,11 @@ function SipCall.fork(self, destinations, arg )
             table.insert(origination_variables, "alert_info='" .. destination.alert_info .. "'");
           end
           table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/' .. sip_account.record.profile_name .. '/' .. sip_account.record.auth_name .. '%' .. sip_account.record.sip_host);
+          if destination.pickup_groups and #destination.pickup_groups > 0 then
+            for key=1, #destination.pickup_groups do
+              pickup_groups[destination.pickup_groups[key]] = true;
+            end
+          end
         else 
           some_destinations_busy = true;
           call_result = { code = 486, phrase = 'User busy', disposition = 'USER_BUSY' };
@@ -184,6 +190,10 @@ function SipCall.fork(self, destinations, arg )
   self.caller:set_variable('call_timeout', arg.timeout );
   self.log:info('FORK DIAL - destinations: ', #dial_strings, ', timeout: ', arg.timeout);
 
+  for pickup_group, value in pairs(pickup_groups) do
+    table.insert(dial_strings, 'pickup/' .. pickup_group);
+  end
+
   if arg.send_ringing then
     self.caller:execute('ring_ready');
   end
@@ -200,6 +210,16 @@ function SipCall.fork(self, destinations, arg )
     session_callee:setAutoHangup(false);
     fork_index = tonumber(session_callee:getVariable('gs_fork_index')) or 0;
     local destination = destinations[fork_index];
+
+    if not destination then
+      destination = {
+        ['type'] = session_callee:getVariable('gs_account_type');
+        id = session_callee:getVariable('gs_account_id');
+        uuid = session_callee:getVariable('gs_account_uuid');
+        pickup_group_pick = session_callee:getVariable('gs_pickup_group_pick');
+      }
+      self.log:notice('FORK - call picked off by: ', destination.type, '=', destination.id, '/', destination.uuid, ', pickup_group: ', destination.pickup_group_pick);
+    end
 
     if arg.detect_dtmf_after_bridge_caller and self.caller.auth_account then
       session:execute('start_dtmf');
