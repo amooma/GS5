@@ -113,6 +113,8 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:hangup(caller, parameters[3], parameters[4]);
   elseif fid == "cpa" then
     result = self:call_parking_inout(caller, parameters[3], parameters[4]);
+  elseif fid == "cpai" then
+    result = self:call_parking_inout_index(caller, parameters[3]);
   end
 
   return result;
@@ -928,6 +930,42 @@ function Functions.call_parking_inout(self, caller, stall_name, lot_name)
     return { continue = false, code = 404, phrase = 'Parking lot not found', no_cdr = true }
   end
 
+  parking_stall:park_retrieve();
+
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
+
+function Functions.call_parking_inout_index(self, caller, stall_index)
+  if not tonumber(stall_index) then
+    self.log:notice('FUNCTION_CALL_PARKING_INOUT_INDEX - malformed index: ', stall_index);
+    return { continue = false, code = 404, phrase = 'No parkings stall specified', no_cdr = true }
+  end
+
+  require 'common.str';
+  local owner = common.str.try(caller, 'auth_account.owner');
+  
+  if not owner then
+    self.log:notice('FUNCTION_CALL_PARKING_INOUT_INDEX - stall owner not specified');
+    return { continue = false, code = 404, phrase = 'No parkings stalls owner' , no_cdr = true }
+  end
+
+  require 'dialplan.call_parking';
+  local parking_stalls = dialplan.call_parking.CallParking:new{ log = self.log, database = self.database, caller = caller }:find_by_owner(owner.id, owner.class);
+
+  if not parking_stalls or #parking_stalls < 1 then
+    self.log:notice('FUNCTION_CALL_PARKING_INOUT_INDEX - no parkings stalls found');
+    return { continue = false, code = 404, phrase = 'No parkings stalls', no_cdr = true }
+  end
+
+  local parking_stall = parking_stalls[tonumber(stall_index)];
+
+  if not parking_stall then
+    self.log:notice('FUNCTION_CALL_PARKING_INOUT_INDEX - no parkings stall found with index: ', stall_index);
+    return { continue = false, code = 404, phrase = 'Parking stall not found', no_cdr = true }
+  end
+
+  self.log:info('FUNCTION_CALL_PARKING_INOUT_INDEX parking/retrieving call - parkingstall=', parking_stall.id, '/', parking_stall.name, ', index: ', stall_index);
   parking_stall:park_retrieve();
 
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
