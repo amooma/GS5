@@ -35,8 +35,6 @@ function Functions.dialplan_function(self, caller, dialed_number)
 
   if fid == "ta" then
     result = self:transfer_all(caller, parameters[3]);
-  elseif fid == "in" then
-    result = self:intercept_extensions(caller, parameters[3]);
   elseif fid == "ia" then
     result = self:intercept_any_number(caller, parameters[3]);
   elseif fid == "anc" then
@@ -151,76 +149,6 @@ function Functions.transfer_all(self, caller, destination_number)
   return destination_number;
 end
 
--- Intercept Extensions
-function Functions.intercept_extensions(self, caller, destination_numbers)
-  if type(destination_numbers) == "string" then
-    destination_numbers = "\"" .. destination_numbers .. "\"";
-  else
-    destination_numbers = "\"" .. table.concat(destination_numbers, "\",\"") .. "\"";
-  end
-
-  self.log:debug("Intercept call to number(s): " .. destination_numbers);
-  
-  if caller.account_type ~= "SipAccount" then
-    self.log:error("caller is not a SipAccount");
-    return { continue = false, code = 403, phrase = 'Incompatible caller' }
-  end
-
-  local sql_query = 'SELECT * FROM `channels` WHERE `callstate` IN ("EARLY", "ACTIVE") AND `dest` IN (' .. destination_numbers .. ') LIMIT 1';
-
-  self.database:query(sql_query, function(call_entry)
-    self.log:debug("intercepting call with uid: " .. call_entry.uuid);
-    caller:intercept(call_entry.uuid);
-  end)
-  
-  return nil;
-end
-
--- intercept call to destination (e.g. sip_account)
-function Functions.intercept_destination(self, caller, destination)
-  self.log:debug('FUNCTION_INTERCEPT_DESTINATION - destination: ', destination);
-  local result = { continue = false, code = 404, phrase = 'No calls found', no_cdr = true };
-  local sql_query = 'SELECT `call_uuid`, `uuid` FROM `detailed_calls` WHERE `callstate` = "RINGING" AND `presence_id` LIKE "' .. destination .. '@%" LIMIT 1';
-
-  caller:set_caller_id(caller.caller_phone_numbers[1] ,caller.caller_id_name);
-  self.database:query(sql_query, function(call_entry)
-    if call_entry.call_uuid and tostring(call_entry.call_uuid) then
-      self.log:notice('FUNCTION_INTERCEPT_DESTINATION intercepting call - destination: ', destination, ', call_uuid: ' .. call_entry.call_uuid);
-      caller:intercept(call_entry.call_uuid);
-      result = { continue = false, code = 200, call_service = 'pickup' }
-      require 'common.str'
-      require 'common.fapi'
-      local fapi = common.fapi.FApi:new{ log = self.log, uuid = call_entry.call_uuid }
-      if fapi:channel_exists() then
-        caller:set_caller_id(
-          common.str.to_s(fapi:get_variable('effective_caller_id_number')),
-          common.str.to_s(fapi:get_variable('effective_caller_id_name'))
-        );
-        caller:set_callee_id(
-          common.str.to_s(fapi:get_variable('effective_callee_id_number')),
-          common.str.to_s(fapi:get_variable('effective_callee_id_name'))
-        );
-
-        caller:set_variable('gs_destination_type', fapi:get_variable('gs_destination_type'));
-        caller:set_variable('gs_destination_id', fapi:get_variable('gs_destination_id'));
-        caller:set_variable('gs_destination_uuid', fapi:get_variable('gs_destination_uuid'));
-
-        caller:set_variable('gs_caller_account_type', fapi:get_variable('gs_account_type'));
-        caller:set_variable('gs_caller_account_id', fapi:get_variable('gs_account_id'));
-        caller:set_variable('gs_caller_account_uuid', fapi:get_variable('gs_account_uuid'));
-
-        caller:set_variable('gs_auth_account_type', fapi:get_variable('gs_auth_account_type'));
-        caller:set_variable('gs_auth_account_id', fapi:get_variable('gs_auth_account_id'));
-        caller:set_variable('gs_auth_account_uuid', fapi:get_variable('gs_auth_account_uuid'));
-      end
-    else
-      self.log:error('FUNCTION - failed to intercept call - no caller uuid for callee uuid: ', call_entry.uuid);
-    end
-  end)
-
-  return result;
-end
-
 
 function Functions.intercept_any_number(self, caller, destination_number)
   require 'common.phone_number'
@@ -240,7 +168,7 @@ function Functions.intercept_any_number(self, caller, destination_number)
 
   caller:set_variable('gs_pickup_group_pick', 's' .. phone_number.record.phone_numberable_id);
   caller:execute('pickup', 's' .. phone_number.record.phone_numberable_id);
-  
+
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
 
