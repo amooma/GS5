@@ -38,7 +38,7 @@ function Functions.dialplan_function(self, caller, dialed_number)
   elseif fid == "in" then
     result = self:intercept_extensions(caller, parameters[3]);
   elseif fid == "ia" then
-    result = self:intercept_any_extension(caller, parameters[3]);
+    result = self:intercept_any_number(caller, parameters[3]);
   elseif fid == "anc" then
     result = self:account_node_change(caller);
   elseif fid == "li" then
@@ -117,7 +117,7 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:call_parking_inout_index(caller, parameters[3]);
   end
 
-  return result;
+  return result or { continue = false, code = 505, phrase = 'Error executing function', no_cdr = true };
 end
 
 -- Transfer all calls to a conference
@@ -178,14 +178,14 @@ end
 
 -- intercept call to destination (e.g. sip_account)
 function Functions.intercept_destination(self, caller, destination)
-  self.log:debug("Intercept call to destination " .. destination);
-  local result = false;
-  local sql_query = 'SELECT `call_uuid`, `uuid` FROM `channels` WHERE `callstate` = "RINGING" AND `dest` = "' .. destination .. '" LIMIT 1';
+  self.log:debug('FUNCTION_INTERCEPT_DESTINATION - destination: ', destination);
+  local result = { continue = false, code = 404, phrase = 'No calls found', no_cdr = true };
+  local sql_query = 'SELECT `call_uuid`, `uuid` FROM `detailed_calls` WHERE `callstate` = "RINGING" AND `presence_id` LIKE "' .. destination .. '@%" LIMIT 1';
 
   caller:set_caller_id(caller.caller_phone_numbers[1] ,caller.caller_id_name);
   self.database:query(sql_query, function(call_entry)
     if call_entry.call_uuid and tostring(call_entry.call_uuid) then
-      self.log:debug("intercepting call - uuid: " .. call_entry.call_uuid);
+      self.log:notice('FUNCTION_INTERCEPT_DESTINATION intercepting call - destination: ', destination, ', call_uuid: ' .. call_entry.call_uuid);
       caller:intercept(call_entry.call_uuid);
       result = { continue = false, code = 200, call_service = 'pickup' }
       require 'common.str'
@@ -221,24 +221,31 @@ function Functions.intercept_destination(self, caller, destination)
   return result;
 end
 
--- intercept call to owner of destination_number
-function Functions.intercept_any_extension(self, caller, destination_number)
-  require 'common.phone_number'
-  local phone_number_object = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:find_by_number(destination_number);
 
-  if not phone_number_object or not phone_number_object.record then
-    self.log:notice("unallocated number: " .. tostring(destination_number));
-    return false;
+function Functions.intercept_any_number(self, caller, destination_number)
+  require 'common.phone_number'
+  local phone_number = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:find_by_number(destination_number);
+
+  if not phone_number or not phone_number.record then
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - number not found: ', destination_number);
+    return { continue = false, code = 404, phrase = 'Number not found', no_cdr = true };
   end
+
+  if not phone_number.record.phone_numberable_type:lower() == 'sipaccount' or not tonumber(phone_number.record.phone_numberable_id) then
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - destination: ',  phone_number.record.phone_numberable_type:lower(), '=', phone_number.record.phone_numberable_id, ', number: ', destination_number);
+    return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
+  end
+
+  require 'common.sip_account'
+  local sip_account = common.sip_account.SipAccount:new{ log = self.log, database = self.database }:find_by_id(phone_number.record.phone_numberable_id)
   
-  if phone_number_object.record.phone_numberable_type == 'SipAccount' then
-    require "common.sip_account"
-    local sip_account_class = common.sip_account.SipAccount:new{ log = self.log, database = self.database }
-    local sip_account = sip_account_class:find_by_id(phone_number_object.record.phone_numberable_id)
-    if sip_account then
-      return self:intercept_destination(caller, sip_account.record.auth_name);
-    end
+  if not sip_account then
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - no sip_account found for number: ', destination_number);
+    return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
   end
+
+  self.log:info('FUNCTION_INTERCEPT_ANY_NUMBER intercepting call - to: ', phone_number.record.phone_numberable_type:lower(), '=', phone_number.record.phone_numberable_id, ', name: ', sip_account.record.auth_name);
+  return self:intercept_destination(caller, sip_account.record.auth_name);
 end
 
 
