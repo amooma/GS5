@@ -1,0 +1,50 @@
+en:
+  group_permissions:
+    name: 'Grouppermission'
+    controller:
+      successfuly_created: 'Successfully created Grouppermission.'
+      successfuly_updated: 'Successfully updated Grouppermission.'
+      successfuly_destroyed: 'Successfully destroyed Grouppermission.'
+    index:
+      page_title: 'Listing Grouppermission'
+      group_id: 'Group'
+      permission: 'Permission'
+      target_group_id: 'Target group'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this Grouppermission?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New Grouppermission for %{resource}'
+    show:
+      page_title: 'Show Grouppermission'
+      group_id: 'Group'
+      permission: 'Permission'
+      target_group_id: 'Target group'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this element?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New Grouppermission'
+      actions:
+        back_to_list: 'Back to Index'
+    edit:
+      page_title: 'Editing Grouppermission'
+      actions:
+        back_to_list: 'Back to Index'
+        edit: 'Edit'
+        view_all: 'View All'
+    form:
+      group_id:
+        label: 'Group'
+        hint: ''
+      permission:
+        label: 'Permission'
+        hint: ''
+      target_group_id:
+        label: 'Target group'
+        hint: ''
+      submit: 'Submit'

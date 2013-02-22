@@ -1,0 +1,25 @@
+- content_for :title, t("groups.show.page_title")
+
+%p
+  %strong= t('groups.show.name') + ":"
+  = @group.name
+%p
+  %strong= t('groups.show.active') + ":"
+  = @group.active
+%p
+  %strong= t('groups.show.comment') + ":"
+  = @group.comment
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @group }
+
+%h3= t('group_permissions.index.page_title')
+- if @group.group_permissions.any?
+  = render "group_permissions/index_core", :group_permissions => @group.group_permissions
+  %br
+= render :partial => 'shared/create_link', :locals => { :parent => @group, :child_class => GroupPermission }
+
+%h3= t('group_memberships.index.page_title')
+- if @group.group_memberships.any?
+  = render "group_memberships/index_core", :group_memberships => @group.group_memberships
+  %br
+= render :partial => 'shared/create_link', :locals => { :parent => @group, :child_class => GroupMembership }

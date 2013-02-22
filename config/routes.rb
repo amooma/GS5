@@ -1,5 +1,10 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  resources :groups do
+    resources :group_memberships
+    resources :group_permissions
+  end
+
   resources :sim_card_providers do
     resources :sim_cards, :except => [:edit, :update]
   end

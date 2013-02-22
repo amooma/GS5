@@ -1,0 +1,6 @@
+- content_for :title, t("groups.index.page_title")
+
+- if @groups && @groups.count > 0
+  = render "index_core", :groups => @groups
+
+= render :partial => 'shared/create_link', :locals => {:child_class => Group}

@@ -1,0 +1,50 @@
+de:
+  group_memberships:
+    name: 'Groupmembership'
+    controller:
+      successfuly_created: 'Groupmembership wurde angelegt.'
+      successfuly_updated: 'Groupmembership wurde aktualisiert.'
+      successfuly_destroyed: 'Groupmembership wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von Groupmembership'
+      group_id: 'Group'
+      item_type: 'Item type'
+      item_id: 'Item'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Groupmembership'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Groupmembership neu anlegen für %{resource}'
+    show:
+      page_title: 'Groupmembership bearbeiten'
+      group_id: 'Group'
+      item_type: 'Item type'
+      item_id: 'Item'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Groupmembership neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Groupmembership bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      group_id:
+        label: 'Group'
+        hint: ''
+      item_type:
+        label: 'Item type'
+        hint: ''
+      item_id:
+        label: 'Item'
+        hint: ''
+      submit: 'Absenden'
