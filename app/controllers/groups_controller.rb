@@ -1,4 +1,7 @@
 class GroupsController < ApplicationController
+  load_and_authorize_resource :group
+  before_filter :spread_breadcrumbs
+
   def index
     @groups = Group.all
   end

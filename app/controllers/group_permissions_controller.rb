@@ -2,6 +2,8 @@ class GroupPermissionsController < ApplicationController
   load_and_authorize_resource :group
   load_and_authorize_resource :group_permission, :through => [:group]
 
+  before_filter :spread_breadcrumbs
+
   def index
   end
 

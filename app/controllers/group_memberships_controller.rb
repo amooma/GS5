@@ -2,6 +2,8 @@ class GroupMembershipsController < ApplicationController
   load_and_authorize_resource :group
   load_and_authorize_resource :group_membership, :through => [:group]
 
+  before_filter :spread_breadcrumbs
+
   def index
   end
 
