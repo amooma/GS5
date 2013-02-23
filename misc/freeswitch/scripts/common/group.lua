@@ -36,32 +36,19 @@ function Group.find_by_id(self, id)
 end
 
 -- list groups by member permissions
-function Group.name_id_by_member_permissions(self, member_id, member_type, permissions, targets)
+function Group.name_id_by_permission(self, member_id, member_type, permission)
   if not tonumber(member_id) then
     return {};
   end
 
-  local sql_query = nil;
-
-  if targets then
-    sql_query = 'SELECT DISTINCT `c`.`id`, `c`.`name` \
-      FROM `group_permissions` `a` \
-      JOIN `group_memberships` `b` ON `a`.`target_group_id` = `b`.`group_id` \
-      JOIN `groups` `c` ON `c`.`id` = `b`.`group_id` \
-      WHERE `b`.`item_type` = ' .. self.database:escape(member_type, '"') .. ' \
-      AND `b`.`item_id` = ' .. member_id .. ' \
-      AND `a`.`permission` IN ("' .. table.concat(permissions, ',') .. '") \
-      GROUP BY `b`.`group_id` LIMIT ' .. MAX_GROUP_MEMBERSHIPS;
-  else
-    sql_query = 'SELECT DISTINCT `c`.`id`, `c`.`name` \
-      FROM `group_permissions` `a` \
-      JOIN `group_memberships` `b` ON `a`.`group_id` = `b`.`group_id` \
-      JOIN `groups` `c` ON `c`.`id` = `a`.`group_id` \
-      WHERE `b`.`item_type` = ' .. self.database:escape(member_type, '"') .. ' \
-      AND `b`.`item_id` = ' .. member_id .. ' \
-      AND `a`.`permission` IN ("' .. table.concat(permissions, ',') .. '") \
-      GROUP BY `b`.`group_id` LIMIT ' .. MAX_GROUP_MEMBERSHIPS;
-  end
+  local sql_query = 'SELECT DISTINCT `c`.`id`, `c`.`name` \
+    FROM `group_permissions` `a` \
+    JOIN `group_memberships` `b` ON `a`.`target_group_id` = `b`.`group_id` \
+    JOIN `groups` `c` ON `c`.`id` = `b`.`group_id` \
+    WHERE `b`.`item_type` = ' .. self.database:escape(member_type, '"') .. ' \
+    AND `b`.`item_id` = ' .. member_id .. ' \
+    AND `a`.`permission` = ' .. self.database:escape(permission, '"') .. ' \
+    GROUP BY `b`.`group_id` LIMIT ' .. MAX_GROUP_MEMBERSHIPS;
 
   local group_names = {};
   local group_ids = {};
