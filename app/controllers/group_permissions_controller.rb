@@ -11,6 +11,7 @@ class GroupPermissionsController < ApplicationController
   end
 
   def new
+    @group_permission.target_group_id = @group_permission.group_id
   end
 
   def create
