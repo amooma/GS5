@@ -33,6 +33,9 @@ class SipAccount < ActiveRecord::Base
 
   belongs_to :language, :foreign_key => 'language_code', :primary_key => 'code'
 
+  has_many :group_memberships, :as => :item, :dependent => :destroy, :uniq => true
+  has_many :groups, :through => :group_memberships
+
   # Delegations:
   #
   delegate :host, :to => :sip_domain, :allow_nil => true
@@ -67,6 +70,7 @@ class SipAccount < ActiveRecord::Base
   validates_uniqueness_of :uuid
 
   after_create { self.create_on_other_gs_nodes('sip_accountable', self.sip_accountable.try(:uuid)) }
+  after_create :create_default_group_memberships
   after_destroy :destroy_on_other_gs_nodes
   after_update { self.update_on_other_gs_nodes('sip_accountable', self.sip_accountable.try(:uuid)) }
 
@@ -146,7 +150,7 @@ class SipAccount < ActiveRecord::Base
       true
     );
   end
-  
+
 
   private
       
@@ -220,4 +224,29 @@ class SipAccount < ActiveRecord::Base
     voicemail_setting.purge = false
     voicemail_setting.save
   end
+
+  def create_default_group_memberships
+    default_groups = Hash.new()
+    templates = GsParameter.get('SipAccount', 'group', 'default')
+    if templates.class == Array
+      templates.each do |group_name|
+        default_groups[group_name] = true
+      end
+    end
+
+    templates = GsParameter.get("SipAccount.#{self.sip_accountable_type}", 'group', 'default')
+    if templates.class == Array
+      templates.each do |group_name|
+        default_groups[group_name] = true
+      end
+    end
+
+    default_groups.each do |group_name, value|
+      group = Group.where(:name => group_name).first
+      if group
+        self.group_memberships.create(:group_id => group.id)
+      end
+    end
+  end
+
 end

@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   # Sync other nodes when this is a cluster.
   #
   after_create :create_on_other_gs_nodes
+  after_create :create_default_group_memberships
   after_destroy :destroy_on_other_gs_nodes
   after_update :update_on_other_gs_nodes
   
@@ -89,6 +90,9 @@ class User < ActiveRecord::Base
   belongs_to :gs_node
 
   has_many :parking_stalls, :as => :parking_stallable, :dependent => :destroy
+
+  has_many :group_memberships, :as => :item, :dependent => :destroy, :uniq => true
+  has_many :groups, :through => :group_memberships
   
   # Avatar like photo  
   mount_uploader :image, ImageUploader  
@@ -223,6 +227,18 @@ class User < ActiveRecord::Base
   def become_a_member_of_default_user_groups
     UserGroup.where(:id => GsParameter.get('DEFAULT_USER_GROUPS_IDS')).each do |user_group|
       user_group.user_group_memberships.create(:user_id => self.id)
+    end
+  end
+
+  def create_default_group_memberships
+    templates = GsParameter.get('User', 'group', 'default')
+    if templates.class == Array
+      templates.each do |group_name|
+        group = Group.where(:name => group_name).first
+        if group
+          self.group_memberships.create(:group_id => group.id)
+        end
+      end
     end
   end
 
