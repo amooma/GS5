@@ -11,7 +11,7 @@ en:
       user_group_name: 'Users'
       super_admin_group_name: 'Super-Admins'
     new:
-      page_title: 'New Gemeinschaft setup'
+      page_title: 'Gemeinschaft Setup'
     form:
       user_id:
         label: 'User'
