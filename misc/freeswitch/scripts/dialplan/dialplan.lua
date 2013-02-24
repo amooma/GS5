@@ -390,7 +390,7 @@ function Dialplan.dial(self, destination)
         table.insert(destination.pickup_groups, 's' .. destination.account.id );
       end
       require 'common.group';
-      local group_names, group_ids = common.group.Group:new{ log = self.log, database = self.database }:name_id_by_permission(destination.id, destination.type, 'pickup')
+      local group_names, group_ids = common.group.Group:new{ log = self.log, database = self.database }:name_id_by_permission(destination.id, destination.type, 'pickup');
       self.log:debug('DESTINATION_GROUPS - pickup_groups: ', table.concat(group_names, ','));
       for index=1, #group_ids do
         table.insert(destination.pickup_groups, 'g' .. group_ids[index]);
