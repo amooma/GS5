@@ -27,7 +27,7 @@ de:
         hint: ''
       default_area_code:
         label: 'Standard Ortsvorwahl'
-        hint: '030 für Berlin, 0261 für Koblenz, 02631 für Neuwied, usw.'
+        hint: 'ohne führende Null; z.B. 30 für Berlin, 261 für Koblenz, 2631 für Neuwied, usw.'
       trunk_access_code:
         label: 'Amtsholungsziffer'
         hint: ''
