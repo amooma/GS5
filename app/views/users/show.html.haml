@@ -44,7 +44,7 @@
             %br
             =link_to t("softkeys.index.page_title"), sip_account_softkeys_path(sip_account)
             %br
-            =link_to t("ringtones.show.page_title"), phone_number_ringtones_path(phone_number)
+            =link_to t("ringtones.show.page_title"), sip_account_ringtones_path(sip_account)
 
       - if @user.conferences.any?
         %p
