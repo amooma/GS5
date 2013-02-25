@@ -1,6 +1,6 @@
 class IntrudersController < ApplicationController
   def index
-    @intruders = Intruder.all
+    @intruders = Intruder.order('list_type ASC, contact_last DESC').all
     spread_breadcrumbs
   end
 

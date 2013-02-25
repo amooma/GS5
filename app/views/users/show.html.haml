@@ -29,10 +29,18 @@
         = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @tenant, :child => @user }
 
       - @user.sip_accounts.each do |sip_account|
-        - phone_number = sip_account.phone_numbers.order(:number).last
-        - if phone_number && !phone_number.number.blank? && phone_number.number[0] != '+'
-          %p
-            %strong= sip_account.phone_numbers.order(:number).last.number
+        - phone_numbers = sip_account.phone_numbers.order(:position)
+        %p
+          - if phone_numbers[0]
+            %strong= phone_numbers[0].number
+          - else
+            %strong= sip_account.to_s
+          - if phone_numbers[1]
+            %strong= phone_numbers[1].number
+          - if phone_numbers[2]
+            %strong= phone_numbers[2].number
+          - if phone_numbers[3]
+            %strong ...
           %p
             =link_to t("call_histories.index.page_title"), sip_account_call_histories_path(sip_account)
             %br
