@@ -37,11 +37,6 @@
         %strong= t('sip_accounts.show.hotdeskable') + ":"
       %td
         = @sip_account.hotdeskable == true ? t('simple_form.yes') : t('simple_form.no') 
-    %tr
-      %td
-        %strong= t('sip_accounts.show.callforward_rules_act_per_sip_account') + ":"
-      %td
-        = @sip_account.callforward_rules_act_per_sip_account == true ? t('simple_form.yes') : t('simple_form.no')
 
     - if @sip_account.registration.try(:network_ip) && @sip_account.registration.try(:network_port)
       %tr
