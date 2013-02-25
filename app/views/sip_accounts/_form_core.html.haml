@@ -13,6 +13,6 @@
   - if @sip_account.sip_accountable_type == 'User'
     = f.input :hotdeskable, :label => t('sip_accounts.form.hotdeskable.label'), :hint => conditional_hint('sip_accounts.form.hotdeskable.hint')
   = f.input :clip_no_screening, :label => t('sip_accounts.form.clip_no_screening.label'), :hint => conditional_hint('sip_accounts.form.clip_no_screening.hint')
-  - if CallForward.where(:phone_number_id => @sip_account.phone_number_ids).count == 0 || @sip_account.callforward_rules_act_per_sip_account == true
+  - if CallForward.where(:call_forwardable_id => @sip_account.phone_number_ids, :call_forwardable_type => 'PhoneNumber').count == 0 || @sip_account.callforward_rules_act_per_sip_account == true
     = f.input :callforward_rules_act_per_sip_account, :label => t('sip_accounts.form.callforward_rules_act_per_sip_account.label'), :hint => conditional_hint('sip_accounts.form.callforward_rules_act_per_sip_account.hint')
   = f.input :language_code, :collection => Language.all.collect{|l| [l.to_s, l.code]}, :label => t('sip_accounts.form.language_code.label'), :hint => conditional_hint('sip_accounts.form.language_id.hint'), :include_blank => false

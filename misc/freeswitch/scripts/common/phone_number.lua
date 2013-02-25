@@ -55,6 +55,8 @@ function PhoneNumber.find_by_number(self, number, phone_numberable_types)
   self.database:query(sql_query, function(number_entry)
     phone_number = PhoneNumber:new(self);
     phone_number.record = number_entry;
+    phone_number.id = tonumber(number_entry.id);
+    phone_number.uuid = number_entry.uuid;
   end)
 
   return phone_number;
@@ -68,6 +70,8 @@ function PhoneNumber.find_all_by_owner(self, owner_id, owner_type)
   self.database:query(sql_query, function(number_entry)
     phone_numbers[tonumber(number_entry.id)] = PhoneNumber:new(self);
     phone_numbers[tonumber(number_entry.id)].record = number_entry;
+    phone_numbers[tonumber(number_entry.id)].id = tonumber(number_entry.id);
+    phone_numbers[tonumber(number_entry.id)].uuid = number_entry.uuid;
   end)
 
   return phone_numbers;
@@ -92,57 +96,6 @@ function PhoneNumber.list_by_same_owner(self, number, owner_types)
   if phone_number then
     return self:list_by_owner(phone_number.record.phone_numberable_id, phone_number.record.phone_numberable_type);
   end
-end
-
--- Retrieve call forwarding
-function PhoneNumber.call_forwarding(self, caller_ids)
-  require 'common.str'
-
-  sources = sources or {};
-  table.insert(sources, '');
-
-  local sql_query = 'SELECT \
-    `a`.`destination` AS `number`, \
-    `a`.`call_forwardable_id` AS `id`, \
-    `a`.`call_forwardable_type` AS `type`, \
-    `a`.`timeout`, `a`.`depth`, \
-    `a`.`source`, \
-    `b`.`value` AS `service` \
-    FROM `call_forwards` `a` JOIN `call_forward_cases` `b` ON `a`.`call_forward_case_id` = `b`.`id` \
-    WHERE `a`.`phone_number_id`= ' .. tonumber(self.record.id) .. ' \
-    AND `a`.`active` IS TRUE';
-
-  local call_forwarding = {}
-
-  self.database:query(sql_query, function(forwarding_entry)
-    local entry_match = false;
-
-    if common.str.blank(forwarding_entry.source) then
-      entry_match = true;
-    else
-      local sources = common.str.strip_to_a(forwarding_entry.source, ',')
-      for index, source in ipairs(sources) do
-        for index, caller_id in ipairs(caller_ids) do
-          if caller_id:match(source) then
-            entry_match = true;
-            self.log:debug('CALL_FORWARDING_GET - source match: ', source, ' ~ ', caller_id );
-            break;
-          end
-        end
-      end
-    end
-
-    if entry_match then
-      call_forwarding[forwarding_entry.service] = forwarding_entry;
-      self.log:debug('CALL_FORWARDING_GET - PhoneNumber=', self.record.id, '/', self.record.uuid, '@', self.record.gs_node_id, 
-        ', number: ', self.record.number, 
-        ', service: ', forwarding_entry.service, 
-        ', destination: ',forwarding_entry.type, '=', forwarding_entry.id, 
-        ', number: ', forwarding_entry.number);
-    end
-  end)
-
-  return call_forwarding;
 end
 
 

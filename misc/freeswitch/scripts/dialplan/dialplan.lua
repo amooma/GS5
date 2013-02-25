@@ -330,7 +330,13 @@ function Dialplan.destination_new(self, arg)
         destination.uuid    = common.str.to_s(destination.phone_number.record.phone_numberable_uuid);
         destination.node_id = common.str.to_i(destination.phone_number.record.gs_node_id);
         if self.caller then
-          destination.call_forwarding = destination.phone_number:call_forwarding(self.caller.caller_phone_numbers);
+          require 'common.call_forwarding';
+          local call_forwarding_class = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database }
+          destination.call_forwarding = call_forwarding_class:list_by_owner(destination.id, destination.type, self.caller.caller_phone_numbers);
+          for service, call_forwarding_entry in pairs(call_forwarding_class:list_by_owner(destination.phone_number.id, destination.phone_number.class, self.caller.caller_phone_numbers)) do
+            destination.call_forwarding[service] = call_forwarding_entry;
+          end
+          -- destination.call_forwarding = destination.phone_number:call_forwarding(self.caller.caller_phone_numbers);
         end
       elseif destination.type == 'unknown' then
         require 'common.sip_account'
@@ -1018,6 +1024,7 @@ function Dialplan.run(self, destination)
 
       destination = self:destination_new(result.call_forwarding);
       self.caller.destination = destination;
+      self.caller.destination_number = destination.number;
 
       if not result.no_cdr and auth_account then
         require 'common.call_history'

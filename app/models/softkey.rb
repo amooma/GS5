@@ -30,7 +30,7 @@ class Softkey < ActiveRecord::Base
         # We pick one phone_number and display the rules of it.
         #
         phone_number = self.sip_account.phone_numbers.order(:number).first
-        call_forwards = self.sip_account.call_forwards.where(:phone_number_id => phone_number.id)
+        call_forwards = self.sip_account.call_forwards.where(:call_forwardable_id => phone_number.id, :call_forwardable_type => 'PhoneNumber')
       else
         call_forwards = self.sip_account.call_forwards
       end
@@ -42,8 +42,8 @@ class Softkey < ActiveRecord::Base
                                    map{ |phone_number| phone_number.phone_numberable.hunt_group.id }.
                                    uniq
 
-      call_forwards + CallForward.where(:call_forwardable_type => 'HuntGroup', :call_forwardable_id => hunt_group_ids).
-                                  where('phone_number_id NOT IN (?)', phone_numbers_ids)
+      call_forwards + CallForward.where(:destinationable_type => 'HuntGroup', :destinationable_id => hunt_group_ids, :call_forwardable_type => 'PhoneNumber').
+                                  where('call_forwardable_id NOT IN (?)', phone_numbers_ids)
     end
   end
 

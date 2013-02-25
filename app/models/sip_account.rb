@@ -16,7 +16,7 @@ class SipAccount < ActiveRecord::Base
   has_many :phones, :through => :phone_sip_accounts
   
   has_many :phone_numbers, :as => :phone_numberable, :dependent => :destroy
-  has_many :call_forwards, :through => :phone_numbers
+  has_many :call_forwards, :as => :call_forwardable, :dependent => :destroy
 
   belongs_to :tenant
   belongs_to :sip_domain
@@ -96,8 +96,8 @@ class SipAccount < ActiveRecord::Base
     if call_forwarding_master.active
       call_forwarding_master.active = false
     else
-      if call_forwarding_service = 'assistant' && call_forwarding_master.call_forwardable_type == 'HuntGroup' && call_forwarding_master.call_forwardable
-        if call_forwarding_master.call_forwardable.hunt_group_members.where(:active => true).count > 0
+      if call_forwarding_service = 'assistant' && call_forwarding_master.destinationable_type == 'HuntGroup' && call_forwarding_master.destinationable
+        if call_forwarding_master.destinationable.hunt_group_members.where(:active => true).count > 0
           call_forwarding_master.active = true
         else
           call_forwarding_master.active = false
@@ -109,7 +109,7 @@ class SipAccount < ActiveRecord::Base
       call_forwarding = phone_number.call_forwards.where(:call_forward_case_id => service_id).order(:active).all(:conditions => 'source IS NULL OR source = ""').first
       if ! call_forwarding
         call_forwarding = CallForward.new()
-        call_forwarding.phone_number_id = phone_number.id
+        call_forwarding.call_forwardable = phone_number
       end
 
       if to_voicemail == nil 

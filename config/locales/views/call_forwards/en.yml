@@ -7,8 +7,8 @@ en:
       successfuly_destroyed: 'Successfully destroyed call forward.'
     index:
       page_title: 'Call forwards'
-      phone_number_id: 'Phone number'
-      call_forward_case_id: 'Call forward case'
+      call_forwardable: 'Forwarding entity'
+      call_forward_case: 'Call forward case'
       timeout: 'Timeout'
       destination: 'Destination'
       to_voicemail: 'Voicemail'
@@ -25,8 +25,8 @@ en:
         create_for: 'New call forward for phone number %{resource}'
     show:
       page_title: 'Show call forward'
-      phone_number_id: 'Phone number'
-      call_forward_case_id: 'Call forward case'
+      call_forwardable: 'Forwarding entity'
+      call_forward_case: 'Call forward case'
       timeout: 'Timeout'
       destination: 'Destination'
       hunt_group: 'Hunt group connection'
@@ -44,10 +44,10 @@ en:
     edit:
       page_title: 'Editing call forward'
     form:
-      phone_number_id:
-        label: 'Phone number'
+      call_forwardable:
+        label: 'Forwarding entity'
         hint: ''
-      call_forward_case_id:
+      call_forward_case:
         label: 'Call forward case'
         hint: ''
       timeout:

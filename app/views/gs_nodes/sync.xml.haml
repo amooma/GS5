@@ -55,7 +55,7 @@
   - if !@call_forwards.blank?
     %call_forwards
       - @call_forwards.each do |call_forward|
-        %call_forward{ :uuid => call_forward.uuid, :service => call_forward.call_forward_case.try(:value), :timeout => call_forward.timeout, :destination => call_forward.destination, :source => call_forward.source, :active => call_forward.active.to_s, :created_at => call_forward.created_at, :updated_at => call_forward.updated_at, :phone_number_uuid => call_forward.phone_number.try(:uuid), :depth => call_forward.depth, :call_forwardable_type => call_forward.call_forwardable_type, :call_forwardable_uuid => call_forward.call_forwardable.try(:uuid), :position => call_forward.position}
+        %call_forward{ :uuid => call_forward.uuid, :service => call_forward.call_forward_case.try(:value), :timeout => call_forward.timeout, :destination => call_forward.destination, :source => call_forward.source, :active => call_forward.active.to_s, :created_at => call_forward.created_at, :updated_at => call_forward.updated_at, :phone_number_uuid => call_forward.phone_number.try(:uuid), :depth => call_forward.depth, :call_forwardable_type => call_forward.call_forwardable_type, :call_forwardable_uuid => call_forward.call_forwardable.try(:uuid), :destinationable_type => call_forward.destinationable_type, :destinationable_uuid => call_forward.destinationable.try(:uuid), :position => call_forward.position}
 
   - if !@softkeys.blank?
     %softkeys
