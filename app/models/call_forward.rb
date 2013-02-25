@@ -10,7 +10,7 @@ class CallForward < ActiveRecord::Base
   
   belongs_to :phone_number
   belongs_to :call_forwardable, :polymorphic => true
-  has_many :softkeys
+  has_many :softkeys, :as => :softkeyable
   
   acts_as_list :scope => [ :phone_number_id, :call_forward_case_id ]
 
