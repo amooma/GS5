@@ -1,15 +1,20 @@
 %table.table.table-striped
   %thead
     %tr
+      %th
       %th= t('call_forwards.index.call_forward_case')
       %th= t('call_forwards.index.timeout')
       %th= t('call_forwards.index.destination')
-      %th= t('call_forwards.index.source')
-      %th= t('call_forwards.index.active')
+      %th= t('call_forwards.index.source')  
 
   %tbody
     - for call_forward in call_forwards
       %tr
+        %td
+          -if call_forward.active
+            %i.icon-ok
+          - else
+            %i.icon-ban-circle
         %td= t("call_forward_cases.#{call_forward.call_forward_case.value}")
         %td= call_forward.timeout
         %td
@@ -20,5 +25,5 @@
             - if call_forward.destinationable_id
               = ": #{call_forward.destinationable}"
         %td= call_forward.source
-        %td= call_forward.active
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => call_forward.call_forwardable, :child => call_forward}
+
