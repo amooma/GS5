@@ -15,6 +15,7 @@ class RingtonesController < ApplicationController
 
   def new
     @ringtone = @parent.ringtones.build
+    @ringtone.bellcore_id = GsParameter.get('default_ringtone', 'dialplan', 'parameters')
   end
 
   def create
