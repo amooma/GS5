@@ -1,7 +1,8 @@
 class RingtonesController < ApplicationController
   load_resource :phone_number
+  load_resource :sip_account
   load_resource :boss_assistant_cooperation
-  load_and_authorize_resource :ringtone, :through => [:phone_number, :boss_assistant_cooperation]
+  load_and_authorize_resource :ringtone, :through => [:phone_number, :sip_account, :boss_assistant_cooperation]
   
   before_filter :set_parent
   before_filter :spread_breadcrumbs
@@ -19,7 +20,7 @@ class RingtonesController < ApplicationController
   def create
     @ringtone = @parent.ringtones.build(params[:ringtone])
     if @ringtone.save
-      redirect_to phone_number_ringtone_path(@parent, @ringtone), :notice => t('ringtones.controller.successfuly_created')
+      redirect_to method( :"#{@parent.class.name.underscore}_ringtones_url" ).(@parent), :notice => t('ringtones.controller.successfuly_created')
     else
       render :new
     end
@@ -30,7 +31,7 @@ class RingtonesController < ApplicationController
 
   def update
     if @ringtone.update_attributes(params[:ringtone])
-      redirect_to method( :"#{@parent.class.name.underscore}_ringtone_path" ).(@ringtone.ringtoneable, @ringtone), :notice  => t('ringtones.controller.successfuly_updated')
+      redirect_to method( :"#{@parent.class.name.underscore}_ringtones_url" ).(@parent), :notice  => t('ringtones.controller.successfuly_updated')
     else
       render :edit
     end
@@ -38,12 +39,12 @@ class RingtonesController < ApplicationController
 
   def destroy
     @ringtone.destroy
-    redirect_to phone_number_ringtones_path(@parent), :notice => t('ringtones.controller.successfuly_destroyed')
+    redirect_to method( :"#{@parent.class.name.underscore}_ringtones_url" ).(@parent), :notice => t('ringtones.controller.successfuly_destroyed')
   end
 
   private
   def set_parent
-    @parent = @phone_number || @boss_assistant_cooperation
+    @parent = @phone_number || @boss_assistant_cooperation || @sip_account
   end
 
   def spread_breadcrumbs

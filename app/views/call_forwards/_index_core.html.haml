@@ -1,21 +1,15 @@
 %table.table.table-striped
   %thead
     %tr
-      - if !@phone_number
-        %th= t('call_forwards.index.call_forwardable')
-      %th= t('call_forwards.index.call_forward_case_id')
+      %th= t('call_forwards.index.call_forward_case')
       %th= t('call_forwards.index.timeout')
       %th= t('call_forwards.index.destination')
       %th= t('call_forwards.index.source')
-      - if GuiFunction.display?('depth_field_value_in_index_table', current_user)
-        %th= t('call_forwards.index.depth')
       %th= t('call_forwards.index.active')
 
   %tbody
     - for call_forward in call_forwards
       %tr
-        - if !@phone_number
-          %td= call_forward.call_forwardable
         %td= t("call_forward_cases.#{call_forward.call_forward_case.value}")
         %td= call_forward.timeout
         %td
@@ -26,7 +20,5 @@
             - if call_forward.destinationable_id
               = ": #{call_forward.destinationable}"
         %td= call_forward.source
-        - if GuiFunction.display?('depth_field_value_in_index_table', current_user)
-          %td= call_forward.depth
         %td= call_forward.active
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => call_forward.call_forwardable, :child => call_forward}
