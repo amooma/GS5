@@ -206,7 +206,7 @@ class SipAccount < ActiveRecord::Base
 
   # log out phone if sip_account is not on this node
   def log_out_phone_if_not_local
-    if self.gs_node_id && ! GsNode.where(:ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS'), :id => self.gs_node_id).first
+    if self.gs_node_id && GsNode.count > 1 && ! GsNode.where(:ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS'), :id => self.gs_node_id).first
       self.phones.each do |phone|
         phone.user_logout;
       end
