@@ -65,6 +65,13 @@
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @sip_account.sip_accountable, :child => @sip_account }
 
+%p
+  %strong= t('ringtones.name') + ':'
+  - if @sip_account.ringtones.count > 0
+    = link_to @sip_account.ringtones.first, sip_account_ringtone_path(@sip_account, @sip_account.ringtones.first)
+  - else
+    = link_to t('ringtones.set_a_ringtone'), new_sip_account_ringtone_path(@sip_account)
+
 - if @sip_account.phone_numbers.count > 0 || can?(:create, @sip_account.phone_numbers.build)
   %h2= t('phone_numbers.index.page_title')
   - if @sip_account.phone_numbers.count > 0
