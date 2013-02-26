@@ -1,13 +1,9 @@
 .navbar.navbar-inverse.navbar-fixed-top
   .navbar-inner
     .container
-      %a.brand{:href => (current_user.nil? ? '/' : tenant_path(current_user.current_tenant))}
-        Gemeinschaft 5
-
-      %a.btn.btn-navbar{"data-target" => ".nav-collapse", "data-toggle" => "collapse"}
-        %span.icon-bar
-        %span.icon-bar
-        %span.icon-bar
+      %span.hidden-phone
+        %a.brand{:href => (current_user.nil? ? '/' : tenant_path(current_user.current_tenant))}
+          Gemeinschaft 5
 
       .nav-collapse.collapse
         %ul.nav
@@ -29,13 +25,14 @@
       - if current_user
         %ul.nav.pull-right
           %li.display
-            - if current_user.image?
-              = image_tag(current_user.image_url(:mini).to_s, :class => 'img-rounded')
-            - else
-              - if current_user.male?
-                = image_tag 'icons/user-male-16x.png', :class => 'img-rounded'
+            %span.hidden-phone
+              - if current_user.image?
+                = image_tag(current_user.image_url(:mini).to_s, :class => 'img-rounded')
               - else
-                = image_tag 'icons/user-female-16x.png', :class => 'img-rounded'
+                - if current_user.male?
+                  = image_tag 'icons/user-male-16x.png', :class => 'img-rounded'
+                - else
+                  = image_tag 'icons/user-female-16x.png', :class => 'img-rounded'
 
           - if current_page?(tenant_user_path(current_user.current_tenant, current_user))
             %li.active
@@ -50,4 +47,8 @@
             %li
               %a.navbar-link{:href => log_out_path}
                 %i.icon-off.icon-white
+
+        - if GuiFunction.display?('search_field_in_top_navigation_bar', current_user)
+          = form_tag search_path, :method => :post, :class => 'navbar-search pull-right' do
+            %input.text{:placeholder => 'Suchen ...', :name => 'q', :class => 'search-query span2'}
 

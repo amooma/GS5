@@ -5,7 +5,9 @@
       %th
         %span.visible-desktop
           = t('phone_books.index.description')
-      %th= t('phone_books.index.count')
+      %th
+        %span.visible-desktop
+          = t('phone_books.index.count')
 
   %tbody
     - for phone_book in phone_books
@@ -16,6 +18,7 @@
           %span.visible-desktop
             = phone_book.description
         %td
-          = number_with_delimiter( phone_book.phone_book_entries.count )
+          %span.visible-desktop
+            = number_with_delimiter( phone_book.phone_book_entries.count )
 
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => phone_book.phone_bookable, :child => phone_book}
