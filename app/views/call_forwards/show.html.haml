@@ -1,9 +1,6 @@
 - content_for :title, t("call_forwards.show.page_title")
 
 %p
-  %strong= t('call_forwards.show.call_forwardable') + ":"
-  = "#{@call_forward.call_forwardable_type}: #{@call_forward.call_forwardable}"
-%p
   %strong= t('call_forwards.show.call_forward_case') + ":"
   = t("call_forward_cases.#{@call_forward.call_forward_case.value}") 
 %p
@@ -21,9 +18,6 @@
 %p
   %strong= t('call_forwards.show.source') + ":"
   = @call_forward.source
-%p
-  %strong= t('call_forwards.show.depth') + ":"
-  = @call_forward.depth
 %p
   %strong= t('call_forwards.show.active') + ":"
   = @call_forward.active

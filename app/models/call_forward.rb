@@ -24,8 +24,8 @@ class CallForward < ActiveRecord::Base
   
   belongs_to :call_forward_case
 
-  validates_presence_of      :depth
   validates_numericality_of  :depth,
+    :allow_nil => true,
     :only_integer => true,
     :greater_than_or_equal_to  =>   1,
     :less_than_or_equal_to     =>  (GsParameter.get('MAX_CALL_FORWARD_DEPTH').nil? ? 0 : GsParameter.get('MAX_CALL_FORWARD_DEPTH'))
@@ -59,7 +59,6 @@ class CallForward < ActiveRecord::Base
   before_save :split_and_format_destination_numbers
   after_save :set_presence
   after_save :deactivate_concurring_entries, :if => Proc.new { |cf| cf.active == true }
-  before_destroy :check_if_other_callforward_rules_have_to_be_destroyed
   before_destroy :deactivate_connected_softkeys
 
   def case_string

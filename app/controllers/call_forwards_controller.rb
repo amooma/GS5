@@ -48,8 +48,8 @@ class CallForwardsController < ApplicationController
     @call_forward = @parent.call_forwards.build( params[:call_forward] )
     
     if @call_forward.save
-      m = method( :"#{@parent.class.name.underscore}_call_forward_path" )
-      redirect_to m.( @parent, @call_forward ), :notice => t('call_forwards.controller.successfuly_created')
+      m = method( :"#{@parent.class.name.underscore}_call_forwards_url" )
+      redirect_to m.( @parent ), :notice => t('call_forwards.controller.successfuly_created')
     else
       @available_call_forward_cases = CallForwardCase.all
       render :new
@@ -64,8 +64,8 @@ class CallForwardsController < ApplicationController
   def update
     @available_call_forward_cases = CallForwardCase.all
     if @call_forward.update_attributes(params[:call_forward])
-      m = method( :"#{@parent.class.name.underscore}_call_forward_path" )
-      redirect_to m.( @parent, @call_forward ), :notice  => t('call_forwards.controller.successfuly_updated')
+      m = method( :"#{@parent.class.name.underscore}_call_forwards_url" )
+      redirect_to m.( @parent ), :notice  => t('call_forwards.controller.successfuly_updated')
     else
       @call_forwarding_destinations = call_forwarding_destination_types()
       render :edit
@@ -74,7 +74,8 @@ class CallForwardsController < ApplicationController
 
   def destroy
     @call_forward.destroy
-    redirect_to :root, :notice => t('call_forwards.controller.successfuly_destroyed')
+    m = method( :"#{@parent.class.name.underscore}_call_forwards_url" )
+    redirect_to m.( @parent ), :notice => t('call_forwards.controller.successfuly_destroyed')
   end
 
   private
@@ -110,7 +111,8 @@ class CallForwardsController < ApplicationController
         add_breadcrumb @sip_account, tenant_sip_account_path(@tenant, @sip_account)
       end
       
-      add_breadcrumb t("call_forwards.index.page_title"), phone_number_call_forwards_path(@parent)
+      m = method( :"#{@parent.class.name.underscore}_call_forwards_url" )
+      add_breadcrumb t("call_forwards.index.page_title"), m.(@parent)
       if @call_forward && !@call_forward.new_record?
         m = method( :"#{@parent.class.name.underscore}_call_forward_path" )
         add_breadcrumb @call_forward, m.(@parent, @call_forward)

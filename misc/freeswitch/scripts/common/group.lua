@@ -48,6 +48,7 @@ function Group.name_id_by_permission(self, member_id, member_type, permission)
     WHERE `b`.`item_type` = ' .. self.database:escape(member_type, '"') .. ' \
     AND `b`.`item_id` = ' .. member_id .. ' \
     AND `a`.`permission` = ' .. self.database:escape(permission, '"') .. ' \
+    AND `c`.`active` IS TRUE \
     GROUP BY `b`.`group_id` LIMIT ' .. MAX_GROUP_MEMBERSHIPS;
 
   local group_names = {};
@@ -72,6 +73,7 @@ function Group.name_id_by_member(self, member_id, member_type)
       JOIN `groups` `c` ON `c`.`id` = `b`.`group_id` \
       WHERE `b`.`item_type` = ' .. self.database:escape(member_type, '"') .. ' \
       AND `b`.`item_id` = ' .. member_id .. ' \
+      AND `c`.`active` IS TRUE \
       GROUP BY `b`.`group_id` LIMIT ' .. MAX_GROUP_MEMBERSHIPS;
 
   local group_names = {};

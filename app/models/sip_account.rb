@@ -36,6 +36,8 @@ class SipAccount < ActiveRecord::Base
   has_many :group_memberships, :as => :item, :dependent => :destroy, :uniq => true
   has_many :groups, :through => :group_memberships
 
+  has_many :ringtones, :as => :ringtoneable, :dependent => :destroy
+
   # Delegations:
   #
   delegate :host, :to => :sip_domain, :allow_nil => true

@@ -256,6 +256,7 @@ Gemeinschaft42c::Application.routes.draw do
     resources :phone_numbers
     resources :softkeys
     resources :call_forwards
+    resources :ringtones
     resources :call_histories do
       collection do
         delete 'destroy_multiple'

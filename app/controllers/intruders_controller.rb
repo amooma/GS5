@@ -1,6 +1,8 @@
 class IntrudersController < ApplicationController
+  load_and_authorize_resource :intruder
+  
   def index
-    @intruders = Intruder.all
+    @intruders = Intruder.order('list_type ASC, contact_last DESC').all
     spread_breadcrumbs
   end
 
