@@ -131,6 +131,7 @@ class Ability
             can :read, PhoneNumber, :id => sip_account.phone_number_ids
             can :manage, CallForward, :call_forwardable_id => sip_account.phone_number_ids
             can :manage, Ringtone, :ringtoneable_type => 'PhoneNumber', :ringtoneable_id => sip_account.phone_number_ids
+            can :manage, Ringtone, :ringtoneable_type => 'SipAccount', :ringtoneable_id => sip_account.id
             can [:read, :destroy, :call] , CallHistory, :id => sip_account.call_history_ids
           end
           can :read, Phone, :phoneable_type => 'User', :phoneable_id => user.id
