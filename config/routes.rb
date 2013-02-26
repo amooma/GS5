@@ -276,6 +276,9 @@ Gemeinschaft42c::Application.routes.draw do
       end
     end
     resources :voicemail_settings
+    member do
+      get 'call'
+    end
   end
 
   resources :phones, :only => [] do
