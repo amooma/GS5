@@ -6,7 +6,7 @@ de:
       successfuly_updated: 'Der Telefonbucheintrag "%{resource}" wurde aktualisiert.'
       successfuly_destroyed: 'Der Telefonbucheintrag wurde gelöscht.'
     index:
-      page_title: 'Anzahl Telefonbucheinträge'
+      page_title: 'Telefonbucheinträge'
       phone_book_id: 'Telefonbuch'
       first_name: 'Vorname'
       middle_name: 'Zweiter Vorname'
