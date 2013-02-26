@@ -1,5 +1,7 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  resources :restore_jobs
+
   resources :groups do
     resources :group_memberships
     resources :group_permissions

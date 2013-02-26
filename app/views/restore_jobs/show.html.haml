@@ -1,0 +1,22 @@
+- content_for :title, t("restore_jobs.show.page_title")
+
+%table.table.table-striped
+  %tbody
+    %tr
+      %td
+        %strong= t('restore_jobs.show.state') + ":"
+      %td
+        = @restore_job.state
+    %tr
+      %td
+        %strong= t('restore_jobs.show.backup_file') + ":"
+      %td
+        = @restore_job.to_s
+    %tr
+      %td
+        %strong= t('backup_jobs.show.size_of_the_backup') + ":"
+      %td
+        - if @restore_job.backup_file?
+          = number_to_human_size(@restore_job.backup_file.size, :precision => 2) 
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @restore_job }
