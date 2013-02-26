@@ -1,0 +1,12 @@
+%table.table.table-striped
+  %tr
+    %th= t('restore_jobs.index.state')
+    %th= t('restore_jobs.index.backup_file')
+    %th
+
+  
+  - for restore_job in restore_jobs
+    %tr
+      %td= restore_job.state
+      %td= restore_job.to_s
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => restore_job}
