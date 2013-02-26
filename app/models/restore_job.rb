@@ -21,6 +21,4 @@ class RestoreJob < ActiveRecord::Base
   def run_the_restore_rake_task
     system "cd #{Rails.root} && rake backup:restore"
   end
-
-
 end
