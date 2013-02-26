@@ -71,15 +71,9 @@
   %strong= t('ringtones.name') + ':'
   - if @sip_account.ringtones.count > 0
     = @sip_account.ringtones.first
-    %p
-      %a.btn.btn-small.btn-warning{:href => edit_sip_account_ringtone_path(@sip_account, @sip_account.ringtones.first) }
-        %i.icon-edit.icon-white
-        =t('ringtones.index.actions.edit')
+    = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @sip_account, :child => @sip_account.ringtones.first }
   - else
-    %p
-      %a.btn.btn-small.btn-default{ :href => new_sip_account_ringtone_path(@sip_account) }
-        %i.icon-plus
-        = t('ringtones.set_a_ringtone')
+    = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => Ringtone }
 
 - if @sip_account.phone_numbers.count > 0 || can?(:create, @sip_account.phone_numbers.build)
   %h2= t('phone_numbers.index.page_title')
