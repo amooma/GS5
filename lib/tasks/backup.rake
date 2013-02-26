@@ -13,17 +13,17 @@ namespace :backup do
       tmp_dir = "/tmp/gs5_restore_directory"
       FileUtils.rm_rf tmp_dir
       FileUtils.mkdir_p tmp_dir
-      system "cd #{tmp_dir} && sudo /usr/bin/tar xzf #{restore_job.backup_file.path}"
+      system "cd #{tmp_dir} && sudo /bin/tar xzf #{restore_job.backup_file.path}"
       restore_directory = Dir.glob("/tmp/gs5_restore_directory/*").first
-      system "cd #{restore_directory} && sudo /usr/bin/tar xf GS5.tar && rm GS5.tar"
+      system "cd #{restore_directory} && sudo /bin/tar xf GS5.tar && rm GS5.tar"
 
       # Restore faxes
       #
-      system "cd / && sudo /usr/bin/tar xzfP #{restore_directory}/GS5/archives/faxes.tar.gz"
+      system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/faxes.tar.gz"
 
       # Restore voicemails
       #
-      # system "cd / && sudo /usr/bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
+      # system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
 
       # Restore the database
       #
