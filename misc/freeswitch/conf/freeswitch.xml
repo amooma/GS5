@@ -27,6 +27,14 @@
               </match>
             </input>
           </macro>
+          <macro name="voicemail_change_pass_success">
+            <input pattern="(.*)">
+              <match>
+                <action function="play-file" data="voicemail/vm-password_has_been_changed.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
           <macro name="voicemail_fail_auth">
             <input pattern="(.*)">
               <match>
@@ -532,6 +540,14 @@
             <input pattern="(.*)">
               <match>
                 <action function="play-file" data="voicemail/vm-enter_pass.wav"/>
+                <action function="say" data="$1" method="pronounced" type="name_spelled"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="voicemail_change_pass_success">
+            <input pattern="(.*)">
+              <match>
+                <action function="play-file" data="voicemail/vm-password_has_been_changed.wav"/>
                 <action function="say" data="$1" method="pronounced" type="name_spelled"/>
               </match>
             </input>
