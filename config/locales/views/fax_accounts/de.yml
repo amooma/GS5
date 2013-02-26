@@ -1,12 +1,12 @@
 de:
   fax_accounts:
-    name: 'Software-Fax-Konto'
+    name: 'Software-Fax'
     controller:
-      successfuly_created: 'Eine neues Software-Fax-Konto wurde erstellt.'
-      successfuly_updated: 'Das Software-Fax-Konto wurde aktualisiert.'
-      successfuly_destroyed: 'Das Software-Fax-Konto wurde gelöscht.'
+      successfuly_created: 'Eine neues Software-Fax wurde erstellt.'
+      successfuly_updated: 'Das Software-Fax wurde aktualisiert.'
+      successfuly_destroyed: 'Das Software-Fax wurde gelöscht.'
     index:
-      page_title: 'Software-Fax-Konten'
+      page_title: 'Software-Faxe'
       name: 'Name'
       station_id: 'Stations-ID'
       email: 'E-Mail'
@@ -17,30 +17,30 @@ de:
       sent: 'Gesendet'
       retries: 'Max. Anzahl von Sendeversuchen'
       last_update: 'Letzter Eintrag'
-      send_a_fax: 'Fax versenden'
+      send_a_fax: 'versenden'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie dieses Software-Fax-Konto löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie dieses Software-Fax löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
         create: 'Neu anlegen'
         create_for: 'Neues Fax-Konto für %{resource} anlegen'
     show:
-      page_title: 'Software-Fax-Konto anzeigen'
+      page_title: 'Software-Fax anzeigen'
       name: 'Name'
       station_id: 'Stations-ID'
       email: 'E-Mail'
       days_till_auto_delete: 'Anzahl der Tage bis Faxe gelöscht werden'
       retries: 'Max. Anzahl von Sendeversuchen'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie dieses Software-Fax-Konto löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie dieses Software-Fax löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     new:
-      page_title: 'Neues Software-Fax-Konto'
+      page_title: 'Neues Software-Fax'
     edit:
-      page_title: 'Software-Fax-Konto bearbeiten'
+      page_title: 'Software-Fax bearbeiten'
     form:
       name:
         label: 'Name'

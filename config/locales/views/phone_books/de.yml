@@ -5,7 +5,7 @@ de:
       name: 'Firmentelefonbuch'
       description: 'Ein für alle Benutzer von %{resource} lesbares Telefonbuch.'
     private_phone_book:
-      name: 'Privates Telefonbuch von %{resource}'
+      name: 'Privates Telefonbuch'
       description: 'Ein privates Telefonbuch.'
     controller:
       successfuly_created: 'Ein neues Telefonbuch wurde erstellt.'

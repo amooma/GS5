@@ -13,16 +13,17 @@ namespace :backup do
       tmp_dir = "/tmp/gs5_restore_directory"
       FileUtils.rm_rf tmp_dir
       FileUtils.mkdir_p tmp_dir
-      system "cd #{tmp_dir} && tar xzf #{restore_job.backup_file.path}"
-      system "cd /tmp/gs5_restore_directory/*/ && tar xf GS5.tar && rm GS5.tar"
+      system "cd #{tmp_dir} && sudo /bin/tar xzf #{restore_job.backup_file.path}"
+      restore_directory = Dir.glob("/tmp/gs5_restore_directory/*").first
+      system "cd #{restore_directory} && sudo /bin/tar xf GS5.tar && rm GS5.tar"
 
       # Restore faxes
       #
-      system "cd / && tar xzfP /tmp/gs5_restore_directory/*/GS5/archives/faxes.tar.gz"
+      system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/faxes.tar.gz"
 
       # Restore voicemails
       #
-      # system "cd / && tar xzfP /tmp/gs5_restore_directory/*/GS5/archives/voicemails.tar.gz"
+      # system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
 
       # Restore the database
       #
@@ -32,7 +33,7 @@ namespace :backup do
       db_user = system_odbc_configuration['gemeinschaft']['USER']
       db_password = system_odbc_configuration['gemeinschaft']['PASSWORD']
 
-      system "gunzip < /tmp/gs5_restore_directory/*/GS5/databases/MySQL/gemeinschaft.sql.gz | mysql -u #{db_user} -p#{db_password} #{database}"
+      system "gunzip < #{restore_directory}/GS5/databases/MySQL/gemeinschaft.sql.gz | mysql -u #{db_user} -p#{db_password} #{database}"
 
       FileUtils.rm_rf tmp_dir
 

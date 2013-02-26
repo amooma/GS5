@@ -7,6 +7,8 @@ class PageController < ApplicationController
   def index
     if current_user
       redirect_to [current_user.current_tenant, current_user]
+    else
+      redirect_to log_in_path
     end
   end
 
