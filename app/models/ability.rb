@@ -176,6 +176,7 @@ class Ability
         #
         can :create, GemeinschaftSetup
         can :manage, SipDomain
+        can [:create, :new, :show, :index], RestoreJob
       end
     end
 
