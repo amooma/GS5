@@ -35,6 +35,8 @@ namespace :backup do
       system "gunzip < /tmp/gs5_restore_directory/*/GS5/databases/MySQL/gemeinschaft.sql.gz | mysql -u #{db_user} -p#{db_password} #{database}"
 
       FileUtils.rm_rf tmp_dir
+
+      system "cd /opt/gemeinschaft && rake db:migrate"
     end
   end
 

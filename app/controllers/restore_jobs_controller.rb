@@ -16,6 +16,7 @@ class RestoreJobsController < ApplicationController
     @restore_job.state = 'new'
 
     if @restore_job.save
+      session[:user_id] = nil
       redirect_to @restore_job, :notice => t('restore_jobs.controller.successfuly_created')
     else
       render :new
