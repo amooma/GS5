@@ -31,7 +31,7 @@ class Conference < ActiveRecord::Base
   
   validate :start_and_end_dates_must_make_sense, :if => Proc.new { |conference| !conference.start.blank? && !conference.end.blank? }
   
-  after_save :send_pin_email_when_pin_has_changed
+  before_save :send_pin_email_when_pin_has_changed
 
   default_scope where(:state => 'active').order(:start)
   
@@ -55,7 +55,7 @@ class Conference < ActiveRecord::Base
   end
 
   def send_pin_email_when_pin_has_changed
-    if self.conferenceable.class == User && self.pin_changed?
+    if !self.new_record? && self.conferenceable.class == User && self.pin_changed?
       Notifications.new_pin(self).deliver
     end
   end
