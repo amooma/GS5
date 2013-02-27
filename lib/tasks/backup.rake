@@ -25,6 +25,10 @@ namespace :backup do
       #
       system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
 
+      # Delete the archive tar.gz to get more air to breathe
+      #
+      FileUtils.mkdir_p "#{restore_directory}/GS5/archives"
+
       # Restore the database
       #
       system_odbc_ini_file = '/var/lib/freeswitch/.odbc.ini'
