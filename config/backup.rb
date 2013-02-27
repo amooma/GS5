@@ -62,6 +62,15 @@ Backup::Model.new(:GS5, 'GS5 backup') do
   end
 
   ##
+  # Avatars
+  #
+  if File.exists?('/opt/gemeinschaft/public/uploads/user/image')
+    archive :avatars do |archive|
+      archive.add     '/opt/gemeinschaft/public/uploads/user/image'
+    end  
+  end
+
+  ##
   # Local (Copy) [Storage]
   #
   store_with Local do |local|
