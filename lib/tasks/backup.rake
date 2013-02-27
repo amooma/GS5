@@ -19,11 +19,21 @@ namespace :backup do
 
       # Restore faxes
       #
-      system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/faxes.tar.gz"
+      if File.exists?("#{restore_directory}/GS5/archives/faxes.tar.gz")
+        system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/faxes.tar.gz"
+      end
 
       # Restore voicemails
       #
-      system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
+      if File.exists?("#{restore_directory}/GS5/archives/voicemails.tar.gz")
+        system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
+      end
+
+      # Restore avatars
+      #
+      if File.exists?("#{restore_directory}/GS5/archives/avatars.tar.gz")
+        system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/avatars.tar.gz"
+      end
 
       # Delete the archive tar.gz to get more air to breathe
       #
