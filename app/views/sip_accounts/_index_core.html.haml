@@ -20,13 +20,13 @@
           - if sip_account.registration
             %i.icon-ok
           - else
-            %i.icon-thumbs-down
+            %i.icon-ban-circle
         %td
           = sip_account.caller_name
         - phone_numbers = sip_account.phone_numbers
         %td
           - if sip_account.phone_numbers.count > 0
-            = render 'phone_numbers/listing', :phone_numbers => sip_account.phone_numbers.order(:number)
+            = render 'phone_numbers/listing', :phone_numbers => sip_account.phone_numbers.order(:position)
         - if sip_accounts.map{ |sip_account| sip_account.phone_sip_accounts.any? }.include?(true)
           %td
             %span.hidden-phone

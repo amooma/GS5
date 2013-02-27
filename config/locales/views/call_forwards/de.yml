@@ -7,8 +7,8 @@ de:
       successfuly_destroyed: 'Die Rufumleitung wurde gelöscht.'
     index:
       page_title: 'Rufumleitungen'
-      phone_number_id: 'Telefonnummer'
-      call_forward_case_id: 'Art der Rufumleitung'
+      call_forwardable: 'Umleitendes Objekt'
+      call_forward_case: 'Art der Rufumleitung'
       timeout: 'Zeitüberschreitung'
       destination: 'Ziel'
       hunt_group: 'Rufgruppen-Verknüpfung'
@@ -25,8 +25,8 @@ de:
         create_for: 'Neue Rufumleitung für die %{resource} anlegen'
     show:
       page_title: 'Rufumleitung anzeigen'
-      phone_number_id: 'Telefonnummer'
-      call_forward_case_id: 'Art der Rufumleitung'
+      call_forwardable: 'Umleitendes Objekt'
+      call_forward_case: 'Art der Rufumleitung'
       timeout: 'Zeitüberschreitung'
       destination: 'Ziel'
       hunt_group: 'Rufgruppen-Verknüpfung'
@@ -44,10 +44,10 @@ de:
     edit:
       page_title: 'Rufumleitung bearbeiten'
     form:
-      phone_number_id:
-        label: 'Telefonnummer'
+      call_forwardable:
+        label: 'Umleitendes Objekt'
         hint: ''
-      call_forward_case_id:
+      call_forward_case:
         label: 'Art der Rufumleitung'
         hint: ''
       timeout:

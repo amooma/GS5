@@ -1,0 +1,10 @@
+- content_for :title, t("group_memberships.show.page_title")
+
+%p
+  %strong= t('group_memberships.show.item_type') + ":"
+  = @group_membership.item_type
+%p
+  %strong= t('group_memberships.show.item_id') + ":"
+  = @group_membership.item_id
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @group, :child => @group_membership }

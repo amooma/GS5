@@ -3,4 +3,4 @@
 - if @call_forwards.count > 0
   = render "index_core", :call_forwards => @call_forwards
 
-= render :partial => 'shared/create_link', :locals => {:parent => @phone_number, :child_class => CallForward}
+= render :partial => 'shared/create_link', :locals => {:parent => @parent, :child_class => CallForward}

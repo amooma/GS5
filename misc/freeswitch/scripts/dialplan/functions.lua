@@ -35,10 +35,8 @@ function Functions.dialplan_function(self, caller, dialed_number)
 
   if fid == "ta" then
     result = self:transfer_all(caller, parameters[3]);
-  elseif fid == "in" then
-    result = self:intercept_extensions(caller, parameters[3]);
   elseif fid == "ia" then
-    result = self:intercept_any_extension(caller, parameters[3]);
+    result = self:intercept_any_number(caller, parameters[3]);
   elseif fid == "anc" then
     result = self:account_node_change(caller);
   elseif fid == "li" then
@@ -113,9 +111,11 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:hangup(caller, parameters[3], parameters[4]);
   elseif fid == "cpa" then
     result = self:call_parking_inout(caller, parameters[3], parameters[4]);
+  elseif fid == "cpai" then
+    result = self:call_parking_inout_index(caller, parameters[3]);
   end
 
-  return result;
+  return result or { continue = false, code = 505, phrase = 'Error executing function', no_cdr = true };
 end
 
 -- Transfer all calls to a conference
@@ -149,94 +149,27 @@ function Functions.transfer_all(self, caller, destination_number)
   return destination_number;
 end
 
--- Intercept Extensions
-function Functions.intercept_extensions(self, caller, destination_numbers)
-  if type(destination_numbers) == "string" then
-    destination_numbers = "\"" .. destination_numbers .. "\"";
-  else
-    destination_numbers = "\"" .. table.concat(destination_numbers, "\",\"") .. "\"";
-  end
 
-  self.log:debug("Intercept call to number(s): " .. destination_numbers);
-  
-  if caller.account_type ~= "SipAccount" then
-    self.log:error("caller is not a SipAccount");
-    return { continue = false, code = 403, phrase = 'Incompatible caller' }
-  end
-
-  local sql_query = 'SELECT * FROM `channels` WHERE `callstate` IN ("EARLY", "ACTIVE") AND `dest` IN (' .. destination_numbers .. ') LIMIT 1';
-
-  self.database:query(sql_query, function(call_entry)
-    self.log:debug("intercepting call with uid: " .. call_entry.uuid);
-    caller:intercept(call_entry.uuid);
-  end)
-  
-  return nil;
-end
-
--- intercept call to destination (e.g. sip_account)
-function Functions.intercept_destination(self, caller, destination)
-  self.log:debug("Intercept call to destination " .. destination);
-  local result = false;
-  local sql_query = 'SELECT `call_uuid`, `uuid` FROM `channels` WHERE `callstate` = "RINGING" AND `dest` = "' .. destination .. '" LIMIT 1';
-
-  caller:set_caller_id(caller.caller_phone_numbers[1] ,caller.caller_id_name);
-  self.database:query(sql_query, function(call_entry)
-    if call_entry.call_uuid and tostring(call_entry.call_uuid) then
-      self.log:debug("intercepting call - uuid: " .. call_entry.call_uuid);
-      caller:intercept(call_entry.call_uuid);
-      result = { continue = false, code = 200, call_service = 'pickup' }
-      require 'common.str'
-      require 'common.fapi'
-      local fapi = common.fapi.FApi:new{ log = self.log, uuid = call_entry.call_uuid }
-      if fapi:channel_exists() then
-        caller:set_caller_id(
-          common.str.to_s(fapi:get_variable('effective_caller_id_number')),
-          common.str.to_s(fapi:get_variable('effective_caller_id_name'))
-        );
-        caller:set_callee_id(
-          common.str.to_s(fapi:get_variable('effective_callee_id_number')),
-          common.str.to_s(fapi:get_variable('effective_callee_id_name'))
-        );
-
-        caller:set_variable('gs_destination_type', fapi:get_variable('gs_destination_type'));
-        caller:set_variable('gs_destination_id', fapi:get_variable('gs_destination_id'));
-        caller:set_variable('gs_destination_uuid', fapi:get_variable('gs_destination_uuid'));
-
-        caller:set_variable('gs_caller_account_type', fapi:get_variable('gs_account_type'));
-        caller:set_variable('gs_caller_account_id', fapi:get_variable('gs_account_id'));
-        caller:set_variable('gs_caller_account_uuid', fapi:get_variable('gs_account_uuid'));
-
-        caller:set_variable('gs_auth_account_type', fapi:get_variable('gs_auth_account_type'));
-        caller:set_variable('gs_auth_account_id', fapi:get_variable('gs_auth_account_id'));
-        caller:set_variable('gs_auth_account_uuid', fapi:get_variable('gs_auth_account_uuid'));
-      end
-    else
-      self.log:error('FUNCTION - failed to intercept call - no caller uuid for callee uuid: ', call_entry.uuid);
-    end
-  end)
-
-  return result;
-end
-
--- intercept call to owner of destination_number
-function Functions.intercept_any_extension(self, caller, destination_number)
+function Functions.intercept_any_number(self, caller, destination_number)
   require 'common.phone_number'
-  local phone_number_object = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:find_by_number(destination_number);
+  local phone_number = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:find_by_number(destination_number);
 
-  if not phone_number_object or not phone_number_object.record then
-    self.log:notice("unallocated number: " .. tostring(destination_number));
-    return false;
+  if not phone_number or not phone_number.record then
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - number not found: ', destination_number);
+    return { continue = false, code = 404, phrase = 'Number not found', no_cdr = true };
   end
-  
-  if phone_number_object.record.phone_numberable_type == 'SipAccount' then
-    require "common.sip_account"
-    local sip_account_class = common.sip_account.SipAccount:new{ log = self.log, database = self.database }
-    local sip_account = sip_account_class:find_by_id(phone_number_object.record.phone_numberable_id)
-    if sip_account then
-      return self:intercept_destination(caller, sip_account.record.auth_name);
-    end
+
+  if not phone_number.record.phone_numberable_type:lower() == 'sipaccount' or not tonumber(phone_number.record.phone_numberable_id) then
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - destination: ',  phone_number.record.phone_numberable_type:lower(), '=', phone_number.record.phone_numberable_id, ', number: ', destination_number);
+    return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
   end
+
+  self.log:info('FUNCTION_INTERCEPT_ANY_NUMBER intercepting call - to: ', phone_number.record.phone_numberable_type:lower(), '=', phone_number.record.phone_numberable_id, ', number: ', destination_number);
+
+  caller:set_variable('gs_pickup_group_pick', 's' .. phone_number.record.phone_numberable_id);
+  caller:execute('pickup', 's' .. phone_number.record.phone_numberable_id);
+
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
 
 
@@ -928,6 +861,42 @@ function Functions.call_parking_inout(self, caller, stall_name, lot_name)
     return { continue = false, code = 404, phrase = 'Parking lot not found', no_cdr = true }
   end
 
+  parking_stall:park_retrieve();
+
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
+
+function Functions.call_parking_inout_index(self, caller, stall_index)
+  if not tonumber(stall_index) then
+    self.log:notice('FUNCTION_CALL_PARKING_INOUT_INDEX - malformed index: ', stall_index);
+    return { continue = false, code = 404, phrase = 'No parkings stall specified', no_cdr = true }
+  end
+
+  require 'common.str';
+  local owner = common.str.try(caller, 'auth_account.owner');
+  
+  if not owner then
+    self.log:notice('FUNCTION_CALL_PARKING_INOUT_INDEX - stall owner not specified');
+    return { continue = false, code = 404, phrase = 'No parkings stalls owner' , no_cdr = true }
+  end
+
+  require 'dialplan.call_parking';
+  local parking_stalls = dialplan.call_parking.CallParking:new{ log = self.log, database = self.database, caller = caller }:find_by_owner(owner.id, owner.class);
+
+  if not parking_stalls or #parking_stalls < 1 then
+    self.log:notice('FUNCTION_CALL_PARKING_INOUT_INDEX - no parkings stalls found');
+    return { continue = false, code = 404, phrase = 'No parkings stalls', no_cdr = true }
+  end
+
+  local parking_stall = parking_stalls[tonumber(stall_index)];
+
+  if not parking_stall then
+    self.log:notice('FUNCTION_CALL_PARKING_INOUT_INDEX - no parkings stall found with index: ', stall_index);
+    return { continue = false, code = 404, phrase = 'Parking stall not found', no_cdr = true }
+  end
+
+  self.log:info('FUNCTION_CALL_PARKING_INOUT_INDEX parking/retrieving call - parkingstall=', parking_stall.id, '/', parking_stall.name, ', index: ', stall_index);
   parking_stall:park_retrieve();
 
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }

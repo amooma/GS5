@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130215133749) do
+ActiveRecord::Schema.define(:version => 20130225160423) do
 
   create_table "access_authorizations", :force => true do |t|
     t.string   "access_authorizationable_type"
@@ -554,6 +554,30 @@ ActiveRecord::Schema.define(:version => 20130215133749) do
     t.string   "trunk_access_code"
   end
 
+  create_table "group_memberships", :force => true do |t|
+    t.integer  "group_id"
+    t.string   "item_type"
+    t.integer  "item_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "group_permissions", :force => true do |t|
+    t.integer  "group_id"
+    t.string   "permission"
+    t.integer  "target_group_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  create_table "groups", :force => true do |t|
+    t.string   "name"
+    t.boolean  "active"
+    t.string   "comment"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "gs_cluster_sync_log_entries", :force => true do |t|
     t.integer  "gs_node_id"
     t.string   "class_name"
@@ -853,6 +877,13 @@ ActiveRecord::Schema.define(:version => 20130215133749) do
   end
 
   add_index "registrations", ["reg_user", "realm", "hostname"], :name => "regindex1"
+
+  create_table "restore_jobs", :force => true do |t|
+    t.string   "state"
+    t.string   "backup_file"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "ringtones", :force => true do |t|
     t.string   "ringtoneable_type"

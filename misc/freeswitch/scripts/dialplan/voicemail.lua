@@ -11,7 +11,7 @@ MESSAGE_LENGTH_MAX = 120;
 SILENCE_LENGTH_ABORT = 5;
 SILENCE_LEVEL = 500;
 BEEP = 'tone_stream://%(1000,0,500)';
-RECORD_FILE_PREFIX = '/tmp/voicemail_';
+RECORD_FILE_PREFIX = '/var/spool/freeswitch/voicemail_';
 
 -- create voicemail object
 function Voicemail.new(self, arg)

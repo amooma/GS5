@@ -1,0 +1,17 @@
+%table.table.table-striped
+  %tr
+    %th
+    %th= t('groups.index.name')
+    %th= t('groups.index.comment')
+
+  
+  - for group in groups
+    %tr
+      %td
+        -if group.active
+          %i.icon-ok
+        - else
+          %i.icon-ban-circle
+      %td= group.name
+      %td= group.comment
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => group}

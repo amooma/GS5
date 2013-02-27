@@ -1,3 +1,3 @@
 .inputs
   / = f.input :audio, :label => t('ringtones.form.audio.label'), :hint => conditional_hint('ringtones.form.audio.hint')
-  = f.input :bellcore_id, :collection => 0..10, :label => t('ringtones.form.bellcore_id.label'), :hint => conditional_hint('ringtones.form.bellcore_id.hint'), :include_blank => true
+  = f.input :bellcore_id, :collection => Ringtone::CORE_RINGTONES_AVAILABLE, :label => t('ringtones.form.bellcore_id.label'), :hint => conditional_hint('ringtones.form.bellcore_id.hint'), :include_blank => false

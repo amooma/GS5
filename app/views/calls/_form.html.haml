@@ -1,0 +1,7 @@
+= simple_form_for([ @parent, @call ]) do |f|
+  = f.error_notification
+
+  = render "form_core", :f => f
+
+  .form-actions
+    = f.button :submit, conditional_t('calls.form.submit')

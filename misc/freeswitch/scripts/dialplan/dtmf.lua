@@ -17,12 +17,17 @@ function Dtmf.new(self, arg)
   self.bleg = arg.bleg
   self.digit_timeout = arg.digit_timeout or 5;
   self.router = arg.router;
+  self.digit_duration_min = arg.digit_duration_min or 500;
 
   return object;
 end
 
 
 function Dtmf.detect(self, caller, sequence, digit, duration, calee)
+  if not tonumber(duration) or duration < self.digit_duration_min then
+    return;
+  end
+
   local timestamp = os.time();
   if timestamp - sequence.updated > self.digit_timeout then
     sequence.digits = digit;
@@ -63,6 +68,9 @@ function Dtmf.transfer(self, caller, destination, calee)
     caller:execute('transfer', destination);
     fapi:execute('uuid_kill', callee_uuid);
   else
+    if caller.account then
+      fapi:execute('uuid_setvar_multi', callee_uuid .. ' gs_auth_account_type=' .. caller.account.class .. ';gs_auth_account_uuid=' .. caller.account.uuid);
+    end
     fapi:execute('uuid_transfer', callee_uuid .. ' ' .. destination);
     caller.session:hangup();
   end

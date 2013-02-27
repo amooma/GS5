@@ -1,0 +1,4 @@
+.inputs
+  - if @group.group_memberships.count < 1
+    = f.input :item_type, :label => t('group_memberships.form.item_type.label'), :hint => conditional_hint('group_memberships.form.item_type.hint')
+  = f.input :item_id, :label => t('group_memberships.form.item_id.label'), :hint => conditional_hint('group_memberships.form.item_id.hint')

@@ -1,0 +1,50 @@
+de:
+  groups:
+    name: 'Group'
+    controller:
+      successfuly_created: 'Group wurde angelegt.'
+      successfuly_updated: 'Group wurde aktualisiert.'
+      successfuly_destroyed: 'Group wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von Group'
+      name: 'Name'
+      active: 'Active'
+      comment: 'Comment'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Group'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Group neu anlegen für %{resource}'
+    show:
+      page_title: 'Group bearbeiten'
+      name: 'Name'
+      active: 'Active'
+      comment: 'Comment'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Group neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Group bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      active:
+        label: 'Active'
+        hint: ''
+      comment:
+        label: 'Comment'
+        hint: ''
+      submit: 'Absenden'

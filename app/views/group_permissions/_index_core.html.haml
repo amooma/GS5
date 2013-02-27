@@ -1,0 +1,11 @@
+%table.table.table-striped
+  %tr
+    %th= t('group_permissions.index.permission')
+    %th= t('group_permissions.index.target_group_id')
+
+  
+  - for group_permission in group_permissions
+    %tr
+      %td= group_permission.permission
+      %td= group_permission.target_group
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => group_permission.group, :child => group_permission}

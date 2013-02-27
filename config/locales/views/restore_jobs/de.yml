@@ -1,0 +1,45 @@
+de:
+  restore_jobs:
+    name: 'Restore Auftrag'
+    controller:
+      successfuly_created: 'Restore Auftrag wurde angelegt.'
+      successfuly_updated: 'Restore Auftrag wurde aktualisiert.'
+      successfuly_destroyed: 'Restore Auftrag wurde gelöscht.'
+    index:
+      page_title: 'Liste Restore Aufträge'
+      state: 'Status'
+      backup_file: 'Backup Datei'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Restore Auftrag'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Restore Auftrag neu anlegen für %{resource}'
+    show:
+      page_title: 'Restore Auftrag bearbeiten'
+      state: 'Status'
+      backup_file: 'Backup Datei'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Restore von einem Backup'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Restore Auftrag bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      state:
+        label: 'Status'
+        hint: ''
+      backup_file:
+        label: 'Backup Datei'
+        hint: ''
+      submit: 'Absenden'

@@ -1068,8 +1068,8 @@ class ConfigSiemensController < ApplicationController
         phone_numbers.push(phone_number.number)
         assistant_call_forwardings = phone_number.call_forwards.where(:call_forward_case_id => CallForwardCase.where(:value => 'assistant').first.id)
         assistant_call_forwardings.each do |assistant_call_forwarding|
-          if assistant_call_forwarding.call_forwardable_type == 'HuntGroup' && assistant_call_forwarding.call_forwardable_id.to_i > 0
-            hunt_groups.push(assistant_call_forwarding.call_forwardable_id.to_i)
+          if assistant_call_forwarding.destinationable_type == 'HuntGroup' && assistant_call_forwarding.destinationable_id.to_i > 0
+            hunt_groups.push(assistant_call_forwarding.destinationable_id.to_i)
           end
         end
       end

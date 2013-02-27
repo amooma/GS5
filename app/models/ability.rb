@@ -90,6 +90,11 @@ class Ability
           # SIM cards
           #
           cannot [:edit, :update], SimCard
+
+          # Restore is only possible on a new system.
+          #
+          cannot :manage, RestoreJob
+
         else
           # Any user can do the following stuff.
           #
@@ -126,11 +131,12 @@ class Ability
 
           # SipAccounts and Phones
           #
-          can :read, SipAccount, :sip_accountable_type => 'User', :sip_accountable_id => user.id
+          can [:read, :call], SipAccount, :sip_accountable_type => 'User', :sip_accountable_id => user.id
           user.sip_accounts.each do |sip_account|
             can :read, PhoneNumber, :id => sip_account.phone_number_ids
-            can :manage, CallForward, :phone_number_id => sip_account.phone_number_ids
+            can :manage, CallForward, :call_forwardable_id => sip_account.phone_number_ids
             can :manage, Ringtone, :ringtoneable_type => 'PhoneNumber', :ringtoneable_id => sip_account.phone_number_ids
+            can :manage, Ringtone, :ringtoneable_type => 'SipAccount', :ringtoneable_id => sip_account.id
             can [:read, :destroy, :call] , CallHistory, :id => sip_account.call_history_ids
           end
           can :read, Phone, :phoneable_type => 'User', :phoneable_id => user.id
@@ -158,7 +164,7 @@ class Ability
           # User can manage CallForwards of the PhoneNumbers of his
           # own SipAccounts:
           #
-          can :manage, CallForward, :phone_number_id => user.phone_number_ids
+          can :manage, CallForward, :call_forwardable_id => user.phone_number_ids
 
           # SoftkeyFunctions
           #
@@ -176,6 +182,7 @@ class Ability
         #
         can :create, GemeinschaftSetup
         can :manage, SipDomain
+        can [:create, :new, :show, :index], RestoreJob
       end
     end
 

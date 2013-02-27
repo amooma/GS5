@@ -16,7 +16,14 @@
   
   - for intruder in intruders
     %tr
-      %td= intruder.list_type.chars.first
+      %td
+        - if intruder.list_type == 'whitelist'
+          %i.icon-ok
+        - elsif intruder.bans > 0
+          %i.icon-fire
+        - elsif intruder.points > 0
+          %i.icon-warning-sign
+
       %td= intruder.contact_ip
       %td= intruder.contact_port
       %td= intruder.points

@@ -37,11 +37,6 @@
         %strong= t('sip_accounts.show.hotdeskable') + ":"
       %td
         = @sip_account.hotdeskable == true ? t('simple_form.yes') : t('simple_form.no') 
-    %tr
-      %td
-        %strong= t('sip_accounts.show.callforward_rules_act_per_sip_account') + ":"
-      %td
-        = @sip_account.callforward_rules_act_per_sip_account == true ? t('simple_form.yes') : t('simple_form.no')
 
     - if @sip_account.registration.try(:network_ip) && @sip_account.registration.try(:network_port)
       %tr
@@ -65,6 +60,21 @@
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @sip_account.sip_accountable, :child => @sip_account }
 
+%p
+  %strong= t('sip_accounts.show.tel_protocol') + ':'
+%p
+  %a.btn.btn-small.btn-default{ :href => '', :onclick => "navigator.registerProtocolHandler(\"tel\", \"#{@register_tel_protocol}\", \"#{@sip_account.to_s}\");" }
+    %i.icon-plus
+    = t('sip_accounts.show.register_tel_protocol')
+
+%p
+  %strong= t('ringtones.name') + ':'
+  - if @sip_account.ringtones.count > 0
+    = @sip_account.ringtones.first
+    = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @sip_account, :child => @sip_account.ringtones.first }
+  - else
+    = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => Ringtone }
+
 - if @sip_account.phone_numbers.count > 0 || can?(:create, @sip_account.phone_numbers.build)
   %h2= t('phone_numbers.index.page_title')
   - if @sip_account.phone_numbers.count > 0
@@ -72,9 +82,20 @@
     %br
   = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => PhoneNumber }
 
+- if @sip_account.call_forwards.count > 0 || can?(:create, @sip_account.call_forwards.build)
+  %h2= t('call_forwards.index.page_title')
+  - if @sip_account.call_forwards.count > 0
+    = render "call_forwards/index_core", :call_forwards => @sip_account.call_forwards
+    %br
+  = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => CallForward }
+
 - if @sip_account.softkeys.count > 0 || can?(:create, @sip_account.softkeys.build)
   %h2= t("softkeys.index.page_title")
   - if @sip_account.softkeys.count > 0
     = render "softkeys/index_core", :softkeys => @sip_account.softkeys
     %br
   = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => Softkey }
+
+- if @sip_account.calls.count > 0
+  %h2= t("calls.index.page_title")
+  = render "calls/index_core", :calls => @sip_account.calls, :parent => @sip_account

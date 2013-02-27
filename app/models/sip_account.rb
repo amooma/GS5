@@ -16,7 +16,7 @@ class SipAccount < ActiveRecord::Base
   has_many :phones, :through => :phone_sip_accounts
   
   has_many :phone_numbers, :as => :phone_numberable, :dependent => :destroy
-  has_many :call_forwards, :through => :phone_numbers
+  has_many :call_forwards, :as => :call_forwardable, :dependent => :destroy
 
   belongs_to :tenant
   belongs_to :sip_domain
@@ -32,6 +32,13 @@ class SipAccount < ActiveRecord::Base
   belongs_to :gs_node
 
   belongs_to :language, :foreign_key => 'language_code', :primary_key => 'code'
+
+  has_many :group_memberships, :as => :item, :dependent => :destroy, :uniq => true
+  has_many :groups, :through => :group_memberships
+
+  has_many :ringtones, :as => :ringtoneable, :dependent => :destroy
+
+  has_many :calls, :finder_sql => lambda { |s| "SELECT DISTINCT detailed_calls.* FROM detailed_calls WHERE presence_id LIKE '#{self.auth_name}@%'" }
 
   # Delegations:
   #
@@ -67,6 +74,7 @@ class SipAccount < ActiveRecord::Base
   validates_uniqueness_of :uuid
 
   after_create { self.create_on_other_gs_nodes('sip_accountable', self.sip_accountable.try(:uuid)) }
+  after_create :create_default_group_memberships
   after_destroy :destroy_on_other_gs_nodes
   after_update { self.update_on_other_gs_nodes('sip_accountable', self.sip_accountable.try(:uuid)) }
 
@@ -92,8 +100,8 @@ class SipAccount < ActiveRecord::Base
     if call_forwarding_master.active
       call_forwarding_master.active = false
     else
-      if call_forwarding_service = 'assistant' && call_forwarding_master.call_forwardable_type == 'HuntGroup' && call_forwarding_master.call_forwardable
-        if call_forwarding_master.call_forwardable.hunt_group_members.where(:active => true).count > 0
+      if call_forwarding_service = 'assistant' && call_forwarding_master.destinationable_type == 'HuntGroup' && call_forwarding_master.destinationable
+        if call_forwarding_master.destinationable.hunt_group_members.where(:active => true).count > 0
           call_forwarding_master.active = true
         else
           call_forwarding_master.active = false
@@ -105,7 +113,7 @@ class SipAccount < ActiveRecord::Base
       call_forwarding = phone_number.call_forwards.where(:call_forward_case_id => service_id).order(:active).all(:conditions => 'source IS NULL OR source = ""').first
       if ! call_forwarding
         call_forwarding = CallForward.new()
-        call_forwarding.phone_number_id = phone_number.id
+        call_forwarding.call_forwardable = phone_number
       end
 
       if to_voicemail == nil 
@@ -146,7 +154,7 @@ class SipAccount < ActiveRecord::Base
       true
     );
   end
-  
+
 
   private
       
@@ -202,7 +210,7 @@ class SipAccount < ActiveRecord::Base
 
   # log out phone if sip_account is not on this node
   def log_out_phone_if_not_local
-    if self.gs_node_id && ! GsNode.where(:ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS'), :id => self.gs_node_id).first
+    if self.gs_node_id && GsNode.count > 1 && ! GsNode.where(:ip_address => GsParameter.get('HOMEBASE_IP_ADDRESS'), :id => self.gs_node_id).first
       self.phones.each do |phone|
         phone.user_logout;
       end
@@ -220,4 +228,29 @@ class SipAccount < ActiveRecord::Base
     voicemail_setting.purge = false
     voicemail_setting.save
   end
+
+  def create_default_group_memberships
+    default_groups = Hash.new()
+    templates = GsParameter.get('SipAccount', 'group', 'default')
+    if templates.class == Array
+      templates.each do |group_name|
+        default_groups[group_name] = true
+      end
+    end
+
+    templates = GsParameter.get("SipAccount.#{self.sip_accountable_type}", 'group', 'default')
+    if templates.class == Array
+      templates.each do |group_name|
+        default_groups[group_name] = true
+      end
+    end
+
+    default_groups.each do |group_name, value|
+      group = Group.where(:name => group_name).first
+      if group
+        self.group_memberships.create(:group_id => group.id)
+      end
+    end
+  end
+
 end

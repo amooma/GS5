@@ -79,6 +79,9 @@ function profile(database, sofia_ini, profile_name, index, domains, node_id)
     parameters['odbc-dsn'] = 'gemeinschaft:' .. tostring(database.user_name) .. ':' .. tostring(database.password);
   end
 
+  parameters['username'] = parameters['username'] or 'Gemeinschaft';
+  parameters['user-agent-string'] = parameters['user-agent-string'] or 'Gemeinschaft';
+
   -- set local bind address
   if domains[index] then
     parameters['sip-ip'] = domains[index]['host'];

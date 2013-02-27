@@ -2,7 +2,6 @@
 -- (c) AMOOMA GmbH 2012-2013
 -- 
 
-local FAX_FILE_PATH = "/opt/GS5/public/uploads/fax_document/tiff/";
 local FAX_ANSWERING_TIMEOUT = 20;
 
 -- Set logger
@@ -142,13 +141,11 @@ end
 if session and session:answered() then
   log:info('FAX_SEND - sending fax_document=' .. fax_document.id .. ' (' .. fax_document.tiff .. ')');
 
-  local file_name = FAX_FILE_PATH .. fax_document.id .. "/" .. fax_document.tiff;
-
   session:setVariable('fax_ident',   fax_account.record.station_id)
   session:setVariable('fax_header',  fax_account.record.name)
   session:setVariable('fax_verbose', 'false')
   local start_time = os.time();
-  session:execute('txfax', file_name);
+  session:execute('txfax', fax_document.tiff);
   
   fax_state = {
     state = nil,

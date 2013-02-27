@@ -10,9 +10,13 @@ class GsParameter < ActiveRecord::Base
             :presence => true,
             :inclusion => { :in => ['String', 'Integer', 'Boolean', 'YAML', 'Nil'] }
 
-  def self.get(wanted_variable)
+  def self.get(wanted_variable, entity=nil, section=nil)
     if GsParameter.table_exists?
-      item = GsParameter.where(:name => wanted_variable).first
+      if entity || section
+        item = GsParameter.where(:name => wanted_variable, :entity => entity, :section => section).first
+      else
+        item = GsParameter.where(:name => wanted_variable).first
+      end
       if item.nil? || item.class_type == 'Nil'
         return nil
       else

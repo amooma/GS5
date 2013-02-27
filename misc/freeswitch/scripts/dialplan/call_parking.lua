@@ -39,6 +39,22 @@ function CallParking.find_by_name(self, name)
 end
 
 
+function CallParking.find_by_owner(self, owner_id, owner_type)
+  local sql_query = 'SELECT * FROM `parking_stalls` WHERE `parking_stallable_id` = '.. owner_id .. ' AND `parking_stallable_type` = "' .. owner_type .. '" ORDER BY `name`';
+  local parking_stalls = {};
+
+  self.database:query(sql_query, function(entry)
+    local parking_stall = CallParking:new(self);
+    parking_stall.record = entry;
+    parking_stall.id = tonumber(entry.id);
+    parking_stall.name = entry.name;
+    table.insert(parking_stalls, parking_stall)
+  end)
+
+  return parking_stalls;
+end
+
+
 function CallParking.list_occupied(self, lot)
   lot = lot or self.lot;
 

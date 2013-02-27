@@ -1,33 +1,25 @@
 - content_for :title, t("call_forwards.show.page_title")
 
 %p
-  %strong= t('call_forwards.show.phone_number_id') + ":"
-  = @call_forward.phone_number
-%p
-  %strong= t('call_forwards.show.call_forward_case_id') + ":"
+  %strong= t('call_forwards.show.call_forward_case') + ":"
   = t("call_forward_cases.#{@call_forward.call_forward_case.value}") 
 %p
   %strong= t('call_forwards.show.timeout') + ":"
   = @call_forward.timeout
 %p
   %strong= t('call_forwards.show.destination') + ":"
-  = @call_forward.destination
-- if @call_forward.call_forwardable_type == 'HuntGroup' && @call_forward.call_forwardable.class == HuntGroup 
-  %p
-    %strong= t('call_forwards.show.hunt_group') + ":"
-    = @call_forward.call_forwardable
-- if @call_forward.call_forwardable_type == 'Voicemail'
-  %p
-    %strong= t('call_forwards.show.to_voicemail') + ":"
-    = 'active'
+  - if @call_forward.destinationable_id && @call_forward.destinationable
+    = "#{@call_forward.destinationable_type}: #{@call_forward.destinationable}"
+  - elsif !@call_forward.destinationable_type.blank?
+    = "#{@call_forward.destinationable_type}: #{@call_forward.destination}"
+  - else
+    = @call_forward.destination
+
 %p
   %strong= t('call_forwards.show.source') + ":"
   = @call_forward.source
 %p
-  %strong= t('call_forwards.show.depth') + ":"
-  = @call_forward.depth
-%p
   %strong= t('call_forwards.show.active') + ":"
   = @call_forward.active
 
-= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone_number, :child => @call_forward }
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @parent, :child => @call_forward }

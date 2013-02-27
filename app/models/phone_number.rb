@@ -3,7 +3,7 @@ class PhoneNumber < ActiveRecord::Base
 
   attr_accessible :name, :number, :gs_node_id, :access_authorization_user_id
 
-  has_many :call_forwards, :dependent => :destroy
+  has_many :call_forwards, :as => :call_forwardable, :dependent => :destroy
   
   has_many :ringtones, :as => :ringtoneable, :dependent => :destroy
   

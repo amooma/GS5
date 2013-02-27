@@ -1,5 +1,12 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  resources :restore_jobs
+
+  resources :groups do
+    resources :group_memberships
+    resources :group_permissions
+  end
+
   resources :sim_card_providers do
     resources :sim_cards, :except => [:edit, :update]
   end
@@ -248,6 +255,9 @@ Gemeinschaft42c::Application.routes.draw do
     resources :phones_sip_accounts
     resources :phone_numbers
     resources :softkeys
+    resources :call_forwards
+    resources :ringtones
+    resources :calls
     resources :call_histories do
       collection do
         delete 'destroy_multiple'
@@ -267,6 +277,9 @@ Gemeinschaft42c::Application.routes.draw do
       end
     end
     resources :voicemail_settings
+    member do
+      get 'call'
+    end
   end
 
   resources :phones, :only => [] do
