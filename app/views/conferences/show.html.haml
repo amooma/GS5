@@ -1,32 +1,50 @@
 - content_for :title, t("conferences.show.page_title")
 
-%p
-  %strong= t('conferences.show.name') + ":"
-  = @conference.name
-- if @conference.start
-  %p
-    %strong= t('conferences.show.start') + ":"
-    = @conference.start
-  %p
-    %strong= t('conferences.show.end') + ":"
-    = @conference.end
-- if !@conference.description.blank?
-  %p
-    %strong= t('conferences.show.description') + ":"
-    = @conference.description
-- if !@conference.pin.blank?
-  %p
-    %strong= t('conferences.show.pin') + ":"
-    = @conference.pin
-%p
-  %strong= t('conferences.show.open_for_anybody') + ":"
-  = @conference.open_for_anybody
-%p
-  %strong= t('conferences.show.announce_new_member_by_name') + ":"
-  = @conference.announce_new_member_by_name
-%p
-  %strong= t('conferences.show.announce_left_member_by_name') + ":"
-  = @conference.announce_left_member_by_name
+%table.table.table-striped
+  %tbody
+    %tr
+      %td
+        %strong= t('conferences.show.name') + ":"
+      %td
+        = @conference.name
+    - if @conference.start
+      %tr
+        %td
+          %strong= t('conferences.show.start') + ":"
+        %td
+          = @conference.start
+      %tr
+        %td
+          %strong= t('conferences.show.end') + ":"
+        %td
+          = @conference.end
+    - if !@conference.description.blank?
+      %tr
+        %td
+          %strong= t('conferences.show.description') + ":"
+        %td
+          = @conference.description
+    - if !@conference.pin.blank?
+      %tr
+        %td
+          %strong= t('conferences.show.pin') + ":"
+        %td
+          = @conference.pin
+    %tr
+      %td
+        %strong= t('conferences.show.open_for_anybody') + ":"
+      %td
+        = @conference.open_for_anybody
+    %tr
+      %td
+        %strong= t('conferences.show.announce_new_member_by_name') + ":"
+      %td
+        = @conference.announce_new_member_by_name
+    %tr
+      %td
+        %strong= t('conferences.show.announce_left_member_by_name') + ":"
+      %td
+        = @conference.announce_left_member_by_name
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @parent, :child => @conference }
 

@@ -3,7 +3,7 @@
   - if !f.object.start.nil?
     = f.input :start, :label => t('conferences.form.start.label'), :hint => conditional_hint('conferences.form.start.hint'), :include_blank => true, :start_year => Time.now.year, :end_year => Time.now.year + 2
     = f.input :end, :label => t('conferences.form.end.label'), :hint => conditional_hint('conferences.form.end.hint'), :include_blank => true, :start_year => Time.now.year, :end_year => Time.now.year + 2
-  = f.input :description, :label => t('conferences.form.description.label'), :hint => conditional_hint('conferences.form.description.hint')
+  = f.input :description, :label => t('conferences.form.description.label'), :hint => conditional_hint('conferences.form.description.hint'), :input_html => { :rows => 3 }
   = f.input :pin, :label => t('conferences.form.pin.label'), :hint => conditional_hint('conferences.form.pin.hint')
   = f.input :max_members, :collection => 1..GsParameter.get('MAXIMUM_NUMBER_OF_PEOPLE_IN_A_CONFERENCE'), :include_blank => false, :label => t('conferences.form.max_members.label'), :hint => conditional_hint('conferences.form.max_members.hint')
   = f.input :open_for_anybody, :label => t('conferences.form.open_for_anybody.label'), :hint => conditional_hint('conferences.form.open_for_anybody.hint')
