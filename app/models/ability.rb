@@ -174,10 +174,6 @@ class Ability
           #
           can :manage, VoicemailMessage
           can :manage, VoicemailSetting
-
-          # Can initiate a call
-          #
-          can :call, SipAccount
         end
       end
     else
