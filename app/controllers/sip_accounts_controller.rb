@@ -1,7 +1,7 @@
 class SipAccountsController < ApplicationController
   load_resource :user
   load_resource :tenant
-  load_resource :sip_account, :only => [:call]
+  load_and_authorize_resource :sip_account, :only => [:call]
   load_and_authorize_resource :sip_account, :through => [:user, :tenant ]
  
   before_filter :set_and_authorize_parent
