@@ -11,7 +11,7 @@ class SipAccountsController < ApplicationController
   end
 
   def show
-    @register_tel_protocol = "#{request.protocol}#{request.host_with_port}/sip_accounts/#{@sip_account.try(:id)}/call?url=%s"
+    @register_tel_protocol = "#{request.protocol}#{request.host_with_port}/sip_accounts/#{@sip_account.try(:id)}/calls/new?url=%s"
   end
 
   def new
