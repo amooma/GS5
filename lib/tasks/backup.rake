@@ -41,7 +41,7 @@ namespace :backup do
 
       # Rebuild the thumbnails
       #
-      FaxDocument.each do |fax_document|
+      FaxDocument.all.each do |fax_document|
         fax_document.render_thumbnails
       end
     end
