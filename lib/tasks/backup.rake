@@ -44,6 +44,10 @@ namespace :backup do
       FaxDocument.all.each do |fax_document|
         fax_document.render_thumbnails
       end
+
+      # Delete the restore_job. No need to waste that space.
+      #
+      restore_job.destroy
     end
   end
 
