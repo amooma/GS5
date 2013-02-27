@@ -3,10 +3,12 @@
     .container
       %span.hidden-phone
         %a.brand{:href => (current_user.nil? ? '/' : tenant_path(current_user.current_tenant))}
-          Gemeinschaft 5
+          Gemeinschaft 5.1
 
       .nav-collapse.collapse
         %ul.nav
+          - if !GemeinschaftSetup.any?
+            %li=link_to t('restore_jobs.new.page_title'), new_restore_job_path
           - if current_user && GemeinschaftSetup.any? && current_user.admin?
             - if current_page?(page_help_path)
               %li.active

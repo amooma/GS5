@@ -26,7 +26,7 @@ de:
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     new:
-      page_title: 'Restore Auftrag neu anlegen'
+      page_title: 'Restore von einem Backup'
       actions:
         back_to_list: 'Zurück zur Übersicht'
     edit:
