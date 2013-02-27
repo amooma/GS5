@@ -1,0 +1,37 @@
+en:
+  calls:
+    name: 'Call'
+    controller:
+      successfuly_created: 'Successfully created call.'
+      successfuly_updated: 'Successfully updated call.'
+      successfuly_destroyed: 'Successfully hung up call.'
+    index:
+      page_title: 'Calls'
+      uuid: 'UUID'
+      actions:
+        confirm_destroy: 'Are you sure you want to drop this call?'
+        destroy: 'Hang up'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New call for sip account %{resource}'
+    show:
+      page_title: 'Call'
+      uuid: 'UUID'
+      actions:
+        confirm_destroy: 'Are you sure you want to drop this call?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View all calls'
+    new:
+      page_title: 'New call'
+    edit:
+      page_title: 'Editing call'
+    form:
+      uuid:
+        label: 'UUID'
+        hint: ''
+      destination:
+        label: 'Destination'
+        hint: ''
+      submit: 'Submit'

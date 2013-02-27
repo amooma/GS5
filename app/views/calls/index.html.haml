@@ -1,6 +1,8 @@
 - content_for :title, t("calls.index.page_title")
 
 - if @calls.count > 0
-  = render "index_core", :calls => @calls
+  = render "index_core", :calls => @calls, :parent => @parent
 
-= render :partial => 'shared/create_link', :locals => {:parent => @parent, :child_class => Call}
+%a.btn.btn-small.btn-default{:href => method( :"new_#{@parent.class.name.underscore}_call_path" ).(@parent) }
+  %i.icon-plus
+  =t("calls.index.actions.create")

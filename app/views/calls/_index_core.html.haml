@@ -1,10 +1,38 @@
 %table.table.table-striped
   %thead
     %tr
-      %th= t('calls.index.uuid')
+      %th
+      %th= t('calls.index.created')
+      %th= t('calls.index.destination')
+      %th= t('calls.index.caller')
+      %th= t('calls.index.callee')
+      %th= t('calls.index.callstate')
+      %th= t('calls.index.codecs')
+      %th
   
   %tbody
-    - for call in @calls
+    - for call in calls
       %tr
         %td
-          = call.uuid
+          - if call.direction == 'inbound'
+            %i.icon-arrow-left
+          - else
+            %i.icon-arrow-right
+        %td
+          = call.created
+        %td
+          = call.dest
+        %td
+          = "#{call.cid_name} #{call.cid_num}"
+        %td
+          = "#{call.callee_name} #{call.callee_num}"
+        %td
+          = call.callstate
+        %td
+          = "#{call.read_codec}/#{call.write_codec}"
+
+        %td
+          %p
+            %a.btn.btn-small.btn-danger{'data-confirm' => t('calls.index.actions.confirm_destroy'), 'data-method' => 'delete', :href => method( :"#{parent.class.name.underscore}_call_path" ).(parent, call), :rel => 'nofollow'}
+              %i.icon-trash.icon-white
+              =t('calls.index.actions.destroy')

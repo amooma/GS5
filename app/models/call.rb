@@ -1,9 +1,31 @@
 class Call < ActiveRecord::Base
   self.table_name = 'detailed_calls'
   self.primary_key = 'uuid'
+
+  attr_writer :sip_account_id
+
+  validates :dest,
+            :presence => true
   
-  def readonly?
-    return true
+  def create(attributes=nil)
+    if ! attributes
+      return
+    end
+
+    self.sip_account = SipAccount.where(:id => attributes[:sip_account_id]).first
+    self.dest = attributes[:dest]
+    return self
+  end
+
+  def save(attributes=nil)
+    
+  end
+
+  def call(number=nil)
+    if @sip_account && self.dest
+      return @sip_account.call(self.dest)
+    end
+    return false
   end
 
   def destroy
@@ -15,15 +37,25 @@ class Call < ActiveRecord::Base
     return FreeswitchAPI.execute('uuid_kill', self.uuid, true);
   end
 
+  def sip_account=(sip_a)
+    @sip_account = sip_a
+  end
+
   def sip_account
+    if @sip_account
+      return @sip_account
+    end
+
     result = self.presence_id.match('^(.+)@(.+)$')
 
     if result && ! result[1].blank? and ! result[2].blank?
       domain = SipDomain.where(:host => result[2]).first
       if domain
-        return SipAccount.where(:auth_name => result[1], :sip_domain_id => domain.id).first
+        @sip_account = SipAccount.where(:auth_name => result[1], :sip_domain_id => domain.id).first
       end
     end
+
+    return @sip_account
   end
 
   def sip_account_bleg
@@ -69,4 +101,5 @@ class Call < ActiveRecord::Base
       true
     end 
   end
+
 end

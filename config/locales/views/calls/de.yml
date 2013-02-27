@@ -1,0 +1,37 @@
+de:
+  calls:
+    name: 'Anruf'
+    controller:
+      successfuly_created: 'Einen neue Anruf wurde erstellt.'
+      successfuly_updated: 'Der Anruf wurde aktualisiert.'
+      successfuly_destroyed: 'Der Anruf wurde aufgelegt.'
+    index:
+      page_title: 'Anrufe'
+      uuid: 'UUID'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Anruf auflegen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neuer Anruf'
+        create_for: 'Neuer Anruf für %{resource}'
+    show:
+      page_title: 'Anruf'
+      uuid: 'UUID'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Anruf auflegen möchten?'
+        destroy: 'Auflegen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Anrufe anzeigen'
+    new:
+      page_title: 'Neuer Anruf'
+    edit:
+      page_title: 'Anruf bearbeiten'
+    form:
+      uuid:
+        label: 'UUID'
+        hint: ''
+      destination:
+        label: 'Ziel'
+        hint: ''
+      submit: 'Absenden'

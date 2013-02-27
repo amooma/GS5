@@ -38,6 +38,8 @@ class SipAccount < ActiveRecord::Base
 
   has_many :ringtones, :as => :ringtoneable, :dependent => :destroy
 
+  has_many :calls, :finder_sql => lambda { |s| "SELECT DISTINCT detailed_calls.* FROM detailed_calls WHERE presence_id LIKE '#{self.auth_name}@%'" }
+
   # Delegations:
   #
   delegate :host, :to => :sip_domain, :allow_nil => true

@@ -95,3 +95,7 @@
     = render "softkeys/index_core", :softkeys => @sip_account.softkeys
     %br
   = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => Softkey }
+
+- if @sip_account.calls.count > 0
+  %h2= t("calls.index.page_title")
+  = render "calls/index_core", :calls => @sip_account.calls, :parent => @sip_account
