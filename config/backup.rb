@@ -32,7 +32,9 @@ Backup::Model.new(:GS5, 'GS5 backup') do
   #
   if File.exists?('/var/opt/gemeinschaft/fax')
     archive :faxes do |archive|
-      archive.add     '/var/opt/gemeinschaft/fax'
+      archive.add     '/var/opt/gemeinschaft/fax/in/*.pdf'
+      archive.add     '/var/opt/gemeinschaft/fax/out/*.pdf'
+      archive.add     '/var/opt/gemeinschaft/fax/out/*.tiff'
     end
   end
 
