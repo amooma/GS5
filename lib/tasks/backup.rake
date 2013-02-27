@@ -23,7 +23,7 @@ namespace :backup do
 
       # Restore voicemails
       #
-      # system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
+      system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
 
       # Restore the database
       #
@@ -38,6 +38,12 @@ namespace :backup do
       FileUtils.rm_rf tmp_dir
 
       system "cd /opt/gemeinschaft && rake db:migrate"
+
+      # Rebuild the thumbnails
+      #
+      FaxDocument.each do |fax_document|
+        fax_document.render_thumbnails
+      end
     end
   end
 

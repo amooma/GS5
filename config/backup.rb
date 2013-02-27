@@ -24,7 +24,7 @@ Backup::Model.new(:GS5, 'GS5 backup') do
     db.host               = "localhost"
     db.port               = 3306
     db.socket             = "/var/run/mysqld/mysqld.sock"
-    db.skip_tables        = ["backup_jobs", "restore_jobs"]
+    db.skip_tables        = ["backup_jobs", "restore_jobs", "fax_thumbnails"]
   end
 
   ##
