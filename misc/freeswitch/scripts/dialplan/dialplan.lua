@@ -251,7 +251,7 @@ function Dialplan.retrieve_caller_data(self)
 
   -- TODO: Set auth_account on transfer initiated by calling party
   if not common.str.blank(self.caller.dialed_sip_user) then
-    self.caller.auth_account = self:object_find('sipaccount', self.caller.dialed_domain, dialed_sip_user);
+    self.caller.auth_account = self:object_find('sipaccount', self.caller.dialed_domain, self.caller.dialed_sip_user);
     if self.caller.set_auth_account then
       self.caller:set_auth_account(self.caller.auth_account);
     end
