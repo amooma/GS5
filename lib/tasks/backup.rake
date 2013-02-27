@@ -23,7 +23,11 @@ namespace :backup do
 
       # Restore voicemails
       #
-      # system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
+      system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
+
+      # Delete the archive tar.gz to get more air to breathe
+      #
+      FileUtils.mkdir_p "#{restore_directory}/GS5/archives"
 
       # Restore the database
       #
@@ -38,6 +42,16 @@ namespace :backup do
       FileUtils.rm_rf tmp_dir
 
       system "cd /opt/gemeinschaft && rake db:migrate"
+
+      # Rebuild the thumbnails
+      #
+      FaxDocument.all.each do |fax_document|
+        fax_document.render_thumbnails
+      end
+
+      # Delete the restore_job. No need to waste that space.
+      #
+      restore_job.destroy
     end
   end
 

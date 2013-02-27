@@ -26,7 +26,7 @@ en:
         edit: 'Edit'
         view_all: 'View All'
     new:
-      page_title: 'New Restorejob'
+      page_title: 'Restore from a backup'
       actions:
         back_to_list: 'Back to Index'
     edit:

@@ -90,6 +90,11 @@ class Ability
           # SIM cards
           #
           cannot [:edit, :update], SimCard
+
+          # Restore is only possible on a new system.
+          #
+          cannot :manage, RestoreJob
+
         else
           # Any user can do the following stuff.
           #
