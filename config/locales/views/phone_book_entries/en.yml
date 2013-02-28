@@ -67,7 +67,7 @@ en:
       xing_account: 'Xing account'
       linkedin_account: 'LinkedIn account'
       mobileme_account: 'iCloud account'
-      manage_phone_number: 'Manage phone number.'
+      manage_phone_numbers: 'Manage phone numbers.'
       actions:
         confirm_destroy: 'Are you sure you want to delete this phone book entry?'
         destroy: 'Delete phone book entry'
