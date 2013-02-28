@@ -11,7 +11,7 @@ class GroupsController < ApplicationController
   end
 
   def new
-    @group = Group.new
+    @group.active = true;
   end
 
   def create

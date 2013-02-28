@@ -5,6 +5,9 @@ class Group < ActiveRecord::Base
   has_many :group_permissions, :dependent => :destroy
   has_many :permittances, :foreign_key => :target_group_id, :class_name => "GroupPermission", :dependent => :destroy
 
+  validates :name,
+            :presence => true
+
   def to_s
     self.name
   end
