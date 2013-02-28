@@ -1,7 +1,6 @@
 class SipAccountsController < ApplicationController
   load_resource :user
   load_resource :tenant
-  load_and_authorize_resource :sip_account, :only => [:call]
   load_and_authorize_resource :sip_account, :through => [:user, :tenant ]
  
   before_filter :set_and_authorize_parent
@@ -11,7 +10,7 @@ class SipAccountsController < ApplicationController
   end
 
   def show
-    @register_tel_protocol = "#{request.protocol}#{request.host_with_port}/sip_accounts/#{@sip_account.try(:id)}/call?url=%s"
+    @register_tel_protocol = "#{request.protocol}#{request.host_with_port}/sip_accounts/#{@sip_account.try(:id)}/calls/new?url=%s"
   end
 
   def new
@@ -74,36 +73,6 @@ class SipAccountsController < ApplicationController
     @sip_account.destroy
     m = method( :"#{@parent.class.name.underscore}_sip_accounts_url" )
     redirect_to :root, :notice => t('sip_accounts.controller.successfuly_destroyed')
-  end
-
-  def call
-    if !params[:url].blank?
-      protocol, separator, phone_number = params[:url].partition(':')
-      if ! phone_number.blank? 
-        @sip_account.call(phone_number)
-        render(
-          :status => 200,
-          :layout => false,
-          :content_type => 'text/plain',
-          :text => "<!-- CALL -->",
-        )
-        return;
-      end
-      render(
-        :status => 404,
-        :layout => false,
-        :content_type => 'text/plain',
-        :text => "<!-- Number not found -->",
-      )
-      return;
-    end
-
-    render(
-      :status => 404,
-      :layout => false,
-      :content_type => 'text/plain',
-      :text => "<!-- Call URL not found -->",
-    )
   end
 
   private

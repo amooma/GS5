@@ -131,7 +131,7 @@ class Ability
 
           # SipAccounts and Phones
           #
-          can [:read, :call], SipAccount, :sip_accountable_type => 'User', :sip_accountable_id => user.id
+          can :read, SipAccount, :sip_accountable_type => 'User', :sip_accountable_id => user.id
           user.sip_accounts.each do |sip_account|
             can :read, PhoneNumber, :id => sip_account.phone_number_ids
             can :manage, CallForward, :call_forwardable_id => sip_account.phone_number_ids
