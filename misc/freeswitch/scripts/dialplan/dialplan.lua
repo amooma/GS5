@@ -329,6 +329,7 @@ function Dialplan.destination_new(self, arg)
         destination.id      = common.str.to_i(destination.phone_number.record.phone_numberable_id);
         destination.uuid    = common.str.to_s(destination.phone_number.record.phone_numberable_uuid);
         destination.node_id = common.str.to_i(destination.phone_number.record.gs_node_id);
+        destination.account = self:object_find(destination.type, destination.id);
         if self.caller then
           require 'common.call_forwarding';
           local call_forwarding_class = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database }
@@ -417,22 +418,21 @@ function Dialplan.dial(self, destination)
   if not self.caller.clir then
     if user_id or tenant_id then
       require 'common.str'
-      local phone_book_entry = nil;
 
       if self.phonebook_number_lookup then
         require 'dialplan.phone_book'
-        phone_book_entry = dialplan.phone_book.PhoneBook:new{ log = self.log, database = self.database }:find_entry_by_number_user_tenant(self.caller.caller_phone_numbers, user_id, tenant_id);
+        self.caller.phone_book_entry = dialplan.phone_book.PhoneBook:new{ log = self.log, database = self.database }:find_entry_by_number_user_tenant(self.caller.caller_phone_numbers, user_id, tenant_id);
       end
 
-      if phone_book_entry then
-        self.log:info('PHONE_BOOK_ENTRY - phone_book=', phone_book_entry.phone_book_id, ' (', phone_book_entry.phone_book_name, '), caller_id_name: ', phone_book_entry.caller_id_name, ', ringtone: ', phone_book_entry.bellcore_id);
-        destination.caller_id_name = common.str.to_ascii(phone_book_entry.caller_id_name);
-        if tonumber(phone_book_entry.bellcore_id) then
-          self.log:debug('RINGTONE - phonebookentry, index: ', phone_book_entry.bellcore_id);
-          self.caller:export_variable('alert_info', 'http://amooma.de;info=Ringer' .. phone_book_entry.bellcore_id .. ';x-line-id=0');
+      if self.caller.phone_book_entry then
+        self.log:info('PHONE_BOOK_ENTRY - phone_book=', self.caller.phone_book_entry.phone_book_id, ' (', self.caller.phone_book_entry.phone_book_name, '), caller_id_name: ', self.caller.phone_book_entry.caller_id_name, ', ringtone: ', self.caller.phone_book_entry.bellcore_id);
+        destination.caller_id_name = common.str.to_ascii(self.caller.phone_book_entry.caller_id_name);
+        if tonumber(self.caller.phone_book_entry.bellcore_id) then
+          self.log:debug('RINGTONE - phonebookentry=', self.caller.phone_book_entry.id, ', ringtone: ', self.caller.phone_book_entry.bellcore_id);
+          self.caller:export_variable('alert_info', 'http://amooma.de;info=Ringer' .. self.caller.phone_book_entry.bellcore_id .. ';x-line-id=0');
         end
-        if phone_book_entry.image then
-          self:set_caller_picture(phone_book_entry.id, 'phonebookentry', phone_book_entry.image);
+        if self.caller.phone_book_entry.image then
+          self:set_caller_picture(self.caller.phone_book_entry.id, 'phonebookentry', self.caller.phone_book_entry.image);
         elseif self.caller.account and self.caller.account.owner then
           self:set_caller_picture(self.caller.account.owner.id, self.caller.account.owner.class);
         end
@@ -744,10 +744,17 @@ function Dialplan.switch(self, destination)
   self.caller:export_variable('alert_info', self.default_ringtone);
 
   if destination.phone_number then
-    local ringtone = destination.phone_number:ringtone();
-    if ringtone and ringtone.bellcore_id then
-      self.log:debug('RINGTONE - ', ringtone.ringtoneable_type .. ', index: ' .. ringtone.bellcore_id);
-      self.caller:export_variable('alert_info', 'http://amooma.de;info=Ringer' .. tonumber(ringtone.bellcore_id) .. ';x-line-id=0');
+    destination.ringtone = destination.phone_number:ringtone();
+  end
+
+  if not destination.ringtone and destination.account and destination.account.ringtone then
+    destination.ringtone = destination.account:ringtone();
+  end
+
+  if destination.ringtone then
+    if destination.ringtone.bellcore_id then
+      self.log:debug('DESTINATION_RINGTONE - ', destination.ringtone.ringtoneable_type .. '=', destination.ringtone.ringtoneable_id, ', ringtone: ' .. destination.ringtone.bellcore_id);
+      self.caller:export_variable('alert_info', 'http://amooma.de;info=Ringer' .. tonumber(destination.ringtone.bellcore_id) .. ';x-line-id=0');
     end
   end
 
@@ -821,10 +828,10 @@ function Dialplan.switch(self, destination)
 
       if user_id or tenant_id then
         require 'dialplan.phone_book'
-        local phone_book_entry = dialplan.phone_book.PhoneBook:new{ log = self.log, database = self.database }:find_entry_by_number_user_tenant({ destination.number }, user_id, tenant_id);
-        if phone_book_entry then
-          self.log:info('PHONE_BOOK_ENTRY - phone_book=', phone_book_entry.phone_book_id, ' (', phone_book_entry.phone_book_name, '), callee_id_name: ', common.str.to_ascii(phone_book_entry.caller_id_name));
-          destination.callee_id_name = common.str.to_ascii(phone_book_entry.caller_id_name);
+        self.caller.callee_phone_book_entry = dialplan.phone_book.PhoneBook:new{ log = self.log, database = self.database }:find_entry_by_number_user_tenant({ destination.number }, user_id, tenant_id);
+        if self.caller.callee_phone_book_entry then
+          self.log:info('PHONE_BOOK_ENTRY - phone_book=', self.caller.callee_phone_book_entry.phone_book_id, ' (', self.caller.callee_phone_book_entry.phone_book_name, '), callee_id_name: ', common.str.to_ascii(self.caller.callee_phone_book_entry.caller_id_name));
+          destination.callee_id_name = common.str.to_ascii(self.caller.callee_phone_book_entry.caller_id_name);
         end
       end 
     end
