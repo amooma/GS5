@@ -89,7 +89,6 @@ class TriggerController < ApplicationController
             rescue => e
               logger.error "PDF fax file could not be deleted: #{pdf_file} => #{e.inspect}"
             end
-            fax_document.tiff = nil
             fax_document.save
             fax_document.render_thumbnails
           else
