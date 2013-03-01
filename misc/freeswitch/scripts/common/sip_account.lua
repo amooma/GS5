@@ -16,6 +16,7 @@ function SipAccount.new(self, arg)
   self.log = arg.log;
   self.database = arg.database;
   self.record = arg.record;
+  self.domain = arg.domain;
   return object;
 end
 
@@ -139,4 +140,25 @@ function SipAccount.call_state(self)
   end)
 
   return state;
+end
+
+
+function SipAccount.call_forwarding_on(self, service, destination, destination_type, timeout, source)
+  
+  if not self.call_forwarding then
+    require 'common.call_forwarding';
+    self.call_forwarding = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database, parent = self, domain = self.domain };
+  end
+
+  return self.call_forwarding:call_forwarding_on(service, destination, destination_type, timeout, source)
+end
+
+
+function SipAccount.call_forwarding_off(self, service, source, delete)
+  if not self.call_forwarding then
+    require 'common.call_forwarding';
+    self.call_forwarding = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database, parent = self, domain = self.domain };
+  end
+
+  return self.call_forwarding:call_forwarding_off(service, source, delete)
 end
