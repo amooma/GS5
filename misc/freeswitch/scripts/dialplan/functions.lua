@@ -632,32 +632,17 @@ function Functions.clip_off(self, caller)
 end
 
 function Functions.call_forwarding_off(self, caller, call_forwarding_service, delete)
-  local defaults = {log = self.log, database = self.database, domain = caller.domain}
-
   -- Find caller's SipAccount
   local caller_sip_account = self:ensure_caller_sip_account(caller);
   if not caller_sip_account then
     return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
   end
 
-  require 'common.phone_number'
-  local phone_number_class = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database, domain = caller.domain };
-  local phone_numbers = phone_number_class:list_by_owner(caller_sip_account.record.id, 'SipAccount');
+  caller_sip_account.domain = caller_sip_account.domain or caller.domain;
 
-  local success = false;
-  for index, phone_number in pairs(phone_numbers) do
-    phone_number_object = phone_number_class:find_by_number(phone_number);
-    if phone_number_object then
-      if phone_number_object:call_forwarding_off(call_forwarding_service, nil, delete) then
-        success = true;
-      end
-    end
-  end
-
-  if not success then
-    self.log:notice("call forwarding could not be deactivated");
+  if not caller_sip_account:call_forwarding_off(call_forwarding_service, nil, delete) then
+    self.log:notice('FUNCTION_CALL_FORWARDING_OFF - call forwarding could not be deactivated');
     return { continue = false, code = 500, phrase = 'Call Forwarding could not be deactivated', no_cdr = true }
-    
   end
 
   caller:answer();
@@ -668,10 +653,8 @@ end
 
 
 function Functions.call_forwarding_on(self, caller, call_forwarding_service, destination, destination_type, timeout)
-  local defaults = {log = self.log, database = self.database, domain = caller.domain}
-
   if not call_forwarding_service then
-    self.log:notice('no call forwarding service specified');
+    self.log:notice('FUNCTION_CALL_FORWARDING_ON - no call forwarding service specified');
   end
 
   -- Find caller's SipAccount
@@ -680,24 +663,11 @@ function Functions.call_forwarding_on(self, caller, call_forwarding_service, des
     return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
   end
 
-  require "common.phone_number"
-  local phone_number_class = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database, domain = caller.domain };
-  local phone_numbers = phone_number_class:list_by_owner(caller_sip_account.record.id, 'SipAccount');
+  caller_sip_account.domain = caller_sip_account.domain or caller.domain;
 
-  local success = false;
-  for index, phone_number in pairs(phone_numbers) do
-    phone_number_object = phone_number_class:find_by_number(phone_number);
-    if phone_number_object then
-      if phone_number_object:call_forwarding_on(call_forwarding_service, destination, timeout) then
-        success = true;
-      end
-    end
-  end
-
-  if not success then
-    self.log:notice("call forwarding could not be activated");
+  if not caller_sip_account:call_forwarding_on(call_forwarding_service, destination, destination_type, timeout) then
+    self.log:notice('FUNCTION_CALL_FORWARDING_ON - call forwarding could not be activated');
     return { continue = false, code = 500, phrase = 'Call Forwarding could not be activated', no_cdr = true }
-    
   end
 
   caller:answer();
