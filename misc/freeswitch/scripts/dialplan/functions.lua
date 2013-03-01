@@ -37,6 +37,8 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:transfer_all(caller, parameters[3]);
   elseif fid == "ia" then
     result = self:intercept_any_number(caller, parameters[3]);
+  elseif fid == "ig" then
+    result = self:group_pickup(caller, parameters[3]);
   elseif fid == "anc" then
     result = self:account_node_change(caller);
   elseif fid == "li" then
@@ -168,6 +170,18 @@ function Functions.intercept_any_number(self, caller, destination_number)
 
   caller:set_variable('gs_pickup_group_pick', 's' .. phone_number.record.phone_numberable_id);
   caller:execute('pickup', 's' .. phone_number.record.phone_numberable_id);
+
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
+
+function Functions.group_pickup(self, caller, group_id)
+  if not tonumber(group_id) then
+    return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
+  end
+  
+  caller:set_variable('gs_pickup_group_pick', 'g' .. group_id);
+  caller:execute('pickup', 'g' .. group_id);
 
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
