@@ -129,17 +129,13 @@ function SipAccount.send_text(self, text)
 end
 
 
-function SipAccount.call_state(self)  
-  local state = nil
-  local sql_query = "SELECT `callstate` FROM `channels` \
-    WHERE `name` LIKE (\"\%" .. self.record.auth_name .. "@%\") \
-    OR `name` LIKE (\"\%" .. self.record.auth_name .. "@%\") LIMIT 1";
+function SipAccount.call_state(self)
+  local sql_query = 'SELECT `callstate` FROM `detailed_calls` \
+    WHERE `presence_id` LIKE "' .. self.record.auth_name .. '@%" \
+    OR `b_presence_id` LIKE "' .. self.record.auth_name .. '@%" \
+    LIMIT 1';
 
-  self.database:query(sql_query, function(channel_entry)
-    state = channel_entry.callstate;
-  end)
-
-  return state;
+  return self.database:query_return_value(sql_query);
 end
 
 
