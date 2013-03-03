@@ -2,11 +2,8 @@
   %tr
     %th
     %th= t('intruders.index.contact_ip')
-    %th= t('intruders.index.contact_port')
     %th= t('intruders.index.points')
-    %th= t('intruders.index.bans')
     %th= t('intruders.index.ban_last')
-    %th= t('intruders.index.ban_end')
     %th= t('intruders.index.contact_count')
     %th= t('intruders.index.contact_last')
     %th= t('intruders.index.contacts_per_second')
@@ -19,21 +16,16 @@
       %td
         - if intruder.list_type == 'whitelist'
           %i.icon-ok
-        - elsif intruder.bans > 0
+        - elsif intruder.bans.to_i > 0
           %i.icon-fire
-        - elsif intruder.points > 0
+        - elsif intruder.points.to_i > 0
           %i.icon-warning-sign
 
       %td= intruder.contact_ip
-      %td= intruder.contact_port
       %td= intruder.points
-      %td= intruder.bans
       %td 
         - if intruder.ban_last
           = l intruder.ban_last, :format => :short
-      %td
-        - if intruder.ban_end
-          = l intruder.ban_end, :format => :short
 
       %td= intruder.contact_count
       %td
