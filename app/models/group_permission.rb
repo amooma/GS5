@@ -1,7 +1,7 @@
 class GroupPermission < ActiveRecord::Base
   attr_accessible :group_id, :permission, :target_group_id
 
-  PERMISSION_TYPES = ['pickup']
+  PERMISSION_TYPES = ['pickup', 'presence']
   
   belongs_to :group
   belongs_to :target_group, :class_name => "Group"
