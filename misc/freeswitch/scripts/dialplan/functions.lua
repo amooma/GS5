@@ -179,7 +179,20 @@ function Functions.group_pickup(self, caller, group_id)
   if not tonumber(group_id) then
     return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
   end
-  
+
+  require 'common.str';
+  require 'common.group';
+  local group_class = common.group.Group:new{ log = self.log, database = self.database };
+  local group_ids = group_class:combine(common.str.try(caller, 'auth_account.group_ids'), common.str.try(caller, 'auth_account.owner.group_ids'));
+  local target_groups = group_class:permission_targets(group_ids, 'pickup');
+
+  if not target_groups[group_id] then
+    self.log:notice('FUNCTION_GROUP_PICKUP - group=', group_id, ' not found or insufficient permissions');
+    return { continue = false, code = 401, phrase = '"Insufficient permissions', no_cdr = true };
+  end
+
+  self.log:notice('FUNCTION_GROUP_PICKUP - group=', group_id, '|', target_groups[group_id]);
+
   caller:set_variable('gs_pickup_group_pick', 'g' .. group_id);
   caller:execute('pickup', 'g' .. group_id);
 
