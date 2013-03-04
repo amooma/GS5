@@ -144,119 +144,24 @@ function Dialplan.auth_gateway(self)
 end
 
 
-function Dialplan.object_find(self, class, identifier, auth_name)
-  require 'common.str'
-  class = common.str.downcase(class);
-
-  require 'common.group';
-  local group_class = common.group.Group:new{ log = self.log, database = self.database };
-
-  if class == 'user' then
-    require 'dialplan.user'
-    local user = nil;
-    if type(identifier) == 'number' then
-      user = dialplan.user.User:new{ log = self.log, database = self.database }:find_by_id(identifier);
-    else
-      user = dialplan.user.User:new{ log = self.log, database = self.database }:find_by_uuid(identifier);
-    end
-
-    if user then
-      user.user_groups = user:list_groups();
-      user.groups, user.group_ids = group_class:name_id_by_member(user.id, user.class);
-    end
-
-    return user;
-  elseif class == 'tenant' then
-    require 'dialplan.tenant'
-    local tenant = nil;
-    if type(identifier) == 'number' then
-      tenant = dialplan.tenant.Tenant:new{ log = self.log, database = self.database }:find_by_id(identifier);
-    else
-      tenant = dialplan.tenant.Tenant:new{ log = self.log, database = self.database }:find_by_uuid(identifier);
-    end
-
-    if tenant then
-      tenant.groups, tenant.group_ids = group_class:name_id_by_member(tenant.id, tenant.class);
-    end
-
-    return tenant;  
-  elseif class == 'sipaccount' then
-    require 'common.sip_account'
-    local sip_account = nil;
-    if auth_name then
-      sip_account = common.sip_account.SipAccount:new{ log = self.log, database = self.database }:find_by_auth_name(auth_name, identifier);
-    elseif type(identifier) == 'number' then
-      sip_account = common.sip_account.SipAccount:new{ log = self.log, database = self.database }:find_by_id(identifier);
-    else
-      sip_account = common.sip_account.SipAccount:new{ log = self.log, database = self.database }:find_by_uuid(identifier);
-    end
-    if sip_account then
-      sip_account.owner = self:object_find(sip_account.record.sip_accountable_type, tonumber(sip_account.record.sip_accountable_id));
-      sip_account.groups, sip_account.group_ids = group_class:name_id_by_member(sip_account.id, sip_account.class);
-    end
-    return sip_account;
-  elseif class == 'huntgroup' then
-    require 'dialplan.hunt_group'
-
-    local hunt_group = nil;
-    if type(identifier) == 'number' then
-      hunt_group = dialplan.hunt_group.HuntGroup:new{ log = self.log, database = self.database }:find_by_id(identifier);
-    else
-      hunt_group = dialplan.hunt_group.HuntGroup:new{ log = self.log, database = self.database }:find_by_uuid(identifier);
-    end
-
-    if hunt_group then
-      hunt_group.owner = self:object_find('tenant', tonumber(hunt_group.record.tenant_id));
-      hunt_group.groups, hunt_group.group_ids = group_class:name_id_by_member(hunt_group.id, hunt_group.class);
-    end
-
-    return hunt_group;
-  elseif class == 'automaticcalldistributor' then
-    require 'dialplan.acd'
-
-    local acd = nil;
-    if type(identifier) == 'number' then
-      acd = dialplan.acd.AutomaticCallDistributor:new{ log = self.log, database = self.database, domain = self.domain }:find_by_id(identifier);
-    else
-      acd = dialplan.acd.AutomaticCallDistributor:new{ log = self.log, database = self.database, domain = self.domain }:find_by_uuid(identifier);
-    end
-
-    if acd then
-      acd.owner = self:object_find(acd.record.automatic_call_distributorable_type, tonumber(acd.record.automatic_call_distributorable_id));
-      acd.groups, acd.group_ids = group_class:name_id_by_member(acd.id, acd.class);
-    end
-
-    return acd;
-  elseif class == 'faxaccount' then
-    require 'dialplan.fax'
-    local fax_account = nil;
-    if type(identifier) == 'number' then
-      fax_account = dialplan.fax.Fax:new{ log = self.log, database = self.database }:find_by_id(identifier);
-    else
-      fax_account = dialplan.fax.Fax:new{ log = self.log, database = self.database }:find_by_uuid(identifier);
-    end
-    if fax_account then
-      fax_account.owner = self:object_find(fax_account.record.fax_accountable_type, tonumber(fax_account.record.fax_accountable_id));
-      fax_account.groups, fax_account.group_ids = group_class:name_id_by_member(fax_account.id, fax_account.class);
-    end
-
-    return fax_account;
-  end
+function Dialplan.object_find(self, arguments)
+  require 'common.object';
+  return common.object.Object:new{ log = self.log, database = self.database}:find(arguments);
 end
 
 
 function Dialplan.retrieve_caller_data(self)
   require 'common.str'
-  self.caller.caller_phone_numbers_hash = {}
+  self.caller.caller_phone_numbers_hash = {};
 
   -- TODO: Set auth_account on transfer initiated by calling party
   if not common.str.blank(self.caller.dialed_sip_user) then
-    self.caller.auth_account = self:object_find('sipaccount', self.caller.dialed_domain, self.caller.dialed_sip_user);
+    self.caller.auth_account = self:object_find{class = 'sipaccount', domain = self.caller.dialed_domain, auth_account = self.caller.dialed_sip_user};
     if self.caller.set_auth_account then
       self.caller:set_auth_account(self.caller.auth_account);
     end
   elseif not common.str.blank(self.caller.auth_account_type) and not common.str.blank(self.caller.auth_account_uuid) then
-    self.caller.auth_account = self:object_find(self.caller.auth_account_type, self.caller.auth_account_uuid);
+    self.caller.auth_account = self:object_find{class = self.caller.auth_account_type, uuid = self.caller.auth_account_uuid};
     if self.caller.set_auth_account then
       self.caller:set_auth_account(self.caller.auth_account);
     end
@@ -274,7 +179,7 @@ function Dialplan.retrieve_caller_data(self)
   end
 
   if not common.str.blank(self.caller.account_type) and not common.str.blank(self.caller.account_uuid) then
-    self.caller.account = self:object_find(self.caller.account_type, self.caller.account_uuid);
+    self.caller.account = self:object_find{class = self.caller.account_type, uuid = self.caller.account_uuid};
     if self.caller.account then
       require 'common.phone_number'
       self.caller.caller_phone_numbers = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:list_by_owner(self.caller.account.id, self.caller.account.class);
@@ -329,7 +234,7 @@ function Dialplan.destination_new(self, arg)
         destination.id      = common.str.to_i(destination.phone_number.record.phone_numberable_id);
         destination.uuid    = common.str.to_s(destination.phone_number.record.phone_numberable_uuid);
         destination.node_id = common.str.to_i(destination.phone_number.record.gs_node_id);
-        destination.account = self:object_find(destination.type, destination.id);
+        destination.account = self:object_find{ class = destination.type, id = destination.id};
         if self.caller then
           require 'common.call_forwarding';
           local call_forwarding_class = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database }
@@ -389,7 +294,7 @@ function Dialplan.dial(self, destination)
   if destination.node_local and destination.type == 'sipaccount' then
     destination.pickup_groups = {};
 
-    destination.account = self:object_find(destination.type, destination.id);
+    destination.account = self:object_find{class = destination.type, id = destination.id};
     if destination.account then
       if destination.account.class == 'sipaccount' then
         destination.callee_id_name = destination.account.record.caller_name;
@@ -408,7 +313,7 @@ function Dialplan.dial(self, destination)
       if destination.account.owner.class == 'user' then
         user_id = destination.account.owner.id;
         tenant_id = tonumber(destination.account.owner.record.current_tenant_id);
-        local user = self:object_find(destination.account.owner.class, tonumber(user_id));
+        local user = self:object_find{class = destination.account.owner.class, id = tonumber(user_id)};
       elseif destination.account.owner.class == 'tenant' then
         tenant_id = destination.account.owner.id;
       end
@@ -483,7 +388,7 @@ end
 
 
 function Dialplan.huntgroup(self, destination)
-  local hunt_group = self:object_find('huntgroup', tonumber(destination.id));
+  local hunt_group = self:object_find{class = 'huntgroup', id = tonumber(destination.id)};
 
   if not hunt_group then
     self.log:error('DIALPLAN_HUNTGROUP - huntgroup not found');
@@ -514,7 +419,7 @@ end
 
 
 function Dialplan.acd(self, destination)
-  local acd = self:object_find('automaticcalldistributor', tonumber(destination.id));
+  local acd = self:object_find{class = 'automaticcalldistributor', id = tonumber(destination.id)};
   
   if not acd then
     self.log:error('DIALPLAN_ACD - acd not found');
@@ -623,7 +528,7 @@ function Dialplan.callthrough(self, destination)
   end
 
   if type(authorization) == 'table' and tonumber(authorization.sip_account_id) and tonumber(authorization.sip_account_id) > 0 then
-    local auth_account                  = self:object_find('sipaccount', tonumber(authorization.sip_account_id));
+    local auth_account                  = self:object_find{class = 'sipaccount', id = tonumber(authorization.sip_account_id)};
     self.caller.forwarding_number       = destination.number;
     self.caller.forwarding_service      = 'callthrough';
     self.caller:set_variable('gs_forwarding_service', self.caller.forwarding_service);
@@ -699,7 +604,7 @@ end
 
 function Dialplan.dialplanfunction(self, destination)
   require 'dialplan.functions'
-  return dialplan.functions.Functions:new{ log = self.log, database = self.database, domain = self.domain }:dialplan_function(self.caller, destination.number);
+  return dialplan.functions.Functions:new{ log = self.log, database = self.database, domain = self.domain, parent = self }:dialplan_function(self.caller, destination.number);
 end
 
 
@@ -1012,7 +917,7 @@ function Dialplan.run(self, destination)
       ', destination: ', result.call_forwarding.type, '=', result.call_forwarding.id, 
       ', number: ', result.call_forwarding.number);
 
-      local auth_account                  = self:object_find(destination.type, destination.id);
+      local auth_account                  = self:object_find{class = destination.type, id = destination.id};
       self.caller.forwarding_number       = destination.number;
       self.caller.forwarding_service      = result.call_forwarding.service;
       self.caller:set_variable('gs_forwarding_service', self.caller.forwarding_service);
