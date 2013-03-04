@@ -34,12 +34,11 @@
           %td
             = @phone.nightly_reboot == true ? t('simple_form.yes') : t('simple_form.no')          
 
-      - if GsParameter.get('PROVISIONING_KEY_LENGTH') == 0
-        %tr
-          %td
-            %strong= t('phones.show.provisioning_key_active') + ":"
-          %td
-            = @phone.provisioning_key_active == true ? t('simple_form.yes') : t('simple_form.no')
+      %tr
+        %td
+          %strong= t('phones.show.provisioning_key_active') + ":"
+        %td
+          = @phone.provisioning_key_active == true ? t('simple_form.yes') : t('simple_form.no')
 
       %tr{:class => (@phone.ip_address.blank? ? 'warning' : '')}
         %td
