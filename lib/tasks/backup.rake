@@ -4,8 +4,8 @@ namespace :backup do
     # This would be the daily backup.
   end
 
-  desc "Do a backup. Now!"
-  task :now => :environment do
+  desc "Do a backup."
+  task :queue_a_new_backup => :environment do
     backup_job = BackupJob.create
     echo "BackupJob ID: #{backup_job.id}"
   end
