@@ -109,3 +109,24 @@ function Group.permission_targets(self, group_ids, permission)
 
   return groups;
 end
+
+
+function Group.combine(self, ...)
+  local groups = {};
+  local group_sets = {...};
+  for set_index=1, #group_sets do
+    if type(group_sets[set_index]) == 'table' then
+      local group_ids = group_sets[set_index];
+      for index=1, #group_ids do
+        groups[tonumber(group_ids[index])] = true;
+      end
+    end
+  end
+
+  local group_ids = {};
+  for group_id, status in pairs(groups) do
+    table.insert(group_ids, group_id);
+  end
+
+  return group_ids;
+end
