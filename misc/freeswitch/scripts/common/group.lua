@@ -89,7 +89,7 @@ end
 
 
 function Group.permission_targets(self, group_ids, permission)
-  if not group_ids or not permission then
+  if not group_ids or #group_ids == 0 or not permission then
     return {};
   end
 
