@@ -162,7 +162,7 @@ function Dialplan.object_find(self, class, identifier, auth_name)
 
     if user then
       user.user_groups = user:list_groups();
-      user.groups = group_class:name_id_by_member(user.id, user.class);
+      user.groups, user.group_ids = group_class:name_id_by_member(user.id, user.class);
     end
 
     return user;
@@ -176,7 +176,7 @@ function Dialplan.object_find(self, class, identifier, auth_name)
     end
 
     if tenant then
-      tenant.groups = group_class:name_id_by_member(tenant.id, tenant.class);
+      tenant.groups, tenant.group_ids = group_class:name_id_by_member(tenant.id, tenant.class);
     end
 
     return tenant;  
@@ -192,7 +192,7 @@ function Dialplan.object_find(self, class, identifier, auth_name)
     end
     if sip_account then
       sip_account.owner = self:object_find(sip_account.record.sip_accountable_type, tonumber(sip_account.record.sip_accountable_id));
-      sip_account.groups = group_class:name_id_by_member(sip_account.id, sip_account.class);
+      sip_account.groups, sip_account.group_ids = group_class:name_id_by_member(sip_account.id, sip_account.class);
     end
     return sip_account;
   elseif class == 'huntgroup' then
@@ -207,7 +207,7 @@ function Dialplan.object_find(self, class, identifier, auth_name)
 
     if hunt_group then
       hunt_group.owner = self:object_find('tenant', tonumber(hunt_group.record.tenant_id));
-      hunt_group.groups = group_class:name_id_by_member(hunt_group.id, hunt_group.class);
+      hunt_group.groups, hunt_group.group_ids = group_class:name_id_by_member(hunt_group.id, hunt_group.class);
     end
 
     return hunt_group;
@@ -223,7 +223,7 @@ function Dialplan.object_find(self, class, identifier, auth_name)
 
     if acd then
       acd.owner = self:object_find(acd.record.automatic_call_distributorable_type, tonumber(acd.record.automatic_call_distributorable_id));
-      acd.groups = group_class:name_id_by_member(acd.id, acd.class);
+      acd.groups, acd.group_ids = group_class:name_id_by_member(acd.id, acd.class);
     end
 
     return acd;
@@ -237,7 +237,7 @@ function Dialplan.object_find(self, class, identifier, auth_name)
     end
     if fax_account then
       fax_account.owner = self:object_find(fax_account.record.fax_accountable_type, tonumber(fax_account.record.fax_accountable_id));
-      fax_account.groups = group_class:name_id_by_member(fax_account.id, fax_account.class);
+      fax_account.groups, fax_account.group_ids = group_class:name_id_by_member(fax_account.id, fax_account.class);
     end
 
     return fax_account;
