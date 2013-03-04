@@ -86,3 +86,26 @@ function Group.name_id_by_member(self, member_id, member_type)
 
   return group_names, group_ids;
 end
+
+function Group.permission_targets(self, group_ids, permission)
+  if not group_ids or not permission then
+    return {};
+  end
+
+  local sql_query = 'SELECT DISTINCT `b`.`id`, `b`.`name` \
+    FROM `group_permissions` `a` \
+    JOIN `groups` `b` ON `b`.`id` = `a`.`target_group_id` \
+    WHERE `a`.`permission` = ' .. self.database:escape(permission, '"') .. ' \
+    AND `a`.`group_id` IN (' .. table.concat(group_ids, ',') .. ') \
+    AND `b`.`active` IS TRUE \
+    GROUP BY `a`.`target_group_id` LIMIT ' .. MAX_GROUP_MEMBERSHIPS;
+
+
+  local groups = {};
+
+  self.database:query(sql_query, function(account_entry)
+    groups[account_entry.id] = account_entry.name;
+  end);
+
+  return groups;
+end
