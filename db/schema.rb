@@ -150,15 +150,14 @@ ActiveRecord::Schema.define(:version => 20130225160423) do
     t.boolean  "active"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
-    t.integer  "phone_number_id"
     t.integer  "depth"
     t.string   "call_forwardable_type"
     t.integer  "call_forwardable_id"
     t.integer  "position"
     t.string   "uuid"
+    t.string   "destinationable_type"
+    t.integer  "destinationable_id"
   end
-
-  add_index "call_forwards", ["phone_number_id"], :name => "index_call_forwards_on_phone_number_id"
 
   create_table "call_histories", :force => true do |t|
     t.string   "call_historyable_type"
