@@ -152,6 +152,10 @@ end
 
 
 function Group.intersection(self, set_one, set_two)
+  if not set_one or not set_two then
+    return {};
+  end
+
   local basic_set = {};
   for index=1, #set_one do
     basic_set[set_one[index]] = true;
