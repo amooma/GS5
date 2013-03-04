@@ -10,6 +10,12 @@ namespace :backup do
     echo "BackupJob ID: #{backup_job.id}"
   end
 
+  desc "Do a backup. Now!"
+  task :force_now => :environment do
+    backup_job = BackupJob.create(:state => 'force now')
+    echo "BackupJob ID: #{backup_job.id}"
+  end
+
   desc "Restore the system"
   task :restore => :environment do
     # This task takes the first RestoreJob to restore the system.
