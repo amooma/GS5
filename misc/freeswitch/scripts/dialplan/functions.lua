@@ -161,12 +161,27 @@ function Functions.intercept_any_number(self, caller, destination_number)
     return { continue = false, code = 404, phrase = 'Number not found', no_cdr = true };
   end
 
-  if not phone_number.record.phone_numberable_type:lower() == 'sipaccount' or not tonumber(phone_number.record.phone_numberable_id) then
-    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - destination: ',  phone_number.record.phone_numberable_type:lower(), '=', phone_number.record.phone_numberable_id, ', number: ', destination_number);
-    return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
+  require 'common.object';
+  local phone_numberable = common.object.Object:new{ log = self.log, database = self.database}:find{class = phone_number.record.phone_numberable_type, id = phone_number.record.phone_numberable_id};
+
+  if not phone_numberable then
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - numberable not found: ', dphone_number.record.phone_numberable_type, '=', phone_number.record.phone_numberable_id);
+    return { continue = false, code = 404, phrase = 'Destination not found', no_cdr = true };
   end
 
-  self.log:info('FUNCTION_INTERCEPT_ANY_NUMBER intercepting call - to: ', phone_number.record.phone_numberable_type:lower(), '=', phone_number.record.phone_numberable_id, ', number: ', destination_number);
+  require 'common.str';
+  require 'common.group';
+  local group_class = common.group.Group:new{ log = self.log, database = self.database };
+  local group_ids = group_class:union(common.str.try(caller, 'auth_account.group_ids'), common.str.try(caller, 'auth_account.owner.group_ids'));
+  local target_groups, target_group_ids = group_class:permission_targets(group_ids, 'pickup');
+  local destination_group_ids = group_class:union(common.str.try(phone_numberable, 'group_ids'), common.str.try(phone_numberable, 'owner.group_ids'));
+
+  if #group_class:intersection(destination_group_ids, target_group_ids) == 0 then
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - Groups not found or insufficient permissions');
+    return { continue = false, code = 402, phrase = '"Insufficient permissions', no_cdr = true };
+  end
+
+  self.log:info('FUNCTION_INTERCEPT_ANY_NUMBER intercepting call - to: ', phone_numberable.class, '=',phone_numberable.id, '|', destination_number);
 
   caller:set_variable('gs_pickup_group_pick', 's' .. phone_number.record.phone_numberable_id);
   caller:execute('pickup', 's' .. phone_number.record.phone_numberable_id);
@@ -183,15 +198,15 @@ function Functions.group_pickup(self, caller, group_id)
   require 'common.str';
   require 'common.group';
   local group_class = common.group.Group:new{ log = self.log, database = self.database };
-  local group_ids = group_class:combine(common.str.try(caller, 'auth_account.group_ids'), common.str.try(caller, 'auth_account.owner.group_ids'));
-  local target_groups = group_class:permission_targets(group_ids, 'pickup');
+  local group_ids = group_class:union(common.str.try(caller, 'auth_account.group_ids'), common.str.try(caller, 'auth_account.owner.group_ids'));
+  local target_group = group_class:is_target(group_id, 'pickup');
 
-  if not target_groups[group_id] then
+  if not target_group then
     self.log:notice('FUNCTION_GROUP_PICKUP - group=', group_id, ' not found or insufficient permissions');
-    return { continue = false, code = 401, phrase = '"Insufficient permissions', no_cdr = true };
+    return { continue = false, code = 402, phrase = '"Insufficient permissions', no_cdr = true };
   end
 
-  self.log:notice('FUNCTION_GROUP_PICKUP - group=', group_id, '|', target_groups[group_id]);
+  self.log:notice('FUNCTION_GROUP_PICKUP - group=', group_id, '|', target_group);
 
   caller:set_variable('gs_pickup_group_pick', 'g' .. group_id);
   caller:execute('pickup', 'g' .. group_id);
