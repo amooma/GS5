@@ -87,6 +87,7 @@ function Group.name_id_by_member(self, member_id, member_type)
   return group_names, group_ids;
 end
 
+
 function Group.permission_targets(self, group_ids, permission)
   if not group_ids or not permission then
     return {};
@@ -100,18 +101,36 @@ function Group.permission_targets(self, group_ids, permission)
     AND `b`.`active` IS TRUE \
     GROUP BY `a`.`target_group_id` LIMIT ' .. MAX_GROUP_MEMBERSHIPS;
 
-
-  local groups = {};
+  local group_names = {};
+  local group_ids = {};
 
   self.database:query(sql_query, function(account_entry)
-    groups[account_entry.id] = account_entry.name;
+    table.insert(group_names, account_entry.name);
+    table.insert(group_ids, tonumber(account_entry.id));
   end);
 
-  return groups;
+  return group_names, group_ids;
 end
 
 
-function Group.combine(self, ...)
+function Group.is_target(self, group_id, permission)
+  if not group_id or not permission then
+    return nil;
+  end
+
+  local sql_query = 'SELECT `b`.`name` \
+    FROM `group_permissions` `a` \
+    JOIN `groups` `b` ON `b`.`id` = `a`.`target_group_id` \
+    WHERE `a`.`permission` = ' .. self.database:escape(permission, '"') .. ' \
+    AND `a`.`group_id` = ' .. tonumber(group_id) .. ' \
+    AND `b`.`active` IS TRUE \
+    LIMIT 1';
+
+  return self.database:query_return_value(sql_query);
+end
+
+
+function Group.union(self, ...)
   local groups = {};
   local group_sets = {...};
   for set_index=1, #group_sets do
@@ -129,4 +148,21 @@ function Group.combine(self, ...)
   end
 
   return group_ids;
+end
+
+
+function Group.intersection(self, set_one, set_two)
+  local basic_set = {};
+  for index=1, #set_one do
+    basic_set[set_one[index]] = true;
+  end
+
+  local final_set = {};
+  for index=1, #set_two do
+    if basic_set[set_two[index]] then
+      table.insert(final_set, set_two[index]);
+    end
+  end
+
+  return final_set;
 end
