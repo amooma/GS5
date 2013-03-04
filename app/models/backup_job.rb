@@ -12,12 +12,17 @@ class BackupJob < ActiveRecord::Base
 
   private
   def set_state_to_queued
-    self.state = 'queued'
+    self.state ||= 'queued'
     self.started_at = Time.now
   end
 
   def initiate_backup
-    self.delay.make_a_backup
+    if self.state == 'force now'
+      self.state = 'queued'
+      self.make_a_backup
+    else
+      self.delay.make_a_backup
+    end
   end
 
   def make_a_backup
