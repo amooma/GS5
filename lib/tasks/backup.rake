@@ -4,6 +4,12 @@ namespace :backup do
     # This would be the daily backup.
   end
 
+  desc "Do a backup. Now!"
+  task :now => :environment do
+    backup_job = BackupJob.create
+    echo "BackupJob ID: #{backup_job.id}"
+  end
+
   desc "Restore the system"
   task :restore => :environment do
     # This task takes the first RestoreJob to restore the system.
