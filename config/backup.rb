@@ -46,6 +46,15 @@ Backup::Model.new(:GS5, 'GS5 backup') do
   end
 
   ##
+  # Voicemails
+  #
+  if File.exists?('/var/opt/gemeinschaft/freeswitch/recordings')
+    archive :recordings do |archive|
+      archive.add     '/var/opt/gemeinschaft/freeswitch/recordings'
+    end
+  end
+
+  ##
   # Avatars
   #
   if File.exists?('/opt/gemeinschaft/public/uploads/user/image')

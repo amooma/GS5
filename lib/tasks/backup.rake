@@ -41,6 +41,12 @@ namespace :backup do
         system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
       end
 
+      # Restore recordings
+      #
+      if File.exists?("#{restore_directory}/GS5/archives/recordings.tar.gz")
+        system "cd / && sudo /bin/tar xzfP #{restore_directory}/GS5/archives/recordings.tar.gz"
+      end
+
       # Restore avatars
       #
       if File.exists?("#{restore_directory}/GS5/archives/avatars.tar.gz")
