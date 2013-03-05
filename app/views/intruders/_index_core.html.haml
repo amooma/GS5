@@ -9,16 +9,25 @@
     %th= t('intruders.index.contacts_per_second')
     %th= t('intruders.index.user_agent')
     %th= t('intruders.index.to_user')
+    %th
 
   
   - for intruder in intruders
-    %tr
+    - if intruder.list_type == 'whitelist'
+      - entry_class = 'success'
+    - elsif intruder.bans.to_i > 0
+      - entry_class = 'error'
+    - elsif intruder.points.to_i > 0
+      - entry_class = 'warn'
+    - else
+      - entry_class = ''
+    %tr{:class => "table #{entry_class}"}
       %td
-        - if intruder.list_type == 'whitelist'
+        - if entry_class == 'success'
           %i.icon-ok
-        - elsif intruder.bans.to_i > 0
+        - elsif entry_class == 'error'
           %i.icon-fire
-        - elsif intruder.points.to_i > 0
+        - elsif entry_class == 'warn'
           %i.icon-warning-sign
 
       %td= intruder.contact_ip
