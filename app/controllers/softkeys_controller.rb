@@ -2,7 +2,7 @@ class SoftkeysController < ApplicationController
   load_and_authorize_resource :sip_account, :except => [:sort]
   load_and_authorize_resource :softkey, :through => [:sip_account], :except => [:sort]
 
-  before_filter :set_available_call_forwards_and_softkey_functions, :only => [ :new, :edit, :update ]
+  before_filter :set_available_softkey_functions, :only => [ :new, :edit, :update ]
   before_filter :spread_breadcrumbs, :except => [:sort]
   
   def index
@@ -54,12 +54,8 @@ class SoftkeysController < ApplicationController
     render nothing: true
   end
 
-
   private
-
-  def set_available_call_forwards_and_softkey_functions
-    @available_call_forwards = @softkey.possible_blf_call_forwards
-
+  def set_available_softkey_functions
     @softkey_functions = []
     SoftkeyFunction.accessible_by(current_ability, :read).each do |softkey_function|
       if GuiFunction.display?("softkey_function_#{softkey_function.name.downcase}_field_in_softkey_form", current_user)
