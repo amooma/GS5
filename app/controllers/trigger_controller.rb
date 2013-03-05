@@ -84,6 +84,7 @@ class TriggerController < ApplicationController
           fax_document.state = 'successful'
           
           if fax_document.save
+            Notifications.new_fax(fax_document).deliver
             begin
               File.delete(pdf_file)
             rescue => e
