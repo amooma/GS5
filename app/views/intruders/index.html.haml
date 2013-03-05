@@ -1,6 +1,9 @@
 - content_for :title, t("intruders.index.page_title")
 
-- if @intruders && @intruders.count > 0
-  = render "index_core", :intruders => @intruders
+- if @intruders && @intruders.count > 0 && @list_types && @list_types.count > 0
+  - @list_types.each do |list_type|
+    %h3= list_type
+    %table.table.table-striped
+      = render "index_core", :intruders => @intruders.where(:list_type => list_type)
 
 = render :partial => 'shared/create_link', :locals => {:child_class => Intruder}

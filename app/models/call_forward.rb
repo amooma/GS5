@@ -177,7 +177,7 @@ class CallForward < ActiveRecord::Base
   end
 
   def deactivate_concurring_entries
-    CallForward.where(:call_forwardable_id => self.call_forwardable_id, :call_forwardable_type => self.call_forwardable_type, :call_forward_case_id => self.call_forward_case_id, :active => true).each do |call_forwarding_entry|
+    CallForward.where(:call_forwardable_id => self.call_forwardable_id, :call_forwardable_type => self.call_forwardable_type, :call_forward_case_id => self.call_forward_case_id, :source => self.source, :active => true).each do |call_forwarding_entry|
       if call_forwarding_entry.id != self.id
         call_forwarding_entry.update_attributes(:active => false)
       end

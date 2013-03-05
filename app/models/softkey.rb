@@ -22,29 +22,24 @@ class Softkey < ActiveRecord::Base
   after_save :resync_phone
   after_destroy :resync_phone
 
-  def possible_blf_call_forwards
-    if self.sip_account.phone_numbers.count == 0
-      nil
-    else
-      if self.sip_account.callforward_rules_act_per_sip_account == true
-        # We pick one phone_number and display the rules of it.
-        #
-        phone_number = self.sip_account.phone_numbers.order(:number).first
-        call_forwards = self.sip_account.call_forwards.where(:call_forwardable_id => phone_number.id, :call_forwardable_type => 'PhoneNumber')
-      else
-        call_forwards = self.sip_account.call_forwards
-      end
-      
-      phone_numbers_ids = self.sip_account.phone_number_ids
-      phone_numbers = PhoneNumber.where(:id => phone_numbers_ids).pluck(:number)
-
-      hunt_group_ids = PhoneNumber.where(:phone_numberable_type => 'HuntGroupMember', :number => phone_numbers).
-                                   map{ |phone_number| phone_number.phone_numberable.hunt_group.id }.
-                                   uniq
-
-      call_forwards + CallForward.where(:destinationable_type => 'HuntGroup', :destinationable_id => hunt_group_ids, :call_forwardable_type => 'PhoneNumber').
-                                  where('call_forwardable_id NOT IN (?)', phone_numbers_ids)
+  def possible_call_forwards
+    call_forwards = self.sip_account.call_forwards
+    self.sip_account.phone_numbers.each do |phone_number|
+      call_forwards = call_forwards + phone_number.call_forwards
     end
+
+
+    phone_numbers_ids = self.sip_account.phone_number_ids
+    phone_numbers = PhoneNumber.where(:id => phone_numbers_ids).pluck(:number)
+
+    hunt_group_ids = PhoneNumber.where(:phone_numberable_type => 'HuntGroupMember', :number => phone_numbers).
+                                 map{ |phone_number| phone_number.phone_numberable.hunt_group.id }.
+                                 uniq
+
+    call_forwards = call_forwards + CallForward.where(:destinationable_type => 'HuntGroup', :destinationable_id => hunt_group_ids, :call_forwardable_type => 'PhoneNumber').
+                                where('call_forwardable_id NOT IN (?)', phone_numbers_ids)
+
+    return call_forwards
   end
 
   def to_s

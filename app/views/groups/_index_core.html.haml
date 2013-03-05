@@ -2,6 +2,8 @@
   %tr
     %th
     %th= t('groups.index.name')
+    %th= t('groups.index.permissions')
+    %th= t('groups.index.memberships')
     %th= t('groups.index.comment')
 
   
@@ -13,5 +15,11 @@
         - else
           %i.icon-ban-circle
       %td= group.name
+      %td
+        - if group.group_permissions.count > 0 && group.group_permissions.count < 4
+          = group.group_permissions.pluck(:permission).uniq.join(' ')
+        - else
+          = group.group_permissions.count
+      %td= group.group_memberships.count
       %td= group.comment
       =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => group}

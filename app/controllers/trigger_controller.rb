@@ -84,12 +84,12 @@ class TriggerController < ApplicationController
           fax_document.state = 'successful'
           
           if fax_document.save
+            Notifications.new_fax(fax_document).deliver
             begin
               File.delete(pdf_file)
             rescue => e
               logger.error "PDF fax file could not be deleted: #{pdf_file} => #{e.inspect}"
             end
-            fax_document.tiff = nil
             fax_document.save
             fax_document.render_thumbnails
           else

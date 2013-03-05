@@ -1,7 +1,10 @@
 class CallForwardsController < ApplicationController
   load_resource :phone_number
   load_resource :sip_account
-  load_and_authorize_resource :call_forward, :through => [:phone_number, :sip_account]
+  load_resource :automatic_call_distributor
+  load_resource :hunt_group
+
+  load_and_authorize_resource :call_forward, :through => [:phone_number, :sip_account, :automatic_call_distributor, :hunt_group]
   
   before_filter :set_and_authorize_parent
   before_filter :spread_breadcrumbs
@@ -81,7 +84,7 @@ class CallForwardsController < ApplicationController
   private
   private
   def set_and_authorize_parent
-    @parent = @sip_account || @phone_number
+    @parent = @phone_number || @sip_account || @automatic_call_distributor || @hunt_group
     authorize! :read, @parent
   end
 
@@ -90,27 +93,30 @@ class CallForwardsController < ApplicationController
       if @parent.class == PhoneNumber && @parent.phone_numberable_type == 'SipAccount'
         @sip_account = @parent.phone_numberable
       end
-      if @sip_account.sip_accountable_type == 'User'
-        @user = @sip_account.sip_accountable
-        if @parent.class == PhoneNumber
-          add_breadcrumb t("users.index.page_title"), tenant_users_path(@user.current_tenant)
-          add_breadcrumb @user, tenant_users_path(@user.current_tenant, @user)
-          add_breadcrumb t("sip_accounts.index.page_title"), user_sip_accounts_path(@user)
-          add_breadcrumb @sip_account, user_sip_account_path(@user, @sip_account)
-          add_breadcrumb t("phone_numbers.index.page_title"), sip_account_phone_numbers_path(@sip_account)
-          add_breadcrumb @parent, sip_account_phone_number_path(@sip_account, @parent)
-        elsif @parent.class == SipAccount
-          add_breadcrumb t("users.index.page_title"), tenant_users_path(@user.current_tenant)
-          add_breadcrumb @user, tenant_users_path(@user.current_tenant, @user)
-          add_breadcrumb t("sip_accounts.index.page_title"), user_sip_accounts_path(@user)
+
+      if @sip_account
+        if @sip_account.sip_accountable_type == 'User'
+          @user = @sip_account.sip_accountable
+          if @parent.class == PhoneNumber
+            add_breadcrumb t("users.index.page_title"), tenant_users_path(@user.current_tenant)
+            add_breadcrumb @user, tenant_users_path(@user.current_tenant, @user)
+            add_breadcrumb t("sip_accounts.index.page_title"), user_sip_accounts_path(@user)
+            add_breadcrumb @sip_account, user_sip_account_path(@user, @sip_account)
+            add_breadcrumb t("phone_numbers.index.page_title"), sip_account_phone_numbers_path(@sip_account)
+            add_breadcrumb @parent, sip_account_phone_number_path(@sip_account, @parent)
+          elsif @parent.class == SipAccount
+            add_breadcrumb t("users.index.page_title"), tenant_users_path(@user.current_tenant)
+            add_breadcrumb @user, tenant_users_path(@user.current_tenant, @user)
+            add_breadcrumb t("sip_accounts.index.page_title"), user_sip_accounts_path(@user)
+          end
+        end
+        if @sip_account.sip_accountable_type == 'Tenant'
+          @tenant = @sip_account.sip_accountable
+          add_breadcrumb t("sip_accounts.index.page_title"), tenant_sip_accounts_path(@tenant)
+          add_breadcrumb @sip_account, tenant_sip_account_path(@tenant, @sip_account)
         end
       end
-      if @sip_account.sip_accountable_type == 'Tenant'
-        @tenant = @sip_account.sip_accountable
-        add_breadcrumb t("sip_accounts.index.page_title"), tenant_sip_accounts_path(@tenant)
-        add_breadcrumb @sip_account, tenant_sip_account_path(@tenant, @sip_account)
-      end
-      
+
       m = method( :"#{@parent.class.name.underscore}_call_forwards_url" )
       add_breadcrumb t("call_forwards.index.page_title"), m.(@parent)
       if @call_forward && !@call_forward.new_record?

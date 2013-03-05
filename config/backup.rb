@@ -32,23 +32,7 @@ Backup::Model.new(:GS5, 'GS5 backup') do
   #
   if File.exists?('/var/opt/gemeinschaft/fax')
     archive :faxes do |archive|
-      # Incoming faxes
-      #
-      Dir.glob("/var/opt/gemeinschaft/fax/in/**/*.pdf").each do |fax_file|
-        archive.add(fax_file)
-      end
-      Dir.glob("/var/opt/gemeinschaft/fax/in/**/*.tiff").each do |fax_file|
-        archive.add(fax_file)
-      end
-
-      # Outgoing faxes
-      #
-      Dir.glob("/var/opt/gemeinschaft/fax/out/**/*.pdf").each do |fax_file|
-        archive.add(fax_file)
-      end
-      Dir.glob("/var/opt/gemeinschaft/fax/out/**/*.tiff").each do |fax_file|
-        archive.add(fax_file)
-      end
+      archive.add     '/var/opt/gemeinschaft/fax'
     end
   end
 
@@ -58,6 +42,15 @@ Backup::Model.new(:GS5, 'GS5 backup') do
   if File.exists?('/var/opt/gemeinschaft/freeswitch/voicemail')
     archive :voicemails do |archive|
       archive.add     '/var/opt/gemeinschaft/freeswitch/voicemail'
+    end
+  end
+
+  ##
+  # Voicemails
+  #
+  if File.exists?('/var/opt/gemeinschaft/freeswitch/recordings')
+    archive :recordings do |archive|
+      archive.add     '/var/opt/gemeinschaft/freeswitch/recordings'
     end
   end
 

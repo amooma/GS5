@@ -1,4 +1,4 @@
-- cache(['tenant_show_table_of_automatic_call_distributors', I18n.locale, tenant, tenant.automatic_call_distributors.count, tenant.automatic_call_distributors.reorder(:updated_at).last]) do
+- cache(['tenant_show_table_of_automatic_call_distributors', I18n.locale, tenant, tenant.automatic_call_distributors.count, tenant.automatic_call_distributors.reorder(:updated_at).last, PhoneNumber.where(:phone_numberable_type => 'AutomaticCallDistributor').order(:updated_at).last]) do
   -# AutomaticCallDistributors
   -#
   - if (can?( :index, AutomaticCallDistributor ) && tenant.automatic_call_distributors.count > 0 ) || can?( :create, AutomaticCallDistributor )

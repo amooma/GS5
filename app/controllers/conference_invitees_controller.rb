@@ -58,7 +58,7 @@ class ConferenceInviteesController < ApplicationController
 
   def destroy
     @conference_invitee.destroy
-    redirect_to conference_invitees_url, :notice => t('conference_invitees.controller.successfuly_destroyed')
+    redirect_to conference_conference_invitees_url(@conference), :notice => t('conference_invitees.controller.successfuly_destroyed')
   end
 
   private

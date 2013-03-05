@@ -4,15 +4,21 @@
   %table.table.table-striped
     %tbody
       %tr
+      %tr
         %td
-          %strong= t('gs_parameters.show.name') + ":"
+          %strong= t('gs_parameters.show.entity') + ":"
         %td
-          = @gs_parameter.name
+          = @gs_parameter.entity
       %tr
         %td
           %strong= t('gs_parameters.show.section') + ":"
         %td
           = @gs_parameter.section
+      %tr
+        %td
+          %strong= t('gs_parameters.show.name') + ":"
+        %td
+          = @gs_parameter.name
       %tr
         %td
           %strong= t('gs_parameters.show.value') + ":"

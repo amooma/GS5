@@ -8,7 +8,7 @@ function hangup_hook_caller(s, status, arg)
   if tostring(status) == 'transfer' then
     if start_caller and start_caller.destination then
       log:info('CALL_TRANSFERRED - destination was: ', start_caller.destination.type, '=', start_caller.destination.id,', number: ' .. tostring(start_caller.destination.number) .. ', to: ' .. start_caller:to_s('sip_refer_to'));
-      start_caller.auth_account            = start_caller.dialplan:object_find(start_caller.destination.type, start_caller.destination.id);
+      start_caller.auth_account            = start_caller.dialplan:object_find{class = start_caller.destination.type, id = start_caller.destination.id};
       start_caller.forwarding_number       = start_caller.destination.number;
       start_caller.forwarding_service      = 'transfer';
     end

@@ -2,10 +2,11 @@
   %tr
     %th= t('group_memberships.index.item_type')
     %th= t('group_memberships.index.item_id')
-
+    %th= t('group_memberships.index.item')
   
   - for group_membership in group_memberships
     %tr
       %td= group_membership.item_type
       %td= group_membership.item_id
+      %td= group_membership.item
       =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => group_membership.group, :child => group_membership}

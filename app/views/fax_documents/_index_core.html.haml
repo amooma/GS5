@@ -25,9 +25,24 @@
       %tr{:class => current_status}
         %td
           - case fax_document.state
-            - when 'successful'
-              = "#{fax_document.inbound ? '&#8680;' : '&#8678;'}".html_safe
+            - when 'received'
+              %i.icon-warning-sign
               = l fax_document.sent_at, :format => :short
+            - when 'unsuccessful'
+              %i.icon-ban-circle
+              = t("fax_documents.states.#{fax_document.state}")
+            - when 'successful'
+              - if fax_document.inbound
+                %i.icon-arrow-right
+              - else
+                %i.icon-arrow-left
+              = l fax_document.sent_at, :format => :short
+            - when 'queued_for_sending'
+              %i.icon-time
+              = t("fax_documents.states.#{fax_document.state}")
+            - when 'sending'
+              %i.icon-print
+              = t("fax_documents.states.#{fax_document.state}")
             - else
               = t("fax_documents.states.#{fax_document.state}")
         %td

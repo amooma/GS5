@@ -3,5 +3,18 @@
   %head
     %title= @sip_account.caller_name
   %body
-    - @sip_account.phone_numbers.each do |number|
-      %br= number.number
+    - phone_numbers = @sip_account.phone_numbers.order(:position)
+    - if phone_numbers[0]
+      %strong= phone_numbers[0].number
+    - else
+      %strong= sip_account.to_s
+    - if phone_numbers[1]
+      %strong= phone_numbers[1].number
+    - if phone_numbers[2]
+      %strong= phone_numbers[2].number
+    - if phone_numbers[3]
+      %strong ...
+    - call = @sip_account.call_histories.where(:entry_type => 'missed').order('start_stamp DESC').first
+    %p
+      Missed:
+      %br= "#{call.start_stamp.strftime('%d.%m %H:%M')} #{call.display_name} #{call.display_number}"
