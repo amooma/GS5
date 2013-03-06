@@ -11,4 +11,17 @@ class Group < ActiveRecord::Base
   def to_s
     self.name
   end
+
+  def permission_targets(permission)
+    group_permissions.where(:permission => permission).pluck(:target_group_id)
+  end
+
+  def self.union(sets=[])
+    group_ids = []
+    sets.each do |set|
+      group_ids = group_ids + set
+    end
+
+    return group_ids.uniq
+  end
 end
