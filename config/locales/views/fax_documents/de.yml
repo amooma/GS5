@@ -5,6 +5,7 @@ de:
       successfuly_created: 'Eine neues Fax-Dokument wurde erstellt.'
       successfuly_updated: 'Das Fax-Dokument wurde aktualisiert.'
       successfuly_destroyed: 'Das Fax-Dokument wurde gelöscht.'
+      tiff_not_created: 'Konnte nicht konvertiert werden.'
     states:
       queued_for_sending: 'In der Warteschleife zum Versand'
       sending: 'Wird aktuell versendet'
