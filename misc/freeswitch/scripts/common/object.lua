@@ -87,13 +87,13 @@ function Object.find(self, attributes)
   elseif class == 'faxaccount' then
     require 'dialplan.fax';
     if tonumber(attributes.id) then
-      fax_account = dialplan.fax.Fax:new{ log = self.log, database = self.database }:find_by_id(attributes.id);
+      object = dialplan.fax.Fax:new{ log = self.log, database = self.database }:find_by_id(attributes.id);
     elseif not common.str.blank(attributes.uuid) then
-      fax_account = dialplan.fax.Fax:new{ log = self.log, database = self.database }:find_by_uuid(attributes.uuid);
+      object = dialplan.fax.Fax:new{ log = self.log, database = self.database }:find_by_uuid(attributes.uuid);
     end
 
     if object then
-      object.owner = self:find{class = fax_account.record.fax_accountable_type, id = tonumber(fax_account.record.fax_accountable_id)};
+      object.owner = self:find{class = object.record.fax_accountable_type, id = tonumber(object.record.fax_accountable_id)};
     end
   end
 
