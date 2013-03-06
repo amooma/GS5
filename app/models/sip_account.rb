@@ -156,6 +156,24 @@ class SipAccount < ActiveRecord::Base
   end
 
 
+  def target_sip_accounts_by_permission(permission)
+    target_groups = Group.union(self.groups.collect{|g| g.permission_targets(permission)})
+    target_groups = target_groups + Group.union(self.sip_accountable.groups.collect{|g| g.permission_targets(permission)})
+    sip_accounts = []
+    GroupMembership.where(:group_id => target_groups).each do |group_membership|
+      if group_membership.item.class == User || group_membership.item.class == Tenant
+        sip_accounts = sip_accounts + group_membership.item.sip_accounts
+      elsif group_membership.item.class == SipAccount
+        sip_accounts << group_membership.item
+      end
+        
+      sip_accounts = sip_accounts.uniq
+    end
+
+    return sip_accounts
+  end
+
+
   private
       
   def save_value_of_to_s
