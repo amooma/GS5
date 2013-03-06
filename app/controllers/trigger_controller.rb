@@ -62,12 +62,14 @@ class TriggerController < ApplicationController
   def fax
     if !params[:fax_account_id].blank?
       fax_account = FaxAccount.where(:id => params[:fax_account_id].to_i).first
+      errors = Array.new()
       if fax_account
         fax_account.fax_documents.where(:state => 'received').each do |fax_document|
 
           pdf_file = fax_document.tiff_to_pdf
 
           if !pdf_file
+            errors << "#{fax_document.tiff} cound not be converted"
             fax_document.state = 'unsuccessful'
             fax_document.save
             next
@@ -89,15 +91,21 @@ class TriggerController < ApplicationController
               File.delete(pdf_file)
             rescue => e
               logger.error "PDF fax file could not be deleted: #{pdf_file} => #{e.inspect}"
+              errors << "#{pdf_file} cound not be deleted"
             end
             fax_document.save
             fax_document.render_thumbnails
           else
+            errors << "#{fax_document.id} cound not be saved"
             fax_document.state = 'unsuccessful'
             fax_document.save
           end
         end
-
+      else
+        errors << "fax_account=#{params[:fax_account_id]} not found"
+      end
+       
+      if errors.count == 0
         render(
           :status => 200,
           :layout => false,
@@ -105,11 +113,11 @@ class TriggerController < ApplicationController
           :text => "<!-- OK -->",
         )
       else
-        render(
-          :status => 404,
+       render(
+          :status => 501,
           :layout => false,
           :content_type => 'text/plain',
-          :text => "<!-- Account not found -->",
+          :text => "<!-- ERRORS: #{errors.join(', ')} -->",
         )
       end
     end
