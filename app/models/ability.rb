@@ -134,9 +134,6 @@ class Ability
           can :read, SipAccount, :sip_accountable_type => 'User', :sip_accountable_id => user.id
           user.sip_accounts.each do |sip_account|
             can :read, PhoneNumber, :id => sip_account.phone_number_ids
-            can :manage, CallForward, :call_forwardable_id => sip_account.phone_number_ids
-            can :manage, Ringtone, :ringtoneable_type => 'PhoneNumber', :ringtoneable_id => sip_account.phone_number_ids
-            can :manage, Ringtone, :ringtoneable_type => 'SipAccount', :ringtoneable_id => sip_account.id
             can [:read, :destroy, :call] , CallHistory, :id => sip_account.call_history_ids
           end
           can :read, Phone, :phoneable_type => 'User', :phoneable_id => user.id
@@ -161,10 +158,17 @@ class Ability
             can :manage, ConferenceInvitee, :conference_id => conference.id
           end
 
-          # User can manage CallForwards of the PhoneNumbers of his
-          # own SipAccounts:
+          # User can manage CallForwards of its SipAccount and PhoneNumbers
           #
-          can :manage, CallForward, :call_forwardable_id => user.phone_number_ids
+          can :manage, CallForward, :call_forwardable_type => 'PhoneNumber', :call_forwardable_id => user.phone_number_ids
+          can :manage, CallForward, :call_forwardable_type => 'SipAccount',  :call_forwardable_id => user.sip_account_ids
+          can :create, CallForward
+
+          # User can manage Ringtones of its SipAccount and PhoneNumbers
+          #
+          can :manage, Ringtone, :ringtoneable_type => 'PhoneNumber', :ringtoneable_id => user.phone_number_ids
+          can :manage, Ringtone, :ringtoneable_type => 'SipAccount',  :ringtoneable_id => user.sip_account_ids
+          can :create, Ringtone
 
           # SoftkeyFunctions
           #
