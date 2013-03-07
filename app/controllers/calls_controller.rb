@@ -18,11 +18,11 @@ class CallsController < ApplicationController
       protocol, separator, phone_number = params[:url].partition(':')
       if ! phone_number.blank? 
         @call = @parent.calls.new()
-        @call.dest = phone_number
+        @call.destination = phone_number
       end
     elsif !params[:number].blank?
       @call = @parent.calls.new()
-      @call.dest = params[:number]
+      @call.destination = params[:number]
     end
   end
 
@@ -31,8 +31,7 @@ class CallsController < ApplicationController
   end
 
   def create
-    params[:call][:sip_account] = @sip_account
-    @call = Call.create(params[:call])
+    @call = @sip_account.calls.create(params[:call])
 
     if @call && @call.call
       m = method( :"#{@parent.class.name.underscore}_calls_url" )
