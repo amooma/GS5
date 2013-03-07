@@ -1,17 +1,17 @@
 class Softkey < ActiveRecord::Base
-  attr_accessible :softkey_function_id, :number, :label, :uuid, :softkeyable_type, :softkeyable_id
+  attr_accessible :softkey_function_id, :number, :label, :uuid, :softkeyable_type, :softkeyable_id, :call_forward, :blf
 
   belongs_to :sip_account
   belongs_to :softkey_function
   belongs_to :softkeyable, :polymorphic => true
 
-  validates_presence_of :softkeyable_id, :if => Proc.new{ |softkey| self.softkey_function_id != nil && 
-                                                                     self.softkey_function_id == SoftkeyFunction.find_by_name('call_forwarding').try(:id) }
-
   # These functions need a number to act.
   #
   validates_presence_of :number, :if => Proc.new{ |softkey| self.softkey_function_id != nil &&  
-                                                            ['blf','speed_dial','dtmf','conference'].include?(softkey.softkey_function.name) }
+                                                            ['blf', 'speed_dial','dtmf','conference'].include?(softkey.softkey_function.name) }
+
+  validates_presence_of :softkeyable_id, :if => Proc.new{ |softkey| self.softkey_function_id != nil && 
+                                                                     ['call_forwarding'].include?(softkey.softkey_function.name) }
 
   validates_presence_of :uuid
   validates_uniqueness_of :uuid
@@ -43,7 +43,16 @@ class Softkey < ActiveRecord::Base
   end
 
   def possible_blf_sip_accounts
-    self.sip_account.target_sip_accounts_by_permission('presence')
+    self.sip_account.target_sip_accounts_by_permission(:presence)
+  end
+
+  def possible_pickup_groups
+    Group.where(:id => self.sip_account.target_group_ids_by_permission(:presence))
+  end
+
+  def possible_blf
+    blf = possible_pickup_groups.collect{ |g| ["#{g.class.name}: #{g.to_s}", "#{g.id}:#{g.class.name}"] }
+    blf + possible_blf_sip_accounts.collect{ |g| ["#{g.class.name}: #{g.to_s}", "#{g.id}:#{g.class.name}"] }
   end
 
   def to_s
@@ -72,6 +81,7 @@ class Softkey < ActiveRecord::Base
   def move_down?
     return self.position.to_i < Softkey.where(:sip_account_id => self.sip_account_id ).order(:position).last.position.to_i
   end
+
 
   private
   # Make sure that no number is set when there is no need for one.

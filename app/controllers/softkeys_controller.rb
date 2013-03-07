@@ -2,7 +2,7 @@ class SoftkeysController < ApplicationController
   load_and_authorize_resource :sip_account, :except => [:sort]
   load_and_authorize_resource :softkey, :through => [:sip_account], :except => [:sort]
 
-  before_filter :set_available_softkey_functions, :only => [ :new, :edit, :update ]
+  before_filter :set_available_softkey_functions, :only => [ :new, :edit, :update, :create ]
   before_filter :spread_breadcrumbs, :except => [:sort]
   
   def index
@@ -35,6 +35,7 @@ class SoftkeysController < ApplicationController
       redirect_to sip_account_softkey_path(@softkey.sip_account, @softkey), :notice  => t('softkeys.controller.successfuly_updated')
     else
       delete_call_forward_softkey_if_no_callforward_is_available
+      
       render :edit
     end
   end
