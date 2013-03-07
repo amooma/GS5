@@ -5,6 +5,8 @@ class AutomaticCallDistributor < ActiveRecord::Base
 
   has_many :acd_agents, :dependent => :destroy
   has_many :phone_numbers, :as => :phone_numberable, :dependent => :destroy
+  has_many :call_forwards, :as => :call_forwardable, :dependent => :destroy
+  
   accepts_nested_attributes_for :phone_numbers, 
                                 :reject_if => lambda { |phone_number| phone_number[:number].blank? }, 
                                 :allow_destroy => true

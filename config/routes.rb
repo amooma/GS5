@@ -64,6 +64,7 @@ Gemeinschaft42c::Application.routes.draw do
   resources :automatic_call_distributors, :only => [] do
     resources :acd_agents
     resources :phone_numbers
+    resources :call_forwards
   end
 
   resources :hunt_group_members, :only => [] do
