@@ -1,0 +1,12 @@
+- content_for :title, t("switchboards.show.page_title")
+
+.row
+  .span6
+    %table.table.table-striped
+      %tr
+        %td
+          %strong= t('switchboards.show.name') + ":"
+        %td
+          = @switchboard.name
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @user, :child => @switchboard }

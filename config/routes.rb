@@ -1,4 +1,5 @@
 Gemeinschaft42c::Application.routes.draw do
+  resources :switchboards
 
   resources :restore_jobs
 
@@ -209,6 +210,7 @@ Gemeinschaft42c::Application.routes.draw do
     resources :fax_accounts
     resources :system_messages, :except => [ :edit, :update, :destroy ]
     resources :parking_stalls
+    resources :switchboards
   end
   
   resources :user_groups do
