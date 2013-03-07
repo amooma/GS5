@@ -42,6 +42,10 @@ class Softkey < ActiveRecord::Base
     return call_forwards
   end
 
+  def possible_blf_sip_accounts
+    self.sip_account.target_sip_accounts_by_permission('presence')
+  end
+
   def to_s
     if self.softkeyable.blank?
       if ['log_out', 'log_in'].include?(self.softkey_function.name)
@@ -77,7 +81,29 @@ class Softkey < ActiveRecord::Base
     if self.softkey_function_id != nil
       case self.softkey_function.name
       when 'blf'
+        has_permission = false
         self.softkeyable = PhoneNumber.where(:number => self.number, :phone_numberable_type => 'SipAccount').first.try(:phone_numberable)
+        if self.softkeyable
+          self.sip_account.groups.each do |group|
+            if group.has_permission(self.softkeyable.class.name, self.softkeyable.id, :presence)
+              has_permission = true
+              break
+            end
+          end
+          if !has_permission && self.sip_account.sip_accountable
+            self.sip_account.sip_accountable.groups.each do |group|
+              if group.has_permission(self.softkeyable.class.name, self.softkeyable.id, :presence)
+                has_permission = true
+                break
+              end
+            end
+          end
+        end
+
+        if !has_permission
+          self.softkeyable = nil
+          self.number = nil
+        end
       when 'conference'
         self.softkeyable = PhoneNumber.where(:number => self.number, :phone_numberable_type => 'Conference').first.try(:phone_numberable)
       when 'call_forwarding'
