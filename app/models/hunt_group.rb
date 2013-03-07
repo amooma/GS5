@@ -2,7 +2,8 @@ class HuntGroup < ActiveRecord::Base
   attr_accessible :name, :strategy, :seconds_between_jumps, :phone_numbers_attributes
 
   belongs_to :tenant, :touch => true
-  has_many :call_forwards, :as => :destinationable, :dependent => :destroy
+  has_many :destrination_call_forwards, :as => :destinationable, :dependent => :destroy
+  has_many :call_forwards, :as => :call_forwardable, :dependent => :destroy
 
   validates_uniqueness_of :name, :scope => :tenant_id,
                                  :allow_nil => true, :allow_blank => true

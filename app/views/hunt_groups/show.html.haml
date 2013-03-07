@@ -19,6 +19,13 @@
   %br
 = render :partial => 'shared/create_link', :locals => {:parent => @hunt_group, :child_class => PhoneNumber}
 
+- if @hunt_group.call_forwards.count > 0 || can?(:create, @hunt_group.call_forwards.build)
+  %h2= t('call_forwards.index.page_title')
+  - if @hunt_group.call_forwards.count > 0
+    = render "call_forwards/index_core", :call_forwards => @hunt_group.call_forwards
+    %br
+  = render :partial => 'shared/create_link', :locals => { :parent => @hunt_group, :child_class => CallForward }
+
 %h2= t('hunt_groups.form.hunt_group_members.label')
 - if @hunt_group.hunt_group_members.count > 0
   = render 'hunt_group_members/index_core', :hunt_group_members => @hunt_group.hunt_group_members

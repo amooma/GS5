@@ -73,6 +73,7 @@ Gemeinschaft42c::Application.routes.draw do
   resources :hunt_groups, :only => [] do
     resources :hunt_group_members
     resources :phone_numbers
+    resources :call_forwards
   end
 
   if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
