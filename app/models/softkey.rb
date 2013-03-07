@@ -22,29 +22,28 @@ class Softkey < ActiveRecord::Base
   after_save :resync_phone
   after_destroy :resync_phone
 
-  def possible_blf_call_forwards
-    if self.sip_account.phone_numbers.count == 0
-      nil
-    else
-      if self.sip_account.callforward_rules_act_per_sip_account == true
-        # We pick one phone_number and display the rules of it.
-        #
-        phone_number = self.sip_account.phone_numbers.order(:number).first
-        call_forwards = self.sip_account.call_forwards.where(:call_forwardable_id => phone_number.id, :call_forwardable_type => 'PhoneNumber')
-      else
-        call_forwards = self.sip_account.call_forwards
-      end
-      
-      phone_numbers_ids = self.sip_account.phone_number_ids
-      phone_numbers = PhoneNumber.where(:id => phone_numbers_ids).pluck(:number)
-
-      hunt_group_ids = PhoneNumber.where(:phone_numberable_type => 'HuntGroupMember', :number => phone_numbers).
-                                   map{ |phone_number| phone_number.phone_numberable.hunt_group.id }.
-                                   uniq
-
-      call_forwards + CallForward.where(:destinationable_type => 'HuntGroup', :destinationable_id => hunt_group_ids, :call_forwardable_type => 'PhoneNumber').
-                                  where('call_forwardable_id NOT IN (?)', phone_numbers_ids)
+  def possible_call_forwards
+    call_forwards = self.sip_account.call_forwards
+    self.sip_account.phone_numbers.each do |phone_number|
+      call_forwards = call_forwards + phone_number.call_forwards
     end
+
+
+    phone_numbers_ids = self.sip_account.phone_number_ids
+    phone_numbers = PhoneNumber.where(:id => phone_numbers_ids).pluck(:number)
+
+    hunt_group_ids = PhoneNumber.where(:phone_numberable_type => 'HuntGroupMember', :number => phone_numbers).
+                                 map{ |phone_number| phone_number.phone_numberable.hunt_group.id }.
+                                 uniq
+
+    call_forwards = call_forwards + CallForward.where(:destinationable_type => 'HuntGroup', :destinationable_id => hunt_group_ids, :call_forwardable_type => 'PhoneNumber').
+                                where('call_forwardable_id NOT IN (?)', phone_numbers_ids)
+
+    return call_forwards
+  end
+
+  def possible_blf_sip_accounts
+    self.sip_account.target_sip_accounts_by_permission('presence')
   end
 
   def to_s
@@ -82,7 +81,29 @@ class Softkey < ActiveRecord::Base
     if self.softkey_function_id != nil
       case self.softkey_function.name
       when 'blf'
+        has_permission = false
         self.softkeyable = PhoneNumber.where(:number => self.number, :phone_numberable_type => 'SipAccount').first.try(:phone_numberable)
+        if self.softkeyable
+          self.sip_account.groups.each do |group|
+            if group.has_permission(self.softkeyable.class.name, self.softkeyable.id, :presence)
+              has_permission = true
+              break
+            end
+          end
+          if !has_permission && self.sip_account.sip_accountable
+            self.sip_account.sip_accountable.groups.each do |group|
+              if group.has_permission(self.softkeyable.class.name, self.softkeyable.id, :presence)
+                has_permission = true
+                break
+              end
+            end
+          end
+        end
+
+        if !has_permission
+          self.softkeyable = nil
+          self.number = nil
+        end
       when 'conference'
         self.softkeyable = PhoneNumber.where(:number => self.number, :phone_numberable_type => 'Conference').first.try(:phone_numberable)
       when 'call_forwarding'

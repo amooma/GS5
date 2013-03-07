@@ -38,7 +38,8 @@ class SipAccount < ActiveRecord::Base
 
   has_many :ringtones, :as => :ringtoneable, :dependent => :destroy
 
-  has_many :calls, :finder_sql => lambda { |s| "SELECT DISTINCT detailed_calls.* FROM detailed_calls WHERE presence_id LIKE '#{self.auth_name}@%' OR b_presence_id LIKE '#{self.auth_name}@%'" }
+  has_many :call_legs, :class_name => 'Call'
+  has_many :b_call_legs, :class_name => 'Call', :foreign_key => 'b_sip_account_id'
 
   # Delegations:
   #
@@ -82,6 +83,10 @@ class SipAccount < ActiveRecord::Base
 
   def to_s
     truncate((self.caller_name || "SipAccount ID #{self.id}"), :length => GsParameter.get('TO_S_MAX_CALLER_NAME_LENGTH')) + " (#{truncate(self.auth_name, :length => GsParameter.get('TO_S_MAX_LENGTH_OF_AUTH_NAME'))}@...#{self.host.split(/\./)[2,3].to_a.join('.') if self.host })"
+  end
+
+  def calls
+    self.call_legs + self.b_call_legs
   end
   
   def call_forwarding_toggle( call_forwarding_service, to_voicemail = nil )
@@ -153,6 +158,24 @@ class SipAccount < ActiveRecord::Base
       "{origination_uuid=#{UUID.new.generate},origination_caller_id_number='#{phone_number}',origination_caller_id_name='Call'}user/#{self.auth_name} #{phone_number}", 
       true
     );
+  end
+
+
+  def target_sip_accounts_by_permission(permission)
+    target_groups = Group.union(self.groups.collect{|g| g.permission_targets(permission)})
+    target_groups = target_groups + Group.union(self.sip_accountable.groups.collect{|g| g.permission_targets(permission)})
+    sip_accounts = []
+    GroupMembership.where(:group_id => target_groups).each do |group_membership|
+      if group_membership.item.class == User || group_membership.item.class == Tenant
+        sip_accounts = sip_accounts + group_membership.item.sip_accounts
+      elsif group_membership.item.class == SipAccount
+        sip_accounts << group_membership.item
+      end
+        
+      sip_accounts = sip_accounts.uniq
+    end
+
+    return sip_accounts
   end
 
 

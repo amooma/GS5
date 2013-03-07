@@ -4,9 +4,15 @@ class GsParametersController < ApplicationController
   before_filter :spread_breadcrumbs
 
   def index
-    @gs_parameters_unordered = GsParameter.scoped
-    @gs_parameters = GsParameter.order([:section, :name])
-    @sections = @gs_parameters.pluck(:section).uniq.sort
+    @gs_parameters = GsParameter.order([:entity, :section, :name])
+
+    @entities = Hash.new()
+    @gs_parameters.each do |parameter|
+      if !@entities[parameter.entity] 
+        @entities[parameter.entity] = Hash.new()
+      end
+      @entities[parameter.entity][parameter.section] = true
+    end
   end
 
   def show

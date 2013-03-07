@@ -72,7 +72,7 @@ function Database.last_insert_id(self)
 end
 
 
-function Database.insert_or_update(self, db_table, record, use_on_update)
+function Database.insert_or_update(self, db_table, record, ignore_on_update)
   ignore_on_update =  ignore_on_update or self.ignore_on_update;
   local record_sql_create = {};
   local record_sql_update = {};

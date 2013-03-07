@@ -96,8 +96,17 @@ class FaxDocument < ActiveRecord::Base
     page_size_command = "<< /Policies << /PageSize 3 >> /InputAttributes currentpagedevice /InputAttributes get dup { pop 1 index exch undef } forall dup 0 << /PageSize [ #{page_size_a4} ] >> put >> setpagedevice"
     working_path, file_name = File.split(self.document.to_s)
     tiff_file = File.basename(file_name.to_s.downcase, File.extname(file_name)) + '.tiff'
-    result = system "cd #{store_dir} && gs -q -r#{self.fax_resolution.resolution_value} -dNOPAUSE -dBATCH -dSAFER -sDEVICE=tiffg3 -sOutputFile=\"#{tiff_file}\" -c \"#{page_size_command}\" -- \"#{self.document.to_s}\""
+    result = system "cd #{store_dir} && gs -q -r#{self.fax_resolution.resolution_value} -dNOPAUSE -dBATCH -dSAFER -sDEVICE=tiffg3 -sOutputFile=\"#{store_dir}/#{tiff_file}\" -c \"#{page_size_command}\" -- \"#{self.document.to_s}\""
     
+    if !File.exists?("#{store_dir}/#{tiff_file}")
+      page_size = "1728x1078" or "1728x1186";
+      command = "cd #{store_dir} && convert -quiet -density #{self.fax_resolution.resolution_value} -units PixelsPerInch -resize #{page_size}\! -monochrome -compress Fax \"#{self.document.to_s}\" \"#{store_dir}/#{tiff_file}\""
+      result = system(command) 
+      if result.nil?
+        logger.error "### FAX_DOCUMENT_TO_TIFF - error: #{$?}, command: #{command}"
+      end
+    end
+
     if !File.exists?("#{store_dir}/#{tiff_file}")
       return nil
     end

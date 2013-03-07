@@ -37,6 +37,8 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:transfer_all(caller, parameters[3]);
   elseif fid == "ia" then
     result = self:intercept_any_number(caller, parameters[3]);
+  elseif fid == "ig" then
+    result = self:group_pickup(caller, parameters[3]);
   elseif fid == "anc" then
     result = self:account_node_change(caller);
   elseif fid == "li" then
@@ -159,15 +161,55 @@ function Functions.intercept_any_number(self, caller, destination_number)
     return { continue = false, code = 404, phrase = 'Number not found', no_cdr = true };
   end
 
-  if not phone_number.record.phone_numberable_type:lower() == 'sipaccount' or not tonumber(phone_number.record.phone_numberable_id) then
-    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - destination: ',  phone_number.record.phone_numberable_type:lower(), '=', phone_number.record.phone_numberable_id, ', number: ', destination_number);
-    return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
+  require 'common.object';
+  local phone_numberable = common.object.Object:new{ log = self.log, database = self.database}:find{class = phone_number.record.phone_numberable_type, id = phone_number.record.phone_numberable_id};
+
+  if not phone_numberable then
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - numberable not found: ', dphone_number.record.phone_numberable_type, '=', phone_number.record.phone_numberable_id);
+    return { continue = false, code = 404, phrase = 'Destination not found', no_cdr = true };
   end
 
-  self.log:info('FUNCTION_INTERCEPT_ANY_NUMBER intercepting call - to: ', phone_number.record.phone_numberable_type:lower(), '=', phone_number.record.phone_numberable_id, ', number: ', destination_number);
+  require 'common.str';
+  require 'common.group';
+  local group_class = common.group.Group:new{ log = self.log, database = self.database };
+  local group_ids = group_class:union(common.str.try(caller, 'auth_account.group_ids'), common.str.try(caller, 'auth_account.owner.group_ids'));
+  local target_groups, target_group_ids = group_class:permission_targets(group_ids, 'pickup');
+  local destination_group_ids = group_class:union(common.str.try(phone_numberable, 'group_ids'), common.str.try(phone_numberable, 'owner.group_ids'));
+
+  if #group_class:intersection(destination_group_ids, target_group_ids) == 0 then
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - Groups not found or insufficient permissions');
+    return { continue = false, code = 402, phrase = '"Insufficient permissions', no_cdr = true };
+  end
+
+  self.log:info('FUNCTION_INTERCEPT_ANY_NUMBER intercepting call - to: ', phone_numberable.class, '=',phone_numberable.id, '|', destination_number);
 
   caller:set_variable('gs_pickup_group_pick', 's' .. phone_number.record.phone_numberable_id);
   caller:execute('pickup', 's' .. phone_number.record.phone_numberable_id);
+
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
+
+function Functions.group_pickup(self, caller, group_id)
+  if not tonumber(group_id) then
+    return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
+  end
+
+  require 'common.str';
+  require 'common.group';
+  local group_class = common.group.Group:new{ log = self.log, database = self.database };
+  local group_ids = group_class:union(common.str.try(caller, 'auth_account.group_ids'), common.str.try(caller, 'auth_account.owner.group_ids'));
+  local target_group = group_class:is_target(group_id, 'pickup');
+
+  if not target_group then
+    self.log:notice('FUNCTION_GROUP_PICKUP - group=', group_id, ' not found or insufficient permissions');
+    return { continue = false, code = 402, phrase = '"Insufficient permissions', no_cdr = true };
+  end
+
+  self.log:notice('FUNCTION_GROUP_PICKUP - group=', group_id, '|', target_group);
+
+  caller:set_variable('gs_pickup_group_pick', 'g' .. group_id);
+  caller:execute('pickup', 'g' .. group_id);
 
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
@@ -618,32 +660,17 @@ function Functions.clip_off(self, caller)
 end
 
 function Functions.call_forwarding_off(self, caller, call_forwarding_service, delete)
-  local defaults = {log = self.log, database = self.database, domain = caller.domain}
-
   -- Find caller's SipAccount
   local caller_sip_account = self:ensure_caller_sip_account(caller);
   if not caller_sip_account then
     return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
   end
 
-  require 'common.phone_number'
-  local phone_number_class = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database, domain = caller.domain };
-  local phone_numbers = phone_number_class:list_by_owner(caller_sip_account.record.id, 'SipAccount');
+  caller_sip_account.domain = caller_sip_account.domain or caller.domain;
 
-  local success = false;
-  for index, phone_number in pairs(phone_numbers) do
-    phone_number_object = phone_number_class:find_by_number(phone_number);
-    if phone_number_object then
-      if phone_number_object:call_forwarding_off(call_forwarding_service, nil, delete) then
-        success = true;
-      end
-    end
-  end
-
-  if not success then
-    self.log:notice("call forwarding could not be deactivated");
+  if not caller_sip_account:call_forwarding_off(call_forwarding_service, nil, delete) then
+    self.log:notice('FUNCTION_CALL_FORWARDING_OFF - call forwarding could not be deactivated');
     return { continue = false, code = 500, phrase = 'Call Forwarding could not be deactivated', no_cdr = true }
-    
   end
 
   caller:answer();
@@ -654,10 +681,8 @@ end
 
 
 function Functions.call_forwarding_on(self, caller, call_forwarding_service, destination, destination_type, timeout)
-  local defaults = {log = self.log, database = self.database, domain = caller.domain}
-
   if not call_forwarding_service then
-    self.log:notice('no call forwarding service specified');
+    self.log:notice('FUNCTION_CALL_FORWARDING_ON - no call forwarding service specified');
   end
 
   -- Find caller's SipAccount
@@ -666,24 +691,11 @@ function Functions.call_forwarding_on(self, caller, call_forwarding_service, des
     return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
   end
 
-  require "common.phone_number"
-  local phone_number_class = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database, domain = caller.domain };
-  local phone_numbers = phone_number_class:list_by_owner(caller_sip_account.record.id, 'SipAccount');
+  caller_sip_account.domain = caller_sip_account.domain or caller.domain;
 
-  local success = false;
-  for index, phone_number in pairs(phone_numbers) do
-    phone_number_object = phone_number_class:find_by_number(phone_number);
-    if phone_number_object then
-      if phone_number_object:call_forwarding_on(call_forwarding_service, destination, timeout) then
-        success = true;
-      end
-    end
-  end
-
-  if not success then
-    self.log:notice("call forwarding could not be activated");
+  if not caller_sip_account:call_forwarding_on(call_forwarding_service, destination, destination_type, timeout) then
+    self.log:notice('FUNCTION_CALL_FORWARDING_ON - call forwarding could not be activated');
     return { continue = false, code = 500, phrase = 'Call Forwarding could not be activated', no_cdr = true }
-    
   end
 
   caller:answer();

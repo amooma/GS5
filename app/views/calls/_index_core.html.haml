@@ -19,17 +19,17 @@
           - else
             %i.icon-arrow-right
         %td
-          = call.created
+          = l Time.at(call.start_stamp), :format => :short
         %td
-          = call.dest
+          = call.destination
         %td
-          = "#{call.cid_name} #{call.cid_num}"
+          = "#{call.caller_id_name} #{call.caller_id_number}"
         %td
-          = "#{call.callee_name} #{call.callee_num}"
+          = "#{call.callee_name} #{call.callee_number}"
         %td
           = call.callstate
         %td
-          = "#{call.read_codec}/#{call.write_codec}"
+          = "#{call.read_codec}/#{call.read_rate}:#{call.write_codec}/#{call.write_rate}"
 
         %td
           %p

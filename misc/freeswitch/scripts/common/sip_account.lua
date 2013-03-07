@@ -16,6 +16,7 @@ function SipAccount.new(self, arg)
   self.log = arg.log;
   self.database = arg.database;
   self.record = arg.record;
+  self.domain = arg.domain;
   return object;
 end
 
@@ -128,15 +129,32 @@ function SipAccount.send_text(self, text)
 end
 
 
-function SipAccount.call_state(self)  
-  local state = nil
-  local sql_query = "SELECT `callstate` FROM `channels` \
-    WHERE `name` LIKE (\"\%" .. self.record.auth_name .. "@%\") \
-    OR `name` LIKE (\"\%" .. self.record.auth_name .. "@%\") LIMIT 1";
+function SipAccount.call_state(self)
+  local sql_query = 'SELECT `callstate` FROM `detailed_calls` \
+    WHERE `presence_id` LIKE "' .. self.record.auth_name .. '@%" \
+    OR `b_presence_id` LIKE "' .. self.record.auth_name .. '@%" \
+    LIMIT 1';
 
-  self.database:query(sql_query, function(channel_entry)
-    state = channel_entry.callstate;
-  end)
+  return self.database:query_return_value(sql_query);
+end
 
-  return state;
+
+function SipAccount.call_forwarding_on(self, service, destination, destination_type, timeout, source)
+  
+  if not self.call_forwarding then
+    require 'common.call_forwarding';
+    self.call_forwarding = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database, parent = self, domain = self.domain };
+  end
+
+  return self.call_forwarding:call_forwarding_on(service, destination, destination_type, timeout, source)
+end
+
+
+function SipAccount.call_forwarding_off(self, service, source, delete)
+  if not self.call_forwarding then
+    require 'common.call_forwarding';
+    self.call_forwarding = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database, parent = self, domain = self.domain };
+  end
+
+  return self.call_forwarding:call_forwarding_off(service, source, delete)
 end

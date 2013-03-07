@@ -2,12 +2,42 @@
 
 - cache(['gs_parameter_all_tables', I18n.locale, @gs_parameters.count, @gs_parameters.reorder(:updated_at).first, @gs_parameters.reorder(:updated_at).last]) do
   - if @gs_parameters && @gs_parameters.count > 0
-    - if @sections
-      - @sections.each do |section|
-        %h3= section
-        %table.table.table-striped
-          -# Template Dependency: gs_parameters/_index_core 
-          = render "index_core", :gs_parameters => @gs_parameters.where(:section => section)
-    - else
-      %table.table.table-striped
-        = render "index_core", :gs_parameters => @gs_parameters
+    %table.table.table-striped
+      %thead
+        %tr
+          %th
+          %th
+          %th
+          %th
+
+      %tbody 
+        - @entities.each do |entity_name, entity|
+          %tr.table.info
+            %td{:colspan => 5}
+              - if !entity_name.blank?
+                %strong= entity_name
+          - entity.each do |section_name, section|
+            %tr.table.success
+              %td
+              %td{:colspan => 4}
+                %strong= section_name
+              - gs_parameters = @gs_parameters.where(:entity => entity_name, :section => section_name)
+              - cache(['gs_parameter_sub_table', I18n.locale, gs_parameters.count, gs_parameters.reorder(:updated_at).first, gs_parameters.reorder(:updated_at).last]) do
+                
+                - for gs_parameter in gs_parameters
+                  - cache(['gs_parameters_table_single_row', I18n.locale, gs_parameter]) do 
+                    %tr
+                      %td
+                      %td
+                      %td
+                        %span.hidden-phone
+                          = truncate(gs_parameter.name, :length => GsParameter.get('DESKTOP_MAX_STRING_LENGTH'))
+                        %span.visible-phone
+                          = truncate(gs_parameter.name, :length => GsParameter.get('MOBILE_MAX_STRING_LENGTH'))
+                      %td
+                        %span.hidden-phone
+                          = truncate(gs_parameter.value, :length => GsParameter.get('DESKTOP_MAX_STRING_LENGTH'))
+                        %span.visible-phone
+                          = truncate(gs_parameter.value, :length => GsParameter.get('MOBILE_MAX_STRING_LENGTH'))           
+                      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => gs_parameter}
+

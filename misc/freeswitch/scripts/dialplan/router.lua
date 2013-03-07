@@ -8,6 +8,7 @@ Router = {}
 
 -- create route object
 function Router.new(self, arg)
+  require 'common.str';
   arg = arg or {}
   object = arg.object or {}
   setmetatable(object, self);

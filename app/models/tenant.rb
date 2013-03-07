@@ -59,6 +59,10 @@ class Tenant < ActiveRecord::Base
   has_many :users_fax_accounts, :through => :users, :source => :fax_accounts, :readonly => true
   has_many :users_fax_accounts_phone_numbers, :through => :users_fax_accounts, :source => :phone_numbers, :readonly => true
 
+  # Groups
+  has_many :group_memberships, :as => :item, :dependent => :destroy, :uniq => true
+  has_many :groups, :through => :group_memberships
+
   # Validations:
   #
   validates_presence_of :name, :state, :country, :language

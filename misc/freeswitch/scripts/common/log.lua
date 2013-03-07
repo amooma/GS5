@@ -37,33 +37,33 @@ function Log.message(self, log_level, message_arguments )
 end
 
 function Log.console(self, ...)
-  self:message(self.level_console, arg);
+  self:message(self.level_console, {...});
 end
 
 function Log.alert(self, ...)
-  self:message(self.level_alert, arg);
+  self:message(self.level_alert, {...});
 end
 
 function Log.critical(self, ...)
-  self:message(self.level_critical, arg);
+  self:message(self.level_critical, {...});
 end
 
 function Log.error(self, ...)
-  self:message(self.level_error, arg);
+  self:message(self.level_error, {...});
 end
 
 function Log.warning(self, ...)
-  self:message(self.level_warning, arg);
+  self:message(self.level_warning, {...});
 end
 
 function Log.notice(self, ...)
-  self:message(self.level_notice, arg);
+  self:message(self.level_notice, {...});
 end
 
 function Log.info(self, ...)
-  self:message(self.level_info, arg);
+  self:message(self.level_info, {...});
 end
 
 function Log.debug(self, ...)
-  self:message(self.level_debug, arg);
+  self:message(self.level_debug, {...});
 end

@@ -67,7 +67,7 @@ de:
       xing_account: 'Xing Konto'
       linkedin_account: 'LinkedIn Konto'
       mobileme_account: 'iCloud Konto'
-      manage_phone_number: 'Telefonnummern verwalten.'
+      manage_phone_numbers: 'Telefonnummern verwalten.'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie diesen Telefonbucheintrag löschen möchten?'
         destroy: 'Löschen'

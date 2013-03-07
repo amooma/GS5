@@ -61,8 +61,14 @@ class FaxDocumentsController < ApplicationController
     @fax_document = @fax_account.fax_documents.build(params[:fax_document])
     @fax_document.retry_counter = @fax_account.retries
     if @fax_document.save
-      @fax_document.queue_for_sending!
-      redirect_to fax_account_fax_document_path(@fax_document.fax_account, @fax_document), :notice => t('fax_documents.controller.successfuly_created')
+      if @fax_document.tiff.blank?
+        @fax_document.destroy
+        @fax_document.errors.add(:document, t('fax_documents.controller.tiff_not_created'))
+        render :new      
+      else
+        @fax_document.queue_for_sending!
+        redirect_to fax_account_fax_document_path(@fax_document.fax_account, @fax_document), :notice => t('fax_documents.controller.successfuly_created')
+      end
     else
       render :new
     end

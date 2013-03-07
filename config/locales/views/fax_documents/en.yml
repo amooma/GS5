@@ -5,6 +5,7 @@ en:
       successfuly_created: 'Successfully created fax.'
       successfuly_updated: 'Successfully updated fax.'
       successfuly_destroyed: 'Successfully destroyed fax.'
+      tiff_not_created: 'Could not be converted.'
     states:
       queued_for_sending: 'Queued for sending'
       sending: 'Currently sending'

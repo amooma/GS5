@@ -7,4 +7,8 @@
   %strong= t('group_memberships.show.item_id') + ":"
   = @group_membership.item_id
 
+%p
+  %strong= t('group_memberships.show.item') + ":"
+  = @group_membership.item
+
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @group, :child => @group_membership }

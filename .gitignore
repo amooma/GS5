@@ -86,3 +86,5 @@ tmp/**/*
 
 # Cache
 /public/gemeinschaft_setups/*
+
+/db/schema.rb

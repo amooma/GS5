@@ -1,4 +1,4 @@
-- cache(['table_of_pbx_features_hunt_groups_row', I18n.locale, tenant, tenant.hunt_groups.count, tenant.hunt_groups.reorder(:updated_at).last]) do
+- cache(['table_of_pbx_features_hunt_groups_row', I18n.locale, tenant, tenant.hunt_groups.count, tenant.hunt_groups.reorder(:updated_at).last, PhoneNumber.where(:phone_numberable_type => 'HuntGroup').order(:updated_at).last]) do
   -# HuntGroups
   -#
   - if (can?( :index, HuntGroup ) && tenant.hunt_groups.count > 0 ) || can?( :create, HuntGroup )

@@ -2,38 +2,39 @@
   %tr
     %th
     %th= t('intruders.index.contact_ip')
-    %th= t('intruders.index.contact_port')
     %th= t('intruders.index.points')
-    %th= t('intruders.index.bans')
     %th= t('intruders.index.ban_last')
-    %th= t('intruders.index.ban_end')
     %th= t('intruders.index.contact_count')
     %th= t('intruders.index.contact_last')
     %th= t('intruders.index.contacts_per_second')
     %th= t('intruders.index.user_agent')
     %th= t('intruders.index.to_user')
+    %th
 
   
   - for intruder in intruders
-    %tr
+    - if intruder.list_type == 'whitelist'
+      - entry_class = 'success'
+    - elsif intruder.bans.to_i > 0
+      - entry_class = 'error'
+    - elsif intruder.points.to_i > 0
+      - entry_class = 'warn'
+    - else
+      - entry_class = ''
+    %tr{:class => "table #{entry_class}"}
       %td
-        - if intruder.list_type == 'whitelist'
+        - if entry_class == 'success'
           %i.icon-ok
-        - elsif intruder.bans > 0
+        - elsif entry_class == 'error'
           %i.icon-fire
-        - elsif intruder.points > 0
+        - elsif entry_class == 'warn'
           %i.icon-warning-sign
 
       %td= intruder.contact_ip
-      %td= intruder.contact_port
       %td= intruder.points
-      %td= intruder.bans
       %td 
         - if intruder.ban_last
           = l intruder.ban_last, :format => :short
-      %td
-        - if intruder.ban_end
-          = l intruder.ban_end, :format => :short
 
       %td= intruder.contact_count
       %td
