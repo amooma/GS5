@@ -579,13 +579,17 @@ end
 
 
 function Dialplan.voicemail(self, destination)
-  if not self.caller.auth_account or self.caller.auth_account.class ~= 'sipaccount' then
-    self.log:error('VOICEMAIL - incompatible destination');
-    return { continue = false, code = 404, phrase = 'Mailbox not found' }
-  end
-
+  require 'common.str';
   require 'dialplan.voicemail'
-  local voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(self.caller.auth_account.id);
+
+  local voicemail_account = nil;
+
+  local sip_account_id
+  if not common.str.blank(destination.number) and false then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_number(destination.number);
+  elseif self.caller.auth_account and self.caller.auth_account.class == 'sipaccount' then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(self.caller.auth_account.id);
+  end
 
   if not voicemail_account then
     self.log:error('VOICEMAIL - no mailbox');
