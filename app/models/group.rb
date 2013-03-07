@@ -16,6 +16,11 @@ class Group < ActiveRecord::Base
     group_permissions.where(:permission => permission).pluck(:target_group_id)
   end
 
+  def has_permission(target_type, target_id, permission)
+    target_group_ids = GroupMembership.where(:item_id => target_id, :item_type => target_type).pluck(:group_id)
+    return group_permissions.where(:permission => permission, :target_group_id => target_group_ids).first != nil
+  end
+
   def self.union(sets=[])
     group_ids = []
     sets.each do |set|
