@@ -38,7 +38,8 @@ class SipAccount < ActiveRecord::Base
 
   has_many :ringtones, :as => :ringtoneable, :dependent => :destroy
 
-  has_many :calls, :finder_sql => lambda { |s| "SELECT DISTINCT calls_active.* FROM calls_active WHERE sip_account_id = #{self.id} OR b_sip_account_id = #{self.id}" }
+  has_many :call_legs, :class_name => 'Call'
+  has_many :b_call_legs, :class_name => 'Call', :foreign_key => 'b_sip_account_id'
 
   # Delegations:
   #
@@ -82,6 +83,10 @@ class SipAccount < ActiveRecord::Base
 
   def to_s
     truncate((self.caller_name || "SipAccount ID #{self.id}"), :length => GsParameter.get('TO_S_MAX_CALLER_NAME_LENGTH')) + " (#{truncate(self.auth_name, :length => GsParameter.get('TO_S_MAX_LENGTH_OF_AUTH_NAME'))}@...#{self.host.split(/\./)[2,3].to_a.join('.') if self.host })"
+  end
+
+  def calls
+    self.call_legs + self.b_call_legs
   end
   
   def call_forwarding_toggle( call_forwarding_service, to_voicemail = nil )
