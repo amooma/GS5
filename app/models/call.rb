@@ -1,5 +1,5 @@
 class Call < ActiveRecord::Base
-  self.table_name = 'detailed_calls'
+  self.table_name = 'calls_active'
   self.primary_key = 'uuid'
 
   attr_writer :sip_account_id
