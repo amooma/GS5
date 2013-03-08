@@ -57,8 +57,11 @@ Gemeinschaft42c::Application.routes.draw do
     collection { post :sort }
   end
 
-  resources :acd_agents, :only => [] do
+  resources :acd_agents do
     resources :phone_numbers
+    member do
+      get 'toggle'
+    end
   end
 
   resources :automatic_call_distributors, :only => [] do
@@ -260,6 +263,7 @@ Gemeinschaft42c::Application.routes.draw do
     resources :call_forwards
     resources :ringtones
     resources :calls
+    resources :acd_agents
     resources :call_histories do
       collection do
         delete 'destroy_multiple'

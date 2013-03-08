@@ -99,3 +99,10 @@
 - if @sip_account.calls.count > 0
   %h2= t("calls.index.page_title")
   = render "calls/index_core", :calls => @sip_account.calls, :parent => @sip_account
+
+- if (can?(:read, AcdAgent) && @sip_account.acd_agents.count > 0) || can?(:create, @sip_account.acd_agents.build)
+  %h2= t('acd_agents.index.page_title')
+  - if @sip_account.acd_agents.count > 0
+    = render "acd_agents/index_core", :acd_agents => @sip_account.acd_agents
+    %br
+  = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => AcdAgent }

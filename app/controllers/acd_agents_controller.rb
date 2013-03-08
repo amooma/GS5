@@ -1,7 +1,7 @@
 class AcdAgentsController < ApplicationController
-  load_and_authorize_resource :automatic_call_distributor
-  load_and_authorize_resource :acd_agent, :through => [:automatic_call_distributor]
-
+  load_and_authorize_resource :automatic_call_distributor, :except => [:toggle]
+  load_and_authorize_resource :acd_agent, :through => [:automatic_call_distributor], :except => [:toggle]
+  load_and_authorize_resource :acd_agent, :only => [:toggle]
   before_filter :spread_breadcrumbs
 
   def index
@@ -62,16 +62,24 @@ class AcdAgentsController < ApplicationController
     redirect_to automatic_call_distributor_acd_agents_path(@automatic_call_distributor), :notice => t('acd_agents.controller.successfuly_destroyed')
   end
 
+  def toggle
+    @acd_agent.toggle_status
+    redirect_to request.referer
+  end
+
+  private
   def spread_breadcrumbs
-    if @automatic_call_distributor.automatic_call_distributorable.class == User
-      add_breadcrumb t("#{@automatic_call_distributor.automatic_call_distributorable.class.name.underscore.pluralize}.index.page_title"), method( :"tenant_#{@automatic_call_distributor.automatic_call_distributorable.class.name.underscore.pluralize}_path" ).(@automatic_call_distributor.tenant)
-      add_breadcrumb @automatic_call_distributor.automatic_call_distributorable, method( :"tenant_#{@automatic_call_distributor.automatic_call_distributorable.class.name.underscore}_path" ).(@automatic_call_distributor.tenant, @automatic_call_distributor.automatic_call_distributorable)
-    end
-    add_breadcrumb t("automatic_call_distributors.index.page_title"), method( :"#{@automatic_call_distributor.automatic_call_distributorable.class.name.underscore}_automatic_call_distributors_path" ).(@automatic_call_distributor.automatic_call_distributorable)
-    add_breadcrumb @automatic_call_distributor, method( :"#{@automatic_call_distributor.automatic_call_distributorable.class.name.underscore}_automatic_call_distributor_path" ).(@automatic_call_distributor.automatic_call_distributorable, @automatic_call_distributor)
-    add_breadcrumb t("acd_agents.index.page_title"), automatic_call_distributor_acd_agents_path(@automatic_call_distributor)
-    if @acd_agent && !@acd_agent.new_record?
-      add_breadcrumb @acd_agent, automatic_call_distributor_acd_agent_path(@automatic_call_distributor, @acd_agent)
+    if @automatic_call_distributor
+      if @automatic_call_distributor.automatic_call_distributorable.class == User
+        add_breadcrumb t("#{@automatic_call_distributor.automatic_call_distributorable.class.name.underscore.pluralize}.index.page_title"), method( :"tenant_#{@automatic_call_distributor.automatic_call_distributorable.class.name.underscore.pluralize}_path" ).(@automatic_call_distributor.tenant)
+        add_breadcrumb @automatic_call_distributor.automatic_call_distributorable, method( :"tenant_#{@automatic_call_distributor.automatic_call_distributorable.class.name.underscore}_path" ).(@automatic_call_distributor.tenant, @automatic_call_distributor.automatic_call_distributorable)
+      end
+      add_breadcrumb t("automatic_call_distributors.index.page_title"), method( :"#{@automatic_call_distributor.automatic_call_distributorable.class.name.underscore}_automatic_call_distributors_path" ).(@automatic_call_distributor.automatic_call_distributorable)
+      add_breadcrumb @automatic_call_distributor, method( :"#{@automatic_call_distributor.automatic_call_distributorable.class.name.underscore}_automatic_call_distributor_path" ).(@automatic_call_distributor.automatic_call_distributorable, @automatic_call_distributor)
+      add_breadcrumb t("acd_agents.index.page_title"), automatic_call_distributor_acd_agents_path(@automatic_call_distributor)
+      if @acd_agent && !@acd_agent.new_record?
+        add_breadcrumb @acd_agent, automatic_call_distributor_acd_agent_path(@automatic_call_distributor, @acd_agent)
+      end
     end
   end
 end

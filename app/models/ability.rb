@@ -170,6 +170,11 @@ class Ability
           can :manage, Ringtone, :ringtoneable_type => 'SipAccount',  :ringtoneable_id => user.sip_account_ids
           can :create, Ringtone
 
+          # User can read and toggle status of ACD agents
+          #
+          can :read, AcdAgent, :destination_type => 'SipAccount',  :destination_id => user.sip_account_ids
+          can :toggle, AcdAgent, :destination_type => 'SipAccount',  :destination_id => user.sip_account_ids
+
           # SoftkeyFunctions
           #
           can :read, SoftkeyFunction
