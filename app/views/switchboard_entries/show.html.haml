@@ -1,0 +1,22 @@
+- content_for :title, t("switchboard_entries.show.page_title")
+
+.row
+  .span6
+    %table.table.table-striped
+      %tr
+        %td
+          %strong= t('switchboard_entries.show.sip_account_id') + ":"
+        %td
+          = @switchboard_entry.sip_account
+      %tr
+        %td
+          %strong= t('switchboard_entries.show.name') + ":"
+        %td
+          = @switchboard_entry.name
+      %tr
+        %td
+          %strong= t('switchboard_entries.show.position') + ":"
+        %td
+          = @switchboard_entry.position
+
+    = render :partial => 'shared/show_edit_destroy_part', :locals => {:parent => @switchboard, :child => @switchboard_entry }

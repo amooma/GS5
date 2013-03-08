@@ -1,5 +1,10 @@
 Gemeinschaft42c::Application.routes.draw do
-  resources :switchboards
+
+  resources :switchboards do
+    resources :switchboard_entries do
+      collection { post :sort }
+    end
+  end
 
   resources :restore_jobs
 

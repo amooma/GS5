@@ -1,0 +1,55 @@
+de:
+  switchboard_entries:
+    name: 'Switchboard-Eintrag'
+    controller:
+      successfuly_created: 'Switchboard-Eintrag wurde angelegt.'
+      successfuly_updated: 'Switchboard-Eintrag wurde aktualisiert.'
+      successfuly_destroyed: 'Switchboard-Eintrag wurde gelöscht.'
+    index:
+      page_title: 'Liste aller Switchboard-Einträge'
+      switchboard_id: 'Switchboard'
+      sip_account_id: 'SIP-Account'
+      name: 'Name'
+      position: 'Position'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Switchboard-Eintrag'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Switchboard-Eintrag neu anlegen für %{resource}'
+    show:
+      page_title: 'Switchboard-Eintrag bearbeiten'
+      switchboard_id: 'Switchboard'
+      sip_account_id: 'SIP-Account'
+      name: 'Name'
+      position: 'Position'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Switchboard-Eintrag neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Switchboard-Eintrag bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      switchboard_id:
+        label: 'Switchboard'
+        hint: ''
+      sip_account_id:
+        label: 'SIP-Account'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      position:
+        label: 'Position'
+        hint: ''
+      submit: 'Absenden'
