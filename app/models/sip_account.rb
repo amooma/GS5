@@ -184,6 +184,33 @@ class SipAccount < ActiveRecord::Base
     return sip_accounts
   end
 
+  def status
+    states = Array.new
+
+    SipAccount.last.call_legs.each do |call_leg|
+      states << {
+        :status => call_leg.callstate,
+        :caller => true,
+        :endpoint_name => call_leg.callee_name,
+        :endpoint_number => call_leg.destination,
+        :endpoint_sip_account_id => call_leg.b_sip_account_id,
+        :start_stamp => call_leg.start_stamp,
+      }
+    end
+
+    SipAccount.last.b_call_legs.each do |call_leg|
+      states << {
+        :status => call_leg.callstate,
+        :caller => false,
+        :endpoint_name => call_leg.caller_id_name,
+        :endpoint_number => call_leg.caller_id_number,
+        :endpoint_sip_account_id => call_leg.sip_account_id,
+        :start_stamp => call_leg.start_stamp,
+      }
+    end
+
+    return states
+  end
 
   private
       
