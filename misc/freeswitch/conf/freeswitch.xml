@@ -914,7 +914,6 @@
               <match>
                 <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
                 <action function="say" data="$1" method="pronounced" type="number"/>
-                <action function="play-file" data="ivr/ivr-in_line.wav"/>
               </match>
             </input>
           </macro>
@@ -923,7 +922,6 @@
               <match>
                 <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
                 <action function="say" data="1" method="pronounced" type="number"/>
-                <action function="play-file" data="ivr/ivr-in_line.wav"/>
                 <action function="break"/>
               </match>
             </input>
@@ -931,7 +929,6 @@
               <match>
                 <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
                 <action function="say" data="$1" method="pronounced" type="number"/>
-                <action function="play-file" data="ivr/ivr-in_line.wav"/>
                 <action function="play-file" data="ivr/ivr-thank_you_for_holding.wav"/>
               </match>
             </input>
@@ -941,7 +938,6 @@
               <match>
                 <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
                 <action function="say" data="1" method="pronounced" type="number"/>
-                <action function="play-file" data="ivr/ivr-in_line.wav"/>
                 <action function="break"/>
               </match>
             </input>
@@ -949,7 +945,6 @@
               <match>
                 <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
                 <action function="say" data="$1" method="pronounced" type="number"/>
-                <action function="play-file" data="ivr/ivr-in_line.wav"/>
                 <action function="play-file" data="ivr/ivr-thank_you_for_holding.wav"/>
               </match>
             </input>
