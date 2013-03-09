@@ -50,13 +50,23 @@ class Intruder < ActiveRecord::Base
     }
   end
 
-  def self.control(action, attributes={})
+  def perimeter_db_rescan
+    Intruder.perimeter_control(:db_rescan, :key => self.key)
+  end
+
+  def self.perimeter_db_rescan(key=nil)
+    Intruder.perimeter_control(:db_rescan, :key => key)
+  end
+
+  def self.perimeter_control(action, attributes={})
     require 'freeswitch_event'
     event = FreeswitchEvent.new('CUSTOM')
     event.add_header('Event-Subclass', 'perimeter::control')
     event.add_header('action', action)
     attributes.each do |name, value|
-      event.add_header(name, value)
+      if !name.blank? && value then
+        event.add_header(name, value)
+      end
     end
     return event.fire()
   end
