@@ -70,11 +70,11 @@ function Intruder.sources_list(self, key)
       ignore = (record.list_type == 'whitelist'),
       contact_first = 0,
       contact_last = 0,
-      contact_count = record.contact_count,
+      contact_count = tonumber(record.contact_count) or 0,
       span_contact_count = 0,
       span_start = 0,
-      points = record.points,
-      banned = record.bans,
+      points = tonumber(record.points) or 0,
+      banned = tonumber(record.bans) or 0,
     };
     sources_count = sources_count + 1;
     if record.list_type == 'whitelist' then
