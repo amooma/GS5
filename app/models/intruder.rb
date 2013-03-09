@@ -119,6 +119,7 @@ class Intruder < ActiveRecord::Base
         write_firewall_list
         restart_firewall
       end
+      self.perimeter_db_rescan
     end
   end
 
@@ -129,6 +130,7 @@ class Intruder < ActiveRecord::Base
         restart_firewall
       end
     end
+    self.perimeter_db_rescan
   end
 
   def check_if_delete_relevant
@@ -138,5 +140,6 @@ class Intruder < ActiveRecord::Base
         restart_firewall
       end
     end
+    self.perimeter_db_rescan
   end 
 end
