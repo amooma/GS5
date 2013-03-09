@@ -31,7 +31,7 @@ class CallsController < ApplicationController
   end
 
   def create
-    @call = @sip_account.calls.create(params[:call])
+    @call = @sip_account.call_legs.build(params[:call])
 
     if @call && @call.call
       m = method( :"#{@parent.class.name.underscore}_calls_url" )
