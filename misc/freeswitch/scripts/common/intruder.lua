@@ -49,3 +49,46 @@ function Intruder.update_blacklist(self, event)
 
   self.database:insert_or_update('intruders', intruder_record, { created_at = false, comment = false });
 end
+
+
+function Intruder.sources_list(self, key)
+  local sql_query = nil;
+
+  if key then
+    sql_query = 'SELECT * FROM `intruders` WHERE `key` = ' .. self.database:escape(key, '"') .. ' LIMIT 1';
+  else
+    sql_query = 'SELECT * FROM `intruders`';
+  end
+
+  local sources = {};
+  local sources_count = 0;
+  local blacklist_count = 0;
+  local whitelist_count = 0;
+
+  self.database:query(sql_query, function(record)
+    sources[record.key] = {
+      ignore = (record.list_type == 'whitelist'),
+      contact_first = 0,
+      contact_last = 0,
+      contact_count = record.contact_count,
+      span_contact_count = 0,
+      span_start = 0,
+      points = record.points,
+      banned = record.bans,
+    };
+    sources_count = sources_count + 1;
+    if record.list_type == 'whitelist' then
+      whitelist_count = whitelist_count + 1;
+    elseif record.list_type == 'blacklist' then
+      blacklist_count = blacklist_count + 1;
+    end
+  end);
+
+  self.log:info('[intruder] INTRUDER_LIST - entries loaded: ', sources_count, ', blacklist: ', blacklist_count, ', whitelist: ', whitelist_count);
+  
+  if key then
+    return sources[key];
+  end
+
+  return sources;
+end
