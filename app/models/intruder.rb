@@ -50,6 +50,17 @@ class Intruder < ActiveRecord::Base
     }
   end
 
+  def self.control(action, attributes={})
+    require 'freeswitch_event'
+    event = FreeswitchEvent.new('CUSTOM')
+    event.add_header('Event-Subclass', 'perimeter::control')
+    event.add_header('action', action)
+    attributes.each do |name, value|
+      event.add_header(name, value)
+    end
+    return event.fire()
+  end
+
   private
   def set_key_if_empty
     if self.key.blank?
