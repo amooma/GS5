@@ -11,16 +11,22 @@
     %p
       %small
         = truncate(switchboard_entry.to_s, :length => 10)
-        %span{:class => "label #{(switchboard_entry.sip_account.registration ? '' : 'label-inverse')}"}
-          - if !switchboard_entry.sip_account.registration
+        %br
+        - if !switchboard_entry.sip_account.registration
+          %span.label.label-inverse
             %i.icon-ban-circle.icon-white
-          - if switchboard_entry.sip_account.phone_numbers.count > 1
-            - phone_numbers = []
-            - switchboard_entry.sip_account.phone_numbers.order(:position).each do |phone_number|
-              - if phone_number.number.length < 6
-                - phone_numbers << phone_number
-            - if phone_numbers.size == 0
-              - phone_numbers = switchboard_entry.sip_account.phone_numbers.order(:position)
-          - else
-            - phone_numbers = switchboard_entry.sip_account.phone_numbers
-          = render 'phone_numbers/listing', :phone_numbers => phone_numbers
+        - else
+          - if switchboard_entry.sip_account.call_legs(:where => ["HELD", "ACTIVE"]).size != 0
+            %span.label.label-success
+              %i.icon-user.icon-white    
+          - if switchboard_entry.sip_account.call_legs(:where => ["RINGING"]).size != 0
+            %span.label.label-info
+              %i.icon-bell.icon-white    
+        - if switchboard_entry.sip_account.non_e164_phone_numbers.size == 0
+          - phone_numbers = switchboard_entry.sip_account.phone_numbers
+        - else 
+          - phone_numbers = switchboard_entry.sip_account.non_e164_phone_numbers
+
+        - phone_numbers.each do |phone_number|
+          %span.label
+            = phone_number.number
