@@ -87,3 +87,6 @@
 
     - cache(['user_show_conferences_overview', I18n.locale, @user, @user.conferences]) do
       = render :partial => 'conferences', :locals => {:user => @user}
+
+    - cache(['user_switchboards_overview', I18n.locale, @user, @user.switchboards]) do
+      = render :partial => 'switchboards', :locals => {:user => @user}

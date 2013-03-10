@@ -1,0 +1,7 @@
+-# Switchboards
+-#
+- if (can?( :index, Switchboard ) && user.switchboards.any? ) || can?( :create, Switchboard )
+  %h2= t('switchboards.index.page_title')
+  - if can?( :index, Switchboard ) && user.switchboards.count > 0
+    = render :partial => "switchboards/index_core", :locals => {:switchboards => user.switchboards, :user => user}
+  = render :partial => 'shared/create_link', :locals => {:parent => user, :child_class => Conference}
