@@ -79,9 +79,9 @@ gem 'uuid'
 # Application server
 gem 'unicorn'
 
-# Thin is needed for the Private Pub stuff.
 # http://railscasts.com/episodes/316-private-pub
 gem 'thin'
+gem 'private_pub'
 
 # Backup https://github.com/meskyanichi/backup
 gem 'backup'
