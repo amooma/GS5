@@ -9,6 +9,7 @@ class SwitchboardsController < ApplicationController
 
   def show
     @switchboard = @user.switchboards.find(params[:id])
+    @switchboard_entries = @switchboard.switchboard_entries
     spread_breadcrumbs
   end
 
