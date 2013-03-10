@@ -1,12 +1,45 @@
-- content_for :title, t("switchboards.show.page_title")
+- content_for :title, @switchboard.name
+
 
 .row
-  .span6
-    %table.table.table-striped
-      %tr
-        %td
-          %strong= t('switchboards.show.name') + ":"
-        %td
-          = @switchboard.name
+  .span12
+    .well.pull-right
+      %p
+        =current_user
 
-= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @user, :child => @switchboard }
+    %ul.thumbnails
+      - @switchboard.switchboard_entries.each do |switchboard_entry|
+        %li.span1
+          %div.thumbnail
+            %a.thumbnail{:href => tenant_user_path(switchboard_entry.sip_account.sip_accountable.current_tenant, switchboard_entry.sip_account.sip_accountable)}
+              - if switchboard_entry.sip_account.sip_accountable.image?
+                = image_tag(switchboard_entry.sip_account.sip_accountable.image_url(:mini).to_s, :class => 'img-rounded')
+              - else
+                - if switchboard_entry.sip_account.sip_accountable.male?
+                  = image_tag 'icons/user-male-16x.png', :class => 'img-rounded'
+                - else
+                  = image_tag 'icons/user-female-16x.png', :class => 'img-rounded'
+            %p
+              %small
+                = truncate(switchboard_entry.to_s, :length => 10)
+                %span{:class => "label #{(switchboard_entry.sip_account.registration ? '' : 'label-inverse')}"}
+                  - if !switchboard_entry.sip_account.registration
+                    %i.icon-ban-circle.icon-white
+                  - if switchboard_entry.sip_account.phone_numbers.count > 1
+                    - phone_numbers = []
+                    - switchboard_entry.sip_account.phone_numbers.order(:position).each do |phone_number|
+                      - if phone_number.number.length < 6
+                        - phone_numbers << phone_number
+                    - if phone_numbers.size == 0
+                      - phone_numbers = switchboard_entry.sip_account.phone_numbers.order(:position)
+                  - else
+                    - phone_numbers = switchboard_entry.sip_account.phone_numbers
+                  = render 'phone_numbers/listing', :phone_numbers => phone_numbers
+
+- if can? :edit, @switchboard
+  .row
+    .span12
+      %a.btn.btn-small.btn-warning{:href => switchboard_switchboard_entries_path(@switchboard) }
+        %i.icon-edit.icon-white
+        %span.hidden-phone
+          =t("switchboard_entries.index.page_title")

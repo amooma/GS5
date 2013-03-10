@@ -215,7 +215,9 @@ Gemeinschaft42c::Application.routes.draw do
     resources :fax_accounts
     resources :system_messages, :except => [ :edit, :update, :destroy ]
     resources :parking_stalls
-    resources :switchboards
+    resources :switchboards do
+      get :display
+    end
   end
   
   resources :user_groups do

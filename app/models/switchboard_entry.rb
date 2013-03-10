@@ -12,6 +12,7 @@ class SwitchboardEntry < ActiveRecord::Base
             :presence => true
 
   validates :name,
+            :length => { :maximum => 10 },
             :uniqueness => {:scope => :switchboard_id},
             :allow_blank => true,
             :allow_nil => true
