@@ -54,8 +54,7 @@ group :test do
 end
 
 gem 'haml'
-# gem 'simple_form', '~> 2.0.1'
-gem 'simple_form', github: 'plataformatec/simple_form', branch: 'v2.1'
+gem 'simple_form', '~> 2.1.0'
 
 # Image Upload
 gem 'carrierwave'
@@ -80,6 +79,8 @@ gem 'uuid'
 # Application server
 gem 'unicorn'
 
+# Thin is needed for the Private Pub stuff.
+# http://railscasts.com/episodes/316-private-pub
 gem 'thin'
 
 # Backup https://github.com/meskyanichi/backup
