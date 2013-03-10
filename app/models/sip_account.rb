@@ -42,6 +42,7 @@ class SipAccount < ActiveRecord::Base
   has_many :b_call_legs, :class_name => 'Call', :foreign_key => 'b_sip_account_id'
 
   has_many :acd_agents, :as => :destination, :dependent => :destroy
+  has_many :switchboard_entries, :dependent => :destroy
 
   # Delegations:
   #

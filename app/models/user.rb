@@ -94,6 +94,8 @@ class User < ActiveRecord::Base
   has_many :group_memberships, :as => :item, :dependent => :destroy, :uniq => true
   has_many :groups, :through => :group_memberships
   
+  has_many :switchboards, :dependent => :destroy
+
   # Avatar like photo  
   mount_uploader :image, ImageUploader  
 
