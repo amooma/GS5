@@ -42,6 +42,10 @@ class TriggerController < ApplicationController
           end
         end
 
+        # Indicate a new voicemail in the navigation bar.
+        #
+        PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_indicator').hide.delay(250).show('slow').hide.delay(250).show('slow');")
+
         render(
           :status => 200,
           :layout => false,
