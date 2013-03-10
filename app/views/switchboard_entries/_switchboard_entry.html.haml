@@ -21,12 +21,7 @@
               %i.icon-user.icon-white    
           - if switchboard_entry.sip_account.call_legs(:where => ["RINGING"]).size != 0
             %span.label.label-info
-              %i.icon-bell.icon-white    
-        - if switchboard_entry.sip_account.non_e164_phone_numbers.size == 0
-          - phone_numbers = switchboard_entry.sip_account.phone_numbers
-        - else 
-          - phone_numbers = switchboard_entry.sip_account.non_e164_phone_numbers
-
-        - phone_numbers.each do |phone_number|
+              %i.icon-bell.icon-white
+        - if switchboard_entry.sip_account.phone_numbers.any?
           %span.label
-            = phone_number.number
+            = switchboard_entry.sip_account.phone_numbers.first.number        

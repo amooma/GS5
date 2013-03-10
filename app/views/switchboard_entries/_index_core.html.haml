@@ -5,12 +5,13 @@
     %th= t('switchboard_entries.index.name')
     %th
 
-  %tbody{ :id => "switchboard_entries", :'data-update-url' => sort_switchboard_switchboard_entries_path(switchboard_entries.first.switchboard) }
-    - for switchboard_entry in switchboard_entries
-      = content_tag_for :tr, switchboard_entry do
-        %td
-          %span.handle
-            %i.icon-resize-vertical
-        %td= switchboard_entry.sip_account
-        %td= switchboard_entry.name
-        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => switchboard_entry.switchboard, :child => switchboard_entry}
+  - if switchboard_entries.any?
+    %tbody{ :id => "switchboard_entries", :'data-update-url' => sort_switchboard_switchboard_entries_path(switchboard_entries.first.switchboard) }
+      - for switchboard_entry in switchboard_entries
+        = content_tag_for :tr, switchboard_entry do
+          %td
+            %span.handle
+              %i.icon-resize-vertical
+          %td= switchboard_entry.sip_account
+          %td= switchboard_entry.name
+          =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => switchboard_entry.switchboard, :child => switchboard_entry}
