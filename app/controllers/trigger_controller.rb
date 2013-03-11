@@ -110,10 +110,6 @@ class TriggerController < ApplicationController
       end
        
       if errors.count == 0
-        # Reload FaxDocument#show
-        #
-        PrivatePub.publish_to("/fax_documents/#{fax_document.id}", "location.reload();")
-
         # Indicate a new fax in the navigation bar.
         #
         if fax_document.fax_accountable.class == User
