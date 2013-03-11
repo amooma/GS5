@@ -110,6 +110,13 @@ class TriggerController < ApplicationController
       end
        
       if errors.count == 0
+        # Indicate a new fax in the navigation bar.
+        #
+        if fax_document.fax_accountable.class == User
+          user = fax_document.fax_accountable
+          PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_indicator').hide.delay(250).show('slow').hide.delay(250).show('slow');")
+        end
+
         render(
           :status => 200,
           :layout => false,
