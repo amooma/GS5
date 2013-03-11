@@ -66,5 +66,5 @@
   .span12
     = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @fax_document.fax_account, :child => @fax_document }
 
-- if @fax_document.state == 'sending' || @fax_document.state == 'queued_for_sending'
+- if ['sending', 'queued_for_sending'].include? @fax_document.state
   = subscribe_to "/fax_documents/#{@fax_document.id}"
