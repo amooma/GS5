@@ -22,12 +22,8 @@
                 =t("call_histories.index.page_title")
             %li
               %a{:href => sip_account_voicemail_messages_path(current_user.sip_accounts.first)}
-                %i.icon-star.icon-white{:id => 'new_voicemail_indicator'}
                 =t("voicemail_messages.index.page_title")
-            :javascript
-              $("#new_voicemail_indicator").hide()
-            = subscribe_to "/users/#{current_user.id}/messages/new"   
-
+   
       - if current_user
         %ul.nav.pull-right
           %li.display
@@ -43,10 +39,18 @@
           - if current_page?(tenant_user_path(current_user.current_tenant, current_user))
             %li.active
               %a.navbar-link{:href => tenant_user_path(current_user.current_tenant, current_user)}
+                %i.icon-star.icon-white{:id => 'new_voicemail_or_fax_indicator'}
+                :javascript
+                  $("#new_voicemail_or_fax_indicator").hide()
+                = subscribe_to "/users/#{current_user.id}/messages/new"                
                 = current_user
           - else
             %li
               %a.navbar-link{:href => tenant_user_path(current_user.current_tenant, current_user)}
+                %i.icon-star.icon-white{:id => 'new_voicemail_or_fax_indicator'}
+                :javascript
+                  $("#new_voicemail_or_fax_indicator").hide()
+                = subscribe_to "/users/#{current_user.id}/messages/new"                
                 = current_user
 
           - if single_sign_on_system? == false
