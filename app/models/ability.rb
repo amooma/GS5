@@ -183,6 +183,11 @@ class Ability
           #
           can :manage, VoicemailMessage
           can :manage, VoicemailSetting
+
+          # Switchboard
+          #
+          can :read, Switchboard, :id => user.switchboard_ids
+          can :read, SwitchboardEntry, :switchboard_id => user.switchboard_ids
         end
       end
     else

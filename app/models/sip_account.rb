@@ -42,6 +42,7 @@ class SipAccount < ActiveRecord::Base
   has_many :b_call_legs, :class_name => 'Call', :foreign_key => 'b_sip_account_id'
 
   has_many :acd_agents, :as => :destination, :dependent => :destroy
+  has_many :switchboard_entries, :dependent => :destroy
 
   # Delegations:
   #
@@ -210,6 +211,11 @@ class SipAccount < ActiveRecord::Base
     end
 
     return states
+  end
+
+  def non_e164_phone_numbers
+    array_of_phone_numbers_as_strings = self.phone_numbers.map{ |phone_number| phone_number.number.to_s }.sort
+    self.phone_numbers.where(:number => array_of_phone_numbers_as_strings.select { |phone_number| phone_number[0] != '+' })
   end
 
   private

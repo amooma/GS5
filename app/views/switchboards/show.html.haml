@@ -1,0 +1,18 @@
+- content_for :title, @switchboard.name
+
+.row
+  .span12
+    .well.pull-right
+      %p
+        =current_user
+
+    %ul.thumbnails
+      = render :partial => "switchboard_entries/switchboard_entry", :collection => @switchboard_entries
+
+- if can? :edit, @switchboard
+  .row
+    .span12
+      %a.btn.btn-small.btn-warning{:href => switchboard_switchboard_entries_path(@switchboard) }
+        %i.icon-edit.icon-white
+        %span.hidden-phone
+          =t("switchboard_entries.index.page_title")

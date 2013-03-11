@@ -1,0 +1,27 @@
+%li.span1{:id => "switchboard_entry_id_#{switchboard_entry.id}"}
+  %div.thumbnail
+    %a.thumbnail{:href => tenant_user_path(switchboard_entry.sip_account.sip_accountable.current_tenant, switchboard_entry.sip_account.sip_accountable)}
+      - if switchboard_entry.sip_account.sip_accountable.image?
+        = image_tag(switchboard_entry.sip_account.sip_accountable.image_url(:mini).to_s, :class => 'img-rounded')
+      - else
+        - if switchboard_entry.sip_account.sip_accountable.male?
+          = image_tag 'icons/user-male-16x.png', :class => 'img-rounded'
+        - else
+          = image_tag 'icons/user-female-16x.png', :class => 'img-rounded'
+    %p
+      %small
+        = truncate(switchboard_entry.to_s, :length => 10)
+        %br
+        - if !switchboard_entry.sip_account.registration
+          %span.label.label-inverse
+            %i.icon-ban-circle.icon-white
+        - else
+          - if switchboard_entry.sip_account.call_legs(:where => ["HELD", "ACTIVE"]).size != 0
+            %span.label.label-success
+              %i.icon-user.icon-white    
+          - if switchboard_entry.sip_account.call_legs(:where => ["RINGING"]).size != 0
+            %span.label.label-info
+              %i.icon-bell.icon-white
+        - if switchboard_entry.sip_account.phone_numbers.any?
+          %span.label
+            = switchboard_entry.sip_account.phone_numbers.first.number        
