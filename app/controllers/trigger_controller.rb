@@ -44,7 +44,7 @@ class TriggerController < ApplicationController
 
         # Indicate a new voicemail in the navigation bar.
         #
-        PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_indicator').hide.delay(250).show('slow').hide.delay(250).show('slow');")
+        PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_indicator').hide('fast').show('slow');")
 
         render(
           :status => 200,
@@ -114,7 +114,7 @@ class TriggerController < ApplicationController
         #
         if fax_document.fax_accountable.class == User
           user = fax_document.fax_accountable
-          PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_indicator').hide.delay(250).show('slow').hide.delay(250).show('slow');")
+          PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_indicator').hide('fast').show('slow');")
         end
 
         render(
