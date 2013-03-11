@@ -34,7 +34,11 @@ end
 
 
 function Gateway.find_by_id(self, id)
-  local sql_query = 'SELECT * FROM `gateways` WHERE `id`= ' .. tonumber(id) .. ' LIMIT 1';
+  local sql_query = 'SELECT `a`.*, `c`.`sip_host` `domain` \
+    FROM `gateways` `a` \
+    LEFT JOIN `gateway_settings` `b` ON `a`.`id` = `b`.`gateway_id` AND `b`.`name` = "inbound_username" \
+    LEFT JOIN `sip_registrations` `c` ON `b`.`value` = `c`.`sip_user` \
+    WHERE `a`.`id`= ' .. tonumber(id) .. ' LIMIT 1';
 
   local gateway = nil;
   self.database:query(sql_query, function(entry)
@@ -59,7 +63,42 @@ end
 function Gateway.find_by_name(self, name)
   local gateway_name = name:gsub('([^%a%d%._%+])', '');
 
-  local sql_query = 'SELECT * FROM `gateways` WHERE `name`= "' .. gateway_name .. '" LIMIT 1';
+  local sql_query = 'SELECT `a`.*, `c`.`sip_host` `domain` \
+    FROM `gateways` `a` \
+    LEFT JOIN `gateway_settings` `b` ON `a`.`id` = `b`.`gateway_id` AND `b`.`name` = "inbound_username" \
+    LEFT JOIN `sip_registrations` `c` ON `b`.`value` = `c`.`sip_user` \
+    WHERE `a`.`name`= ' .. self.database:escape(gateway_name, '"') .. ' LIMIT 1';
+
+  local gateway = nil;
+  self.database:query(sql_query, function(entry)
+    require 'common.str';
+    gateway = Gateway:new(self);
+    gateway.record = entry;
+    gateway.id = tonumber(entry.id);
+    gateway.name = entry.name;
+    gateway.technology = entry.technology;
+    gateway.outbound = common.str.to_b(entry.outbound);
+    gateway.inbound = common.str.to_b(entry.inbound);
+  end)
+
+  if gateway then
+    gateway.settings = self:config_table_get('gateway_settings', gateway.id);
+  end
+
+  return gateway;
+end
+
+
+function Gateway.find_by_auth_name(self, name)
+  local auth_name = name:gsub('([^%a%d%._%+])', '');
+
+  local sql_query = 'SELECT `c`.*, `a`.`value` `password`, `b`.`value` `username` \
+    FROM `gateway_settings` `a` \
+    INNER JOIN `gateway_settings` `b` \
+    ON (`a`.`gateway_id` = `b`.`gateway_id` AND `a`.`name` = "inbound_password" AND `b`.`name` = "inbound_username" AND `b`.`value` = ' .. self.database:escape(auth_name, '"') .. ') \
+    LEFT JOIN `gateways` `c` \
+    ON (`a`.`gateway_id` = `c`.`id`) \
+    WHERE `c`.`inbound` IS TRUE OR `c`.`outbound` IS TRUE LIMIT 1';
 
   local gateway = nil;
   self.database:query(sql_query, function(entry)
@@ -82,8 +121,15 @@ end
 
 
 function Gateway.call_url(self, destination_number)
+  require 'common.str';
+
   if self.technology == 'sip' then
-    return 'sofia/gateway/' .. self.GATEWAY_PREFIX .. self.id .. '/' .. tostring(destination_number);
+    if self.settings.inbound_username and self.settings.inbound_password and not common.str.blank(self.record.domain) then
+      return 'sofia/' .. (self.settings.profile or 'gemeinschaft') .. '/' .. self.settings.inbound_username .. '%' .. self.record.domain;
+    else
+      return 'sofia/gateway/' .. self.GATEWAY_PREFIX .. self.id .. '/' .. tostring(destination_number);
+    end
+    
   elseif self.technology == 'xmpp' then
     local destination_str = tostring(destination_number);
     if self.settings.destination_domain then
