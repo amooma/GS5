@@ -135,10 +135,22 @@ end
 function Dialplan.auth_gateway(self)
   require 'common.gateway'
   local gateway_class = common.gateway.Gateway:new{ log = self.log, database = self.database};
-  local gateway = gateway_class:authenticate(self.caller);
+
+  local gateway = false;
+
+  if self.caller:to_b('gs_from_gateway') then
+    gateway = {
+      name = self.caller:to_s('gs_gateway_name'),
+      id = self.caller:to_i('gs_gateway_id'),
+    }
+    log:info('AUTH_GATEWAY - authenticaded by password and username: ', self.caller:to_s('username'), ', gateway=', gateway.id, '|', gateway.name, ', ip: ', self.caller.sip_contact_host);
+    return gateway_class:find_by_id(gateway.id);
+  else
+    gateway = gateway_class:authenticate(self.caller);
+  end
 
   if gateway then
-    log:info('AUTH_GATEWAY - ', gateway.auth_source, ' ~ ', gateway.auth_pattern, ', gateway=', gateway.id, ', name: ', gateway.name, ', ip: ', self.caller.sip_contact_host);
+    log:info('AUTH_GATEWAY - ', gateway.auth_source, ' ~ ', gateway.auth_pattern, ', gateway=', gateway.id, '|', gateway.name, ', ip: ', self.caller.sip_contact_host);
     return gateway_class:find_by_id(gateway.id);
   end
 end
