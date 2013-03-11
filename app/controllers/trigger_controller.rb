@@ -91,6 +91,8 @@ class TriggerController < ApplicationController
           
           if fax_document.save
             Notifications.new_fax(fax_document).deliver
+            @last_fax_document = fax_document
+
             begin
               File.delete(pdf_file)
             rescue => e
@@ -112,8 +114,8 @@ class TriggerController < ApplicationController
       if errors.count == 0
         # Indicate a new fax in the navigation bar.
         #
-        if fax_document.fax_accountable.class == User
-          user = fax_document.fax_accountable
+        if @last_fax_document.fax_account.fax_accountable.class == User
+          user = @last_fax_document.fax_account.fax_accountable
           PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_or_fax_indicator').hide('fast').show('slow');")
         end
 
