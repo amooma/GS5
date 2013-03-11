@@ -22,6 +22,9 @@ local CALL_FORWARDING_SERVICES = {
 
 -- create dialplan object
 function Dialplan.new(self, arg)
+  require 'common.str';
+  require 'common.array';
+
   arg = arg or {}
   object = arg.object or {}
   setmetatable(object, self);
@@ -35,7 +38,6 @@ end
 
 
 function Dialplan.domain_get(self, domain)
-  require 'common.str'
   local global_domain = freeswitch.API():execute('global_getvar', 'domain');
 
   if common.str.blank(global_domain) then
@@ -74,7 +76,6 @@ end
 
 
 function Dialplan.configuration_read(self)
-  require 'common.str'
   require 'common.configuration_table'
 
   -- dialplan configuration
@@ -124,7 +125,6 @@ end
 
 
 function Dialplan.auth_sip_account(self)
-  require 'common.str'
   if not common.str.blank(self.caller.auth_account_type) then
     self.log:info('AUTH_SIP_ACCOUNT - ', self.caller.auth_account_type, '=', self.caller.account_id, '/', self.caller.account_uuid);
     return true;
@@ -163,7 +163,6 @@ end
 
 
 function Dialplan.retrieve_caller_data(self)
-  require 'common.str'
   self.caller.caller_phone_numbers_hash = {};
 
   -- TODO: Set auth_account on transfer initiated by calling party
@@ -219,8 +218,6 @@ end
 
 
 function Dialplan.destination_new(self, arg)
-  require 'common.str'
-
   local destination = {
     number = arg.number or '',
     type = arg.type or 'unknown',
@@ -300,7 +297,6 @@ function Dialplan.dial(self, destination)
   local user_id = nil; 
   local tenant_id = nil;
 
-  require 'common.str'
   destination.caller_id_number = destination.caller_id_number or self.caller.caller_phone_numbers[1];
 
   if destination.node_local and destination.type == 'sipaccount' then
@@ -334,7 +330,6 @@ function Dialplan.dial(self, destination)
 
   if not self.caller.clir then
     if user_id or tenant_id then
-      require 'common.str'
 
       if self.phonebook_number_lookup then
         require 'dialplan.phone_book'
@@ -591,7 +586,6 @@ end
 
 
 function Dialplan.voicemail(self, destination)
-  require 'common.str';
   require 'dialplan.voicemail'
 
   local voicemail_account = nil;
@@ -625,7 +619,6 @@ end
 
 
 function Dialplan.switch(self, destination)
-  require 'common.str'
   local result = nil;
   self.dial_timeout_active = self.dial_timeout;
 
@@ -719,7 +712,7 @@ function Dialplan.switch(self, destination)
   elseif not common.str.blank(destination.number) then
     local result = { continue = false, code = 404, phrase = 'No route' }
 
-    local clip_no_screening = common.str.try(self.caller, 'account.record.clip_no_screening');
+    local clip_no_screening = common.array.try(self.caller, 'account.record.clip_no_screening');
     self.caller.caller_id_numbers = {}
     if not common.str.blank(clip_no_screening) then
       for index, number in ipairs(common.str.strip_to_a(clip_no_screening, ',')) do
@@ -743,9 +736,8 @@ function Dialplan.switch(self, destination)
     end
 
     if self.phonebook_number_lookup then
-      require 'common.str'
-      local user_id = common.str.try(self.caller, 'account.owner.id');
-      local tenant_id = common.str.try(self.caller, 'account.owner.record.current_tenant_id');
+      local user_id = common.array.try(self.caller, 'account.owner.id');
+      local tenant_id = common.array.try(self.caller, 'account.owner.record.current_tenant_id');
 
       if user_id or tenant_id then
         require 'dialplan.phone_book'
@@ -761,7 +753,6 @@ function Dialplan.switch(self, destination)
       require 'dialplan.geo_number'
       local geo_number = dialplan.geo_number.GeoNumber:new{ log = self.log, database = self.database }:find(destination.number);
       if geo_number then
-        require 'common.str'
         self.log:info('GEO_NUMBER - found: ', geo_number.name, ', ', geo_number.country);
         if geo_number.name then
           destination.callee_id_name = common.str.to_ascii(geo_number.name) .. ', ' .. common.str.to_ascii(geo_number.country);
@@ -812,7 +803,6 @@ end
 
 
 function Dialplan.run(self, destination)
-  require 'common.str';
   require 'dialplan.router';
   
   self.caller:set_variable('hangup_after_bridge', false);
@@ -897,7 +887,7 @@ function Dialplan.run(self, destination)
   end
 
   self.caller:set_variable('default_language', self.caller.language);
-  self.caller:set_variable('sound_prefix', common.str.try(self.config, 'sounds.' .. tostring(self.caller.language)));
+  self.caller:set_variable('sound_prefix', common.array.try(self.config, 'sounds.' .. tostring(self.caller.language)));
   self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name, '" , number: ', destination.number, ', language: ', self.caller.language);
 
   local result = { continue = false };
