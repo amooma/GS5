@@ -16,6 +16,10 @@ class TriggerController < ApplicationController
             next
           end
 
+          # Indicate a new voicemail in the navigation bar.
+          #
+          PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_or_fax_indicator').hide('fast').show('slow');")
+
           if  user.email.blank?
             next
           end
@@ -41,10 +45,6 @@ class TriggerController < ApplicationController
             message.save
           end
         end
-
-        # Indicate a new voicemail in the navigation bar.
-        #
-        PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_or_fax_indicator').hide('fast').show('slow');")
 
         render(
           :status => 200,
