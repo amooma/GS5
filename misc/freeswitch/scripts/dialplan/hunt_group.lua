@@ -98,7 +98,7 @@ function HuntGroup.run(self, dialplan_object, caller, destination)
 
   self.log:info('HUNTGROUP ', self.record.id, ' - name: ', self.record.name, ', strategy: ', self.record.strategy,', members: ', #hunt_group_members);
 
-  local clip_no_screening = common.str.try(caller, 'account.record.clip_no_screening');
+  local clip_no_screening = common.array.try(caller, 'account.record.clip_no_screening');
   caller.caller_id_numbers = {}
   if not common.str.blank(clip_no_screening) then
     for index, number in ipairs(common.str.strip_to_a(clip_no_screening, ',')) do
