@@ -100,7 +100,7 @@ function Perimeter.check(self, event)
   end
   if not event.key then
     self.log:warning('[perimeter] PERIMETER_CHECK - no key');
-    for key, value in pairs() do
+    for key, value in pairs(event) do
       self.log:debug('[perimeter] PERIMETER_CHECK event_data - "', key, '" = "', value, '"');
     end
     return;
