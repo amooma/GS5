@@ -4,37 +4,6 @@
 
 module(...,package.seeall)
 
-function try(array, arguments)
-  if type(arguments) ~= 'string' or type(array) ~= 'table' then
-    return nil;
-  end
-
-  local result = array;
-  
-  arguments:gsub('([^%.]+)', function(entry)
-    local success, result = pcall(function() result = (result[tonumber(entry) or entry]); end);
-  end);
-  
-  return result;
-end
-
-
-function set(array, arguments, value)
-  local nop, arguments_count = arguments:gsub('%.', '');
-  local structure = array;
-  arguments:gsub('([^%.]+)', function(entry)
-    if arguments_count <= 0 then
-      structure[entry] = value;
-    elseif type(structure[entry]) == 'table' then
-      structure = structure[entry];
-    else
-      structure[entry] = {};
-      structure = structure[entry];
-    end
-    arguments_count = arguments_count - 1;
-  end);
-end
-
 -- to number
 function to_n(value)
   value = tostring(value):gsub('[^%d%.%+%-]', '');
