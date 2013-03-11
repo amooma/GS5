@@ -9,6 +9,9 @@ Perimeter = {}
 
 
 function Perimeter.new(self, arg)
+  require 'common.str';
+  require 'common.array';
+
   arg = arg or {}
   object = arg.object or {}
   setmetatable(object, self);
@@ -203,7 +206,7 @@ end
 function Perimeter.check_bad_headers(self, event)
   local points = nil;
   for name, pattern in pairs(self.bad_headers[event.action]) do
-    pattern = self:expand_variables(pattern, event);
+    pattern = common.array.expand_variables(pattern, event);
     local success, result = pcall(string.find, event[name], pattern);
     if success and result then
       self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
@@ -225,20 +228,21 @@ function Perimeter.append_blacklist_file(self, event)
   event.date = self:format_date(event.timestamp);
 
   if self.blacklist_file_comment then  
-    blacklist:write(self:expand_variables(self.blacklist_file_comment, event), '\n');
+    blacklist:write(common.array.expand_variables(self.blacklist_file_comment, event), '\n');
   end
 
   self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_APPEND_BLACKLIST - file: ', self.blacklist_file);
-  blacklist:write(self:expand_variables(self.blacklist_file_entry, event), '\n');
+  blacklist:write(common.array.expand_variables(self.blacklist_file_entry, event), '\n');
   blacklist:close();
 end
 
 
 function Perimeter.execute_ban(self, event)
-  local command = self:expand_variables(self.ban_command, event);
+  local command = common.array.expand_variables(self.ban_command, event);
   self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_EXECUTE_BAN - command: ', command);
   local result = os.execute(command);
 end
+
 
 function Perimeter.update_intruder(self, event)
   require 'common.intruder';
@@ -246,15 +250,7 @@ function Perimeter.update_intruder(self, event)
 end
 
 
-function Perimeter.expand_variables(self, line, variables)
-  return (line:gsub('{([%a%d%._]+)}', function(captured)
-    return variables[captured] or '';
-  end))
-end
-
-
 function Perimeter.action_db_rescan(self, record)
-  require 'common.str';
   require 'common.intruder';
 
   if common.str.blank(record.key) then

@@ -9,6 +9,7 @@ Router = {}
 -- create route object
 function Router.new(self, arg)
   require 'common.str';
+  require 'common.array';
   arg = arg or {}
   object = arg.object or {}
   setmetatable(object, self);
@@ -60,20 +61,13 @@ function Router.read_table(self, table_name, force_reload)
 end
 
 
-function Router.expand_variables(self, line, variables, variables2)
-  return (line:gsub('{([%a%d%._]+)}', function(captured)
-    return common.str.try(variables, captured) or common.str.try(variables2, captured) or '';
-  end))
-end
-
-
 function Router.element_match(self, pattern, search_string, replacement, route_variables)
   local success, result = pcall(string.find, search_string, pattern);
 
   if not success then
     self.log:error('ELEMENT_MATCH - table error - pattern: ', pattern, ', search_string: ', search_string);
   elseif result then
-    return true, search_string:gsub(pattern, self:expand_variables(replacement, route_variables, self.variables));
+    return true, search_string:gsub(pattern, common.array.expand_variables(replacement, route_variables, self.variables));
   end
 
   return false;
@@ -102,7 +96,7 @@ function Router.route_match(self, route)
     gateway = 'gateway' .. route.endpoint_id,
     ['type'] = route.endpoint_type,
     id = route.endpoint_id,
-    destination_number = common.str.try(self, 'caller.destination_number'),
+    destination_number = common.array.try(self, 'caller.destination_number'),
     channel_variables = {},
   };
 
@@ -117,18 +111,18 @@ function Router.route_match(self, route)
     if element.action ~= 'none' then
       if common.str.blank(element.var_in) or common.str.blank(element.pattern) and element.action == 'set' then
         result = true;
-        replacement = self:expand_variables(element.replacement, destination, self.variables);
+        replacement = common.array.expand_variables(element.replacement, destination, self.variables);
       else
         local command, variable_name = common.str.partition(element.var_in, ':');
 
         if not command or not variable_name then
-          local search_string = tostring(common.str.try(destination, element.var_in) or common.str.try(self.caller, element.var_in));
+          local search_string = tostring(common.array.try(destination, element.var_in) or common.array.try(self.caller, element.var_in));
           result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement), destination);
         elseif command == 'var' then
-          local search_string = tostring(common.str.try(self.caller, element.var_in));
+          local search_string = tostring(common.array.try(self.caller, element.var_in));
           result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
         elseif command == 'key' or command == 'val' then
-          local groups = common.str.try(self.caller, variable_name);
+          local groups = common.array.try(self.caller, variable_name);
           result, replacement = self:element_match_group(tostring(element.pattern), groups, tostring(element.replacement), command == 'key');
         elseif command == 'chv' then
           local search_string = self.caller:to_s(variable_name);
@@ -151,7 +145,7 @@ function Router.route_match(self, route)
         if not common.str.blank(element.var_out) then
           local command, variable_name = common.str.partition(element.var_out, ':');
           if not command or not variable_name or command == 'var' then
-            common.str.set(destination, element.var_out, replacement);
+            common.array.set(destination, element.var_out, replacement);
           elseif command == 'chv' then
             destination.channel_variables[variable_name] = replacement;
           elseif command == 'hdr' then

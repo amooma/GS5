@@ -23,7 +23,6 @@ function Functions.ensure_caller_sip_account(self, caller)
 end
 
 function Functions.dialplan_function(self, caller, dialed_number)
-  require 'common.str'
   local parameters = common.str.to_a(dialed_number, '%-');
   if not parameters[2] then
     return { continue = false, code = 484, phrase = 'Malformed function parameters', no_cdr = true };
@@ -169,12 +168,11 @@ function Functions.intercept_any_number(self, caller, destination_number)
     return { continue = false, code = 404, phrase = 'Destination not found', no_cdr = true };
   end
 
-  require 'common.str';
   require 'common.group';
   local group_class = common.group.Group:new{ log = self.log, database = self.database };
-  local group_ids = group_class:union(common.str.try(caller, 'auth_account.group_ids'), common.str.try(caller, 'auth_account.owner.group_ids'));
+  local group_ids = group_class:union(common.array.try(caller, 'auth_account.group_ids'), common.array.try(caller, 'auth_account.owner.group_ids'));
   local target_groups, target_group_ids = group_class:permission_targets(group_ids, 'pickup');
-  local destination_group_ids = group_class:union(common.str.try(phone_numberable, 'group_ids'), common.str.try(phone_numberable, 'owner.group_ids'));
+  local destination_group_ids = group_class:union(common.array.try(phone_numberable, 'group_ids'), common.array.try(phone_numberable, 'owner.group_ids'));
 
   if #group_class:intersection(destination_group_ids, target_group_ids) == 0 then
     self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - Groups not found or insufficient permissions');
@@ -195,10 +193,9 @@ function Functions.group_pickup(self, caller, group_id)
     return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
   end
 
-  require 'common.str';
   require 'common.group';
   local group_class = common.group.Group:new{ log = self.log, database = self.database };
-  local group_ids = group_class:union(common.str.try(caller, 'auth_account.group_ids'), common.str.try(caller, 'auth_account.owner.group_ids'));
+  local group_ids = group_class:union(common.array.try(caller, 'auth_account.group_ids'), common.array.try(caller, 'auth_account.owner.group_ids'));
   local target_group = group_class:is_target(group_id, 'pickup');
 
   if not target_group then
@@ -250,8 +247,6 @@ end
 
 
 function Functions.user_login(self, caller, number, pin)
-  require 'common.str'
-
   local PHONE_NUMBER_LEN_MIN = 4;
   local PHONE_NUMBER_LEN_MAX = 12;
   local PIN_LEN_MIN = 4;
@@ -367,7 +362,6 @@ end
 
 
 function Functions.user_logout(self, caller)
-  require 'common.str'
   self.log:info('LOGOUT - caller: ', caller.account_type, '/', caller.account_uuid, ', caller_id: ', caller.caller_id_number);
 
   -- find caller's sip account
@@ -845,8 +839,6 @@ end
 
 
 function Functions.hangup(self, caller, code, phrase)
-  require 'common.str'
-
   if not tonumber(code) then
     code = 403;
     phrase = 'Forbidden';
@@ -885,8 +877,7 @@ function Functions.call_parking_inout_index(self, caller, stall_index)
     return { continue = false, code = 404, phrase = 'No parkings stall specified', no_cdr = true }
   end
 
-  require 'common.str';
-  local owner = common.str.try(caller, 'auth_account.owner');
+  local owner = common.array.try(caller, 'auth_account.owner');
   
   if not owner then
     self.log:notice('FUNCTION_CALL_PARKING_INOUT_INDEX - stall owner not specified');
