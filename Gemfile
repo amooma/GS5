@@ -89,6 +89,8 @@ gem 'backup'
 # Cronjobs
 gem 'whenever'
 
+gem 'whois'
+
 # Local Variables:
 # mode: ruby
 # End:
