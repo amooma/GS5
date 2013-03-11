@@ -12,6 +12,7 @@ class GatewaySetting < ActiveRecord::Base
       'inbound_password' => 'String',
       'number_source' =>  'String',
       'contact' =>  'String',
+      'dial_string' =>  'String',
       'profile' =>  'String',
     },
    'xmpp' => { 
