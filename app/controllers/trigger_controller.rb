@@ -89,6 +89,31 @@ class TriggerController < ApplicationController
     end
   end
 
+  def sip_account_update
+    sip_account = SipAccount.find(params[:id])
+
+    if sip_account
+      # push the partial to the webbrowser
+      #
+      # new_html = ActionController::Base.helpers.escape_javascript(render_to_string("fax_documents/_fax_document", :layout => false, :locals => {:fax_document => fax_document}))
+      # PrivatePub.publish_to("/fax_documents/#{fax_document.id}", "$('#" + fax_document.id.to_s + ".fax_document').replaceWith('#{new_html}');")
+    
+      render(
+            :status => 200,
+            :layout => false,
+            :content_type => 'text/plain',
+            :text => "<!-- OK -->",
+      )
+    else
+      render(
+        :status => 501,
+        :layout => false,
+        :content_type => 'text/plain',
+        :text => "<!-- ERRORS: #{errors.join(', ')} -->",
+      )
+    end
+  end  
+
   def fax
     if !params[:fax_account_id].blank?
       fax_account = FaxAccount.where(:id => params[:fax_account_id].to_i).first
