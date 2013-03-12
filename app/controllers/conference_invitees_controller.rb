@@ -35,10 +35,7 @@ class ConferenceInviteesController < ApplicationController
     end                            
     
     if @conference_invitee.save
-      # m = method( :"#{@parent_in_route.class.name.underscore}_path" )
-      # redirect_to m.( @parent_in_route ), :notice => t('conference_invitees.controller.successfuly_created', :resource => @conference_invitees)
-      m = method( :"#{@conference_invitee.conference.conferenceable_type.underscore}_conference_path")
-      redirect_to m.( @conference_invitee.conference.conferenceable, @conference_invitee.conference), :notice => t('conference_invitees.controller.successfuly_created', :resource => @conference_invitees)
+      redirect_to conference_conference_invitees_url(@conference), :notice => t('conference_invitees.controller.successfuly_created')
     else
       render :new
     end
@@ -50,7 +47,7 @@ class ConferenceInviteesController < ApplicationController
 
   def update
     if @conference_invitee.update_attributes(params[:conference_invitee])
-      redirect_to @conference_invitee, :notice  => t('conference_invitees.controller.successfuly_updated')
+      redirect_to conference_conference_invitees_url(@conference), :notice  => t('conference_invitees.controller.successfuly_updated')
     else
       render :edit
     end
