@@ -25,6 +25,7 @@ Gemeinschaft42c::Application.routes.draw do
     get "trigger/voicemail"
     get "trigger/fax"
     match 'trigger/fax_has_been_sent/:id' => 'trigger#fax_has_been_sent'
+    match 'trigger/sip_account_update/:id' => 'trigger#sip_account_update'
   end
 
   resources :call_routes do
