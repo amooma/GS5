@@ -470,7 +470,7 @@
               </match>
             </input>
           </macro>
-                    <macro name="conference_welcome">
+          <macro name="conference_welcome">
             <input pattern="^(.*)$">
               <match>
                 <action function="play-file" data="conference/conf-welcome.wav"/>
