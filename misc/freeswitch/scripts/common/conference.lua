@@ -1,18 +1,10 @@
 -- Gemeinschaft 5 module: conference class
--- (c) AMOOMA GmbH 2012-2013
+-- (c) AMOOMA GmbH 2013
 -- 
 
 module(...,package.seeall)
 
 Conference = {}
-
-MEMBERS_MAX = 100;
-PIN_LENGTH_MAX = 10;
-PIN_LENGTH_MIN = 2;
-PIN_TIMEOUT = 4000;
-ANNOUNCEMENT_MAX_LEN = 10
-ANNOUNCEMENT_SILENCE_THRESHOLD = 500
-ANNOUNCEMENT_SILENCE_LEN = 3
 
 -- create conference object
 function Conference.new(self, arg)
@@ -24,215 +16,225 @@ function Conference.new(self, arg)
   self.log = arg.log;
   self.database = arg.database;
   self.record = arg.record;
-  self.max_members = 0;
   return object;
 end
 
--- find conference by id
+
+function Conference.settings_get(self)
+  require 'common.array';
+  require 'common.configuration_table';
+
+  local configuration = common.configuration_table.get(self.database, 'conferences');
+  if not configuration then
+    return nil;
+  end
+
+  local parameters = configuration.parameters or {};
+  local settings = configuration.settings or {};
+
+  settings.members_max = settings.members_max or tonumber(parameters['max-members']) or 100;
+  settings.pin_length_max = tonumber(settings.pin_length_max) or 10;
+  settings.pin_length_min = tonumber(settings.pin_length_min) or 2;
+  settings.pin_timeout = tonumber(settings.pin_timeout) or 4000;
+  settings.announcement_max_length = tonumber(settings.announcement_max_length) or 10;
+  settings.announcement_silence_threshold = tonumber(settings.announcement_silence_threshold) or 500;
+  settings.announcement_silence_length = tonumber(settings.announcement_silence_length) or 3;
+  settings.flags = settings.flags or { waste = true };
+  settings.pin_sound = parameters['pin-sound'];
+  settings.pin_bad_sound = parameters['bad-pin-sound'];
+  settings.key_enter = parameters.key_enter or '#';
+  settings.phrase_welcome = settings.phrase_welcome or 'conference_welcome';
+  settings.phrase_goodbye = settings.phrase_goodbye or 'conference_goodbye';
+  settings.phrase_record_name = settings.phrase_record_name or 'conference_record_name';
+  settings.spool_dir = settings.spool_dir or '/var/spool/freeswitch';
+  return settings;
+end
+
+
 function Conference.find_by_id(self, id)
-  local sql_query = 'SELECT * FROM `conferences` WHERE `id`= ' .. tonumber(id) .. '  LIMIT 1';
+  local sql_query = 'SELECT *, (NOW() >= `start` AND NOW() <= `end`) AS `open_now` FROM `conferences` WHERE `id`= ' .. tonumber(id) .. '  LIMIT 1';
   local conference = nil;
 
   self.database:query(sql_query, function(conference_entry)
     conference = Conference:new(self);
     conference.record = conference_entry;
     conference.id = tonumber(conference_entry.id);
+    conference.identifier = 'conference' .. conference.id;
     conference.uuid = conference_entry.uuid;
-    conference.max_members = tonumber(conference.record.max_members) or MEMBERS_MAX;
-  end)
+    conference.pin = conference_entry.pin;
+    conference.open_for_public = common.str.to_b(conference_entry.open_for_anybody);
+    conference.announce_entering = common.str.to_b(conference_entry.announce_new_member_by_name);
+    conference.announce_leaving = common.str.to_b(conference_entry.announce_left_member_by_name);
+    if not common.str.blank(conference_entry.open_now) then
+      conference.open_now = common.str.to_b(conference_entry.open_now);
+    end
 
+    conference.settings = self:settings_get();
+    if conference.settings then
+      conference.settings.members_max = tonumber(conference.record.max_members) or conference.settings.members_max;
+    else
+      conference.log:error('CONFERENCE - no basic configuration');
+    end
+  end)
+  
   return conference; 
 end
 
--- find invitee by phone numbers
+
 function Conference.find_invitee_by_numbers(self, phone_numbers)
   if not self.record then 
-    return false
+    return false;
   end
 
-  local sql_query = string.format(
-  "SELECT `conference_invitees`.`pin` AS `pin`, `conference_invitees`.`speaker` AS `speaker`, `conference_invitees`.`moderator` AS `moderator` " ..
-  "FROM `conference_invitees` JOIN `phone_numbers` ON `phone_numbers`.`phone_numberable_id` = `conference_invitees`.`id` " ..
-  "WHERE `phone_numbers`.`phone_numberable_type` = 'ConferenceInvitee' AND `conference_invitees`.`conference_id` = %d " ..
-  "AND `phone_numbers`.`number` IN ('%s') LIMIT 1", self.record.id, table.concat(phone_numbers, "','"));
+  local sql_query = 'SELECT `a`.* \
+    FROM `conference_invitees` `a` \
+    JOIN `phone_numbers` `b` ON `b`.`phone_numberable_id` = `a`.`id` \
+    WHERE `b`.`phone_numberable_type` = "ConferenceInvitee" \
+    AND `a`.`conference_id` = ' .. self.id .. ' \
+    AND `b`.`number` IN ("' .. table.concat(phone_numbers, "','") .. '") \
+    LIMIT 1';
   
   local invitee = nil;
 
-  self.database:query(sql_query, function(conference_entry)
-    invitee = conference_entry;
+  self.database:query(sql_query, function(invitee_entry)
+    invitee = invitee_entry;
   end)
 
-  return invitee; 
+  return invitee;
 end
 
-function Conference.count(self)
-  return tonumber(self.caller:result('conference ' .. self.record.id .. ' list count')) or 0;
+
+function Conference.members_count(self)
+  return tonumber(self.caller:result('conference ' .. self.identifier .. ' list count')) or 0;
 end
 
--- Try to enter a conference
+
+function Conference.check_pin(self, pin)
+  local digits = '';
+  for i = 1, 3 do
+    if digits == pin then
+      break
+    elseif digits ~= "" then
+      if self.settings.pin_bad_sound then
+        self.caller:playback(self.settings.pin_bad_sound);
+      else
+        self.caller.session:sayPhrase('conference_bad_pin');
+      end
+    end
+    digits = self.caller.session:read(self.settings.pin_length_min, self.settings.pin_length_max, self.settings.pin_sound, self.settings.pin_timeout, self.settings.key_enter);
+  end
+
+  if digits ~= pin then
+    return false
+  end
+
+  return true;
+end
+
+
+function Conference.check_ownership(self)
+  local auth_account_owner = common.array.try(self.caller, 'auth_account.owner');
+  if not auth_account_owner then
+    return false;
+  end
+
+  if tonumber(self.record.conferenceable_id) == auth_account_owner.id and self.record.conferenceable_type:lower() == auth_account_owner.class then
+    return true;
+  end
+end
+
+
+function Conference.record_name(self)
+  if not self.announce_entering and not announce_leaving then
+    return nil;
+  end
+
+  local name_file = self.settings.spool_dir .. '/conference_caller_name_' .. self.caller.uuid .. '.wav';
+  self.caller.session:sayPhrase(self.settings.phrase_record_name);
+  self.caller.session:recordFile(name_file, self.settings.announcement_max_length, self.settings.announcement_silence_threshold, self.settings.announcement_max_length);
+  self.caller:playback(name_file);
+
+  return name_file;
+end
+
+
+function Conference.playback(self, file_name)
+  self.caller:execute('set',"result=${conference(" .. self.identifier .. " play ".. file_name .. ")}");
+end
+
+
 function Conference.enter(self, caller, domain)
-  local cause = "NORMAL_CLEARING";
-  local pin = nil;
-  local flags = {'waste'};
-
   self.caller = caller;
+  local members = self:members_count();
 
-  require "common.phone_number"
-  local phone_number_class = common.phone_number.PhoneNumber:new{log = self.log, database = self.database}
-  local phone_numbers = phone_number_class:list_by_owner(self.record.id, "Conference");
+  self.log:info('CONFERENCE ', self.id, ' - open_for_public: ', self.open_for_public, ', open_now: ', self.open_now, ', members: ', members, ', members_max: ', self.settings.members_max);
 
-  -- Set conference presence
-  require "dialplan.presence"
-  local presence = dialplan.presence.Presence:new();
-  presence:init{ log = log, accounts = phone_numbers, domain = domain, uuid = "conference_" .. self.record.id };
-
-  local conference_count = self:count();
-
-  -- Check if conference is full
-  if conference_count >= self.max_members then
-    presence:early();
-    self.log:debug(string.format("full conference %s (\"%s\"), members: %d, members allowed: %d", self.record.id, self.record.name, conference_count, self.max_members));
-
-    if (tonumber(self.record.conferenceable_id) == caller.account_owner_id)
-    and (self.record.conferenceable_type == caller.account_owner_type) then
-      self.log:debug("Allow owner of this conterence to enter a full conference");
-    else
-      cause = "CALL_REJECTED";
-      caller:hangup(cause);
-      return cause;
-    end;
+  if self.open_now == false then
+    self.log:notice('CONFERENCE ', self.id, ' - currently closed, start: ', self.record.start, ', end: ', self.record['end']);
+    return { continue = false, code = 493, phrase = 'Conference closed' };
   end
 
-  require 'common.str'
-  -- Check if conference is within time frame
-  if not common.str.blank(self.record.start) and not common.str.blank(self.record['end']) then
-    local d = {}
-    _,_,d.year,d.month,d.day,d.hour,d.min,d.sec=string.find(self.record.start, "(%d+)-(%d+)-(%d+) (%d+):(%d+):(%d+)");
-
-    local conference_start = os.time(d);
-    _,_,d.year,d.month,d.day,d.hour,d.min,d.sec=string.find(self.record['end'], "(%d+)-(%d+)-(%d+) (%d+):(%d+):(%d+)");
-    local conference_end = os.time(d);
-    local now = os.time(os.date("!*t", os.time()));
-    
-    log:debug("conference - open: " .. os.date("%c",conference_start) .. " by " .. os.date("%c",conference_end) .. ", now: " .. os.date("%c",now));
-
-    if now < conference_start or  now > conference_end then
-      cause = "CALL_REJECTED";
-      caller:hangup(cause);
-      return cause;
-    end
+  if members >= self.settings.members_max then
+    self.log:notice('CONFERENCE ', self.id, ' - full, members: ', members, ', members_max: ', self.settings.members_max);
+    return { continue = false, code = 493, phrase = 'Conference closed' };
   end
 
-  -- Owner ist always moderator
-  if (tonumber(self.record.conferenceable_id) == caller.account_owner_id) and (self.record.conferenceable_type == caller.account_owner_type) then
-    table.insert(flags, 'moderator');
-    log:debug("is owner - conference: " .. self.record.id .. ", owner: " .. caller.account_owner_type .. ":" .. caller.account_owner_id);
-  else
-    local invitee = self:find_invitee_by_numbers(caller.caller_phone_numbers);
-
-    if not common.str.to_b(self.record.open_for_anybody) and not invitee then
-      log:debug(string.format("conference %s (\"%s\"), caller %s not allowed to enter this conference", self.record.id, self.record.name, caller.caller_phone_number));
-      cause = "CALL_REJECTED";
-      caller:hangup(cause);
-      return cause;
-    end
-
-    if invitee then
-      log:debug("conference " .. self.record.id .. " member invited - speaker: " .. invitee.speaker .. ", moderator: " .. invitee.moderator);
-      if common.str.to_b(invitee.moderator) then
-        table.insert(flags, 'moderator');
-      end
-      if not common.str.to_b(invitee.speaker) then
-        table.insert(flags, 'mute');
-      end
-      pin = invitee.pin;
-    else
-      log:debug("conference " .. self.record.id .. " caller not invited");
-    end
+  local invitee = self:find_invitee_by_numbers(caller.caller_phone_numbers);
+  if invitee then
+    self.settings.flags.mute = not common.str.to_b(invitee.speaker);
+    self.settings.flags.moderator = common.str.to_b(invitee.moderator);
+    self.log:info('CONFERENCE ', self.id, ' - invitee=', invitee.id, '/', invitee.uuid, ', speaker: ', not self.settings.flags.mute, ', moderator: ', self.settings.flags.moderator);
+    self.pin = invitee.pin;
+  elseif self:check_ownership() then
+    self.settings.flags.moderator = true;
+    self.pin = nil;
+    self.log:info('CONFERENCE ', self.id, ' - owner: ', self.caller.auth_account.owner.class,'=', self.caller.auth_account.owner.id, '/', self.caller.auth_account.owner.uuid, ', speaker: ', not self.settings.flags.mute, ', moderator: ', self.settings.flags.moderator);
+  elseif not self.open_for_public then
+    self.log:notice('CONFERENCE ', self.id, ' - not open for public');
+    return { continue = false, code = 493, phrase = 'Conference closed' };
   end
 
-  if not pin and self.record.pin then
-    pin = self.record.pin
+  if not common.str.blank(self.pin) and not self:check_pin(self.pin) then
+    self.log:notice('CONFERENCE ', self.id, ' - PIN wrong');
+    if self.settings.phrase_goodbye then
+      caller.session:sayPhrase(self.settings.phrase_goodbye);
+    end
+    return { continue = false, code = 493, phrase = 'Not authorized' };
   end
 
   caller:answer();
   caller:sleep(1000);
-  caller.session:sayPhrase('conference_welcome');
-
-  if not common.str.blank(pin) then
-    local digits = "";
-    for i = 1, 3, 1 do
-      if digits == pin then
-        break
-      elseif digits ~= "" then
-        caller.session:sayPhrase('conference_bad_pin');
-      end
-      digits = caller.session:read(PIN_LENGTH_MIN, PIN_LENGTH_MAX, 'conference/conf-pin.wav', PIN_TIMEOUT, '#');
-    end
-    if digits ~= pin then
-      caller.session:sayPhrase('conference_goodbye');
-      return "CALL_REJECTED";
-    end
+  if self.settings.phrase_welcome then
+    caller.session:sayPhrase('conference_welcome');
   end
 
-  self.log:debug(string.format("entering conference %s - name: \"%s\", flags: %s, members: %d, max. members: %d", 
-        self.record.id, self.record.name, table.concat(flags, ','), conference_count, self.max_members));
-  
-  -- Members count will be incremented in a few milliseconds, set presence
-  if (conference_count + 1) >= self.max_members then
-    presence:early();
-  else
-    presence:confirmed();
-  end
-
-  -- Enter the conference
-  local name_file = nil;
-
-  -- Record caller's name
-  if common.str.to_b(self.record.announce_new_member_by_name) or common.str.to_b(self.record.announce_left_member_by_name) then
-    local uid = session:get_uuid();
-    name_file = "/var/spool/freeswitch/conference_caller_name_" .. uid .. ".wav";
-    caller.session:sayPhrase('conference_record_name');
-    session:recordFile(name_file, ANNOUNCEMENT_MAX_LEN, ANNOUNCEMENT_SILENCE_THRESHOLD, ANNOUNCEMENT_SILENCE_LEN);
-    caller.session:streamFile(name_file);
-  end
-
-  -- Play entering caller's name if recorded
-  if name_file and (self:count() > 0) and common.str.to_b(self.record.announce_new_member_by_name) then
-    caller.session:execute('set',"result=${conference(" .. self.record.id .. " play ".. name_file .. ")}");
-    caller.session:execute('set',"result=${conference(" .. self.record.id .. " play conference/conf-has_joined.wav)}");
-  else
-    -- Ensure a surplus "#" digit is not passed to the conference
-    caller.session:read(1, 1, '', 1000, "#");
-  end
-
-  local result =  caller.session:execute('conference', self.record.id .. "@profile_" .. self.record.id .. "++flags{" .. table.concat(flags, '|') .. "}");
-  self.log:debug('exited conference - result: ' .. tostring(result));
-  caller.session:sayPhrase('conference_goodbye');
-
-  -- Play leaving caller's name if recorded
+  local name_file = self:record_name(caller);
   if name_file then
-    if (self:count() > 0) and common.str.to_b(self.record.announce_left_member_by_name) then
-      if (self:count() == 1) then 
-        caller.session:sleep(3000);
+    if self.announce_entering then
+      members = self:members_count();
+      if members > 0 then
+        caller.session:sayPhrase('conference_has_joined', name_file);
       end
-      caller.session:execute('set',"result=${conference(" .. self.record.id .. " play ".. name_file .. ")}");
-      caller.session:execute('set',"result=${conference(" .. self.record.id .. " play conference/conf-has_left.wav)}");
+    end
+  end
+
+  local result =  caller:execute('conference', self.identifier .. "@profile_" .. self.identifier .. "++flags{" .. common.array.keys_to_s(self.settings.flags, '|') .. "}");
+  if self.settings.phrase_goodbye then
+    caller.session:sayPhrase(self.settings.phrase_goodbye);
+  end
+
+  if name_file then
+    if self.announce_leaving then
+      members = self:members_count();
+      if members > 0 then
+        if members == 1 then 
+          caller:sleep(3000);
+        end
+        caller.session:sayPhrase('conference_has_left', name_file);
+      end
     end
     os.remove(name_file);
   end
 
-  -- Set presence according to member count
-  conference_count = self:count();
-  if conference_count >= self.max_members then
-    presence:early();
-  elseif conference_count > 0 then
-    presence:confirmed();
-  else
-    presence:terminated();
-  end
-
-  cause = "NORMAL_CLEARING";
-  caller.session:hangup(cause);
-  return cause;
+  return { continue = false, code = 200, phrase = 'OK' }
 end

@@ -76,7 +76,7 @@ end
 
 
 function Dialplan.configuration_read(self)
-  require 'common.configuration_table'
+  require 'common.configuration_table';
 
   -- dialplan configuration
   self.config  = common.configuration_table.get(self.database, 'dialplan');
@@ -462,16 +462,14 @@ end
 
 
 function Dialplan.conference(self, destination)
-  -- call local conference
-  require 'common.conference'
-  conference = common.conference.Conference:new{ log = self.log, database = self.database }:find_by_id(destination.id);
+  require 'common.conference';
+  local conference = common.conference.Conference:new{ log = self.log, database = self.database }:find_by_id(destination.id);
  
   if not conference then
     return { continue = false, code = 404, phrase = 'Conference not found' }
   end
 
-  local cause = conference:enter(self.caller, self.domain);
-  return { continue = false, cause = cause }
+  return conference:enter(self.caller, self.domain);
 end
 
 

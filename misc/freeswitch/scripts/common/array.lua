@@ -45,10 +45,35 @@ function expand_variable(variable_path, variable_sets)
   end
 end
 
-
+-- replace variables in a string by array values
 function expand_variables(line, ...)
   local variable_sets = {...};
   return (line:gsub('{([%a%d%._]+)}', function(captured)
     return expand_variable(captured, variable_sets);
   end))
+end
+
+
+-- concatenate array values
+function to_s(array, separator, prefix, suffix)
+  require 'common.str';
+
+  local buffer = '';
+  for key, value in pairs(array) do
+    buffer = common.str.append(buffer, value, separator, prefix, suffix);
+  end
+
+  return buffer;
+end
+
+-- concatenate array keys
+function keys_to_s(array, separator, prefix, suffix)
+  require 'common.str';
+
+  local buffer = '';
+  for key, value in pairs(array) do
+    buffer = common.str.append(buffer, key, separator, prefix, suffix);
+  end
+
+  return buffer;
 end
