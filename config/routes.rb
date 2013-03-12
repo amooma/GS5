@@ -24,9 +24,8 @@ Gemeinschaft42c::Application.routes.draw do
   scope :constraints => lambda{|req|%w(127.0.0.1).include? req.remote_addr} do
     get "trigger/voicemail"
     get "trigger/fax"
+    match 'trigger/fax_has_been_sent/:id' => 'trigger#fax_has_been_sent'
   end
-
-  get "trigger/fax_has_been_sent"
 
   resources :call_routes do
     collection { 
