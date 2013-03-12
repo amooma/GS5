@@ -15,6 +15,7 @@ function PresenceUpdate.new(self, arg)
   require 'common.str';
   require 'common.phone_number';
   require 'common.fapi';
+  require 'common.configuration_table';
 
   arg = arg or {}
   object = arg.object or {}
@@ -27,6 +28,13 @@ function PresenceUpdate.new(self, arg)
   self.presence_accounts = {}
   self.account_record = {}
 
+  self.config = common.configuration_table.get(self.database, 'presence_update');
+  self.config = self.config or {};
+  self.config.trigger = self.config.trigger or {
+    sip_account_presence = true,
+    sip_account_register = true,
+    sip_account_unregister = true,
+  };
   return object;
 end
 
@@ -87,7 +95,7 @@ function PresenceUpdate.sofia_register(self, event)
   local timestamp = event:getHeader('Event-Date-Timestamp');
 
   local sip_account = self:retrieve_sip_account(account, account);
-  if sip_account then
+  if sip_account and common.str.to_b(self.config.trigger.sip_account_register) then
     self:trigger_rails(sip_account, 'register', timestamp, account)
   end
 
@@ -101,7 +109,7 @@ function PresenceUpdate.sofia_ungerister(self, event)
   local timestamp = event:getHeader('Event-Date-Timestamp');
 
   local sip_account = self:retrieve_sip_account(account, account);
-  if sip_account then
+  if sip_account and common.str.to_b(self.config.trigger.sip_account_unregister) then
     self:trigger_rails(sip_account, 'unregister', timestamp, account)
   end
 
@@ -131,11 +139,15 @@ function PresenceUpdate.presence_in(self, event)
     local login = tostring(event:getHeader('proto'));
     self.log:info('[', uuid,'] PRESENCE_CONFERENCE_', call_direction:upper(), ' ', common.str.to_i(account), ' - identifier: ', account, ', state: ', state);
     self:conference(direction, account, domain, state, uuid);
-  elseif protocol == 'sip' and common.str.blank(state) then
-    return;
-  else
+  elseif protocol == 'sip' or protocol == 'any' then
+    if protocol == 'sip' and common.str.blank(state) then
+      self.log:debug('[', uuid,'] PRESENCE_', call_direction:upper(),' no state - protocol: ', protocol, ', account: ', account);
+      return;
+    end
     self.log:info('[', uuid,'] PRESENCE_', call_direction:upper(),' - protocol: ', protocol, ', account: ', account, ', state: ', state);
     self:sip_account(direction, account, domain, state, uuid, caller_id, timestamp);
+  else
+    self.log:info('[', uuid,'] PRESENCE_', call_direction:upper(),' unhandled protocol: ', protocol, ', account: ', account, ', state: ', state);
   end
 end
 
@@ -230,7 +242,9 @@ function PresenceUpdate.sip_account(self, inbound, account, domain, status, uuid
     uuid = uuid
   }:set(status_map[status] or 'terminated', caller_id);
 
-  self:trigger_rails(sip_account, status_map[status] or 'terminated', timestamp, uuid);
+  if common.str.to_b(self.config.trigger.sip_account_presence) then
+    self:trigger_rails(sip_account, status_map[status] or 'terminated', timestamp, uuid);
+  end
 end
 
 
@@ -250,7 +264,6 @@ end
 function PresenceUpdate.trigger_rails(self, account, status, timestamp, uuid)
   if account.class == 'sipaccount' then
     local command = 'http_request.lua ' .. tostring(uuid) .. ' http://127.0.0.1/trigger/sip_account_update/' .. tostring(account.id) .. '?timestamp=' .. timestamp .. '&status=' .. tostring(status);
-
     common.fapi.FApi:new():execute('luarun', command);
   end
 end
