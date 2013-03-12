@@ -196,7 +196,7 @@ function conf_conference(database)
 
     if conf_name then
       require 'common.conference'
-      conference = common.conference.Conference:new{log=log, database=database}:find_by_id(conf_name);
+      conference = common.conference.Conference:new{log=log, database=database}:find_by_id(common.str.to_i(conf_name));
       if conference then
         log:debug('CONFIG_CONFERENCE ', conf_name, ' name: ', conference.record.name, ', profile: ', profile_name);
         config.parameters['caller-id-name'] = conference.record.name or '';
