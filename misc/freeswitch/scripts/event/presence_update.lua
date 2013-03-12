@@ -10,6 +10,12 @@ ACCOUNT_RECORD_TIMEOUT = 120;
 PresenceUpdate = {}
 
 function PresenceUpdate.new(self, arg)
+  require 'common.sip_account';
+  require 'dialplan.presence';
+  require 'common.str';
+  require 'common.phone_number';
+  require 'common.fapi';
+
   arg = arg or {}
   object = arg.object or {}
   setmetatable(object, self);
@@ -34,10 +40,29 @@ function PresenceUpdate.event_handlers(self)
 end
 
 
+function PresenceUpdate.retrieve_sip_account(self, account, uuid)
+  uuid = uuid or 'presence_update';
+  
+  if not self.account_record[account] or ((os.time() - self.account_record[account].created_at) > ACCOUNT_RECORD_TIMEOUT) then
+    self.log:debug('[', uuid,'] PRESENCE - retrieve account data - account: ', account);
+    
+    local sip_account = common.sip_account.SipAccount:new{ log = self.log, database = self.database }:find_by_auth_name(account);
+    if not sip_account then
+      return
+    end
+    
+    local phone_numbers = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:list_by_owner(sip_account.id, sip_account.class);
+
+    self.account_record[account] = { id = sip_account.id, class = sip_account.class, phone_numbers = phone_numbers, created_at = os.time() }
+  end
+
+  return self.account_record[account];
+end
+
+
 function PresenceUpdate.presence_probe(self, event)
   local DIALPLAN_FUNCTION_PATTERN = '^f[_%-].*';
 
-  require 'common.str'
   local event_to = event:getHeader('to');
   local event_from = event:getHeader('from');
   local probe_type = event:getHeader('probe-type');
@@ -59,6 +84,13 @@ end
 
 function PresenceUpdate.sofia_register(self, event)
   local account = event:getHeader('from-user');
+  local timestamp = event:getHeader('Event-Date-Timestamp');
+
+  local sip_account = self:retrieve_sip_account(account, account);
+  if sip_account then
+    self:trigger_rails(sip_account, 'register', timestamp, account)
+  end
+
   self.log:debug('[', account, '] PRESENCE_UPDATE - flushing account cache on register');
   self.presence_accounts[account] = nil;
 end
@@ -66,6 +98,13 @@ end
 
 function PresenceUpdate.sofia_ungerister(self, event)
   local account = event:getHeader('from-user');
+  local timestamp = event:getHeader('Event-Date-Timestamp');
+
+  local sip_account = self:retrieve_sip_account(account, account);
+  if sip_account then
+    self:trigger_rails(sip_account, 'unregister', timestamp, account)
+  end
+
   self.log:debug('[', account, '] PRESENCE_UPDATE - flushing account cache on unregister');
   self.presence_accounts[account] = nil;
 end
@@ -78,7 +117,7 @@ function PresenceUpdate.presence_in(self, event)
   local uuid = event:getHeader('Unique-ID');
   local caller_id =  event:getHeader('Caller-Caller-ID-Number');
   local protocol = tostring(event:getHeader('proto'));
-
+  local timestamp = event:getHeader('Event-Date-Timestamp');
   local direction = nil;
 
   if call_direction == 'inbound' then
@@ -96,7 +135,7 @@ function PresenceUpdate.presence_in(self, event)
     return;
   else
     self.log:info('[', uuid,'] PRESENCE_', call_direction:upper(),' - protocol: ', protocol, ', account: ', account, ', state: ', state);
-    self:sip_account(direction, account, domain, state, uuid, caller_id);
+    self:sip_account(direction, account, domain, state, uuid, caller_id, timestamp);
   end
 end
 
@@ -123,10 +162,9 @@ end
 
 
 function PresenceUpdate.call_forwarding(self, account, domain, call_forwarding_id)
-  require 'common.call_forwarding'
-  local call_forwarding = common.call_forwarding.CallForwarding:new{ log=self.log, database=self.database, domain=domain }:find_by_id(call_forwarding_id);
-            
-  require 'common.str'
+  require 'common.call_forwarding';
+
+  local call_forwarding = common.call_forwarding.CallForwarding:new{ log=self.log, database=self.database, domain=domain }:find_by_id(call_forwarding_id);     
   if call_forwarding and common.str.to_b(call_forwarding.record.active) then
     local destination_type = tostring(call_forwarding.record.call_forwardable_type):lower()
     
@@ -147,7 +185,6 @@ function PresenceUpdate.hunt_group_membership(self, account, domain, member_id)
 
   if status then
     self.log:debug('[', account, '] PRESENCE_UPDATE - updating hunt group membership presence - id: ', member_id);
-    require 'dialplan.presence'
     local presence_class = dialplan.presence.Presence:new{
       log = self.log,
       database = self.database,
@@ -165,7 +202,6 @@ function PresenceUpdate.acd_membership(self, account, domain, member_id)
 
   if status then
     self.log:debug('[', account, '] PRESENCE_UPDATE - updating ACD membership presence - id: ', member_id);
-    require 'dialplan.presence'
     local presence_class = dialplan.presence.Presence:new{
       log = self.log,
       database = self.database,
@@ -177,41 +213,29 @@ function PresenceUpdate.acd_membership(self, account, domain, member_id)
 end
 
 
-function PresenceUpdate.sip_account(self, inbound, account, domain, status, uuid, caller_id)
+function PresenceUpdate.sip_account(self, inbound, account, domain, status, uuid, caller_id, timestamp)
   local status_map = { progressing = 'early', alerting = 'confirmed', active = 'confirmed' }
-
-  if not self.account_record[account] or ((os.time() - self.account_record[account].created_at) > ACCOUNT_RECORD_TIMEOUT) then
-    self.log:debug('[', uuid,'] PRESENCE - retrieve account data - account: ', account);
-
-    require 'common.sip_account'
-    local sip_account = common.sip_account.SipAccount:new{ log = self.log, database = self.database }:find_by_auth_name(account);
-
-    if not sip_account then
-      return
-    end
-
-    require 'common.phone_number'
-    local phone_numbers = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:list_by_owner(sip_account.id, sip_account.class);
-
-    self.account_record[account] = { id = sip_account.id, class = sip_account.class, phone_numbers = phone_numbers, created_at = os.time() }
+  
+  local sip_account = self:retrieve_sip_account(account, uuid);
+  if not sip_account then
+    return;
   end
 
-  require 'dialplan.presence';
   dialplan.presence.Presence:new{
     log = self.log,
     database = self.database,
     inbound = inbound,
     domain = domain,
-    accounts = self.account_record[account].phone_numbers,
+    accounts = sip_account.phone_numbers,
     uuid = uuid
   }:set(status_map[status] or 'terminated', caller_id);
 
-  self:trigger_rails(self.account_record[account], status_map[status] or 'terminated', uuid);
+  self:trigger_rails(sip_account, status_map[status] or 'terminated', timestamp, uuid);
 end
 
 
 function PresenceUpdate.conference(self, inbound, account, domain, status, uuid)
-  require 'dialplan.presence';
+  
   dialplan.presence.Presence:new{
     log = self.log,
     database = self.database,
@@ -223,11 +247,10 @@ function PresenceUpdate.conference(self, inbound, account, domain, status, uuid)
 end
 
 
-function PresenceUpdate.trigger_rails(self, account, status, uuid)
+function PresenceUpdate.trigger_rails(self, account, status, timestamp, uuid)
   if account.class == 'sipaccount' then
-    local command = 'http_request.lua ' .. uuid .. ' http://127.0.0.1/trigger/sip_account_update/' .. tostring(account.id .. '?status=' .. tostring(status));
+    local command = 'http_request.lua ' .. tostring(uuid) .. ' http://127.0.0.1/trigger/sip_account_update/' .. tostring(account.id) .. '?timestamp=' .. timestamp .. '&status=' .. tostring(status);
 
-    require 'common.fapi'
     common.fapi.FApi:new():execute('luarun', command);
   end
 end
