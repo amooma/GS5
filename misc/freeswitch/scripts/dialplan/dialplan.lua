@@ -165,12 +165,11 @@ end
 function Dialplan.retrieve_caller_data(self)
   self.caller.caller_phone_numbers_hash = {};
 
-  -- TODO: Set auth_account on transfer initiated by calling party
-  if not common.str.blank(self.caller.auth_account_type) and not common.str.blank(self.caller.auth_account_uuid) then
-    self.caller.auth_account = self:object_find{class = self.caller.auth_account_type, uuid = self.caller.auth_account_uuid};
-  elseif not common.str.blank(self.caller.previous_destination_type) and not common.str.blank(self.caller.previous_destination_uuid) then
+  if not common.str.blank(self.caller.previous_destination_type) and not common.str.blank(self.caller.previous_destination_uuid) then
     self.log:debug('CALLER_DATA - authenticate by previous destination: ', self.caller.previous_destination_type, '=', self.caller.previous_destination_id, '/', self.caller.previous_destination_uuid);
     self.caller.auth_account = self:object_find{class = self.caller.previous_destination_type, uuid = self.caller.previous_destination_uuid};
+  elseif not common.str.blank(self.caller.auth_account_type) and not common.str.blank(self.caller.auth_account_uuid) then
+    self.caller.auth_account = self:object_find{class = self.caller.auth_account_type, uuid = self.caller.auth_account_uuid};
   elseif not common.str.blank(self.caller.dialed_sip_user) then
     self.caller.auth_account = self:object_find{class = 'sipaccount', domain = self.caller.dialed_domain, auth_account = self.caller.dialed_sip_user};
   end
