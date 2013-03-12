@@ -281,7 +281,30 @@ class ConfigSnomController < ApplicationController
             when 'log_in'
               @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => "speed f-li-#{softkey.number}"})
             when 'conference'
-              @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => "blf <sip:#{softkey.number}@#{sip_account.host}>|f-ta-"})
+              conference = softkey.softkeyable
+              if conference.class == Conference
+                @softkeys.push({
+                  :context => sip_account_index,
+                  :function => softkey.softkey_function.name,
+                  :label => softkey.label,
+                  :softkey => softkey,
+                  :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
+                  :subscription => {
+                    :to => "sip:conference#{conference.id}@#{sip_account.host}",
+                    :for => "sip:conference#{conference.id}@#{sip_account.host}",
+                  },
+                  :actions => [{
+                    :type => :dial, 
+                    :target => "f-ta-#{softkey.number}",
+                    :when => 'on press',
+                    :states => 'connected,holding',
+                  },{
+                    :type => :dial, 
+                    :target => softkey.number,
+                    :when => 'on press',
+                  }],
+                })
+              end
             when 'parking_stall'
               parking_stall = softkey.softkeyable
               if parking_stall.class == ParkingStall
