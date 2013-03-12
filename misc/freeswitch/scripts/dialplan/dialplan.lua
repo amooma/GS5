@@ -165,17 +165,13 @@ end
 function Dialplan.retrieve_caller_data(self)
   self.caller.caller_phone_numbers_hash = {};
 
-  -- TODO: Set auth_account on transfer initiated by calling party
-  if not common.str.blank(self.caller.dialed_sip_user) then
-    self.caller.auth_account = self:object_find{class = 'sipaccount', domain = self.caller.dialed_domain, auth_account = self.caller.dialed_sip_user};
-    if self.caller.set_auth_account then
-      self.caller:set_auth_account(self.caller.auth_account);
-    end
+  if not common.str.blank(self.caller.previous_destination_type) and not common.str.blank(self.caller.previous_destination_uuid) then
+    self.log:debug('CALLER_DATA - authenticate by previous destination: ', self.caller.previous_destination_type, '=', self.caller.previous_destination_id, '/', self.caller.previous_destination_uuid);
+    self.caller.auth_account = self:object_find{class = self.caller.previous_destination_type, uuid = self.caller.previous_destination_uuid};
   elseif not common.str.blank(self.caller.auth_account_type) and not common.str.blank(self.caller.auth_account_uuid) then
     self.caller.auth_account = self:object_find{class = self.caller.auth_account_type, uuid = self.caller.auth_account_uuid};
-    if self.caller.set_auth_account then
-      self.caller:set_auth_account(self.caller.auth_account);
-    end
+  elseif not common.str.blank(self.caller.dialed_sip_user) then
+    self.caller.auth_account = self:object_find{class = 'sipaccount', domain = self.caller.dialed_domain, auth_account = self.caller.dialed_sip_user};
   end
 
   if self.caller.auth_account then
@@ -184,6 +180,9 @@ function Dialplan.retrieve_caller_data(self)
       self.log:info('CALLER_DATA - auth owner: ', self.caller.auth_account.owner.class, '=', self.caller.auth_account.owner.id, '/', self.caller.auth_account.owner.uuid, ', groups: ', table.concat(self.caller.auth_account.owner.groups, ','));
     else
       self.log:error('CALLER_DATA - auth owner not found');
+    end
+    if self.caller.set_auth_account then
+      self.caller:set_auth_account(self.caller.auth_account);
     end
   else
     self.log:info('CALLER_DATA - no data - unauthenticated call: ', self.caller.auth_account_type, '/', self.caller.auth_account_uuid);
@@ -304,6 +303,7 @@ function Dialplan.dial(self, destination)
 
     destination.account = self:object_find{class = destination.type, id = destination.id};
     if destination.account then
+      destination.uuid = destination.account.uuid;
       if destination.account.class == 'sipaccount' then
         destination.callee_id_name = destination.account.record.caller_name;
         self.caller:set_callee_id(destination.number, destination.account.record.caller_name);
@@ -314,7 +314,7 @@ function Dialplan.dial(self, destination)
       self.log:debug('DESTINATION_GROUPS - pickup_groups: ', table.concat(group_names, ','));
       for index=1, #group_ids do
         table.insert(destination.pickup_groups, 'g' .. group_ids[index]);
-      end
+      end 
     end
 
     if destination.account and destination.account.owner then
@@ -325,6 +325,9 @@ function Dialplan.dial(self, destination)
       elseif destination.account.owner.class == 'tenant' then
         tenant_id = destination.account.owner.id;
       end
+      self.caller:set_variable('gs_destination_owner_type', destination.account.owner.class);
+      self.caller:set_variable('gs_destination_owner_id', destination.account.owner.id);
+      self.caller:set_variable('gs_destination_owner_uuid', destination.account.owner.uuid);
     end
   end
 
@@ -904,6 +907,7 @@ function Dialplan.run(self, destination)
     self.caller:set_variable('gs_destination_uuid', destination.uuid);
     self.caller:set_variable('gs_destination_number', destination.number);
     self.caller:set_variable('gs_destination_node_local', destination.node_local);
+    self.caller:set_variable('gs_destination_node_id, ', destination.node_id);
 
     result = self:switch(destination);
     result = result or { continue = false, code = 502, cause = 'DESTINATION_OUT_OF_ORDER', phrase = 'Destination out of order' }

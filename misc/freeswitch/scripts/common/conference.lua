@@ -188,7 +188,7 @@ function Conference.enter(self, caller, domain)
   elseif self:check_ownership() then
     self.settings.flags.moderator = true;
     self.pin = nil;
-    self.log:info('CONFERENCE ', self.id, ' - owner: ', self.caller.auth_account.owner.class,'=', self.caller.auth_account.owner.id, '/', self.caller.auth_account.owner.uuid, ', speaker: ', not self.settings.flags.mute, ', moderator: ', self.settings.flags.moderator);
+    self.log:info('CONFERENCE ', self.id, ' - owner authenticated: ', self.caller.auth_account.owner.class,'=', self.caller.auth_account.owner.id, '/', self.caller.auth_account.owner.uuid, ', speaker: ', not self.settings.flags.mute, ', moderator: ', self.settings.flags.moderator);
   elseif not self.open_for_public then
     self.log:notice('CONFERENCE ', self.id, ' - not open for public');
     return { continue = false, code = 493, phrase = 'Conference closed' };
