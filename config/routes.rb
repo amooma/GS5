@@ -26,6 +26,8 @@ Gemeinschaft42c::Application.routes.draw do
     get "trigger/fax"
   end
 
+  get "trigger/fax_has_been_sent"
+
   resources :call_routes do
     collection { 
       post :sort 
