@@ -72,22 +72,31 @@ end
 
 
 function PresenceUpdate.presence_in(self, event)
-  if not event:getHeader('status') then
-    return
-  end
-
   local account, domain = common.str.partition(event:getHeader('from'), '@');
-  local direction = tostring(event:getHeader('presence-call-direction'))
+  local call_direction = tostring(event:getHeader('presence-call-direction') or event:getHeader('call-direction'))
   local state = event:getHeader('presence-call-info-state');
   local uuid = event:getHeader('Unique-ID');
   local caller_id =  event:getHeader('Caller-Caller-ID-Number');
+  local protocol = tostring(event:getHeader('proto'));
 
-  if direction == 'inbound' then
-    self.log:info('[', uuid,'] PRESENCE_INBOUND: account: ', account, ', state: ', state);
-    self:sip_account(true, account, domain, state, uuid);
-  elseif direction == 'outbound' then
-    self.log:info('[', uuid,'] PRESENCE_OUTBOUND: account: ', account, ', state: ', state, ', caller: ', caller_id);
-    self:sip_account(false, account, domain, state, uuid, caller_id);
+  local direction = nil;
+
+  if call_direction == 'inbound' then
+    direction = true;
+  elseif call_direction == 'outbound' then
+    direction = false;
+  end
+
+  if protocol == 'conf' then    
+    state = event:getHeader('answer-state');
+    local login = tostring(event:getHeader('proto'));
+    self.log:info('[', uuid,'] PRESENCE_CONFERENCE_', call_direction:upper(), ' ', common.str.to_i(account), ' - identifier: ', account, ', state: ', state);
+    self:conference(direction, account, domain, state, uuid);
+  elseif protocol == 'sip' and common.str.blank(state) then
+    return;
+  else
+    self.log:info('[', uuid,'] PRESENCE_', call_direction:upper(),' - protocol: ', protocol, ', account: ', account, ', state: ', state);
+    self:sip_account(direction, account, domain, state, uuid, caller_id);
   end
 end
 
@@ -196,4 +205,17 @@ function PresenceUpdate.sip_account(self, inbound, account, domain, status, uuid
     accounts = self.account_record[account].phone_numbers,
     uuid = uuid
   }:set(status_map[status] or 'terminated', caller_id);
+end
+
+
+function PresenceUpdate.conference(self, inbound, account, domain, status, uuid)
+  require 'dialplan.presence'
+  local result = dialplan.presence.Presence:new{
+    log = self.log,
+    database = self.database,
+    inbound = inbound,
+    domain = domain,
+    accounts = { account },
+    uuid = uuid
+  }:set(status or 'terminated');
 end
