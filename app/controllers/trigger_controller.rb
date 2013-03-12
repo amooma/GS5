@@ -95,8 +95,10 @@ class TriggerController < ApplicationController
     if sip_account
       # push the partial to the webbrowser
       #
-      # new_html = ActionController::Base.helpers.escape_javascript(render_to_string("fax_documents/_fax_document", :layout => false, :locals => {:fax_document => fax_document}))
-      # PrivatePub.publish_to("/fax_documents/#{fax_document.id}", "$('#" + fax_document.id.to_s + ".fax_document').replaceWith('#{new_html}');")
+      sip_account.switchboard_entries.each do |switchboard_entry|
+        new_html = ActionController::Base.helpers.escape_javascript(render_to_string("switchboard_entries/_switchboard_entry", :layout => false, :locals => {:switchboard_entry => switchboard_entry}))
+        PrivatePub.publish_to("/switchboards/#{switchboard_entry.switchboard.id}", "$('#switchboard_entry_id_" + switchboard_entry.id.to_s + ".replaceWith('#{new_html}');")
+      end
     
       render(
             :status => 200,
