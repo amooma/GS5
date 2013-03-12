@@ -19,6 +19,7 @@ class TriggerController < ApplicationController
           # Indicate a new voicemail in the navigation bar.
           #
           PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_or_fax_indicator').hide('fast').show('slow');")
+          PrivatePub.publish_to("/users/#{user.id}/messages/new", "document.title = '* ' + document.title.replace( '* ' , '');")
 
           if  user.email.blank?
             next
@@ -70,7 +71,6 @@ class TriggerController < ApplicationController
       # push the partial to the webbrowser
       #
       new_html = ActionController::Base.helpers.escape_javascript(render_to_string("fax_documents/_fax_document", :layout => false, :locals => {:fax_document => fax_document}))
-      Rails.logger.debug new_html
       PrivatePub.publish_to("/fax_documents/#{fax_document.id}", "$('#" + fax_document.id.to_s + ".fax_document').replaceWith('#{new_html}');")
     
       render(
@@ -143,6 +143,7 @@ class TriggerController < ApplicationController
         if @last_fax_document.fax_account.fax_accountable.class == User
           user = @last_fax_document.fax_account.fax_accountable
           PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_or_fax_indicator').hide('fast').show('slow');")
+          PrivatePub.publish_to("/users/#{user.id}/messages/new", "document.title = '* ' + document.title.replace( '* ' , '');")
         end
 
         render(
