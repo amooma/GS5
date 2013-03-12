@@ -69,10 +69,24 @@ class TriggerController < ApplicationController
     if fax_document
       # push the partial to the webbrowser
       #
-      new_html = render_to_string("fax_documents/_fax_document", :layout => false, :locals => {:fax_document => fax_document})
-      PrivatePub.publish_to("/fax_documents/#{fax_document.id}", "$('#fax_document_" + fax_document.id.to_s + "').replaceWith(escape_javascript(" + new_html + "));")
+      new_html = ActionController::Base.helpers.escape_javascript(render_to_string("fax_documents/_fax_document", :layout => false, :locals => {:fax_document => fax_document}))
+      Rails.logger.debug new_html
+      PrivatePub.publish_to("/fax_documents/#{fax_document.id}", "$('#" + fax_document.id.to_s + ".fax_document').replaceWith('#{new_html}');")
+    
+      render(
+            :status => 200,
+            :layout => false,
+            :content_type => 'text/plain',
+            :text => "<!-- OK -->",
+      )
+    else
+      render(
+        :status => 501,
+        :layout => false,
+        :content_type => 'text/plain',
+        :text => "<!-- ERRORS: #{errors.join(', ')} -->",
+      )
     end
-
   end
 
   def fax
