@@ -196,8 +196,8 @@ function PresenceUpdate.sip_account(self, inbound, account, domain, status, uuid
     self.account_record[account] = { id = sip_account.id, class = sip_account.class, phone_numbers = phone_numbers, created_at = os.time() }
   end
 
-  require 'dialplan.presence'
-  local result = dialplan.presence.Presence:new{
+  require 'dialplan.presence';
+  dialplan.presence.Presence:new{
     log = self.log,
     database = self.database,
     inbound = inbound,
@@ -205,12 +205,14 @@ function PresenceUpdate.sip_account(self, inbound, account, domain, status, uuid
     accounts = self.account_record[account].phone_numbers,
     uuid = uuid
   }:set(status_map[status] or 'terminated', caller_id);
+
+  self:trigger_rails(self.account_record[account], status_map[status] or 'terminated', uuid);
 end
 
 
 function PresenceUpdate.conference(self, inbound, account, domain, status, uuid)
-  require 'dialplan.presence'
-  local result = dialplan.presence.Presence:new{
+  require 'dialplan.presence';
+  dialplan.presence.Presence:new{
     log = self.log,
     database = self.database,
     inbound = inbound,
@@ -218,4 +220,14 @@ function PresenceUpdate.conference(self, inbound, account, domain, status, uuid)
     accounts = { account },
     uuid = uuid
   }:set(status or 'terminated');
+end
+
+
+function PresenceUpdate.trigger_rails(self, account, status, uuid)
+  if account.class == 'sipaccount' then
+    local command = 'http_request.lua ' .. uuid .. ' http://127.0.0.1/trigger/sip_account_update/' .. tostring(account.id .. '?status=' .. tostring(status));
+
+    require 'common.fapi'
+    common.fapi.FApi:new():execute('luarun', command);
+  end
 end
