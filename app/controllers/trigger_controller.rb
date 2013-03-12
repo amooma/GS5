@@ -63,6 +63,18 @@ class TriggerController < ApplicationController
     end
   end
 
+  def fax_has_been_sent
+    fax_document = FaxDocument.find(params[:id])
+
+    if fax_document
+      # push the partial to the webbrowser
+      #
+      new_html = render_to_string("fax_documents/_fax_document", :layout => false, :locals => {:fax_document => fax_document})
+      PrivatePub.publish_to("/fax_documents/#{fax_document.id}", "$('#fax_document_" + fax_document.id.to_s + "').replaceWith(escape_javascript(" + new_html + "));")
+    end
+
+  end
+
   def fax
     if !params[:fax_account_id].blank?
       fax_account = FaxAccount.where(:id => params[:fax_account_id].to_i).first
