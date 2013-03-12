@@ -303,6 +303,7 @@ function Dialplan.dial(self, destination)
 
     destination.account = self:object_find{class = destination.type, id = destination.id};
     if destination.account then
+      destination.uuid = destination.account.uuid;
       if destination.account.class == 'sipaccount' then
         destination.callee_id_name = destination.account.record.caller_name;
         self.caller:set_callee_id(destination.number, destination.account.record.caller_name);
@@ -313,10 +314,7 @@ function Dialplan.dial(self, destination)
       self.log:debug('DESTINATION_GROUPS - pickup_groups: ', table.concat(group_names, ','));
       for index=1, #group_ids do
         table.insert(destination.pickup_groups, 'g' .. group_ids[index]);
-      end
-      self.caller:set_variable('gs_destination_type', destination.account.class);
-      self.caller:set_variable('gs_destination_id', destination.account.id);
-      self.caller:set_variable('gs_destination_uuid', destination.account.uuid);
+      end 
     end
 
     if destination.account and destination.account.owner then
@@ -909,6 +907,7 @@ function Dialplan.run(self, destination)
     self.caller:set_variable('gs_destination_uuid', destination.uuid);
     self.caller:set_variable('gs_destination_number', destination.number);
     self.caller:set_variable('gs_destination_node_local', destination.node_local);
+    self.caller:set_variable('gs_destination_node_id, ', destination.node_id);
 
     result = self:switch(destination);
     result = result or { continue = false, code = 502, cause = 'DESTINATION_OUT_OF_ORDER', phrase = 'Destination out of order' }
