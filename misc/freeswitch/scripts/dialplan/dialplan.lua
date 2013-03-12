@@ -166,16 +166,13 @@ function Dialplan.retrieve_caller_data(self)
   self.caller.caller_phone_numbers_hash = {};
 
   -- TODO: Set auth_account on transfer initiated by calling party
-  if not common.str.blank(self.caller.dialed_sip_user) then
-    self.caller.auth_account = self:object_find{class = 'sipaccount', domain = self.caller.dialed_domain, auth_account = self.caller.dialed_sip_user};
-    if self.caller.set_auth_account then
-      self.caller:set_auth_account(self.caller.auth_account);
-    end
-  elseif not common.str.blank(self.caller.auth_account_type) and not common.str.blank(self.caller.auth_account_uuid) then
+  if not common.str.blank(self.caller.auth_account_type) and not common.str.blank(self.caller.auth_account_uuid) then
     self.caller.auth_account = self:object_find{class = self.caller.auth_account_type, uuid = self.caller.auth_account_uuid};
-    if self.caller.set_auth_account then
-      self.caller:set_auth_account(self.caller.auth_account);
-    end
+  elseif not common.str.blank(self.caller.previous_destination_type) and not common.str.blank(self.caller.previous_destination_uuid) then
+    self.log:debug('CALLER_DATA - authenticate by previous destination: ', self.caller.previous_destination_type, '=', self.caller.previous_destination_id, '/', self.caller.previous_destination_uuid);
+    self.caller.auth_account = self:object_find{class = self.caller.previous_destination_type, uuid = self.caller.previous_destination_uuid};
+  elseif not common.str.blank(self.caller.dialed_sip_user) then
+    self.caller.auth_account = self:object_find{class = 'sipaccount', domain = self.caller.dialed_domain, auth_account = self.caller.dialed_sip_user};
   end
 
   if self.caller.auth_account then
@@ -184,6 +181,9 @@ function Dialplan.retrieve_caller_data(self)
       self.log:info('CALLER_DATA - auth owner: ', self.caller.auth_account.owner.class, '=', self.caller.auth_account.owner.id, '/', self.caller.auth_account.owner.uuid, ', groups: ', table.concat(self.caller.auth_account.owner.groups, ','));
     else
       self.log:error('CALLER_DATA - auth owner not found');
+    end
+    if self.caller.set_auth_account then
+      self.caller:set_auth_account(self.caller.auth_account);
     end
   else
     self.log:info('CALLER_DATA - no data - unauthenticated call: ', self.caller.auth_account_type, '/', self.caller.auth_account_uuid);
@@ -315,6 +315,9 @@ function Dialplan.dial(self, destination)
       for index=1, #group_ids do
         table.insert(destination.pickup_groups, 'g' .. group_ids[index]);
       end
+      self.caller:set_variable('gs_destination_type', destination.account.class);
+      self.caller:set_variable('gs_destination_id', destination.account.id);
+      self.caller:set_variable('gs_destination_uuid', destination.account.uuid);
     end
 
     if destination.account and destination.account.owner then
@@ -325,6 +328,9 @@ function Dialplan.dial(self, destination)
       elseif destination.account.owner.class == 'tenant' then
         tenant_id = destination.account.owner.id;
       end
+      self.caller:set_variable('gs_destination_owner_type', destination.account.owner.class);
+      self.caller:set_variable('gs_destination_owner_id', destination.account.owner.id);
+      self.caller:set_variable('gs_destination_owner_uuid', destination.account.owner.uuid);
     end
   end
 
