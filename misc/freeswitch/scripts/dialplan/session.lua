@@ -226,3 +226,8 @@ function Session.expand_variables(self, line)
     return self.session:getVariable(captured) or '';
   end))
 end
+
+
+function Session.playback(self, file)
+  self.session:streamFile(file);
+end
