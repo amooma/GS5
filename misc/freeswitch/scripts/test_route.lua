@@ -46,7 +46,7 @@ dialplan_object:retrieve_caller_data();
 local destination = arguments.destination or dialplan_object:destination_new{ number = caller.destination_number };
 local routes = {};
 
-if destination.type == 'unknown' then
+if destination and destination.type == 'unknown' then
   local clip_no_screening = common.array.try(caller, 'account.record.clip_no_screening');
   caller.caller_id_numbers = {}
   if not common.str.blank(clip_no_screening) then
@@ -63,10 +63,10 @@ if destination.type == 'unknown' then
 
   destination.callee_id_number = destination.number;
   destination.callee_id_name = nil;
-
-  require 'dialplan.router';
-  routes =  dialplan.router.Router:new{ log = log, database = database, caller = caller, variables = caller, log_details = true }:route_run(arguments.table or 'outbound');
 end
+
+require 'dialplan.router';
+routes =  dialplan.router.Router:new{ log = log, database = database, caller = caller, variables = caller, log_details = true }:route_run(arguments.table or 'outbound');
 
 local result = {
   routes = routes,
