@@ -49,9 +49,27 @@ class Conference < ActiveRecord::Base
   def to_s
     name
   end
+
+  def list_conference
+    require 'freeswitch_event'
+    result = FreeswitchAPI.api_result(FreeswitchAPI.api('conference', "conference#{self.id}", 'xml_list'))
+    if result =~ /^\<\?xml/
+      return Hash.from_xml(result)
+    end
+    return nil
+  end
+
+  def list_members
+    data = self.list_conference
+    if data.blank?
+      return {}
+    end
+
+    return data.fetch('conferences',{}).fetch('conference',{}).fetch('members',{}).fetch('member',{})
+  end
   
+
   private
-  
   def start_and_end_dates_must_make_sense
     errors.add(:end, 'must be later than the start') if self.end < self.start
   end
