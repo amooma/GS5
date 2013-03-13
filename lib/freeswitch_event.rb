@@ -103,8 +103,41 @@ class FreeswitchEvent
 end
 
 class FreeswitchAPI
-  def self.execute(command, arguments, bgapi = false)
+  def self.api_result(result)
+    if not result
+      return nil
+    end
 
+    if result['Content-Type'] == 'api/response'
+      if result['_BODY'].blank?
+        return nil
+      elsif result['_BODY'] =~ /^\+OK/
+        return true
+      elsif result['_BODY'] =~ /^\-ERR/
+        return false
+      else
+        return result['_BODY']
+      end
+    end
+    
+    return nil
+  end
+
+  def self.api(command, *arguments)
+    event = FreeswitchEventSocket.new()
+    if event && event.connect()
+      event.command("api #{command} #{arguments.join(' ')}")
+      result = event.result()
+      content_length = result['Content-Length'].to_i
+      if content_length > 0 && result['_BODY'].blank?
+        result['_BODY'] = event.read(content_length);
+      end
+      event.close()
+      return result
+    end
+  end
+
+  def self.execute(command, arguments, bgapi = false)
     event = FreeswitchEventSocket.new()
     if event && event.connect()
       api = bgapi ? 'bgapi' : 'api'
