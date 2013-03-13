@@ -74,8 +74,6 @@ class User < ActiveRecord::Base
   
   has_many :fax_accounts, :as => :fax_accountable, :dependent => :destroy
 
-  has_many :system_messages, :dependent => :destroy
-
   has_many :auto_destroy_access_authorization_phone_numbers, :class_name => 'PhoneNumber', :foreign_key => 'access_authorization_user_id', :dependent => :destroy
   
   belongs_to :current_tenant, :class_name => 'Tenant'
