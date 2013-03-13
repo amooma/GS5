@@ -54,12 +54,12 @@ class Call < ActiveRecord::Base
       return nil
     end
 
+    require 'freeswitch_event'
     if auth_account 
       FreeswitchAPI.api('uuid_setvar', channel_uuid, 'gs_auth_account_type', auth_account.class.name)
       FreeswitchAPI.api('uuid_setvar', channel_uuid, 'gs_auth_account_uuid', auth_account.uuid)
     end
 
-    require 'freeswitch_event'
     return FreeswitchAPI.api_result(FreeswitchAPI.api('uuid_transfer', channel_uuid, destination))
   end
 
@@ -85,5 +85,5 @@ class Call < ActiveRecord::Base
   def get_variable_bleg(variable_name)
     return get_variable_from_uuid(self.b_uuid, variable_name);
   end
-  
+
 end
