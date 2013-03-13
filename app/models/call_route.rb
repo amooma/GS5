@@ -253,4 +253,20 @@ class CallRoute < ActiveRecord::Base
     end
   end
 
+
+  def self.test_route(table, caller)
+    arguments = ["'#{table}' table"]
+    caller.each do |key, value|
+      arguments << "'#{value}' '#{key}'"
+    end
+
+    require 'freeswitch_event'
+    result = FreeswitchAPI.api_result(FreeswitchAPI.api('lua', 'test_route.lua', arguments.join(' ')))
+    if result.blank? then
+      return
+    end
+
+    return JSON.parse(result)
+  end
+
 end
