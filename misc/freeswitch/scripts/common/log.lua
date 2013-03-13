@@ -12,6 +12,7 @@ function Log.new(self, arg)
   object = arg.object or {}
   setmetatable(object, self);
   self.__index = self;
+  self.disabled = arg.disabled or false;
   self.prefix = arg.prefix or '### ';
 
   self.level_console  = arg.level_console  or 0;
@@ -27,6 +28,9 @@ function Log.new(self, arg)
 end
 
 function Log.message(self, log_level, message_arguments )
+  if self.disabled then
+    return
+  end
   local message = tostring(self.prefix);
   for index, value in pairs(message_arguments) do
     if type(index) == 'number' then
