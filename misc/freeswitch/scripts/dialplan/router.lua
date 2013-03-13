@@ -98,6 +98,7 @@ function Router.route_match(self, route)
     id = route.endpoint_id,
     destination_number = common.array.try(self, 'caller.destination_number'),
     channel_variables = {},
+    route_id = route.id,
   };
 
   local route_matches = false;
