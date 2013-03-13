@@ -13,6 +13,7 @@ function Log.new(self, arg)
   setmetatable(object, self);
   self.__index = self;
   self.disabled = arg.disabled or false;
+  self.buffer = arg.buffer;
   self.prefix = arg.prefix or '### ';
 
   self.level_console  = arg.level_console  or 0;
@@ -37,7 +38,11 @@ function Log.message(self, log_level, message_arguments )
       message = message .. tostring(value);
     end
   end
-  freeswitch.consoleLog(log_level, message .. '\n');
+  if self.buffer then
+    table.insert(self.buffer, message);
+  elseif freeswitch then
+    freeswitch.consoleLog(log_level, message .. '\n');
+  end
 end
 
 function Log.console(self, ...)
