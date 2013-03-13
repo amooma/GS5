@@ -129,8 +129,12 @@ class FreeswitchAPI
       event.command("api #{command} #{arguments.join(' ')}")
       result = event.result()
       content_length = result['Content-Length'].to_i
-      if content_length > 0 && result['_BODY'].blank?
-        result['_BODY'] = event.read(content_length);
+      while content_length > result['_BODY'].to_s.length
+        body = event.read(content_length - result['_BODY'].to_s.length)
+        if body.blank?
+          break
+        end
+        result['_BODY'] = result['_BODY'].to_s + body;
       end
       event.close()
       return result
