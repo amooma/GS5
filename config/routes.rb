@@ -32,6 +32,7 @@ Gemeinschaft42c::Application.routes.draw do
     collection { 
       post :sort 
       get :show_variables
+      get :test
     }
     resources :route_elements do
       collection { post :sort }

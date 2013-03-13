@@ -1,0 +1,55 @@
+%h2= 'Routing Test'
+
+- if @route_test
+  - if  @route_test['destination']
+    %h3= 'Destination'
+    %table.table.table-striped
+      %thead
+        %tr
+          %td= 'number'
+          %td= 'type'
+          %td= 'ID'
+
+      %tbody{ :id => "destination" }
+        %tr
+          %td= @route_test['destination']['number']
+          %td= @route_test['destination']['type']
+          %td= @route_test['destination']['id']
+  -if @route_test['routes'] && @route_test['routes'].count > 0
+    %h3= 'Routes'
+    %table.table.table-striped
+      %thead
+        %tr
+          %th
+          %th= 'ID'
+          %th= 'destination_number'
+          %th= 'endpoint'
+
+      %tbody{ :id => "route_test" }
+        - @route_test['routes'].each do |index, route_entry|
+          %tr
+            %td= index
+            %td= route_entry['route_id']
+            %td= route_entry['destination_number']
+            %td= "#{route_entry['type']}=#{route_entry['id']}"
+  -if @route_test['log'] && @route_test['log'].count > 0
+    %h3= 'Log'
+    %table.table.table-striped
+      %thead
+        %tr
+          %th
+      %tbody{ :id => "log" }
+        - @route_test['log'].each do |index, log_line|
+          - if log_line =~ /^ROUTE_NO_MATCH/
+            - entry_class = 'table error'
+          - elsif log_line =~ /^ELEMENT_NO_MATCH/
+            - entry_class = 'table warning'
+          - elsif log_line =~ /^ROUTE \d+ /
+            - entry_class = 'table success'
+          - elsif log_line =~ /^[A-Z_]+_MATCH/
+            - entry_class = 'table info'
+          - else
+            - entry_class = nil
+          %tr{:class => entry_class}
+            %td= log_line
+            
