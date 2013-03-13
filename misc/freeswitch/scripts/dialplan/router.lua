@@ -20,6 +20,7 @@ function Router.new(self, arg)
   self.routes = arg.routes or {};
   self.caller = arg.caller;
   self.variables = arg.variables or {};
+  self.log_details = arg.log_details;
   self.routing_tables = {};
   return object;
 end
@@ -65,11 +66,19 @@ function Router.element_match(self, pattern, search_string, replacement, route_v
   local success, result = pcall(string.find, search_string, pattern);
 
   if not success then
-    self.log:error('ELEMENT_MATCH - table error - pattern: ', pattern, ', search_string: ', search_string);
+    self.log:error('ELEMENT_ERROR - table error - pattern: ', pattern, ', search_string: ', search_string);
   elseif result then
-    return true, search_string:gsub(pattern, common.array.expand_variables(replacement, route_variables, self.variables));
+    local replace_by = common.array.expand_variables(replacement, route_variables, self.variables)
+    result = search_string:gsub(pattern, replace_by);
+    if self.log_details then
+      self.log:debug('ELEMENT_MATCH - ', search_string, ' ~= ', pattern, ' => ', replacement, ' => ', replace_by);
+    end
+    return true, result;
   end
 
+  if self.log_details then
+    self.log:debug('ELEMENT_NO_MATCH - ', search_string, ' != ', pattern);
+  end
   return false;
 end
 
@@ -108,6 +117,10 @@ function Router.route_match(self, route)
     local replacement = nil;
 
     local element = route.elements[index];
+
+    if self.log_details then
+      self.log:debug('ROUTE_ELEMENT ', element.id, ' - var_in: ', element.var_in, ', var_out: ', element.var_out, ', action: ', element.action, ', mandatory: ', element.mandatory);
+    end
 
     if element.action ~= 'none' then
       if common.str.blank(element.var_in) or common.str.blank(element.pattern) and element.action == 'set' then
