@@ -77,3 +77,21 @@ function keys_to_s(array, separator, prefix, suffix)
 
   return buffer;
 end
+
+-- convert to JSON
+function to_json(array)
+  require 'common.str';
+  local buffer = '{';
+  for key, value in pairs(array) do
+    if type(value) == 'table' then
+      buffer = buffer .. '"' .. key .. '":' .. to_json(value) .. ',';
+    else
+      buffer = buffer .. '"' .. key .. '":' .. common.str.to_json(value) .. ',';
+    end
+  end
+  if buffer:sub(-1) == ',' then
+    buffer = buffer:sub(1, -2);
+  end
+  buffer = buffer .. '}';
+  return buffer;
+end
