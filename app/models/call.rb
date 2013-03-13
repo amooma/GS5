@@ -39,6 +39,30 @@ class Call < ActiveRecord::Base
     return FreeswitchAPI.execute('uuid_kill', self.uuid, true);
   end
 
+  def transfer_blind(destination, call_leg=:aleg, auth_account=nil)
+    if destination.blank?
+      return nil
+    end
+
+    if call_leg == :bleg
+      channel_uuid = self.b_uuid
+    else
+      channel_uuid = self.uuid
+    end
+
+    if channel_uuid.blank?
+      return nil
+    end
+
+    if auth_account 
+      FreeswitchAPI.api('uuid_setvar', channel_uuid, 'gs_auth_account_type', auth_account.class.name)
+      FreeswitchAPI.api('uuid_setvar', channel_uuid, 'gs_auth_account_uuid', auth_account.uuid)
+    end
+
+    require 'freeswitch_event'
+    return FreeswitchAPI.api_result(FreeswitchAPI.api('uuid_transfer', channel_uuid, destination))
+  end
+
   def get_variable_from_uuid(channel_uuid, variable_name)
     if channel_uuid.blank? 
       return nil
@@ -61,5 +85,5 @@ class Call < ActiveRecord::Base
   def get_variable_bleg(variable_name)
     return get_variable_from_uuid(self.b_uuid, variable_name);
   end
-
+  
 end
