@@ -92,28 +92,21 @@ class TriggerController < ApplicationController
   def sip_account_update
     sip_account = SipAccount.find(params[:id])
 
-    if sip_account
+    if sip_account && sip_account.switchboard_entries.any?
       # push the partial to the webbrowser
       #
       sip_account.switchboard_entries.each do |switchboard_entry|
         new_html = ActionController::Base.helpers.escape_javascript(render_to_string("switchboard_entries/_switchboard_entry", :layout => false, :locals => {:switchboard_entry => switchboard_entry}))
         PrivatePub.publish_to("/switchboards/#{switchboard_entry.switchboard.id}", "$('#switchboard_entry_id_" + switchboard_entry.id.to_s + "').replaceWith('#{new_html}');")
-      end
-    
-      render(
-            :status => 200,
-            :layout => false,
-            :content_type => 'text/plain',
-            :text => "<!-- OK -->",
-      )
-    else
-      render(
-        :status => 501,
-        :layout => false,
-        :content_type => 'text/plain',
-        :text => "<!-- ERRORS: #{errors.join(', ')} -->",
-      )
+      end    
     end
+    
+    render(
+          :status => 200,
+          :layout => false,
+          :content_type => 'text/plain',
+          :text => "<!-- OK -->",
+    )
   end  
 
   def fax
