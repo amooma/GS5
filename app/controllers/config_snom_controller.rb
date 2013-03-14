@@ -233,8 +233,8 @@ class ConfigSnomController < ApplicationController
 		if ! request.env['HTTP_USER_AGENT'].index('snom')
 			Rails.logger.info "---> User-Agent indicates not a Snom phone (#{request.env['HTTP_USER_AGENT'].inspect})"
 		else
-			Rails.logger.info "---> Phone #{@mac_address.inspect}, IP address #{request.remote_ip.inspect}"
-			@phone.update_attributes({ :ip_address => request.remote_ip })
+			Rails.logger.info "---> Phone #{@mac_address.inspect}, IP address #{request_remote_ip.inspect}"
+			@phone.update_attributes({ :ip_address => request_remote_ip })
 		end
 
     @softkeys = Array.new()

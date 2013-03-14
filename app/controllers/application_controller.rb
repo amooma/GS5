@@ -110,6 +110,10 @@ class ApplicationController < ActionController::Base
       redirect_to log_in_path, :alert => 'Access denied! You need to login first.'
     end
   end
+
+  def request_remote_ip 
+    request.env['HTTP_X_FORWARDED_FOR'] || request.remote_ip 
+  end
   
   private  
   

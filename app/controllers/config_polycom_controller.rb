@@ -67,8 +67,8 @@ class ConfigPolycomController < ApplicationController
 		if ! request.env['HTTP_USER_AGENT'].index('polycom')
 			Rails.logger.info "---> User-Agent indicates not a Polycom phone (#{request.env['HTTP_USER_AGENT'].inspect})"
 		else
-			Rails.logger.info "---> Phone #{@mac_address.inspect}, IP address #{request.remote_ip.inspect}"
-			@phone.update_attributes({ :ip_address => request.remote_ip })
+			Rails.logger.info "---> Phone #{@mac_address.inspect}, IP address #{request_remote_ip.inspect}"
+			@phone.update_attributes({ :ip_address => request_remote_ip })
 		end
 
     xml_applications_url = "#{request.protocol}#{request.host_with_port}/config_polycom/#{@phone.id}/0"
