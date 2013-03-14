@@ -1,0 +1,26 @@
+.dashboard
+  - current_user.sip_accounts.each do |sip_account|
+    %table.table.table-striped
+      %thead
+        %tr
+          %td
+            SIP Account
+          %td
+            Direction
+          %td
+            StartStamp
+          %td
+            Destination
+          %td
+            CalleeName
+      %tbody
+        - sip_account.calls.each do |call|
+          %tr
+            %td
+              - current_user.sip_accounts.each do |sip_account|
+                %span.label.label-info
+                  =sip_account.phone_numbers.first.to_s
+            %td=call.direction
+            %td=l Time.at(call.start_stamp)
+            %td=call.destination
+            %td=call.callee_name

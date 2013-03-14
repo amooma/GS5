@@ -12,16 +12,22 @@
       %small
         = truncate(switchboard_entry.to_s, :length => 10)
         %br
-        - if !switchboard_entry.sip_account.registration
-          %span.label.label-inverse
-            %i.icon-ban-circle.icon-white
-        - else
-          - if switchboard_entry.sip_account.call_legs(:where => ["HELD", "ACTIVE"]).size != 0
-            %span.label.label-success
-              %i.icon-user.icon-white    
-          - if switchboard_entry.sip_account.call_legs(:where => ["RINGING"]).size != 0
-            %span.label.label-info
-              %i.icon-bell.icon-white
         - if switchboard_entry.sip_account.phone_numbers.any?
           %span.label
-            = switchboard_entry.sip_account.phone_numbers.first.number        
+            = switchboard_entry.sip_account.phone_numbers.first.number
+
+        %br
+
+        - if switchboard_entry.sip_account.registration
+          - switchboard_entry.sip_account.calls.each do |call|
+            - if call.callstate == 'RINGING'
+              %span.label.label-info
+                %i.icon-bell.icon-white
+                = "from #{call.callee_number}"
+
+            - if call.callstate == 'EARLY'
+              %span.label.label-info
+                = "calls #{call.destination}"
+        - else
+          %span.label.label-inverse
+            %i.icon-ban-circle.icon-white
