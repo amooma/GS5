@@ -218,7 +218,7 @@ function Conference.enter(self, caller, domain)
     return { continue = false, code = 493, phrase = 'Not authorized' };
   end
 
-  self.caller:send_display('Welcome  to ' .. tostring(self.record.name));
+  self.caller:send_display(tostring(self.record.name) .. ', members: ' .. tostring(members));
   caller:sleep(1000);
   if self.settings.phrase_welcome then
     caller.session:sayPhrase('conference_welcome');
