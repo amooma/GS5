@@ -248,6 +248,7 @@ function conf_conference(database)
   };
 end
 
+
 function conf_voicemail(database)
   require 'configuration.simple_xml'
   local xml = configuration.simple_xml.SimpleXml:new();
@@ -282,6 +283,35 @@ function conf_voicemail(database)
     },
   };
 end
+
+
+function conf_event_socket(database)
+  require 'configuration.simple_xml'
+  local xml = configuration.simple_xml.SimpleXml:new();
+
+  require 'common.configuration_table';
+  local settings = common.configuration_table.get(database, 'event_socket', 'settings');
+
+  XML_STRING = xml:element{
+    'document', 
+    ['type'] = 'freeswitch/xml',
+    xml:element{
+      'section',
+      name = 'configuration',
+      description = 'Gemeinschaft 5 FreeSWITCH configuration',
+      xml:element{
+        'configuration',
+        name = 'event_socket.conf',
+        description = 'Event socket configuration',
+        xml:element{
+          'settings',
+          xml:from_hash('param', settings, 'name', 'value'),
+        },
+      },
+    },
+  };
+end
+
 
 function conf_post_switch(database)
   require 'configuration.simple_xml'
@@ -558,6 +588,8 @@ if XML_REQUEST.section == 'configuration' and XML_REQUEST.tag_name == 'configura
     conf_voicemail(database);
   elseif XML_REQUEST.key_value == "post_load_switch.conf" then
     conf_post_switch(database);
+  elseif XML_REQUEST.key_value == "event_socket.conf" then
+    conf_event_socket(database);
   end
 elseif XML_REQUEST.section == 'directory' and XML_REQUEST.tag_name == '' then
   log:debug('SIP_ACCOUNT_DIRECTORY - initialization phase');
