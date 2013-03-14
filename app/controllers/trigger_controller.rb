@@ -100,8 +100,11 @@ class TriggerController < ApplicationController
     end
 
     Switchboard.all.each do |switchboard|
-      new_html = ActionController::Base.helpers.escape_javascript(render_to_string("switchboards/_current_user_dashboard", :layout => false, :locals => {:current_user => switchboard.user}))
-      PrivatePub.publish_to("/switchboards/#{switchboard.id}", "$('.dashboard').replaceWith('#{new_html}');")
+      if sip_account.call_legs.where(:sip_account_id => switchboard.user.sip_account_ids).any? || 
+         sip_account.b_call_legs.where(:sip_account_id => switchboard.user.sip_account_ids).any?
+        new_html = ActionController::Base.helpers.escape_javascript(render_to_string("switchboards/_current_user_dashboard", :layout => false, :locals => {:current_user => switchboard.user}))
+        PrivatePub.publish_to("/switchboards/#{switchboard.id}", "$('.dashboard').replaceWith('#{new_html}');")
+      end
     end
 
     render(

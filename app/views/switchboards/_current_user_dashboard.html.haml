@@ -4,23 +4,30 @@
       %thead
         %tr
           %td
-            SIP Account
-          %td
-            Direction
-          %td
-            StartStamp
           %td
             Destination
           %td
-            CalleeName
+            Start
+          %td{:span => '2'}
+            Caller
       %tbody
-        - sip_account.calls.each do |call|
+        - sip_account.call_legs.where(callstate: 'RINGING').each do |call_leg|
+          %tr.warning
+            %td
+              %i.icon-bell
+            %td
+              %span.label.label-info
+                =sip_account.phone_numbers.first.to_s
+            %td=l Time.at(call_leg.start_stamp)
+            %td=call_leg.callee_name
+            %td=call_leg.callee_number
+
+        - sip_account.b_call_legs.where(direction: 'inbound').each do |call_leg|
           %tr
             %td
-              - current_user.sip_accounts.each do |sip_account|
-                %span.label.label-info
-                  =sip_account.phone_numbers.first.to_s
-            %td=call.direction
-            %td=l Time.at(call.start_stamp)
-            %td=call.destination
-            %td=call.callee_name
+            %td
+              %span.label.label-info
+                =sip_account.phone_numbers.first.to_s
+            %td=l Time.at(call_leg.start_stamp)
+            %td=call_leg.b_caller_id_name
+            %td=call_leg.b_caller_id_number
