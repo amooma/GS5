@@ -31,6 +31,7 @@ function Conference.settings_get(self)
 
   local parameters = configuration.parameters or {};
   local settings = configuration.settings or {};
+  local sounds = configuration.sounds or {};
 
   settings.members_max = settings.members_max or tonumber(parameters['max-members']) or 100;
   settings.pin_length_max = tonumber(settings.pin_length_max) or 10;
@@ -40,14 +41,14 @@ function Conference.settings_get(self)
   settings.announcement_silence_threshold = tonumber(settings.announcement_silence_threshold) or 500;
   settings.announcement_silence_length = tonumber(settings.announcement_silence_length) or 3;
   settings.flags = settings.flags or { waste = true };
-  settings.pin_sound = parameters['pin-sound'];
-  settings.pin_bad_sound = parameters['bad-pin-sound'];
+  sounds.pin = sounds.pin or 'conference/conf-pin.wav';
+  sounds.has_joined = sounds.has_joined or 'conference/conf-has_joined.wav';
+  sounds.has_left = sounds.has_left or 'conference/conf-has_left.wav';
+  sounds.alone = sounds.has_alone or 'conference/conf-alone.wav';
+
   settings.key_enter = parameters.key_enter or '#';
-  settings.phrase_welcome = settings.phrase_welcome or 'conference_welcome';
-  settings.phrase_goodbye = settings.phrase_goodbye or 'conference_goodbye';
-  settings.phrase_record_name = settings.phrase_record_name or 'conference_record_name';
   settings.spool_dir = settings.spool_dir or '/var/spool/freeswitch';
-  return settings;
+  return settings, sounds;
 end
 
 
@@ -69,7 +70,7 @@ function Conference.find_by_id(self, id)
       conference.open_now = common.str.to_b(conference_entry.open_now);
     end
 
-    conference.settings = self:settings_get();
+    conference.settings, conference.sounds = self:settings_get();
     if conference.settings then
       conference.settings.members_max = tonumber(conference.record.max_members) or conference.settings.members_max;
     else
@@ -117,14 +118,10 @@ function Conference.check_pin(self, pin)
       break
     elseif digits ~= "" then
       self.caller:send_display('PIN: wrong');
-      if self.settings.pin_bad_sound then
-        self.caller:playback(self.settings.pin_bad_sound);
-      else
-        self.caller.session:sayPhrase('conference_bad_pin');
-      end
+      self.caller.session:sayPhrase('conference_bad_pin');
     end
     self.caller:send_display('Enter PIN');
-    digits = self.caller.session:read(self.settings.pin_length_min, self.settings.pin_length_max, self.settings.pin_sound, self.settings.pin_timeout, self.settings.key_enter);
+    digits = self.caller.session:read(self.settings.pin_length_min, self.settings.pin_length_max, self.sounds.pin, self.settings.pin_timeout, self.settings.key_enter);
   end
 
   if digits ~= pin then
@@ -164,7 +161,7 @@ end
 function Conference.record_name(self)
   self.caller:send_display('Record name');
   local name_file = self.settings.spool_dir .. '/conference_caller_name_' .. self.caller.uuid .. '.wav';
-  self.caller.session:sayPhrase(self.settings.phrase_record_name);
+  self.caller.session:sayPhrase('conference_record_name');
   self.caller.session:recordFile(name_file, self.settings.announcement_max_length, self.settings.announcement_silence_threshold, self.settings.announcement_max_length);
   self.caller:send_display('Playback name');
   self.caller:playback(name_file);
@@ -173,10 +170,16 @@ function Conference.record_name(self)
 end
 
 
-function Conference.playback(self, file_name)
-  self.caller:execute('set',"result=${conference(" .. self.identifier .. " play ".. file_name .. ")}");
+function Conference.playback(self, ...)
+  local sound_files = {...};
+  for index=1, #sound_files do
+    self.caller:execute('set',"result=${conference(" .. self.identifier .. " play ".. tostring(sound_files[index]) .. ")}");
+  end
 end
 
+function Conference.phrase(self, phrase, file_name)
+  self.caller:execute('set',"result=${conference(" .. self.identifier .. " phrase ".. phrase .. ':' .. file_name .. ")}");
+end
 
 function Conference.enter(self, caller, domain)
   self.caller = caller;
@@ -196,8 +199,12 @@ function Conference.enter(self, caller, domain)
 
   local invitee = self:find_invitee_by_numbers(caller.caller_phone_numbers);
   if invitee then
-    self.settings.flags.mute = not common.str.to_b(invitee.speaker);
-    self.settings.flags.moderator = common.str.to_b(invitee.moderator);
+    if common.str.to_b(invitee.speaker) then
+      self.settings.flags.mute = nil;
+    end
+    if common.str.to_b(invitee.moderator) then
+      self.settings.flags.moderator = true;
+    end
     self.log:info('CONFERENCE ', self.id, ' - invitee=', invitee.id, '/', invitee.uuid, ', speaker: ', not self.settings.flags.mute, ', moderator: ', self.settings.flags.moderator);
     self.pin = invitee.pin;
   elseif self:check_ownership() then
@@ -212,17 +219,14 @@ function Conference.enter(self, caller, domain)
   caller:answer();
   if not common.str.blank(self.pin) and not self:check_pin(self.pin) then
     self.log:notice('CONFERENCE ', self.id, ' - PIN wrong');
-    if self.settings.phrase_goodbye then
-      caller.session:sayPhrase(self.settings.phrase_goodbye);
-    end
+    caller.session:sayPhrase('conference_goodbye');
     return { continue = false, code = 493, phrase = 'Not authorized' };
   end
 
   self.caller:send_display(tostring(self.record.name) .. ', members: ' .. tostring(members));
   caller:sleep(1000);
-  if self.settings.phrase_welcome then
-    caller.session:sayPhrase('conference_welcome');
-  end
+  caller.session:sayPhrase('conference_welcome');
+
 
   local name_file = nil;
   local name_file_delete = nil;
@@ -235,30 +239,31 @@ function Conference.enter(self, caller, domain)
     end
   end
 
+  members = self:members_count();
   if self.announce_entering and name_file then
-    members = self:members_count();
     if members > 0 then
-      caller.session:sayPhrase('conference_has_joined', name_file);
+      self:playback(name_file, self.sounds.has_joined);
     end
+  end
+
+  if members == 0 then 
+    caller.session:sayPhrase('conference_alone');
   end
 
   self.caller:send_display(tostring(self.record.name));
   local result =  caller:execute('conference', self.identifier .. "@profile_" .. self.identifier .. "++flags{" .. common.array.keys_to_s(self.settings.flags, '|') .. "}");
   
   self.caller:send_display('Goodbye');
-
-  if self.settings.phrase_goodbye then
-    caller.session:sayPhrase(self.settings.phrase_goodbye);
-  end
+  caller.session:sayPhrase('conference_goodbye');
 
   if name_file then
     if self.announce_leaving then
       members = self:members_count();
       if members > 0 then
+        self:playback(name_file, self.sounds.has_left);
         if members == 1 then 
-          caller:sleep(3000);
+          self:playback(self.sounds.alone);
         end
-        caller.session:sayPhrase('conference_has_left', name_file);
       end
     end
     if name_file_delete then
