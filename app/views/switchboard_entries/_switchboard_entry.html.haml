@@ -12,7 +12,7 @@
       %small
         = truncate(switchboard_entry.to_s, :length => 23)
         %br
-        - if switchboard_entry.sip_account.phone_numbers.any?
+        - if switchboard_entry.sip_account.phone_numbers.any? && !switchboard_entry.sip_account.call_legs.where(callstate: 'ACTIVE').any? && !switchboard_entry.sip_account.b_call_legs.where(b_callstate: 'ACTIVE').any?
           %span.label
             = switchboard_entry.sip_account.phone_numbers.first.number
 
@@ -29,12 +29,16 @@
               = "calls #{call_leg.destination}"
 
           - switchboard_entry.sip_account.call_legs.where(callstate: 'ACTIVE').each do |call_leg|
+            %span.label
+              = "#{switchboard_entry.sip_account.phone_numbers.first.number} => "
             %span.label.label-info
-              = "#{call_leg.b_caller_id_number} => #{call_leg.callee_number}"
+              = "#{call_leg.callee_number}"
 
           - switchboard_entry.sip_account.b_call_legs.where(b_callstate: 'ACTIVE').each do |b_call_leg|
             %span.label.label-info
-              = "#{b_call_leg.b_caller_id_number} => #{b_call_leg.destination}"
+              = "#{b_call_leg.b_caller_id_number} =>"
+            %span.label
+              = switchboard_entry.sip_account.phone_numbers.first.number
 
         - else
           %span.label.label-inverse
