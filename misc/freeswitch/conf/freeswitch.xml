@@ -515,6 +515,13 @@
               </match>
             </input>
           </macro>
+          <macro name="conference_alone">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="conference/conf-alone.wav"/>
+              </match>
+            </input>
+          </macro>
         </macros>
       </phrases>
     </language>
@@ -1024,6 +1031,13 @@
               <match>
                 <action function="play-file" data="$1"/>
                 <action function="play-file" data="conference/conf-has_left.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_alone">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="conference/conf-alone.wav"/>
               </match>
             </input>
           </macro>
