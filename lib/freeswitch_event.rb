@@ -15,7 +15,11 @@ class FreeswitchEventSocket
     return false
   end
 
-  def connect(password = DEFAULT_PASSWORD, event_host = DEFAULT_HOST, event_port = DEFAULT_PORT)
+  def connect(password = nil, event_host = nil, event_port = nil)
+    event_host = event_host || GsParameter.get('host', 'event_socket', 'client') || GsParameter.get('listen-ip', 'event_socket', 'settings') || DEFAULT_HOST
+    event_port = event_port || GsParameter.get('port', 'event_socket', 'client') || GsParameter.get('listen-port', 'event_socket', 'settings') || DEFAULT_PORT
+    password = password || GsParameter.get('password', 'event_socket', 'client') || GsParameter.get('password', 'event_socket', 'settings') || DEFAULT_PASSWORD
+
     begin
       @socket = TCPSocket.open(event_host, event_port)
     rescue
