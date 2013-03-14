@@ -1,27 +1,45 @@
-%li.span1{:id => "switchboard_entry_id_#{switchboard_entry.id}"}
+%li.span2{:id => "switchboard_entry_id_#{switchboard_entry.id}"}
   %div.thumbnail
     %a.thumbnail{:href => tenant_user_path(switchboard_entry.sip_account.sip_accountable.current_tenant, switchboard_entry.sip_account.sip_accountable)}
       - if switchboard_entry.sip_account.sip_accountable.image?
-        = image_tag(switchboard_entry.sip_account.sip_accountable.image_url(:small).to_s, :class => 'img-rounded')
+        = image_tag(switchboard_entry.sip_account.sip_accountable.image_url(:profile).to_s, :class => 'img-rounded', :style => 'width: 100px;')
       - else
         - if switchboard_entry.sip_account.sip_accountable.male?
-          = image_tag 'icons/user-male-16x.png', :class => 'img-rounded'
+          = image_tag('icons/user-male-16x.png', :class => 'img-rounded', :style => 'width: 100px;')
         - else
-          = image_tag 'icons/user-female-16x.png', :class => 'img-rounded'
+          = image_tag('icons/user-female-16x.png', :class => 'img-rounded', :style => 'width: 100px;')
     %p
       %small
-        = truncate(switchboard_entry.to_s, :length => 10)
+        = truncate(switchboard_entry.to_s, :length => 23)
         %br
-        - if !switchboard_entry.sip_account.registration
+        - if switchboard_entry.sip_account.phone_numbers.any? && !switchboard_entry.sip_account.call_legs.where(callstate: 'ACTIVE').any? && !switchboard_entry.sip_account.b_call_legs.where(b_callstate: 'ACTIVE').any?
+          %span.label
+            = switchboard_entry.sip_account.phone_numbers.first.number
+
+        %br
+
+        - if switchboard_entry.sip_account.registration
+          - switchboard_entry.sip_account.call_legs.where(callstate: 'RINGING').each do |call_leg|
+            %span.label.label-warning
+              %i.icon-bell.icon-white
+              = "#{call_leg.caller_id_number}"
+
+          - switchboard_entry.sip_account.call_legs.where(callstate: 'EARLY').each do |call_leg|
+            %span.label.label-info
+              = "calls #{call_leg.destination}"
+
+          - switchboard_entry.sip_account.call_legs.where(callstate: 'ACTIVE').each do |call_leg|
+            %span.label
+              = "#{switchboard_entry.sip_account.phone_numbers.first.number} => "
+            %span.label.label-info
+              = "#{call_leg.callee_number}"
+
+          - switchboard_entry.sip_account.b_call_legs.where(b_callstate: 'ACTIVE').each do |b_call_leg|
+            %span.label.label-info
+              = "#{b_call_leg.b_caller_id_number} =>"
+            %span.label
+              = switchboard_entry.sip_account.phone_numbers.first.number
+
+        - else
           %span.label.label-inverse
             %i.icon-ban-circle.icon-white
-        - else
-          - if switchboard_entry.sip_account.call_legs(:where => ["HELD", "ACTIVE"]).size != 0
-            %span.label.label-success
-              %i.icon-user.icon-white    
-          - if switchboard_entry.sip_account.call_legs(:where => ["RINGING"]).size != 0
-            %span.label.label-info
-              %i.icon-bell.icon-white
-        - if switchboard_entry.sip_account.phone_numbers.any?
-          %span.label
-            = switchboard_entry.sip_account.phone_numbers.first.number        
