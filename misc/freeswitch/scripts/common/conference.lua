@@ -147,14 +147,26 @@ function Conference.check_ownership(self)
 end
 
 
-function Conference.record_name(self)
-  if not self.announce_entering and not announce_leaving then
-    return nil;
+function Conference.account_name_file(self)
+  if not self.caller.account or tostring(self.caller.account.class):lower() ~= 'sipaccount' then
+    return;
   end
+
+  require 'dialplan.voicemail'
+  local voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(self.caller.account.id);
+  if voicemail_account and not common.str.blank(voicemail_account.record.name_path) then
+    self.log:debug('CONFERENCE ', self.id, ' - caller_name_file: ', voicemail_account.record.name_path);
+    return voicemail_account.record.name_path;
+  end
+end
+
+
+function Conference.record_name(self)
   self.caller:send_display('Record name');
   local name_file = self.settings.spool_dir .. '/conference_caller_name_' .. self.caller.uuid .. '.wav';
   self.caller.session:sayPhrase(self.settings.phrase_record_name);
   self.caller.session:recordFile(name_file, self.settings.announcement_max_length, self.settings.announcement_silence_threshold, self.settings.announcement_max_length);
+  self.caller:send_display('Playback name');
   self.caller:playback(name_file);
 
   return name_file;
@@ -212,13 +224,21 @@ function Conference.enter(self, caller, domain)
     caller.session:sayPhrase('conference_welcome');
   end
 
-  local name_file = self:record_name(caller);
-  if name_file then
-    if self.announce_entering then
-      members = self:members_count();
-      if members > 0 then
-        caller.session:sayPhrase('conference_has_joined', name_file);
-      end
+  local name_file = nil;
+  local name_file_delete = nil;
+
+  if self.announce_entering or self.announce_leaving then
+    name_file = self:account_name_file();
+    if not name_file then
+      name_file = self:record_name(caller);
+      name_file_delete = true;
+    end
+  end
+
+  if self.announce_entering and name_file then
+    members = self:members_count();
+    if members > 0 then
+      caller.session:sayPhrase('conference_has_joined', name_file);
     end
   end
 
@@ -241,7 +261,9 @@ function Conference.enter(self, caller, domain)
         caller.session:sayPhrase('conference_has_left', name_file);
       end
     end
-    os.remove(name_file);
+    if name_file_delete then
+      os.remove(name_file);
+    end
   end
 
   return { continue = false, code = 200, phrase = 'OK' }
