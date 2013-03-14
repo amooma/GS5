@@ -113,14 +113,17 @@ function Conference.check_pin(self, pin)
   local digits = '';
   for i = 1, 3 do
     if digits == pin then
+      self.caller:send_display('PIN: OK');
       break
     elseif digits ~= "" then
+      self.caller:send_display('PIN: wrong');
       if self.settings.pin_bad_sound then
         self.caller:playback(self.settings.pin_bad_sound);
       else
         self.caller.session:sayPhrase('conference_bad_pin');
       end
     end
+    self.caller:send_display('Enter PIN');
     digits = self.caller.session:read(self.settings.pin_length_min, self.settings.pin_length_max, self.settings.pin_sound, self.settings.pin_timeout, self.settings.key_enter);
   end
 
@@ -148,7 +151,7 @@ function Conference.record_name(self)
   if not self.announce_entering and not announce_leaving then
     return nil;
   end
-
+  self.caller:send_display('Record name');
   local name_file = self.settings.spool_dir .. '/conference_caller_name_' .. self.caller.uuid .. '.wav';
   self.caller.session:sayPhrase(self.settings.phrase_record_name);
   self.caller.session:recordFile(name_file, self.settings.announcement_max_length, self.settings.announcement_silence_threshold, self.settings.announcement_max_length);
@@ -194,6 +197,7 @@ function Conference.enter(self, caller, domain)
     return { continue = false, code = 493, phrase = 'Conference closed' };
   end
 
+  caller:answer();
   if not common.str.blank(self.pin) and not self:check_pin(self.pin) then
     self.log:notice('CONFERENCE ', self.id, ' - PIN wrong');
     if self.settings.phrase_goodbye then
@@ -202,7 +206,7 @@ function Conference.enter(self, caller, domain)
     return { continue = false, code = 493, phrase = 'Not authorized' };
   end
 
-  caller:answer();
+  self.caller:send_display('Welcome  to ' .. tostring(self.record.name));
   caller:sleep(1000);
   if self.settings.phrase_welcome then
     caller.session:sayPhrase('conference_welcome');
@@ -218,7 +222,11 @@ function Conference.enter(self, caller, domain)
     end
   end
 
+  self.caller:send_display(tostring(self.record.name));
   local result =  caller:execute('conference', self.identifier .. "@profile_" .. self.identifier .. "++flags{" .. common.array.keys_to_s(self.settings.flags, '|') .. "}");
+  
+  self.caller:send_display('Goodbye');
+
   if self.settings.phrase_goodbye then
     caller.session:sayPhrase(self.settings.phrase_goodbye);
   end
