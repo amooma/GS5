@@ -65,6 +65,8 @@ if destination and destination.type == 'unknown' then
   destination.callee_id_name = nil;
 end
 
+caller.destination = destination;
+
 require 'dialplan.router';
 routes =  dialplan.router.Router:new{ log = log, database = database, caller = caller, variables = caller, log_details = true }:route_run(arguments.table or 'outbound');
 
