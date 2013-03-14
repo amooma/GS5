@@ -129,23 +129,3 @@ function append(buffer, value, separator, prefix, suffix)
 
   return buffer;
 end
-
--- concatenate array values to string
-function concat(array, separator, prefix, suffix)
-  local buffer = '';
-  for key, value in pairs(array) do
-    buffer = append(buffer, value, separator, prefix, suffix);
-  end
-
-  return buffer;
-end
-
--- concatenate array keys to string
-function concat_keys(array, separator, prefix, suffix)
-  local buffer = '';
-  for key, value in pairs(array) do
-    buffer = append(buffer, key, separator, prefix, suffix);
-  end
-
-  return buffer;
-end
