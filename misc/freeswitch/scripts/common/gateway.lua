@@ -231,9 +231,7 @@ function Gateway.parameters_build(self, gateway_id, technology)
       parameters.register = common.str.to_b(settings.register);
     end
 
-    if common.str.blank(settings.password) then
-      parameters.password = 'gateway' .. gateway_id;
-    else
+    if not common.str.blank(settings.password) then
       parameters.password = settings.password;
     end
 
