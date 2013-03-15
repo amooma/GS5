@@ -38,7 +38,7 @@ end
 
 
 function HuntGroup.find_by_uuid(self, uuid)
-  local sql_query = 'SELECT * FROM `hunt_groups` WHERE `id`= "'.. uuid .. '" LIMIT 1';
+  local sql_query = 'SELECT * FROM `hunt_groups` WHERE `uuid`= "'.. uuid .. '" LIMIT 1';
   local hunt_group = nil;
 
   self.database:query(sql_query, function(entry)
