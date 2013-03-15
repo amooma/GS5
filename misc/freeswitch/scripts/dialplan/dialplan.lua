@@ -185,7 +185,7 @@ function Dialplan.retrieve_caller_data(self)
       self.caller:set_auth_account(self.caller.auth_account);
     end
   else
-    self.log:info('CALLER_DATA - no data - unauthenticated call: ', self.caller.auth_account_type, '/', self.caller.auth_account_uuid);
+    self.log:info('CALLER_DATA - no data - unauthenticated call: ', self.caller.auth_account_type, '=', self.caller.auth_account_id, '/', self.caller.auth_account_uuid);
   end
 
   if not common.str.blank(self.caller.account_type) and not common.str.blank(self.caller.account_uuid) then
