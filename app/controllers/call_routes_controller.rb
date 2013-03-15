@@ -88,10 +88,17 @@ class CallRoutesController < ApplicationController
   end
 
   def test
-    sip_account = SipAccount.where(:id => params[:sip_account_id]).first;
-    destination_number = params[:destination_number]
-    routing_table = params[:routing_table]
-    @route_test = CallRoute.test_route(routing_table, {'caller.destination_number' => destination_number, 'caller.auth_account_type' => 'SipAccount', 'caller.auth_account_uuid' => sip_account.uuid})
+    if !params[:sip_account_id].blank?
+      account = SipAccount.where(:id => params[:sip_account_id]).first
+    elsif !params[:hunt_group_id].blank?
+      account = HuntGroup.where(:id => params[:hunt_group_id]).first
+    end
+
+    if account
+      destination_number = params[:destination_number]
+      routing_table = params[:routing_table]
+      @route_test = CallRoute.test_route(routing_table, {'caller.destination_number' => destination_number, 'caller.auth_account_type' => account.class.name, 'caller.auth_account_id' => account.id, 'caller.auth_account_uuid' => account.try(:uuid)})
+    end
   end
 
   private
