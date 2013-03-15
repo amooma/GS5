@@ -1,6 +1,9 @@
 - content_for :title, t("softkeys.show.page_title")
 
 %p
+  %strong= t("softkeys.show.label") + ":"
+  =@softkey.label
+%p
   %strong= t("softkeys.functions.#{@softkey.softkey_function}") + ":"
   =@softkey.to_s
     
