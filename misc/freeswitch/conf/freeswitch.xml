@@ -275,7 +275,7 @@
                 <action function="play-file" data="ivr/ivr-thank_you_for_calling.wav"/>
                 <action function="play-file" data="$1"/>
                 <action function="play-file" data="voicemail/vm-not_available.wav"/>
-  				<action function="play-file" data="ivr/ivr-please_state_your_name_and_reason_for_calling.wav"/>
+                <action function="play-file" data="ivr/ivr-please_state_your_name_and_reason_for_calling.wav"/>
               </match>
             </input>
             <input pattern="^greeting:(.+)$">
@@ -801,7 +801,7 @@
                 <action function="play-file" data="ivr/ivr-thank_you_for_calling.wav"/>
                 <action function="play-file" data="$1"/>
                 <action function="play-file" data="voicemail/vm-not_available.wav"/>
-				<action function="play-file" data="ivr/ivr-please_state_your_name_and_reason_for_calling.wav"/>
+                <action function="play-file" data="ivr/ivr-please_state_your_name_and_reason_for_calling.wav"/>
               </match>
             </input>
             <input pattern="^greeting:(.+)$">
