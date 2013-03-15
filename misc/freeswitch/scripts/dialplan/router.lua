@@ -83,9 +83,14 @@ function Router.element_match(self, pattern, search_string, replacement, route_v
 end
 
 
-function Router.element_match_group(self, pattern, groups, replacement, use_key, route_variables)
+function Router.element_match_group(self, pattern, groups, replacement, use_key, route_variables, variable_name)
   if type(groups) ~= 'table' then
+    self.log:debug('ELEMENT_FIND_IN_ARRAY - no such array: ', variable_name, ', use_keys: ', tostring(use_key));
     return false;
+  end
+
+  if self.log_details then
+    self.log:debug('ELEMENT_FIND_IN_ARRAY - array: ', variable_name, ', use_keys: ', tostring(use_key));
   end
 
   for key, value in pairs(groups) do
@@ -136,8 +141,8 @@ function Router.route_match(self, route)
           local search_string = tostring(common.array.try(self.caller, element.var_in));
           result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
         elseif command == 'key' or command == 'val' then
-          local groups = common.array.try(self.caller, variable_name);
-          result, replacement = self:element_match_group(tostring(element.pattern), groups, tostring(element.replacement), command == 'key');
+          local groups = common.array.try(destination, variable_name) or common.array.try(self.caller, variable_name);
+          result, replacement = self:element_match_group(tostring(element.pattern), groups, tostring(element.replacement), command == 'key', destination, variable_name);
         elseif command == 'chv' then
           local search_string = self.caller:to_s(variable_name);
           result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
