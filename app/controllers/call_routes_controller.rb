@@ -97,7 +97,15 @@ class CallRoutesController < ApplicationController
     if account
       destination_number = params[:destination_number]
       routing_table = params[:routing_table]
-      @route_test = CallRoute.test_route(routing_table, {'caller.destination_number' => destination_number, 'caller.auth_account_type' => account.class.name, 'caller.auth_account_id' => account.id, 'caller.auth_account_uuid' => account.try(:uuid)})
+      @route_test = CallRoute.test_route(routing_table, {
+        'caller.destination_number' => destination_number,
+        'caller.auth_account_type' => account.class.name, 
+        'caller.auth_account_id' => account.id, 
+        'caller.auth_account_uuid' => account.try(:uuid),
+        'caller.account_type' => account.class.name, 
+        'caller.account_id' => account.id, 
+        'caller.account_uuid' => account.try(:uuid),
+      })
     end
   end
 
