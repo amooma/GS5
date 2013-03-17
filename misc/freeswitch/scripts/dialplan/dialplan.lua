@@ -626,6 +626,8 @@ function Dialplan.switch(self, destination)
   local result = nil;
   self.dial_timeout_active = self.dial_timeout;
 
+  self.log:debug('SWITCH - auth: ', self.caller.auth_account.class, '=', self.caller.auth_account.id, '/', self.caller.auth_account.uuid, ', caller: ', self.caller.account.class, '=', self.caller.account.id, '/', self.caller.account.uuid);
+  
   if not destination.node_local then
     return self:dial(destination);
   end
@@ -726,8 +728,8 @@ function Dialplan.switch(self, destination)
     for index, number in ipairs(self.caller.caller_phone_numbers) do
       table.insert(self.caller.caller_id_numbers, number);
     end
-    self.log:info('CALLER_ID_NUMBERS - clir: ', self.caller.clir, ', numbers: ', table.concat(self.caller.caller_id_numbers, ','));
 
+    self.log:info('SWITCH - clir: ', self.caller.clir, ', caller_id_numbers: ', table.concat(self.caller.caller_id_numbers, ','));
     destination.callee_id_number = destination.number;
     destination.callee_id_name = nil;
 
