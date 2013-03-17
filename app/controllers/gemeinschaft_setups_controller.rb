@@ -62,6 +62,11 @@ class GemeinschaftSetupsController < ApplicationController
       GsParameter.where(:name => 'ringtone_url').first.update_attributes(:value => "http://#{@gemeinschaft_setup.sip_domain.host}")
       GsParameter.where(:name => 'user_image_url').first.update_attributes(:value => "http://#{@gemeinschaft_setup.sip_domain.host}/uploads/user/image")
 
+      # Set ringback_tone
+      if @gemeinschaft_setup.country.country_code.to_s == '49'
+        GsParameter.where(:entity => 'dialplan', :section => 'variables', :name => 'ringback').first.update_attributes(:value => '%(1000,4000,425.0)')
+      end
+
       # Restart FreeSWITCH
       if Rails.env.production?
         require 'freeswitch_event'

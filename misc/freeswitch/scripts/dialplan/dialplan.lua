@@ -185,12 +185,15 @@ function Dialplan.retrieve_caller_data(self)
       self.caller:set_auth_account(self.caller.auth_account);
     end
   else
-    self.log:info('CALLER_DATA - no data - unauthenticated call: ', self.caller.auth_account_type, '/', self.caller.auth_account_uuid);
+    self.log:info('CALLER_DATA - no data - unauthenticated call: ', self.caller.auth_account_type, '=', self.caller.auth_account_id, '/', self.caller.auth_account_uuid);
   end
 
   if not common.str.blank(self.caller.account_type) and not common.str.blank(self.caller.account_uuid) then
     self.caller.account = self:object_find{class = self.caller.account_type, uuid = self.caller.account_uuid};
     if self.caller.account then
+      self.caller.clir = common.str.to_b(common.array.try(self.caller, 'account.record.clir'));
+      self.caller.clip = common.str.to_b(common.array.try(self.caller, 'account.record.clip'));
+
       require 'common.phone_number'
       self.caller.caller_phone_numbers = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:list_by_owner(self.caller.account.id, self.caller.account.class);
       for index, caller_number in ipairs(self.caller.caller_phone_numbers) do
@@ -623,6 +626,8 @@ function Dialplan.switch(self, destination)
   local result = nil;
   self.dial_timeout_active = self.dial_timeout;
 
+  self.log:debug('SWITCH - auth: ', self.caller.auth_account.class, '=', self.caller.auth_account.id, '/', self.caller.auth_account.uuid, ', caller: ', self.caller.account.class, '=', self.caller.account.id, '/', self.caller.account.uuid);
+  
   if not destination.node_local then
     return self:dial(destination);
   end
@@ -723,8 +728,8 @@ function Dialplan.switch(self, destination)
     for index, number in ipairs(self.caller.caller_phone_numbers) do
       table.insert(self.caller.caller_id_numbers, number);
     end
-    self.log:info('CALLER_ID_NUMBERS - clir: ', self.caller.clir, ', numbers: ', table.concat(self.caller.caller_id_numbers, ','));
 
+    self.log:info('SWITCH - clir: ', self.caller.clir, ', caller_id_numbers: ', table.concat(self.caller.caller_id_numbers, ','));
     destination.callee_id_number = destination.number;
     destination.callee_id_name = nil;
 
