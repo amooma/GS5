@@ -191,6 +191,9 @@ function Dialplan.retrieve_caller_data(self)
   if not common.str.blank(self.caller.account_type) and not common.str.blank(self.caller.account_uuid) then
     self.caller.account = self:object_find{class = self.caller.account_type, uuid = self.caller.account_uuid};
     if self.caller.account then
+      self.caller.clir = common.str.to_b(common.array.try(self.caller, 'account.record.clir'));
+      self.caller.clip = common.str.to_b(common.array.try(self.caller, 'account.record.clip'));
+
       require 'common.phone_number'
       self.caller.caller_phone_numbers = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:list_by_owner(self.caller.account.id, self.caller.account.class);
       for index, caller_number in ipairs(self.caller.caller_phone_numbers) do
