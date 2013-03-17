@@ -24,6 +24,7 @@ function Log.new(self, arg)
   self.level_notice   = arg.level_notice   or 5;
   self.level_info     = arg.level_info     or 6;
   self.level_debug    = arg.level_debug    or 7;
+  self.level_devel    = arg.level_devel    or 4;
 
   return object;
 end
@@ -35,7 +36,12 @@ function Log.message(self, log_level, message_arguments )
   local message = tostring(self.prefix);
   for index, value in pairs(message_arguments) do
     if type(index) == 'number' then
-      message = message .. tostring(value);
+      if type(value) == 'table' then
+        require 'common.array';
+        message = message .. common.array.to_json(value);
+      else
+        message = message .. tostring(value);
+      end
     end
   end
   if self.buffer then
@@ -75,4 +81,10 @@ end
 
 function Log.debug(self, ...)
   self:message(self.level_debug, {...});
+end
+
+function Log.devel(self, ...)
+  local arguments = {...};
+  table.insert(arguments, 1, '**');
+  self:message(self.level_devel, arguments);
 end
