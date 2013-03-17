@@ -213,11 +213,6 @@ class SipAccount < ActiveRecord::Base
     return states
   end
 
-  def non_e164_phone_numbers
-    array_of_phone_numbers_as_strings = self.phone_numbers.map{ |phone_number| phone_number.number.to_s }.sort
-    self.phone_numbers.where(:number => array_of_phone_numbers_as_strings.select { |phone_number| phone_number[0] != '+' })
-  end
-
   private
       
   def save_value_of_to_s
