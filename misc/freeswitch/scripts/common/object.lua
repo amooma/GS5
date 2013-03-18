@@ -95,6 +95,18 @@ function Object.find(self, attributes)
     if object then
       object.owner = self:find{class = object.record.fax_accountable_type, id = tonumber(object.record.fax_accountable_id)};
     end
+  elseif class == 'conference' then
+    require 'common.conference';
+
+    if tonumber(attributes.id) then
+      object = common.conference.Conference:new{ log = self.log, database = self.database }:find_by_id(attributes.id);
+    elseif not common.str.blank(attributes.uuid) then
+      object = common.conference.Conference:new{ log = self.log, database = self.database }:find_by_uuid(attributes.uuid);
+    end
+
+    if object then
+      object.owner = self:find{class = object.record.conferenceable_type, id = tonumber(object.record.conferenceable_id)};
+    end
   end
 
   if object then
