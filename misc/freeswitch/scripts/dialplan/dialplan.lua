@@ -626,8 +626,6 @@ function Dialplan.switch(self, destination)
   local result = nil;
   self.dial_timeout_active = self.dial_timeout;
 
-  self.log:debug('SWITCH - auth: ', self.caller.auth_account.class, '=', self.caller.auth_account.id, '/', self.caller.auth_account.uuid, ', caller: ', self.caller.account.class, '=', self.caller.account.id, '/', self.caller.account.uuid);
-  
   if not destination.node_local then
     return self:dial(destination);
   end
