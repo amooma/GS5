@@ -41,8 +41,9 @@ en:
       registration: 'Registration'
       expires: 'Expires'
       user_agent: 'User Agent'
-      tel_protocol: 'TEL Protocol'
+      call_protocols: 'URLs'
       register_tel_protocol: 'Register for tel: URLs with browser'
+      register_callto_protocol: 'Register for callto: URLs with browser'
       actions:
         confirm_destroy: 'Are you sure you want to delete this SIP account?'
         destroy: 'Delete'
