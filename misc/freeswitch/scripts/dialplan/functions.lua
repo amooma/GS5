@@ -119,35 +119,32 @@ function Functions.dialplan_function(self, caller, dialed_number)
   return result or { continue = false, code = 505, phrase = 'Error executing function', no_cdr = true };
 end
 
--- Transfer all calls to a conference
+
 function Functions.transfer_all(self, caller, destination_number)
-  self.log:info('TRANSFER_ALL - caller: ', caller.account_type, '/', caller.account_uuid, ' number: ', destination_number);
-  
   local caller_sip_account = self:ensure_caller_sip_account(caller);
   if not caller_sip_account then
     self.log:error('TRANSFER_ALL - incompatible caller');
     return { continue = false, code = 403, phrase = 'Incompatible caller' }
   end
 
-  -- Query call and channel table for channel IDs
-  local sql_query = 'SELECT  `b`.`name` AS `caller_chan_name`, `a`.`caller_uuid`, `a`.`callee_uuid` \
-    FROM `calls` `a` JOIN `channels` `b` ON `a`.`caller_uuid` = `b`.`uuid` JOIN `channels` `c` \
-    ON `a`.`callee_uuid` = `c`.`uuid` WHERE `b`.`name` LIKE ("%' .. caller_sip_account.record.auth_name .. '@%") \
-    OR `c`.`name` LIKE ("%' .. caller_sip_account.record.auth_name .. '@%") LIMIT 100';
+  self.log:info('TRANSFER_ALL - initiator: ', caller.account.class, '=', caller.account.id, '/', caller.account.uuid, ', number: ', destination_number);
 
+  local sql_query = 'SELECT `uuid`, `b_uuid`, `callee_number`, `caller_id_number`, `sip_account_id`, `b_sip_account_id` \
+    FROM `calls_active` WHERE `sip_account_id` = '.. caller.account.id .. ' OR `b_sip_account_id` = '.. caller.account.id;
+  local index = 1;
   self.database:query(sql_query, function(call_entry)
-    local uid = nil
-    if call_entry.caller_chan_name:find(caller_sip_account.record.auth_name .. "@") then
-      uid = call_entry.callee_uuid;
-      self.log:debug("Transfering callee channel with uid: " .. uid);
-    else
-      uid = call_entry.caller_uuid;
-      self.log:debug("Transfering caller channel with uid: " .. uid);
+    if not common.str.blank(call_entry.uuid) and tostring(caller.account.id) ~= tostring(call_entry.sip_account_id) then
+      self.log:info('TRANSFER_ALEG ', index, ' - channel/', call_entry.uuid, '|', call_entry.caller_id_number);
+      freeswitch.API():execute("uuid_transfer", call_entry.uuid .. " " .. destination_number);
     end
-    freeswitch.API():execute("uuid_transfer", uid .. " " .. destination_number);
+    if not common.str.blank(call_entry.b_uuid) and tostring(caller.account.id) ~= tostring(call_entry.b_sip_account_id)  then
+      self.log:info('TRANSFER_BLEG ', index, ' - channel/', call_entry.b_uuid, '|', call_entry.callee_number);
+      freeswitch.API():execute("uuid_transfer", call_entry.b_uuid .. " " .. destination_number);
+    end
+    index = index + 1;
   end)
 
-  return destination_number;
+  return { continue = true, number = destination_number }
 end
 
 
@@ -175,7 +172,7 @@ function Functions.intercept_any_number(self, caller, destination_number)
   local destination_group_ids = group_class:union(common.array.try(phone_numberable, 'group_ids'), common.array.try(phone_numberable, 'owner.group_ids'));
 
   if #group_class:intersection(destination_group_ids, target_group_ids) == 0 then
-    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - Groups not found or insufficient permissions');
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - Groups not found or insufficient permissions, destination:', destination_group_ids, ', target: ', target_group_ids);
     return { continue = false, code = 402, phrase = '"Insufficient permissions', no_cdr = true };
   end
 
