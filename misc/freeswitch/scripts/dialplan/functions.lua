@@ -164,7 +164,7 @@ function Functions.intercept_any_number(self, caller, destination_number)
   local phone_numberable = common.object.Object:new{ log = self.log, database = self.database}:find{class = phone_number.record.phone_numberable_type, id = phone_number.record.phone_numberable_id};
 
   if not phone_numberable then
-    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - numberable not found: ', dphone_number.record.phone_numberable_type, '=', phone_number.record.phone_numberable_id);
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - numberable not found: ', phone_number.record.phone_numberable_type, '=', phone_number.record.phone_numberable_id);
     return { continue = false, code = 404, phrase = 'Destination not found', no_cdr = true };
   end
 
