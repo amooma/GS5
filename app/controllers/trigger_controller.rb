@@ -92,19 +92,26 @@ class TriggerController < ApplicationController
   def sip_account_update
     sip_account = SipAccount.find(params[:id])
 
-    # TO-DO: Only update the neccessary entries.
-    #
-    SwitchboardEntry.all.each do |switchboard_entry|
-      new_html = ActionController::Base.helpers.escape_javascript(render_to_string("switchboard_entries/_switchboard_entry", :layout => false, :locals => {:switchboard_entry => switchboard_entry}))
-      PrivatePub.publish_to("/switchboards/#{switchboard_entry.switchboard.id}", "$('#switchboard_entry_id_" + switchboard_entry.id.to_s + "').replaceWith('#{new_html}');")
-    end
+    if sip_account.updated_at < Time.now
 
-    Switchboard.all.each do |switchboard|
-      if sip_account.call_legs.where(:sip_account_id => switchboard.user.sip_account_ids).any? || 
-         sip_account.b_call_legs.where(:sip_account_id => switchboard.user.sip_account_ids).any?
-        new_html = ActionController::Base.helpers.escape_javascript(render_to_string("switchboards/_current_user_dashboard", :layout => false, :locals => {:current_user => switchboard.user}))
-        PrivatePub.publish_to("/switchboards/#{switchboard.id}", "$('.dashboard').replaceWith('#{new_html}');")
+      # Push an update to sip_account.switchboard_entries
+      #
+      sip_account.switchboard_entries.each do |switchboard_entry|
+        escaped_switchboard_entry_partial = ActionController::Base.helpers.escape_javascript(render_to_string("switchboard_entries/_switchboard_entry", :layout => false, :locals => {:switchboard_entry => switchboard_entry}))
+        PrivatePub.publish_to("/switchboards/#{switchboard_entry.switchboard.id}", "$('#switchboard_entry_id_" + switchboard_entry.id.to_s + "').replaceWith('#{escaped_switchboard_entry_partial}');")
       end
+
+      # Push an update to the needed switchboards
+      #
+      Switchboard.where(:user_id => sip_account.sip_accountable.id).each do |switchboard|
+        if sip_account.call_legs.where(:sip_account_id => switchboard.user.sip_account_ids).any? || 
+           sip_account.b_call_legs.where(:sip_account_id => switchboard.user.sip_account_ids).any?
+          escaped_switchboard_partial = ActionController::Base.helpers.escape_javascript(render_to_string("switchboards/_current_user_dashboard", :layout => false, :locals => {:current_user => switchboard.user}))
+          PrivatePub.publish_to("/switchboards/#{switchboard.id}", "$('.dashboard').replaceWith('#{escaped_switchboard_partial}');")
+        end
+      end
+
+      sip_account.touch
     end
 
     render(
