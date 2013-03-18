@@ -132,13 +132,19 @@ function Conference.check_pin(self, pin)
 end
 
 
-function Conference.check_ownership(self)
-  local auth_account_owner = common.array.try(self.caller, 'auth_account.owner');
-  if not auth_account_owner then
+function Conference.check_ownership(self, check_caller)
+  local owner = nil;
+
+  if check_caller then
+    owner = common.array.try(self.caller, 'account.owner');
+  else
+    owner = common.array.try(self.caller, 'auth_account.owner');
+  end
+  if not owner then
     return false;
   end
 
-  if tonumber(self.record.conferenceable_id) == auth_account_owner.id and self.record.conferenceable_type:lower() == auth_account_owner.class then
+  if tonumber(self.record.conferenceable_id) == owner.id and self.record.conferenceable_type:lower() == owner.class then
     return true;
   end
 end
@@ -208,9 +214,14 @@ function Conference.enter(self, caller, domain)
     self.log:info('CONFERENCE ', self.id, ' - invitee=', invitee.id, '/', invitee.uuid, ', speaker: ', not self.settings.flags.mute, ', moderator: ', self.settings.flags.moderator);
     self.pin = invitee.pin;
   elseif self:check_ownership() then
-    self.settings.flags.moderator = true;
     self.pin = nil;
-    self.log:info('CONFERENCE ', self.id, ' - owner authenticated: ', self.caller.auth_account.owner.class,'=', self.caller.auth_account.owner.id, '/', self.caller.auth_account.owner.uuid, ', speaker: ', not self.settings.flags.mute, ', moderator: ', self.settings.flags.moderator);
+    local caller_owner = false;
+    if self:check_ownership(true) then
+      self.settings.flags.moderator = true;
+      self.settings.flags.dtmf = true;
+      caller_owner = true;
+    end
+    self.log:info('CONFERENCE ', self.id, ' - owner authenticated: ', self.caller.auth_account.owner.class,'=', self.caller.auth_account.owner.id, '/', self.caller.auth_account.owner.uuid, ', owner: ', caller_owner, ', speaker: ', not self.settings.flags.mute, ', moderator: ', self.settings.flags.moderator);
   elseif not self.open_for_public then
     self.log:notice('CONFERENCE ', self.id, ' - not open for public');
     return { continue = false, code = 493, phrase = 'Conference closed' };
