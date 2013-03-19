@@ -27,6 +27,16 @@ de:
         show: 'Anzeigen'
         create: 'Neu anlegen'
         create_for: 'Neue Telefonkonferenz für %{resource} anlegen'
+    index_members:
+      caller: 'Anrufer'
+      join_time: 'Laufzeit'
+      talking: 'Spricht'
+      flags: 'Flags'
+      can_hear: 'hören'
+      can_speak: 'sprechen'
+      moderator: 'moderator'
+      has_floor: 'saal'
+      video: 'video'
     show:
       page_title: 'Telefonkonferenz anzeigen'
       name: 'Name'
@@ -38,6 +48,9 @@ de:
       open_for_anybody: 'Für jeden offen?'
       announce_new_member_by_name: 'Neue Teilnehmer werden angekündigt'
       announce_left_member_by_name: 'Die Konferenz verlassende Teilnehmer werden angekündigt'
+      identifier: 'Identifier'
+      member_count: 'Mitglieder'
+      run_time: 'Laufzeit'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie diese Telefonkonferenz löschen möchten?'
         destroy: 'Löschen'
