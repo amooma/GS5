@@ -5,7 +5,7 @@ end
 
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.13'
 gem 'bcrypt-ruby'
 gem 'sqlite3'
 gem 'mysql2'
