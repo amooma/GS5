@@ -54,18 +54,35 @@ class Conference < ActiveRecord::Base
     require 'freeswitch_event'
     result = FreeswitchAPI.api_result(FreeswitchAPI.api('conference', "conference#{self.id}", 'xml_list'))
     if result =~ /^\<\?xml/
-      return Hash.from_xml(result)
+      data = Hash.from_xml(result)
+      if data
+        return data.fetch('conferences',{}).fetch('conference',{})
+      end
     end
     return nil
   end
 
-  def list_members
-    data = self.list_conference
+  def list_members(data=self.list_conference())
     if data.blank?
       return {}
     end
 
-    return data.fetch('conferences',{}).fetch('conference',{}).fetch('members',{}).fetch('member',{})
+    members = data.fetch('members',{}).fetch('member',{})
+    if members.class != Array
+      members = [members]
+    end
+
+    members.each_with_index do |member, index|
+      members[index][:call] = Call.where(:uuid => member['uuid']).first
+      if !members[index][:call]
+        members[index][:call] = Call.where(:b_uuid => member['uuid']).first
+        if members[index][:call]
+          members[index][:call_bleg] = true;
+        end
+      end
+    end
+
+    return members;
   end
   
 
