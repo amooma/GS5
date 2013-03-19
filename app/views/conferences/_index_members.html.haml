@@ -1,0 +1,40 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th= t('conferences.index_members.caller')
+      %th= t('conferences.index_members.join_time')
+      %th= t('conferences.index_members.talking')
+      %th= t('conferences.index_members.flags')
+
+
+  %tbody
+    - for member in members
+      %tr
+        %td
+          -if member[:call]
+            - if member[:call_bleg]
+              = member[:call].b_caller_id_name
+              = member[:call].b_caller_id_number
+            - else
+              = member[:call].caller_id_name
+              = member[:call].caller_id_number
+        %td
+          = member['join_time']
+        %td
+          =  member['flags']['talking']
+        %td
+          - if member['flags']['can_hear'] == 'true'
+            %span.label
+              = t('conferences.index_members.can_hear')
+          - if member['flags']['can_speak'] == 'true'
+            %span.label
+              = t('conferences.index_members.can_speak')
+          - if member['flags']['is_moderator'] == 'true'
+            %span.label
+              = t('conferences.index_members.moderator')
+          - if member['flags']['has_floor'] == 'true'
+            %span.label
+              = t('conferences.index_members.has_floor')
+          - if member['flags']['has_video'] == 'true'
+            %span.label
+              = t('conferences.index_members.video')
