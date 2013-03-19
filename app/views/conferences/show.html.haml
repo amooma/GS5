@@ -45,6 +45,24 @@
         %strong= t('conferences.show.announce_left_member_by_name') + ":"
       %td
         = @conference.announce_left_member_by_name
+    - conference_data = @conference.list_conference
+    - if conference_data
+      %tr
+        %td
+          %strong= t('conferences.show.identifier') + ":"
+        %td
+          = conference_data['name']
+      %tr
+        %td
+          %strong= t('conferences.show.member_count') + ":"
+        %td
+          = conference_data['member_count']
+      %tr
+        %td
+          %strong= t('conferences.show.run_time') + ":"
+        %td
+          = conference_data['run_time']
+
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @parent, :child => @conference }
 
@@ -53,6 +71,11 @@
   = render "phone_numbers/index_core", :phone_numbers => @phone_numbers
 
 = render :partial => 'shared/create_link', :locals => {:parent => @conference, :child_class => PhoneNumber}
+
+- members = @conference.list_members(conference_data)
+- if members && members.count > 0
+  %h2= t("conferences.show.members")
+  = render "index_members", :members => members
 
 %h2= t("conference_invitees.index.page_title")
 - if @conference.conference_invitees.count > 0
