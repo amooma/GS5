@@ -6,7 +6,7 @@ en:
       successfuly_updated: 'Successfully updated Switchboard.'
       successfuly_destroyed: 'Successfully destroyed Switchboard.'
     index:
-      page_title: 'Listing Switchboard'
+      page_title: 'Switchboards'
       name: 'Name'
       user_id: 'User'
       actions:

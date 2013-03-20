@@ -6,7 +6,7 @@ de:
       successfuly_updated: 'Switchboard wurde aktualisiert.'
       successfuly_destroyed: 'Switchboard wurde gelöscht.'
     index:
-      page_title: 'Liste aller Switchboards'
+      page_title: 'Switchboards'
       name: 'Name'
       user_id: 'User'
       actions:
