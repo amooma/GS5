@@ -8,6 +8,9 @@ class SwitchboardsController < ApplicationController
   end
 
   def show
+    if @user.nil?
+      @user = current_user
+    end
     @switchboard = @user.switchboards.find(params[:id])
     @switchboard_entries = @switchboard.switchboard_entries
     spread_breadcrumbs
