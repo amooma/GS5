@@ -7,8 +7,7 @@
 
 .inputs
   = f.input :softkey_function_id, :as => :select, :collection => @softkey_functions.map {|x| [I18n.t("softkeys.functions.#{x}"), x.id] }, :label => t('softkeys.form.function.label'), :hint => conditional_hint('softkeys.form.function.hint'), :include_blank => false
-  - call_forwards = @softkey.possible_call_forwards
-  - if call_forwards && call_forwards.count > 0
-    = f.input :softkeyable_id, :collection => call_forwards, :label => t('softkeys.form.call_forward.label'), :hint => conditional_hint('softkeys.form.call_forward.hint'), :include_blank => false
+  - if @possible_call_forwards && @possible_call_forwards.count > 0
+    = f.input :softkeyable_id, :collection => @possible_call_forwards, :label => t('softkeys.form.call_forward.label'), :hint => conditional_hint('softkeys.form.call_forward.hint'), :include_blank => false
   = f.input :number, :label => t('softkeys.form.number.label'), :hint => conditional_hint('softkeys.form.number.hint')
   = f.input :label, :label => t('softkeys.form.label.label'), :hint => conditional_hint('softkeys.form.label.hint')
