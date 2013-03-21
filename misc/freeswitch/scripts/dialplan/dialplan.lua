@@ -894,11 +894,18 @@ function Dialplan.run(self, destination)
   self.caller:set_variable('sound_prefix', common.array.try(self.config, 'sounds.' .. tostring(self.caller.language)));
   self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name, '" , number: ', destination.number, ', language: ', self.caller.language);
 
+
+  self.caller.static_caller_id_number = self.caller.caller_id_number;
+  self.caller.static_caller_id_name = self.caller.caller_id_name;
+
   local result = { continue = false };
   local loop = self.caller.loop_count;
   while self.caller:ready() and loop < self.max_loops do
     loop = loop + 1;
     self.caller.loop_count = loop;
+    
+    self.caller.caller_id_number = self.caller.static_caller_id_number;
+    self.caller.caller_id_name = self.caller.static_caller_id_name;
 
      self.log:info('LOOP ', loop,  
     ' - destination: ', destination.type, '=', destination.id, '/', destination.uuid,'@', destination.node_id, 
