@@ -138,7 +138,7 @@ function Router.route_match(self, route)
           local search_string = tostring(common.array.try(destination, element.var_in) or common.array.try(self.caller, element.var_in));
           result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement), destination);
         elseif command == 'var' then
-          local search_string = tostring(common.array.try(self.caller, element.var_in));
+          local search_string = tostring(common.array.try(self.caller, variable_name));
           result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
         elseif command == 'key' or command == 'val' then
           local groups = common.array.try(destination, variable_name) or common.array.try(self.caller, variable_name);
@@ -193,7 +193,10 @@ function Router.route_run(self, table_name, find_first)
   local routes = {};
 
   if type(routing_table) == 'table' then
-    for index=1, #routing_table do    
+    for index=1, #routing_table do
+      if self.log_details then
+        self.log:info('ROUTE_',table_name:upper(),' ', index,' - ', table_name,'=', routing_table[index].id, '/', routing_table[index].name);
+      end    
       local route = self:route_match(routing_table[index]);
       if route then
         table.insert(routes, route);
