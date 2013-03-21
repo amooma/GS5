@@ -49,7 +49,18 @@ class RingtonesController < ApplicationController
   end
 
   def spread_breadcrumbs
-    if @parent.class == PhoneNumber && @parent.phone_numberable.class == SipAccount
+    if @parent.class == SipAccount
+      if @sip_account.sip_accountable.class == User
+        add_breadcrumb t("#{@sip_account.sip_accountable.class.name.underscore.pluralize}.index.page_title"), method( :"tenant_#{@sip_account.sip_accountable.class.name.underscore.pluralize}_path" ).(@sip_account.tenant)
+        add_breadcrumb @sip_account.sip_accountable, method( :"tenant_#{@sip_account.sip_accountable.class.name.underscore}_path" ).(@sip_account.tenant, @sip_account.sip_accountable)
+      end
+      add_breadcrumb t("sip_accounts.index.page_title"), method( :"#{@sip_account.sip_accountable.class.name.underscore}_sip_accounts_path" ).(@sip_account.sip_accountable)
+      add_breadcrumb @sip_account, method( :"#{@sip_account.sip_accountable.class.name.underscore}_sip_account_path" ).(@sip_account.sip_accountable, @sip_account)
+      add_breadcrumb t("ringtones.index.page_title"), sip_account_ringtones_path(@sip_account)
+      if @ringtone && !@ringtone.new_record?
+        add_breadcrumb @ringtone
+      end
+    elsif @parent.class == PhoneNumber
       @sip_account = @parent.phone_numberable
       if @sip_account.sip_accountable.class == User
         add_breadcrumb t("#{@sip_account.sip_accountable.class.name.underscore.pluralize}.index.page_title"), method( :"tenant_#{@sip_account.sip_accountable.class.name.underscore.pluralize}_path" ).(@sip_account.tenant)
@@ -61,7 +72,7 @@ class RingtonesController < ApplicationController
       add_breadcrumb @phone_number, sip_account_phone_number_path(@sip_account, @phone_number)
       add_breadcrumb t("ringtones.index.page_title"), phone_number_ringtones_path(@phone_number)
       if @ringtone && !@ringtone.new_record?
-        add_breadcrumb @ringtone, phone_number_ringtone_path(@phone_number, @ringtone)
+        add_breadcrumb @ringtone
       end
     end
   end
