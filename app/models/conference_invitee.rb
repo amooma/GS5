@@ -23,7 +23,6 @@ class ConferenceInvitee < ActiveRecord::Base
   validates_inclusion_of :moderator, :in => [true, false]
     
   validate :uniqueness_of_phone_number_in_the_parent_conference
-  validates_uniqueness_of :phone_book_entry_id, :scope => :conference_id, :allow_nil => true
   
   def to_s
     "ID #{self.id}"
