@@ -28,7 +28,6 @@ class Softkey < ActiveRecord::Base
       call_forwards = call_forwards + phone_number.call_forwards
     end
 
-
     phone_numbers_ids = self.sip_account.phone_number_ids
     phone_numbers = PhoneNumber.where(:id => phone_numbers_ids).pluck(:number)
 
