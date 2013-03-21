@@ -24,6 +24,6 @@ class Ringtone < ActiveRecord::Base
   belongs_to :ringtoneable, :polymorphic => true
 
   def to_s
-    self.bellcore_id.to_s
+    CORE_RINGTONES_AVAILABLE.index(self.bellcore_id)
   end
 end
