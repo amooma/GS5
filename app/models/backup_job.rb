@@ -37,7 +37,7 @@ class BackupJob < ActiveRecord::Base
       if tmp_backup_directory.blank?
         self.state = 'failed'
       else
-        system "cd #{backup_directory} && sudo /bin/tar czf #{backup_name_prefix}#{File.basename(tmp_backup_directory)}.tar.gz #{File.basename(tmp_backup_directory)}"
+        system "cd #{backup_directory} && nice -n 19 sudo /bin/tar czf #{backup_name_prefix}#{File.basename(tmp_backup_directory)}.tar.gz #{File.basename(tmp_backup_directory)}"
         require 'fileutils'
         FileUtils.rm_rf tmp_backup_directory
         file = File::Stat.new("#{backup_directory}/#{backup_name_prefix}#{File.basename(tmp_backup_directory)}.tar.gz")
