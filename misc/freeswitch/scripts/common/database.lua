@@ -67,6 +67,29 @@ function Database.query_return_value(self, sql_query)
 end
 
 
+function Database.query_return_first(self, sql_query)
+  local result = nil;
+
+  self.conn:query(sql_query, function(row)
+    result = row;
+    return result;
+  end);
+
+  return result;
+end
+
+
+function Database.query_return_all(self, sql_query)
+  local result = {};
+
+  self.conn:query(sql_query, function(row)
+    table.insert(result, row);
+  end);
+
+  return result;
+end
+
+
 function Database.last_insert_id(self)
   return self:query_return_value('SELECT LAST_INSERT_ID()');
 end
