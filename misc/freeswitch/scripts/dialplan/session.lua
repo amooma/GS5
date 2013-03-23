@@ -173,6 +173,12 @@ function Session.answer(self)
   return self.session:answer();
 end
 
+-- Is answered?
+function Session.answered(self)
+  return self.session:answered();
+end
+
+
 function Session.intercept(self, uid)
   self.session:execute("intercept", uid);
 end
