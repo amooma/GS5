@@ -17,11 +17,11 @@ class CallsController < ApplicationController
     if !params[:url].blank?
       protocol, separator, phone_number = params[:url].partition(':')
       if ! phone_number.blank? 
-        @call = @parent.calls.new()
+        @call = @parent.call_legs.new()
         @call.destination = phone_number
       end
     elsif !params[:number].blank?
-      @call = @parent.calls.new()
+      @call = @parent.call_legs.new()
       @call.destination = params[:number]
     end
   end
