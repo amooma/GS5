@@ -1234,6 +1234,9 @@
         <load module="mod_spandsp"/>
         <load module="mod_snmp"/>
         <load module="mod_dingaling"/>
+		<!-- Uncomment the following line after running
+		     'gs-addon install fs-g729' -->
+		<!--<load module="mod_com_g729"/>-->
       </modules>
     </configuration>
     <configuration name="lua.conf" description="LUA Configuration">
