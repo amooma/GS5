@@ -1,19 +1,26 @@
 <% content_for :title, "Switchboard #{@switchboard.name}" %>
 
+<script>
+  var switchboard_id = <%= @switchboard.id %>;
+</script>
+
 <div class='row'>
   <div class='span12'>
-    <div id='container'>
-
-    </div>
+    <div id='container'></div>
 
     <script type="text/x-handlebars">
-      <h1>{{appName}}</h1>
+      <p>{{appName}}</p>
+      <p>{{title}}</p>
 
-      <h2>{{title}}</h2>
+      {{outlet}}
     </script>
 
+    <script type="text/x-handlebars" data-template-name="switchboard">
+      <h1>{{name}}</h1>
+      <p>switchboard view marker</p>
+      <p>Length: {{switchboardEntrys.length}}</p>
+    </script>
 
-    
   </div>
 </div>
 

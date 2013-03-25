@@ -3,8 +3,16 @@ class SwitchboardsController < ApplicationController
   authorize_resource :switchboard, :through => :user
 
   def index
+    if @user.nil?
+      @user = current_user
+    end
     @switchboards = @user.switchboards
     spread_breadcrumbs
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @switchboards }
+    end
   end
 
   def show
@@ -14,6 +22,11 @@ class SwitchboardsController < ApplicationController
     @switchboard = @user.switchboards.find(params[:id])
     @switchboard_entries = @switchboard.switchboard_entries
     spread_breadcrumbs
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @switchboard }
+    end
   end
 
   def new

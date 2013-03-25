@@ -8,8 +8,17 @@ class SwitchboardEntriesController < ApplicationController
   end
 
   def show
-    @switchboard_entry = @switchboard.switchboard_entries.find(params[:id])
-    spread_breadcrumbs
+    if @switchboard
+      @switchboard_entry = @switchboard.switchboard_entries.find(params[:id])
+      spread_breadcrumbs
+    else
+      @switchboard_entry = SwitchboardEntry.find(params[:id])
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @switchboard_entry }
+    end    
   end
 
   def new
