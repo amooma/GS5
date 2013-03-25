@@ -87,6 +87,28 @@ class CallRoutesController < ApplicationController
     end
   end
 
+  def test
+    if !params[:sip_account_id].blank?
+      account = SipAccount.where(:id => params[:sip_account_id]).first
+    elsif !params[:hunt_group_id].blank?
+      account = HuntGroup.where(:id => params[:hunt_group_id]).first
+    end
+
+    if account
+      destination_number = params[:destination_number]
+      routing_table = params[:routing_table]
+      @route_test = CallRoute.test_route(routing_table, {
+        'caller.destination_number' => destination_number,
+        'caller.auth_account_type' => account.class.name, 
+        'caller.auth_account_id' => account.id, 
+        'caller.auth_account_uuid' => account.try(:uuid),
+        'caller.account_type' => account.class.name, 
+        'caller.account_id' => account.id, 
+        'caller.account_uuid' => account.try(:uuid),
+      })
+    end
+  end
+
   private
   def call_route_parameter_params
     params.require(:call_route).permit(:routing_table, :name, :endpoint_type, :endpoint_id, :position)

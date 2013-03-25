@@ -1,5 +1,11 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  resources :switchboards do
+    resources :switchboard_entries do
+      collection { post :sort }
+    end
+  end
+
   resources :restore_jobs
 
   resources :groups do
@@ -18,12 +24,15 @@ Gemeinschaft42c::Application.routes.draw do
   scope :constraints => lambda{|req|%w(127.0.0.1).include? req.remote_addr} do
     get "trigger/voicemail"
     get "trigger/fax"
+    match 'trigger/fax_has_been_sent/:id' => 'trigger#fax_has_been_sent'
+    match 'trigger/sip_account_update/:id' => 'trigger#sip_account_update'
   end
 
   resources :call_routes do
     collection { 
       post :sort 
       get :show_variables
+      get :test
     }
     resources :route_elements do
       collection { post :sort }
@@ -57,13 +66,17 @@ Gemeinschaft42c::Application.routes.draw do
     collection { post :sort }
   end
 
-  resources :acd_agents, :only => [] do
+  resources :acd_agents do
     resources :phone_numbers
+    member do
+      get 'toggle'
+    end
   end
 
   resources :automatic_call_distributors, :only => [] do
     resources :acd_agents
     resources :phone_numbers
+    resources :call_forwards
   end
 
   resources :hunt_group_members, :only => [] do
@@ -73,6 +86,7 @@ Gemeinschaft42c::Application.routes.draw do
   resources :hunt_groups, :only => [] do
     resources :hunt_group_members
     resources :phone_numbers
+    resources :call_forwards
   end
 
   if GsParameter.get('CALLTHROUGH_HAS_WHITELISTS') == true
@@ -209,6 +223,9 @@ Gemeinschaft42c::Application.routes.draw do
     resources :fax_accounts
     resources :system_messages, :except => [ :edit, :update, :destroy ]
     resources :parking_stalls
+    resources :switchboards do
+      get :display
+    end
   end
   
   resources :user_groups do
@@ -258,6 +275,7 @@ Gemeinschaft42c::Application.routes.draw do
     resources :call_forwards
     resources :ringtones
     resources :calls
+    resources :acd_agents
     resources :call_histories do
       collection do
         delete 'destroy_multiple'

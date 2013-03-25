@@ -1,0 +1,6 @@
+- content_for :title, t("switchboard_entries.index.page_title")
+
+- if @switchboard_entries && @switchboard_entries.count > 0
+  = render "index_core", :switchboard_entries => @switchboard_entries
+
+= render :partial => 'shared/create_link', :locals => {:parent => @switchboard, :child_class => SwitchboardEntry}

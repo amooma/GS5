@@ -5,7 +5,7 @@ end
 
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.13'
 gem 'bcrypt-ruby'
 gem 'sqlite3'
 gem 'mysql2'
@@ -54,8 +54,7 @@ group :test do
 end
 
 gem 'haml'
-# gem 'simple_form', '~> 2.0.1'
-gem 'simple_form', github: 'plataformatec/simple_form', branch: 'v2.1'
+gem 'simple_form', '~> 2.1.0'
 
 # Image Upload
 gem 'carrierwave'
@@ -80,13 +79,17 @@ gem 'uuid'
 # Application server
 gem 'unicorn'
 
+# http://railscasts.com/episodes/316-private-pub
 gem 'thin'
+gem 'private_pub'
 
 # Backup https://github.com/meskyanichi/backup
 gem 'backup'
 
 # Cronjobs
 gem 'whenever'
+
+gem 'whois'
 
 # Local Variables:
 # mode: ruby

@@ -146,7 +146,7 @@ class ConfigSiemensController < ApplicationController
     country = 'US'
     language = 'en'
     if ! @phone.nil?
-      @phone.update_attributes(:ip_address => request.remote_ip)
+      @phone.update_attributes(:ip_address => request_remote_ip)
       @sip_account = @phone.sip_accounts.where(:sip_accountable_type => @phone.phoneable_type,
                                      :sip_accountable_id => @phone.phoneable_id).first
 

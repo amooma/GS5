@@ -272,8 +272,10 @@
             </input>
             <input pattern="^name:(.+)$">
               <match>
+                <action function="play-file" data="ivr/ivr-thank_you_for_calling.wav"/>
                 <action function="play-file" data="$1"/>
                 <action function="play-file" data="voicemail/vm-not_available.wav"/>
+                <action function="play-file" data="ivr/ivr-please_state_your_name_and_reason_for_calling.wav"/>
               </match>
             </input>
             <input pattern="^greeting:(.+)$">
@@ -470,7 +472,7 @@
               </match>
             </input>
           </macro>
-                    <macro name="conference_welcome">
+          <macro name="conference_welcome">
             <input pattern="^(.*)$">
               <match>
                 <action function="play-file" data="conference/conf-welcome.wav"/>
@@ -512,6 +514,13 @@
               <match>
                 <action function="play-file" data="$1"/>
                 <action function="play-file" data="conference/conf-has_left.wav"/>
+              </match>
+            </input>
+          </macro>
+          <macro name="conference_alone">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="conference/conf-alone.wav"/>
               </match>
             </input>
           </macro>
@@ -789,8 +798,10 @@
             </input>
             <input pattern="^name:(.+)$">
               <match>
+                <action function="play-file" data="ivr/ivr-thank_you_for_calling.wav"/>
                 <action function="play-file" data="$1"/>
                 <action function="play-file" data="voicemail/vm-not_available.wav"/>
+                <action function="play-file" data="ivr/ivr-please_state_your_name_and_reason_for_calling.wav"/>
               </match>
             </input>
             <input pattern="^greeting:(.+)$">
@@ -914,7 +925,6 @@
               <match>
                 <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
                 <action function="say" data="$1" method="pronounced" type="number"/>
-                <action function="play-file" data="ivr/ivr-in_line.wav"/>
               </match>
             </input>
           </macro>
@@ -923,7 +933,6 @@
               <match>
                 <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
                 <action function="say" data="1" method="pronounced" type="number"/>
-                <action function="play-file" data="ivr/ivr-in_line.wav"/>
                 <action function="break"/>
               </match>
             </input>
@@ -931,7 +940,6 @@
               <match>
                 <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
                 <action function="say" data="$1" method="pronounced" type="number"/>
-                <action function="play-file" data="ivr/ivr-in_line.wav"/>
                 <action function="play-file" data="ivr/ivr-thank_you_for_holding.wav"/>
               </match>
             </input>
@@ -941,7 +949,6 @@
               <match>
                 <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
                 <action function="say" data="1" method="pronounced" type="number"/>
-                <action function="play-file" data="ivr/ivr-in_line.wav"/>
                 <action function="break"/>
               </match>
             </input>
@@ -949,7 +956,6 @@
               <match>
                 <action function="play-file" data="ivr/ivr-you_are_number.wav"/>
                 <action function="say" data="$1" method="pronounced" type="number"/>
-                <action function="play-file" data="ivr/ivr-in_line.wav"/>
                 <action function="play-file" data="ivr/ivr-thank_you_for_holding.wav"/>
               </match>
             </input>
@@ -1032,6 +1038,13 @@
               </match>
             </input>
           </macro>
+          <macro name="conference_alone">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="conference/conf-alone.wav"/>
+              </match>
+            </input>
+          </macro>
         </macros>
       </phrases>
     </language>
@@ -1051,13 +1064,6 @@
       <settings>
         <param name="colorize" value="true"/>
         <param name="loglevel" value="info"/>
-      </settings>
-    </configuration>
-    <configuration name="event_socket.conf" description="Socket Client">
-      <settings>
-        <param name="nat-map" value="false"/>
-        <param name="listen-ip" value="127.0.0.1"/>
-        <param name="listen-port" value="8021"/>
       </settings>
     </configuration>
     <configuration name="local_stream.conf" description="stream files from local dir">
@@ -1082,7 +1088,21 @@
         <param name="interval" value="20"/>
         <param name="timer-name" value="soft"/>
       </directory>
-    </configuration>
+	  <directory name="mohh/shout" path="/var/opt/gemeinschaft/shout">
+	      <param name="rate" value="16000"/>
+	      <param name="shuffle" value="true"/>
+	      <param name="channels" value="1"/>
+	      <param name="interval" value="10"/>
+	      <param name="timer-name" value="soft"/>
+	  </directory>
+	  <directory name="moh/shout" path="/var/opt/gemeinschaft/shout">
+	      <param name="rate" value="8000"/>
+	      <param name="shuffle" value="true"/>
+	      <param name="channels" value="1"/>
+	      <param name="interval" value="10"/>
+	      <param name="timer-name" value="soft"/>
+	  </directory>
+	</configuration>
     <configuration name="logfile.conf" description="File Logging">
       <settings>
         <param name="rotate-on-hup" value="true"/>
@@ -1181,6 +1201,14 @@
         <param name="file-prefix" value="fax_in_"/>
       </settings>
     </configuration>
+	<configuration name="shout.conf" description="Shoutcast stream config">
+	  <settings>
+	    <!-- Don't change these unless you are insane -->
+	    <!--<param name="decoder" value="i586"/>-->
+	    <param name="volume" value="0.7"/>
+	    <!--<param name="outscale" value="8192"/>-->
+	  </settings>
+	</configuration>
     <configuration name="modules.conf" description="Modules">
       <modules>
         <load module="mod_console"/>
@@ -1200,16 +1228,17 @@
         <load module="mod_native_file"/>
         <load module="mod_local_stream"/>
         <load module="mod_tone_stream"/>
+        <load module="mod_shout"/>
         <load module="mod_say_en"/>
         <load module="mod_say_de"/>
         <load module="mod_spandsp"/>
         <load module="mod_snmp"/>
         <load module="mod_dingaling"/>
       </modules>
-    </configuration>  
+    </configuration>
     <configuration name="lua.conf" description="LUA Configuration">
       <settings>
-        <param name="module-directory" value="/usr/lib/i386-linux-gnu/lua/5.1/?.so;"/>
+        <param name="module-directory" value="/usr/lib/local-platform/lua/5.1/?.so;"/>
         <param name="script-directory" value="/usr/share/freeswitch/scripts/?.lua;/usr/share/lua/5.1/?.lua;"/>
         <param name="xml-handler-script" value="configuration.lua"/>
         <param name="xml-handler-bindings" value="directory|configuration"/>

@@ -173,6 +173,12 @@ if session and session:answered() then
 
   cause = session:hangupCause();
   log:info('FAX_SEND - end - fax_document=', fax_document.id, ', success: ', fax_state.state, ', cause: ', cause, ', result: ', fax_state.result_code, ' ', session:getVariable('fax_result_text'));
+
+  local command = 'http_request.lua sendfax http://127.0.0.1/trigger/fax_has_been_sent/' .. tostring(fax_document.id);
+
+  require 'common.fapi'
+  common.fapi.FApi:new():execute('luarun', command);
+
 else
   if session then 
     cause = session:hangupCause();

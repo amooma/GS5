@@ -16,6 +16,11 @@ class TriggerController < ApplicationController
             next
           end
 
+          # Indicate a new voicemail in the navigation bar.
+          #
+          PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_or_fax_indicator').hide('fast').show('slow');")
+          PrivatePub.publish_to("/users/#{user.id}/messages/new", "document.title = '* ' + document.title.replace( '* ' , '');")
+
           if  user.email.blank?
             next
           end
@@ -59,6 +64,64 @@ class TriggerController < ApplicationController
     end
   end
 
+  def fax_has_been_sent
+    fax_document = FaxDocument.find(params[:id])
+
+    if fax_document
+      # push the partial to the webbrowser
+      #
+      new_html = ActionController::Base.helpers.escape_javascript(render_to_string("fax_documents/_fax_document", :layout => false, :locals => {:fax_document => fax_document}))
+      PrivatePub.publish_to("/fax_documents/#{fax_document.id}", "$('#" + fax_document.id.to_s + ".fax_document').replaceWith('#{new_html}');")
+    
+      render(
+            :status => 200,
+            :layout => false,
+            :content_type => 'text/plain',
+            :text => "<!-- OK -->",
+      )
+    else
+      render(
+        :status => 501,
+        :layout => false,
+        :content_type => 'text/plain',
+        :text => "<!-- ERRORS: #{errors.join(', ')} -->",
+      )
+    end
+  end
+
+  def sip_account_update
+    sip_account = SipAccount.find(params[:id])
+
+    if sip_account.updated_at < Time.now
+
+      # Push an update to sip_account.switchboard_entries
+      #
+      sip_account.switchboard_entries.each do |switchboard_entry|
+        escaped_switchboard_entry_partial = ActionController::Base.helpers.escape_javascript(render_to_string("switchboard_entries/_switchboard_entry", :layout => false, :locals => {:switchboard_entry => switchboard_entry}))
+        PrivatePub.publish_to("/switchboards/#{switchboard_entry.switchboard.id}", "$('#switchboard_entry_id_" + switchboard_entry.id.to_s + "').replaceWith('#{escaped_switchboard_entry_partial}');")
+      end
+
+      # Push an update to the needed switchboards
+      #
+      Switchboard.where(:user_id => sip_account.sip_accountable.id).each do |switchboard|
+        if sip_account.call_legs.where(:sip_account_id => switchboard.user.sip_account_ids).any? || 
+           sip_account.b_call_legs.where(:sip_account_id => switchboard.user.sip_account_ids).any?
+          escaped_switchboard_partial = ActionController::Base.helpers.escape_javascript(render_to_string("switchboards/_current_user_dashboard", :layout => false, :locals => {:current_user => switchboard.user}))
+          PrivatePub.publish_to("/switchboards/#{switchboard.id}", "$('.dashboard').replaceWith('#{escaped_switchboard_partial}');")
+        end
+      end
+
+      sip_account.touch
+    end
+
+    render(
+          :status => 200,
+          :layout => false,
+          :content_type => 'text/plain',
+          :text => "<!-- OK -->",
+    )
+  end  
+
   def fax
     if !params[:fax_account_id].blank?
       fax_account = FaxAccount.where(:id => params[:fax_account_id].to_i).first
@@ -87,6 +150,8 @@ class TriggerController < ApplicationController
           
           if fax_document.save
             Notifications.new_fax(fax_document).deliver
+            @last_fax_document = fax_document
+
             begin
               File.delete(pdf_file)
             rescue => e
@@ -106,6 +171,14 @@ class TriggerController < ApplicationController
       end
        
       if errors.count == 0
+        # Indicate a new fax in the navigation bar.
+        #
+        if @last_fax_document.fax_account.fax_accountable.class == User
+          user = @last_fax_document.fax_account.fax_accountable
+          PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_or_fax_indicator').hide('fast').show('slow');")
+          PrivatePub.publish_to("/users/#{user.id}/messages/new", "document.title = '* ' + document.title.replace( '* ' , '');")
+        end
+
         render(
           :status => 200,
           :layout => false,

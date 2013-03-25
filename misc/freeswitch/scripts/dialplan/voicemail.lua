@@ -66,15 +66,14 @@ function Voicemail.find_by_name(self, account_name)
   return voicemail_account
 end
 
--- Find Voicemail account by name
+-- Find Voicemail account by number
 function Voicemail.find_by_number(self, phone_number)
   local sip_account = nil;
 
   require "common.phone_number"
-  local phone_number_class = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database };
-  local destination_number_object = phone_number_class:find_by_number(phone_number);
-  if destination_number_object and destination_number_object.record.phone_numberable_type == "SipAccount" then
-    return Voicemail:find_by_sip_account_id(destination_number_object.record.phone_numberable_id);
+  local destination_number_object = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:find_by_number(phone_number);
+  if destination_number_object and destination_number_object.record.phone_numberable_type:lower() == "sipaccount" then
+    return self:find_by_sip_account_id(destination_number_object.record.phone_numberable_id);
   end
 
   return false;

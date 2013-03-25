@@ -15,7 +15,11 @@ class FreeswitchEventSocket
     return false
   end
 
-  def connect(password = DEFAULT_PASSWORD, event_host = DEFAULT_HOST, event_port = DEFAULT_PORT)
+  def connect(password = nil, event_host = nil, event_port = nil)
+    event_host = event_host || GsParameter.get('host', 'event_socket', 'client') || GsParameter.get('listen-ip', 'event_socket', 'settings') || DEFAULT_HOST
+    event_port = event_port || GsParameter.get('port', 'event_socket', 'client') || GsParameter.get('listen-port', 'event_socket', 'settings') || DEFAULT_PORT
+    password = password || GsParameter.get('password', 'event_socket', 'client') || GsParameter.get('password', 'event_socket', 'settings') || DEFAULT_PASSWORD
+
     begin
       @socket = TCPSocket.open(event_host, event_port)
     rescue
@@ -103,8 +107,45 @@ class FreeswitchEvent
 end
 
 class FreeswitchAPI
-  def self.execute(command, arguments, bgapi = false)
+  def self.api_result(result)
+    if not result
+      return nil
+    end
 
+    if result['Content-Type'] == 'api/response'
+      if result['_BODY'].blank?
+        return nil
+      elsif result['_BODY'] =~ /^\+OK/
+        return true
+      elsif result['_BODY'] =~ /^\-ERR/
+        return false
+      else
+        return result['_BODY']
+      end
+    end
+    
+    return nil
+  end
+
+  def self.api(command, *arguments)
+    event = FreeswitchEventSocket.new()
+    if event && event.connect()
+      event.command("api #{command} #{arguments.join(' ')}")
+      result = event.result()
+      content_length = result['Content-Length'].to_i
+      while content_length > result['_BODY'].to_s.length
+        body = event.read(content_length - result['_BODY'].to_s.length)
+        if body.blank?
+          break
+        end
+        result['_BODY'] = result['_BODY'].to_s + body;
+      end
+      event.close()
+      return result
+    end
+  end
+
+  def self.execute(command, arguments, bgapi = false)
     event = FreeswitchEventSocket.new()
     if event && event.connect()
       api = bgapi ? 'bgapi' : 'api'

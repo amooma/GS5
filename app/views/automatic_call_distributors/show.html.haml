@@ -63,6 +63,13 @@
   = render 'phone_numbers/index_core', :phone_numbers => @automatic_call_distributor.phone_numbers
   = render :partial => 'shared/create_link', :locals => {:parent => @automatic_call_distributor, :child_class => PhoneNumber, :short_link => true}
 
+- if @automatic_call_distributor.call_forwards.count > 0 || can?(:create, @automatic_call_distributor.call_forwards.build)
+  %h3= t('call_forwards.index.page_title')
+  - if @automatic_call_distributor.call_forwards.count > 0
+    = render "call_forwards/index_core", :call_forwards => @automatic_call_distributor.call_forwards
+    %br
+  = render :partial => 'shared/create_link', :locals => { :parent => @automatic_call_distributor, :child_class => CallForward }
+
 - if can?( :index, @automatic_call_distributor.acd_agents )
   %h3= t('automatic_call_distributors.index.acd_agents')
   = render 'acd_agents/index_core', :acd_agents => @automatic_call_distributor.acd_agents

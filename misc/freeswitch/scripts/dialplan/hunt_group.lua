@@ -38,7 +38,7 @@ end
 
 
 function HuntGroup.find_by_uuid(self, uuid)
-  local sql_query = 'SELECT * FROM `hunt_groups` WHERE `id`= "'.. uuid .. '" LIMIT 1';
+  local sql_query = 'SELECT * FROM `hunt_groups` WHERE `uuid`= "'.. uuid .. '" LIMIT 1';
   local hunt_group = nil;
 
   self.database:query(sql_query, function(entry)
@@ -98,25 +98,26 @@ function HuntGroup.run(self, dialplan_object, caller, destination)
 
   self.log:info('HUNTGROUP ', self.record.id, ' - name: ', self.record.name, ', strategy: ', self.record.strategy,', members: ', #hunt_group_members);
 
-  local clip_no_screening = common.str.try(caller, 'account.record.clip_no_screening');
   caller.caller_id_numbers = {}
-  if not common.str.blank(clip_no_screening) then
-    for index, number in ipairs(common.str.strip_to_a(clip_no_screening, ',')) do
-      table.insert(caller.caller_id_numbers, number);
-    end
-  end
   for index, number in ipairs(caller.caller_phone_numbers) do
     table.insert(caller.caller_id_numbers, number);
   end
-  self.log:info('CALLER_ID_NUMBERS - clir: ', caller.clir, ', numbers: ', table.concat(caller.caller_id_numbers, ','));
 
-  local save_destination = caller.destination;
+  local phone_numbers = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:list_by_owner(self.id, self.class);
+  for index, number in ipairs(phone_numbers) do
+    table.insert(caller.caller_id_numbers, number);
+  end
+
+  self.log:debug('HUNTGROUP ', self.record.id, ' - auth: ', caller.auth_account.class, '=', caller.auth_account.id, '/', caller.auth_account.uuid, ', caller: ', caller.account.class, '=', caller.account.id, '/', caller.account.uuid);
+  self.log:info('HUNTGROUP ', self.record.id, ' - clir: ', caller.clir, ', caller_id_numbers: ', table.concat(caller.caller_id_numbers, ','));
+
+  local hunt_group_destination = caller.destination;
 
   local destinations = {}
   for index, hunt_group_member in ipairs(hunt_group_members) do
     local destination = dialplan_object:destination_new{ number = hunt_group_member.number };
     if destination.type == 'unknown' then
-      
+      caller.destination = destination;
       caller.destination_number = destination.number;
 
       require 'dialplan.router'
@@ -144,8 +145,8 @@ function HuntGroup.run(self, dialplan_object, caller, destination)
     end
   end
 
-  caller.destination = save_destination;
-  caller.destination_number = save_destination.number;
+  caller.destination = hunt_group_destination;
+  caller.destination_number = hunt_group_destination.number;
 
   local forwarding_destination = nil;
   if caller.forwarding_service == 'assistant' and caller.auth_account then
@@ -165,7 +166,7 @@ function HuntGroup.run(self, dialplan_object, caller, destination)
           table.insert(recursive_destinations, forwarding_destination);
         end
         require 'dialplan.sip_call'
-        result = dialplan.sip_call.SipCall:new{ log = self.log, database = self.database, caller = caller }:fork( recursive_destinations, { callee_id_number = destination.number, timeout = member_timeout });
+        result = dialplan.sip_call.SipCall:new{ log = self.log, database = self.database, caller = caller }:fork( recursive_destinations, { callee_id_number = hunt_group_destination.number, timeout = member_timeout });
         if result.disposition == 'SUCCESS' then
           if result.fork_index then
             result.destination = recursive_destinations[result.fork_index];

@@ -1,0 +1,10 @@
+%table.table.table-striped
+  %tr
+    %th= t('switchboards.index.name')
+    %th
+
+  
+  - for switchboard in switchboards
+    %tr
+      %td= switchboard.name
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => user, :child => switchboard}

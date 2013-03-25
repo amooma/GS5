@@ -9,6 +9,9 @@ Perimeter = {}
 
 
 function Perimeter.new(self, arg)
+  require 'common.str';
+  require 'common.array';
+
   arg = arg or {}
   object = arg.object or {}
   setmetatable(object, self);
@@ -94,12 +97,24 @@ end
 
 
 function Perimeter.check(self, event)
-  if not event or not event.key then
-    self.log:warning('[perimeter] PERIMETER_CHECK - no event/key');
+  if not type(event) == 'list' then
+    self.log:warning('[perimeter] PERIMETER_CHECK - no event data');
+    return;
+  end
+  if not event.key then
+    self.log:warning('[perimeter] PERIMETER_CHECK - no key');
+    for key, value in pairs(event) do
+      self.log:debug('[perimeter] PERIMETER_CHECK event_data - "', key, '" = "', value, '"');
+    end
     return;
   end
 
-  event.record = self:record_load(event); 
+  event.record = self:record_load(event);
+  
+  if event.record.ignore then
+    return
+  end
+
   if event.record.banned <= self.ban_tries then
     for check_name, check_points in pairs(self.checks[event.action]) do
       if self.checks_available[check_name] then
@@ -191,7 +206,7 @@ end
 function Perimeter.check_bad_headers(self, event)
   local points = nil;
   for name, pattern in pairs(self.bad_headers[event.action]) do
-    pattern = self:expand_variables(pattern, event);
+    pattern = common.array.expand_variables(pattern, event);
     local success, result = pcall(string.find, event[name], pattern);
     if success and result then
       self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
@@ -213,20 +228,21 @@ function Perimeter.append_blacklist_file(self, event)
   event.date = self:format_date(event.timestamp);
 
   if self.blacklist_file_comment then  
-    blacklist:write(self:expand_variables(self.blacklist_file_comment, event), '\n');
+    blacklist:write(common.array.expand_variables(self.blacklist_file_comment, event), '\n');
   end
 
   self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_APPEND_BLACKLIST - file: ', self.blacklist_file);
-  blacklist:write(self:expand_variables(self.blacklist_file_entry, event), '\n');
+  blacklist:write(common.array.expand_variables(self.blacklist_file_entry, event), '\n');
   blacklist:close();
 end
 
 
 function Perimeter.execute_ban(self, event)
-  local command = self:expand_variables(self.ban_command, event);
+  local command = common.array.expand_variables(self.ban_command, event);
   self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_EXECUTE_BAN - command: ', command);
   local result = os.execute(command);
 end
+
 
 function Perimeter.update_intruder(self, event)
   require 'common.intruder';
@@ -234,8 +250,14 @@ function Perimeter.update_intruder(self, event)
 end
 
 
-function Perimeter.expand_variables(self, line, variables)
-  return (line:gsub('{([%a%d%._]+)}', function(captured)
-    return variables[captured] or '';
-  end))
+function Perimeter.action_db_rescan(self, record)
+  require 'common.intruder';
+
+  if common.str.blank(record.key) then
+    self.log:info('[perimeter] PERIMETER rescan entire sources database');
+    self.sources = common.intruder.Intruder:new{ log = self.log, database = self.database }:sources_list();
+  else
+    self.log:info('[perimeter] PERIMETER rescan sources database - key: ', record.key);
+    self.sources[record.key] = common.intruder.Intruder:new{ log = self.log, database = self.database }:sources_list(record.key);
+  end
 end

@@ -7,6 +7,12 @@ class Conference < ActiveRecord::Base
   has_many :conference_invitees, :dependent => :destroy
   has_many :phone_numbers, :as => :phone_numberable, :dependent => :destroy
 
+  before_validation {
+    if !self.pin.blank?
+      self.pin = self.pin.to_s.gsub(/[^0-9]/, '')
+    end
+  }
+
   validates_presence_of  :conferenceable_type, :conferenceable_id
   validates_presence_of  :conferenceable
   validates_presence_of  :name
@@ -21,15 +27,12 @@ class Conference < ActiveRecord::Base
 
   validates_inclusion_of :open_for_anybody, :in => [true, false]
   
-  validates_numericality_of :pin, :only_integer => true, 
-                                  :greater_than => 0,
-                                  :allow_nil => true,
-                                  :allow_blank => true
   validates_length_of       :pin, :minimum => (GsParameter.get('MINIMUM_PIN_LENGTH').nil? ? 4 : GsParameter.get('MINIMUM_PIN_LENGTH')),
                                   :allow_nil => true,
                                   :allow_blank => true
   
   validate :start_and_end_dates_must_make_sense, :if => Proc.new { |conference| !conference.start.blank? && !conference.end.blank? }
+
   
   before_save :send_pin_email_when_pin_has_changed
 
@@ -46,11 +49,45 @@ class Conference < ActiveRecord::Base
   def to_s
     name
   end
+
+  def list_conference
+    require 'freeswitch_event'
+    result = FreeswitchAPI.api_result(FreeswitchAPI.api('conference', "conference#{self.id}", 'xml_list'))
+    if result =~ /^\<\?xml/
+      data = Hash.from_xml(result)
+      if data
+        return data.fetch('conferences',{}).fetch('conference',{})
+      end
+    end
+    return nil
+  end
+
+  def list_members(data=self.list_conference())
+    if data.blank?
+      return {}
+    end
+
+    members = data.fetch('members',{}).fetch('member',{})
+    if members.class != Array
+      members = [members]
+    end
+
+    members.each_with_index do |member, index|
+      members[index][:call] = Call.where(:uuid => member['uuid']).first
+      if !members[index][:call]
+        members[index][:call] = Call.where(:b_uuid => member['uuid']).first
+        if members[index][:call]
+          members[index][:call_bleg] = true;
+        end
+      end
+    end
+
+    return members;
+  end
   
+
   private
-  
   def start_and_end_dates_must_make_sense
-    errors.add(:start, 'must be in the future') if self.start < Time.now - 10.minutes
     errors.add(:end, 'must be later than the start') if self.end < self.start
   end
 

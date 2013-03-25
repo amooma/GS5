@@ -48,7 +48,7 @@ class GsNodesController < ApplicationController
   end
 
   def sync
-    if !GsNode.where(:ip_address => request.remote_ip).first
+    if !GsNode.where(:ip_address => request_remote_ip).first
       render(
         :status => 404,
         :layout => false,

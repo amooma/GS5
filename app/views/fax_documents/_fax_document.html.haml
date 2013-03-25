@@ -1,0 +1,66 @@
+.fax_document{:id => fax_document.id}
+  .row
+    .span12
+      %table.table.table-striped
+        - case fax_document.state
+          - when 'unsuccessful'
+            - current_status = 'error'
+          - when 'sending'
+            - current_status = 'success'
+          - when 'queued_for_sending'
+            - current_status = 'warning'
+          - else
+            - current_status = ''
+
+        %tr{:class => current_status}
+          %td
+            %strong= t('fax_documents.index.state') + ":"
+          %td
+            = t("fax_documents.states.#{fax_document.state}")
+        %tr
+          %td
+            %strong= t('fax_documents.index.result_code') + ":"
+          %td
+            = fax_document.result_code
+        %tr
+          %td
+            %strong= t('fax_documents.index.result_text') + ":"
+          %td
+            = t("fax_documents.result_codes.code_#{fax_document.result_code}")
+        %tr
+          %td
+            %strong= t('fax_documents.show.document_transferred_pages') + ":"
+          %td
+            = fax_document.document_transferred_pages
+        %tr
+          %td
+            %strong= t('fax_documents.show.remote_station_id') + ":"
+          %td
+            = fax_document.remote_station_id
+        %tr
+          %td
+            %strong= t('fax_documents.show.fax_resolution') + ":"
+          %td
+            = fax_document.fax_resolution
+
+      - if fax_document.document?
+        %p
+          %a{:href => fax_account_fax_document_path(fax_document.fax_account, fax_document, :format => :pdf), :method => :get}
+            %i{:class => 'icon-download'}
+            = t("fax_documents.index.actions.download_pdf") + " (#{number_to_human_size(fax_document.document.size, :precision => 2)})"
+
+  .row
+    .span12
+      - if fax_document.fax_thumbnails.any?
+        %ul.thumbnails
+          - fax_document.fax_thumbnails.limit(50).each do |fax_thumbnail|
+            %li.span4
+              %div.thumbnail
+                %a.thumbnail{:href => fax_thumbnail.thumbnail.url}
+                  =image_tag(fax_thumbnail.thumbnail.url, :alt => "Page #{fax_thumbnail.position}")
+                %p
+                  = "#{fax_thumbnail.position}/#{fax_document.fax_thumbnails.count}"
+
+  .row
+    .span12
+      = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => fax_document.fax_account, :child => fax_document }

@@ -7,7 +7,7 @@ class CallRoute < ActiveRecord::Base
   has_many :route_elements, :dependent => :destroy, :order => :position
 
   validates :name,
-  					:presence => true
+            :presence => true
 
   validates :routing_table,
             :presence => true,
@@ -251,6 +251,22 @@ class CallRoute < ActiveRecord::Base
         return nil
       end
     end
+  end
+
+
+  def self.test_route(table, caller)
+    arguments = ["'#{table}' table"]
+    caller.each do |key, value|
+      arguments << "'#{value}' '#{key}'"
+    end
+
+    require 'freeswitch_event'
+    result = FreeswitchAPI.api_result(FreeswitchAPI.api('lua', 'test_route.lua', arguments.join(' ')))
+    if result.blank? then
+      return
+    end
+
+    return JSON.parse(result)
   end
 
 end

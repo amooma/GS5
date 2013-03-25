@@ -33,6 +33,82 @@
       %td
         = @gateway.description
 
+    - if @gateway.technology.to_s == 'sip'
+      - status = @gateway.status
+      - if !@gateway.status.blank?
+        %tr
+          %td
+            %strong= t('gateways.show.status') + ":"
+          %td
+            = "#{status['status']} (#{status['state']})"
+        %tr
+          %td
+            %strong= t('gateways.show.identifier') + ":"
+          %td
+            = status['name']
+        %tr
+          %td
+            %strong= t('gateways.show.profile') + ":"
+          %td
+            = status['profile']
+        %tr
+          %td
+            %strong= t('gateways.show.username') + ":"
+          %td
+            = status['username']
+        %tr
+          %td
+            %strong= t('gateways.show.password') + ":"
+          %td
+            = status['password']
+        %tr
+          %td
+            %strong= t('gateways.show.realm') + ":"
+          %td
+            = status['realm']
+        %tr
+          %td
+            %strong= t('gateways.show.contact') + ":"
+          %td
+            = status['contact']
+        %tr
+          %td
+            %strong= t('gateways.show.from') + ":"
+          %td
+            = status['from']
+        %tr
+          %td
+            %strong= t('gateways.show.to') + ":"
+          %td
+            = status['to']
+        %tr
+          %td
+            %strong= t('gateways.show.proxy') + ":"
+          %td
+            = status['proxy']
+      - registration = @gateway.inbound_register
+      - if !registration.blank?
+        %tr
+          %td
+            %strong= t('gateways.show.inbound_register_status') + ":"
+          %td
+            = registration.status
+        %tr
+          %td
+            %strong= t('gateways.show.inbound_register_contact') + ":"
+          %td
+            = registration.contact
+        %tr
+          %td
+            %strong= t('gateways.show.inbound_register_user_agent') + ":"
+          %td
+            = registration.user_agent
+        %tr
+          %td
+            %strong= t('gateways.show.inbound_register_network') + ":"
+          %td
+            = "#{registration.network_ip}:#{registration.network_port}"
+
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @gateway }
 
 

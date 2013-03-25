@@ -9,6 +9,7 @@ Router = {}
 -- create route object
 function Router.new(self, arg)
   require 'common.str';
+  require 'common.array';
   arg = arg or {}
   object = arg.object or {}
   setmetatable(object, self);
@@ -19,6 +20,7 @@ function Router.new(self, arg)
   self.routes = arg.routes or {};
   self.caller = arg.caller;
   self.variables = arg.variables or {};
+  self.log_details = arg.log_details;
   self.routing_tables = {};
   return object;
 end
@@ -60,29 +62,35 @@ function Router.read_table(self, table_name, force_reload)
 end
 
 
-function Router.expand_variables(self, line, variables, variables2)
-  return (line:gsub('{([%a%d%._]+)}', function(captured)
-    return common.str.try(variables, captured) or common.str.try(variables2, captured) or '';
-  end))
-end
-
-
 function Router.element_match(self, pattern, search_string, replacement, route_variables)
   local success, result = pcall(string.find, search_string, pattern);
 
   if not success then
-    self.log:error('ELEMENT_MATCH - table error - pattern: ', pattern, ', search_string: ', search_string);
+    self.log:error('ELEMENT_ERROR - table error - pattern: ', pattern, ', search_string: ', search_string);
   elseif result then
-    return true, search_string:gsub(pattern, self:expand_variables(replacement, route_variables, self.variables));
+    local replace_by = common.array.expand_variables(replacement, route_variables, self.variables)
+    result = search_string:gsub(pattern, replace_by);
+    if self.log_details then
+      self.log:debug('ELEMENT_MATCH - ', search_string, ' ~= ', pattern, ' => ', replacement, ' => ', replace_by);
+    end
+    return true, result;
   end
 
+  if self.log_details then
+    self.log:debug('ELEMENT_NO_MATCH - ', search_string, ' != ', pattern);
+  end
   return false;
 end
 
 
-function Router.element_match_group(self, pattern, groups, replacement, use_key, route_variables)
+function Router.element_match_group(self, pattern, groups, replacement, use_key, route_variables, variable_name)
   if type(groups) ~= 'table' then
+    self.log:debug('ELEMENT_FIND_IN_ARRAY - no such array: ', variable_name, ', use_keys: ', tostring(use_key));
     return false;
+  end
+
+  if self.log_details then
+    self.log:debug('ELEMENT_FIND_IN_ARRAY - array: ', variable_name, ', use_keys: ', tostring(use_key));
   end
 
   for key, value in pairs(groups) do
@@ -102,8 +110,9 @@ function Router.route_match(self, route)
     gateway = 'gateway' .. route.endpoint_id,
     ['type'] = route.endpoint_type,
     id = route.endpoint_id,
-    destination_number = common.str.try(self, 'caller.destination_number'),
+    destination_number = common.array.try(self, 'caller.destination_number'),
     channel_variables = {},
+    route_id = route.id,
   };
 
   local route_matches = false;
@@ -114,22 +123,26 @@ function Router.route_match(self, route)
 
     local element = route.elements[index];
 
+    if self.log_details then
+      self.log:debug('ROUTE_ELEMENT ', element.id, ' - var_in: ', element.var_in, ', var_out: ', element.var_out, ', action: ', element.action, ', mandatory: ', element.mandatory);
+    end
+
     if element.action ~= 'none' then
       if common.str.blank(element.var_in) or common.str.blank(element.pattern) and element.action == 'set' then
         result = true;
-        replacement = self:expand_variables(element.replacement, destination, self.variables);
+        replacement = common.array.expand_variables(element.replacement, destination, self.variables);
       else
         local command, variable_name = common.str.partition(element.var_in, ':');
 
         if not command or not variable_name then
-          local search_string = tostring(common.str.try(destination, element.var_in) or common.str.try(self.caller, element.var_in));
+          local search_string = tostring(common.array.try(destination, element.var_in) or common.array.try(self.caller, element.var_in));
           result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement), destination);
         elseif command == 'var' then
-          local search_string = tostring(common.str.try(self.caller, element.var_in));
+          local search_string = tostring(common.array.try(self.caller, variable_name));
           result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
         elseif command == 'key' or command == 'val' then
-          local groups = common.str.try(self.caller, variable_name);
-          result, replacement = self:element_match_group(tostring(element.pattern), groups, tostring(element.replacement), command == 'key');
+          local groups = common.array.try(destination, variable_name) or common.array.try(self.caller, variable_name);
+          result, replacement = self:element_match_group(tostring(element.pattern), groups, tostring(element.replacement), command == 'key', destination, variable_name);
         elseif command == 'chv' then
           local search_string = self.caller:to_s(variable_name);
           result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
@@ -151,7 +164,7 @@ function Router.route_match(self, route)
         if not common.str.blank(element.var_out) then
           local command, variable_name = common.str.partition(element.var_out, ':');
           if not command or not variable_name or command == 'var' then
-            common.str.set(destination, element.var_out, replacement);
+            common.array.set(destination, element.var_out, replacement);
           elseif command == 'chv' then
             destination.channel_variables[variable_name] = replacement;
           elseif command == 'hdr' then
@@ -180,7 +193,10 @@ function Router.route_run(self, table_name, find_first)
   local routes = {};
 
   if type(routing_table) == 'table' then
-    for index=1, #routing_table do    
+    for index=1, #routing_table do
+      if self.log_details then
+        self.log:info('ROUTE_',table_name:upper(),' ', index,' - ', table_name,'=', routing_table[index].id, '/', routing_table[index].name);
+      end    
       local route = self:route_match(routing_table[index]);
       if route then
         table.insert(routes, route);

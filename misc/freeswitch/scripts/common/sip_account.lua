@@ -130,9 +130,9 @@ end
 
 
 function SipAccount.call_state(self)
-  local sql_query = 'SELECT `callstate` FROM `detailed_calls` \
-    WHERE `presence_id` LIKE "' .. self.record.auth_name .. '@%" \
-    OR `b_presence_id` LIKE "' .. self.record.auth_name .. '@%" \
+  local sql_query = 'SELECT `callstate` FROM `calls_active` \
+    WHERE `sip_account_id` = ' .. self.id .. ' \
+    OR `b_sip_account_id` = ' .. self.id .. ' \
     LIMIT 1';
 
   return self.database:query_return_value(sql_query);

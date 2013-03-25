@@ -135,6 +135,17 @@ function SipCall.fork(self, destinations, arg )
           if destination.alert_info then
             table.insert(origination_variables, "alert_info='" .. destination.alert_info .. "'");
           end
+          if destination.account then
+            table.insert(origination_variables, "gs_account_type='" .. common.str.to_s(destination.account.class) .. "'");
+            table.insert(origination_variables, "gs_account_id='" .. common.str.to_i(destination.account.id) .. "'");
+            table.insert(origination_variables, "gs_account_uuid='" .. common.str.to_s(destination.account.uuid) .. "'");
+          end
+          if self.caller.auth_account then
+            table.insert(origination_variables, "gs_auth_account_type='" .. common.str.to_s(self.caller.auth_account.class) .. "'");
+            table.insert(origination_variables, "gs_auth_account_id='" .. common.str.to_i(self.caller.auth_account.id) .. "'");
+            table.insert(origination_variables, "gs_auth_account_uuid='" .. common.str.to_s(self.caller.auth_account.uuid) .. "'");
+          end
+
           table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/' .. sip_account.record.profile_name .. '/' .. sip_account.record.auth_name .. '%' .. sip_account.record.sip_host);
           if destination.pickup_groups and #destination.pickup_groups > 0 then
             for key=1, #destination.pickup_groups do

@@ -1,0 +1,55 @@
+en:
+  switchboard_entries:
+    name: 'Switchboardentry'
+    controller:
+      successfuly_created: 'Successfully created Switchboardentry.'
+      successfuly_updated: 'Successfully updated Switchboardentry.'
+      successfuly_destroyed: 'Successfully destroyed Switchboardentry.'
+    index:
+      page_title: 'Listing Switchboardentry'
+      switchboard_id: 'Switchboard'
+      sip_account_id: 'Sip account'
+      name: 'Name'
+      position: 'Position'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this Switchboardentry?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New Switchboardentry for %{resource}'
+    show:
+      page_title: 'Show Switchboardentry'
+      switchboard_id: 'Switchboard'
+      sip_account_id: 'Sip account'
+      name: 'Name'
+      position: 'Position'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this element?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New Switchboardentry'
+      actions:
+        back_to_list: 'Back to Index'
+    edit:
+      page_title: 'Editing Switchboardentry'
+      actions:
+        back_to_list: 'Back to Index'
+        edit: 'Edit'
+        view_all: 'View All'
+    form:
+      switchboard_id:
+        label: 'Switchboard'
+        hint: ''
+      sip_account_id:
+        label: 'Sip account'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      position:
+        label: 'Position'
+        hint: ''
+      submit: 'Submit'

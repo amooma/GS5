@@ -23,7 +23,6 @@ function Functions.ensure_caller_sip_account(self, caller)
 end
 
 function Functions.dialplan_function(self, caller, dialed_number)
-  require 'common.str'
   local parameters = common.str.to_a(dialed_number, '%-');
   if not parameters[2] then
     return { continue = false, code = 484, phrase = 'Malformed function parameters', no_cdr = true };
@@ -120,35 +119,32 @@ function Functions.dialplan_function(self, caller, dialed_number)
   return result or { continue = false, code = 505, phrase = 'Error executing function', no_cdr = true };
 end
 
--- Transfer all calls to a conference
+
 function Functions.transfer_all(self, caller, destination_number)
-  self.log:info('TRANSFER_ALL - caller: ', caller.account_type, '/', caller.account_uuid, ' number: ', destination_number);
-  
   local caller_sip_account = self:ensure_caller_sip_account(caller);
   if not caller_sip_account then
     self.log:error('TRANSFER_ALL - incompatible caller');
     return { continue = false, code = 403, phrase = 'Incompatible caller' }
   end
 
-  -- Query call and channel table for channel IDs
-  local sql_query = 'SELECT  `b`.`name` AS `caller_chan_name`, `a`.`caller_uuid`, `a`.`callee_uuid` \
-    FROM `calls` `a` JOIN `channels` `b` ON `a`.`caller_uuid` = `b`.`uuid` JOIN `channels` `c` \
-    ON `a`.`callee_uuid` = `c`.`uuid` WHERE `b`.`name` LIKE ("%' .. caller_sip_account.record.auth_name .. '@%") \
-    OR `c`.`name` LIKE ("%' .. caller_sip_account.record.auth_name .. '@%") LIMIT 100';
+  self.log:info('TRANSFER_ALL - initiator: ', caller.account.class, '=', caller.account.id, '/', caller.account.uuid, ', number: ', destination_number);
 
+  local sql_query = 'SELECT `uuid`, `b_uuid`, `callee_number`, `caller_id_number`, `sip_account_id`, `b_sip_account_id` \
+    FROM `calls_active` WHERE `sip_account_id` = '.. caller.account.id .. ' OR `b_sip_account_id` = '.. caller.account.id;
+  local index = 1;
   self.database:query(sql_query, function(call_entry)
-    local uid = nil
-    if call_entry.caller_chan_name:find(caller_sip_account.record.auth_name .. "@") then
-      uid = call_entry.callee_uuid;
-      self.log:debug("Transfering callee channel with uid: " .. uid);
-    else
-      uid = call_entry.caller_uuid;
-      self.log:debug("Transfering caller channel with uid: " .. uid);
+    if not common.str.blank(call_entry.uuid) and tostring(caller.account.id) ~= tostring(call_entry.sip_account_id) then
+      self.log:info('TRANSFER_ALEG ', index, ' - channel/', call_entry.uuid, '|', call_entry.caller_id_number);
+      freeswitch.API():execute("uuid_transfer", call_entry.uuid .. " " .. destination_number);
     end
-    freeswitch.API():execute("uuid_transfer", uid .. " " .. destination_number);
+    if not common.str.blank(call_entry.b_uuid) and tostring(caller.account.id) ~= tostring(call_entry.b_sip_account_id)  then
+      self.log:info('TRANSFER_BLEG ', index, ' - channel/', call_entry.b_uuid, '|', call_entry.callee_number);
+      freeswitch.API():execute("uuid_transfer", call_entry.b_uuid .. " " .. destination_number);
+    end
+    index = index + 1;
   end)
 
-  return destination_number;
+  return { continue = true, number = destination_number }
 end
 
 
@@ -165,19 +161,18 @@ function Functions.intercept_any_number(self, caller, destination_number)
   local phone_numberable = common.object.Object:new{ log = self.log, database = self.database}:find{class = phone_number.record.phone_numberable_type, id = phone_number.record.phone_numberable_id};
 
   if not phone_numberable then
-    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - numberable not found: ', dphone_number.record.phone_numberable_type, '=', phone_number.record.phone_numberable_id);
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - numberable not found: ', phone_number.record.phone_numberable_type, '=', phone_number.record.phone_numberable_id);
     return { continue = false, code = 404, phrase = 'Destination not found', no_cdr = true };
   end
 
-  require 'common.str';
   require 'common.group';
   local group_class = common.group.Group:new{ log = self.log, database = self.database };
-  local group_ids = group_class:union(common.str.try(caller, 'auth_account.group_ids'), common.str.try(caller, 'auth_account.owner.group_ids'));
+  local group_ids = group_class:union(common.array.try(caller, 'auth_account.group_ids'), common.array.try(caller, 'auth_account.owner.group_ids'));
   local target_groups, target_group_ids = group_class:permission_targets(group_ids, 'pickup');
-  local destination_group_ids = group_class:union(common.str.try(phone_numberable, 'group_ids'), common.str.try(phone_numberable, 'owner.group_ids'));
+  local destination_group_ids = group_class:union(common.array.try(phone_numberable, 'group_ids'), common.array.try(phone_numberable, 'owner.group_ids'));
 
   if #group_class:intersection(destination_group_ids, target_group_ids) == 0 then
-    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - Groups not found or insufficient permissions');
+    self.log:notice('FUNCTION_INTERCEPT_ANY_NUMBER - Groups not found or insufficient permissions, destination:', destination_group_ids, ', target: ', target_group_ids);
     return { continue = false, code = 402, phrase = '"Insufficient permissions', no_cdr = true };
   end
 
@@ -195,10 +190,9 @@ function Functions.group_pickup(self, caller, group_id)
     return { continue = false, code = 505, phrase = 'Incompatible destination', no_cdr = true };
   end
 
-  require 'common.str';
   require 'common.group';
   local group_class = common.group.Group:new{ log = self.log, database = self.database };
-  local group_ids = group_class:union(common.str.try(caller, 'auth_account.group_ids'), common.str.try(caller, 'auth_account.owner.group_ids'));
+  local group_ids = group_class:union(common.array.try(caller, 'auth_account.group_ids'), common.array.try(caller, 'auth_account.owner.group_ids'));
   local target_group = group_class:is_target(group_id, 'pickup');
 
   if not target_group then
@@ -250,8 +244,6 @@ end
 
 
 function Functions.user_login(self, caller, number, pin)
-  require 'common.str'
-
   local PHONE_NUMBER_LEN_MIN = 4;
   local PHONE_NUMBER_LEN_MAX = 12;
   local PIN_LEN_MIN = 4;
@@ -367,7 +359,6 @@ end
 
 
 function Functions.user_logout(self, caller)
-  require 'common.str'
   self.log:info('LOGOUT - caller: ', caller.account_type, '/', caller.account_uuid, ', caller_id: ', caller.caller_id_number);
 
   -- find caller's sip account
@@ -845,8 +836,6 @@ end
 
 
 function Functions.hangup(self, caller, code, phrase)
-  require 'common.str'
-
   if not tonumber(code) then
     code = 403;
     phrase = 'Forbidden';
@@ -885,8 +874,7 @@ function Functions.call_parking_inout_index(self, caller, stall_index)
     return { continue = false, code = 404, phrase = 'No parkings stall specified', no_cdr = true }
   end
 
-  require 'common.str';
-  local owner = common.str.try(caller, 'auth_account.owner');
+  local owner = common.array.try(caller, 'auth_account.owner');
   
   if not owner then
     self.log:notice('FUNCTION_CALL_PARKING_INOUT_INDEX - stall owner not specified');

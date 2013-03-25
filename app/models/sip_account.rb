@@ -41,6 +41,9 @@ class SipAccount < ActiveRecord::Base
   has_many :call_legs, :class_name => 'Call'
   has_many :b_call_legs, :class_name => 'Call', :foreign_key => 'b_sip_account_id'
 
+  has_many :acd_agents, :as => :destination, :dependent => :destroy
+  has_many :switchboard_entries, :dependent => :destroy
+
   # Delegations:
   #
   delegate :host, :to => :sip_domain, :allow_nil => true
@@ -160,12 +163,16 @@ class SipAccount < ActiveRecord::Base
     );
   end
 
-
-  def target_sip_accounts_by_permission(permission)
+  def target_group_ids_by_permission(permission)
     target_groups = Group.union(self.groups.collect{|g| g.permission_targets(permission)})
     target_groups = target_groups + Group.union(self.sip_accountable.groups.collect{|g| g.permission_targets(permission)})
+
+    return target_groups
+  end
+
+  def target_sip_accounts_by_permission(permission)
     sip_accounts = []
-    GroupMembership.where(:group_id => target_groups).each do |group_membership|
+    GroupMembership.where(:group_id => target_group_ids_by_permission(permission)).each do |group_membership|
       if group_membership.item.class == User || group_membership.item.class == Tenant
         sip_accounts = sip_accounts + group_membership.item.sip_accounts
       elsif group_membership.item.class == SipAccount
@@ -178,6 +185,38 @@ class SipAccount < ActiveRecord::Base
     return sip_accounts
   end
 
+  def status
+    states = Array.new
+
+    self.call_legs.each do |call_leg|
+      states << {
+        :status => call_leg.b_callstate || call_leg.callstate,
+        :status_channel => call_leg.callstate,
+        :caller => true,
+        :endpoint_name => call_leg.callee_name,
+        :endpoint_number => call_leg.destination,
+        :endpoint_sip_account_id => call_leg.b_sip_account_id,
+        :start_stamp => call_leg.start_stamp,
+        :secure => call_leg.secure,
+      }
+    end
+
+    self.b_call_legs.each do |call_leg|
+      call_status = 
+      states << {
+        :status => call_leg.b_callstate,
+        :status_channel => call_leg.b_callstate,
+        :caller => false,
+        :endpoint_name => call_leg.caller_id_name,
+        :endpoint_number => call_leg.caller_id_number,
+        :endpoint_sip_account_id => call_leg.sip_account_id,
+        :start_stamp => call_leg.start_stamp,
+        :secure => call_leg.b_secure,
+      }
+    end
+
+    return states
+  end
 
   private
       

@@ -22,6 +22,9 @@ local CALL_FORWARDING_SERVICES = {
 
 -- create dialplan object
 function Dialplan.new(self, arg)
+  require 'common.str';
+  require 'common.array';
+
   arg = arg or {}
   object = arg.object or {}
   setmetatable(object, self);
@@ -35,7 +38,6 @@ end
 
 
 function Dialplan.domain_get(self, domain)
-  require 'common.str'
   local global_domain = freeswitch.API():execute('global_getvar', 'domain');
 
   if common.str.blank(global_domain) then
@@ -74,8 +76,7 @@ end
 
 
 function Dialplan.configuration_read(self)
-  require 'common.str'
-  require 'common.configuration_table'
+  require 'common.configuration_table';
 
   -- dialplan configuration
   self.config  = common.configuration_table.get(self.database, 'dialplan');
@@ -124,7 +125,6 @@ end
 
 
 function Dialplan.auth_sip_account(self)
-  require 'common.str'
   if not common.str.blank(self.caller.auth_account_type) then
     self.log:info('AUTH_SIP_ACCOUNT - ', self.caller.auth_account_type, '=', self.caller.account_id, '/', self.caller.account_uuid);
     return true;
@@ -135,10 +135,22 @@ end
 function Dialplan.auth_gateway(self)
   require 'common.gateway'
   local gateway_class = common.gateway.Gateway:new{ log = self.log, database = self.database};
-  local gateway = gateway_class:authenticate(self.caller);
+
+  local gateway = false;
+
+  if self.caller:to_b('gs_from_gateway') then
+    gateway = {
+      name = self.caller:to_s('gs_gateway_name'),
+      id = self.caller:to_i('gs_gateway_id'),
+    }
+    log:info('AUTH_GATEWAY - authenticaded by password and username: ', self.caller:to_s('username'), ', gateway=', gateway.id, '|', gateway.name, ', ip: ', self.caller.sip_contact_host);
+    return gateway_class:find_by_id(gateway.id);
+  else
+    gateway = gateway_class:authenticate(self.caller);
+  end
 
   if gateway then
-    log:info('AUTH_GATEWAY - ', gateway.auth_source, ' ~ ', gateway.auth_pattern, ', gateway=', gateway.id, ', name: ', gateway.name, ', ip: ', self.caller.sip_contact_host);
+    log:info('AUTH_GATEWAY - ', gateway.auth_source, ' ~ ', gateway.auth_pattern, ', gateway=', gateway.id, '|', gateway.name, ', ip: ', self.caller.sip_contact_host);
     return gateway_class:find_by_id(gateway.id);
   end
 end
@@ -151,20 +163,15 @@ end
 
 
 function Dialplan.retrieve_caller_data(self)
-  require 'common.str'
   self.caller.caller_phone_numbers_hash = {};
 
-  -- TODO: Set auth_account on transfer initiated by calling party
-  if not common.str.blank(self.caller.dialed_sip_user) then
-    self.caller.auth_account = self:object_find{class = 'sipaccount', domain = self.caller.dialed_domain, auth_account = self.caller.dialed_sip_user};
-    if self.caller.set_auth_account then
-      self.caller:set_auth_account(self.caller.auth_account);
-    end
+  if not common.str.blank(self.caller.previous_destination_type) and not common.str.blank(self.caller.previous_destination_uuid) then
+    self.log:debug('CALLER_DATA - authenticate by previous destination: ', self.caller.previous_destination_type, '=', self.caller.previous_destination_id, '/', self.caller.previous_destination_uuid);
+    self.caller.auth_account = self:object_find{class = self.caller.previous_destination_type, uuid = self.caller.previous_destination_uuid};
   elseif not common.str.blank(self.caller.auth_account_type) and not common.str.blank(self.caller.auth_account_uuid) then
     self.caller.auth_account = self:object_find{class = self.caller.auth_account_type, uuid = self.caller.auth_account_uuid};
-    if self.caller.set_auth_account then
-      self.caller:set_auth_account(self.caller.auth_account);
-    end
+  elseif not common.str.blank(self.caller.dialed_sip_user) then
+    self.caller.auth_account = self:object_find{class = 'sipaccount', domain = self.caller.dialed_domain, auth_account = self.caller.dialed_sip_user};
   end
 
   if self.caller.auth_account then
@@ -174,13 +181,19 @@ function Dialplan.retrieve_caller_data(self)
     else
       self.log:error('CALLER_DATA - auth owner not found');
     end
+    if self.caller.set_auth_account then
+      self.caller:set_auth_account(self.caller.auth_account);
+    end
   else
-    self.log:info('CALLER_DATA - no data - unauthenticated call: ', self.caller.auth_account_type, '/', self.caller.auth_account_uuid);
+    self.log:info('CALLER_DATA - no data - unauthenticated call: ', self.caller.auth_account_type, '=', self.caller.auth_account_id, '/', self.caller.auth_account_uuid);
   end
 
   if not common.str.blank(self.caller.account_type) and not common.str.blank(self.caller.account_uuid) then
     self.caller.account = self:object_find{class = self.caller.account_type, uuid = self.caller.account_uuid};
     if self.caller.account then
+      self.caller.clir = common.str.to_b(common.array.try(self.caller, 'account.record.clir'));
+      self.caller.clip = common.str.to_b(common.array.try(self.caller, 'account.record.clip'));
+
       require 'common.phone_number'
       self.caller.caller_phone_numbers = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database }:list_by_owner(self.caller.account.id, self.caller.account.class);
       for index, caller_number in ipairs(self.caller.caller_phone_numbers) do
@@ -207,8 +220,6 @@ end
 
 
 function Dialplan.destination_new(self, arg)
-  require 'common.str'
-
   local destination = {
     number = arg.number or '',
     type = arg.type or 'unknown',
@@ -288,7 +299,6 @@ function Dialplan.dial(self, destination)
   local user_id = nil; 
   local tenant_id = nil;
 
-  require 'common.str'
   destination.caller_id_number = destination.caller_id_number or self.caller.caller_phone_numbers[1];
 
   if destination.node_local and destination.type == 'sipaccount' then
@@ -296,6 +306,7 @@ function Dialplan.dial(self, destination)
 
     destination.account = self:object_find{class = destination.type, id = destination.id};
     if destination.account then
+      destination.uuid = destination.account.uuid;
       if destination.account.class == 'sipaccount' then
         destination.callee_id_name = destination.account.record.caller_name;
         self.caller:set_callee_id(destination.number, destination.account.record.caller_name);
@@ -306,7 +317,7 @@ function Dialplan.dial(self, destination)
       self.log:debug('DESTINATION_GROUPS - pickup_groups: ', table.concat(group_names, ','));
       for index=1, #group_ids do
         table.insert(destination.pickup_groups, 'g' .. group_ids[index]);
-      end
+      end 
     end
 
     if destination.account and destination.account.owner then
@@ -317,12 +328,14 @@ function Dialplan.dial(self, destination)
       elseif destination.account.owner.class == 'tenant' then
         tenant_id = destination.account.owner.id;
       end
+      self.caller:set_variable('gs_destination_owner_type', destination.account.owner.class);
+      self.caller:set_variable('gs_destination_owner_id', destination.account.owner.id);
+      self.caller:set_variable('gs_destination_owner_uuid', destination.account.owner.uuid);
     end
   end
 
   if not self.caller.clir then
     if user_id or tenant_id then
-      require 'common.str'
 
       if self.phonebook_number_lookup then
         require 'dialplan.phone_book'
@@ -455,16 +468,14 @@ end
 
 
 function Dialplan.conference(self, destination)
-  -- call local conference
-  require 'common.conference'
-  conference = common.conference.Conference:new{ log = self.log, database = self.database }:find_by_id(destination.id);
+  require 'common.conference';
+  local conference = common.conference.Conference:new{ log = self.log, database = self.database }:find_by_id(destination.id);
  
   if not conference then
     return { continue = false, code = 404, phrase = 'Conference not found' }
   end
 
-  local cause = conference:enter(self.caller, self.domain);
-  return { continue = false, cause = cause }
+  return conference:enter(self.caller, self.domain);
 end
 
 
@@ -579,13 +590,16 @@ end
 
 
 function Dialplan.voicemail(self, destination)
-  if not self.caller.auth_account or self.caller.auth_account.class ~= 'sipaccount' then
-    self.log:error('VOICEMAIL - incompatible destination');
-    return { continue = false, code = 404, phrase = 'Mailbox not found' }
-  end
-
   require 'dialplan.voicemail'
-  local voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(self.caller.auth_account.id);
+
+  local voicemail_account = nil;
+
+  local sip_account_id
+  if not common.str.blank(destination.number) and false then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_number(destination.number);
+  elseif self.caller.auth_account and self.caller.auth_account.class == 'sipaccount' then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(self.caller.auth_account.id);
+  end
 
   if not voicemail_account then
     self.log:error('VOICEMAIL - no mailbox');
@@ -609,7 +623,6 @@ end
 
 
 function Dialplan.switch(self, destination)
-  require 'common.str'
   local result = nil;
   self.dial_timeout_active = self.dial_timeout;
 
@@ -703,7 +716,7 @@ function Dialplan.switch(self, destination)
   elseif not common.str.blank(destination.number) then
     local result = { continue = false, code = 404, phrase = 'No route' }
 
-    local clip_no_screening = common.str.try(self.caller, 'account.record.clip_no_screening');
+    local clip_no_screening = common.array.try(self.caller, 'account.record.clip_no_screening');
     self.caller.caller_id_numbers = {}
     if not common.str.blank(clip_no_screening) then
       for index, number in ipairs(common.str.strip_to_a(clip_no_screening, ',')) do
@@ -713,8 +726,8 @@ function Dialplan.switch(self, destination)
     for index, number in ipairs(self.caller.caller_phone_numbers) do
       table.insert(self.caller.caller_id_numbers, number);
     end
-    self.log:info('CALLER_ID_NUMBERS - clir: ', self.caller.clir, ', numbers: ', table.concat(self.caller.caller_id_numbers, ','));
 
+    self.log:info('SWITCH - clir: ', self.caller.clir, ', caller_id_numbers: ', table.concat(self.caller.caller_id_numbers, ','));
     destination.callee_id_number = destination.number;
     destination.callee_id_name = nil;
 
@@ -727,9 +740,8 @@ function Dialplan.switch(self, destination)
     end
 
     if self.phonebook_number_lookup then
-      require 'common.str'
-      local user_id = common.str.try(self.caller, 'account.owner.id');
-      local tenant_id = common.str.try(self.caller, 'account.owner.record.current_tenant_id');
+      local user_id = common.array.try(self.caller, 'account.owner.id');
+      local tenant_id = common.array.try(self.caller, 'account.owner.record.current_tenant_id');
 
       if user_id or tenant_id then
         require 'dialplan.phone_book'
@@ -745,7 +757,6 @@ function Dialplan.switch(self, destination)
       require 'dialplan.geo_number'
       local geo_number = dialplan.geo_number.GeoNumber:new{ log = self.log, database = self.database }:find(destination.number);
       if geo_number then
-        require 'common.str'
         self.log:info('GEO_NUMBER - found: ', geo_number.name, ', ', geo_number.country);
         if geo_number.name then
           destination.callee_id_name = common.str.to_ascii(geo_number.name) .. ', ' .. common.str.to_ascii(geo_number.country);
@@ -796,7 +807,6 @@ end
 
 
 function Dialplan.run(self, destination)
-  require 'common.str';
   require 'dialplan.router';
   
   self.caller:set_variable('hangup_after_bridge', false);
@@ -881,14 +891,21 @@ function Dialplan.run(self, destination)
   end
 
   self.caller:set_variable('default_language', self.caller.language);
-  self.caller:set_variable('sound_prefix', common.str.try(self.config, 'sounds.' .. tostring(self.caller.language)));
+  self.caller:set_variable('sound_prefix', common.array.try(self.config, 'sounds.' .. tostring(self.caller.language)));
   self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name, '" , number: ', destination.number, ', language: ', self.caller.language);
+
+
+  self.caller.static_caller_id_number = self.caller.caller_id_number;
+  self.caller.static_caller_id_name = self.caller.caller_id_name;
 
   local result = { continue = false };
   local loop = self.caller.loop_count;
   while self.caller:ready() and loop < self.max_loops do
     loop = loop + 1;
     self.caller.loop_count = loop;
+    
+    self.caller.caller_id_number = self.caller.static_caller_id_number;
+    self.caller.caller_id_name = self.caller.static_caller_id_name;
 
      self.log:info('LOOP ', loop,  
     ' - destination: ', destination.type, '=', destination.id, '/', destination.uuid,'@', destination.node_id, 
@@ -900,6 +917,7 @@ function Dialplan.run(self, destination)
     self.caller:set_variable('gs_destination_uuid', destination.uuid);
     self.caller:set_variable('gs_destination_number', destination.number);
     self.caller:set_variable('gs_destination_node_local', destination.node_local);
+    self.caller:set_variable('gs_destination_node_id, ', destination.node_id);
 
     result = self:switch(destination);
     result = result or { continue = false, code = 502, cause = 'DESTINATION_OUT_OF_ORDER', phrase = 'Destination out of order' }

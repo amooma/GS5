@@ -231,8 +231,8 @@ function Fax.insert_document(self, record)
   return  self.database:query(sql_query); 
 end
 
-function Fax.trigger_notification(self, fax_document_id, uuid)
-  local command = 'http_request.lua ' .. uuid .. ' http://127.0.0.1/trigger/fax?fax_account_id=' .. tostring(fax_document_id);
+function Fax.trigger_notification(self, fax_account_id, uuid)
+  local command = 'http_request.lua ' .. uuid .. ' http://127.0.0.1/trigger/fax?fax_account_id=' .. tostring(fax_account_id);
 
   require 'common.fapi'
   return common.fapi.FApi:new():execute('luarun', command);

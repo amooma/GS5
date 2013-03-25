@@ -58,6 +58,13 @@ function Session.init_channel_variables(self)
   self.node_id              = self:to_i('sip_h_X-GS_node_id');
   self.loop_count           = self:to_i('sip_h_X-GS_loop_count');
 
+  self.previous_destination_type    = self:to_s('gs_destination_type');
+  self.previous_destination_id      = self:to_i('gs_destination_id');
+  self.previous_destination_uuid    = self:to_s('gs_destination_uuid');
+  self.previous_destination_owner_type    = self:to_s('gs_destination_owner_type');
+  self.previous_destination_owner_id      = self:to_i('gs_destination_owner_id');
+  self.previous_destination_owner_uuid    = self:to_s('gs_destination_owner_uuid');
+
   if self.node_id > 0 and self.node_id ~= self.local_node_id then
     self.from_node          = true;
   else
@@ -166,6 +173,12 @@ function Session.answer(self)
   return self.session:answer();
 end
 
+-- Is answered?
+function Session.answered(self)
+  return self.session:answered();
+end
+
+
 function Session.intercept(self, uid)
   self.session:execute("intercept", uid);
 end
@@ -225,4 +238,9 @@ function Session.expand_variables(self, line)
   return (line:gsub('{([%a%d_-]+)}', function(captured)
     return self.session:getVariable(captured) or '';
   end))
+end
+
+
+function Session.playback(self, file)
+  self.session:streamFile(file);
 end

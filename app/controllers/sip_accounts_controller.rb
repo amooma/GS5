@@ -10,7 +10,10 @@ class SipAccountsController < ApplicationController
   end
 
   def show
-    @register_tel_protocol = "#{request.protocol}#{request.host_with_port}/sip_accounts/#{@sip_account.try(:id)}/calls/new?url=%s"
+    @register_protocols = {
+      :tel    => "#{request.protocol}#{request.host_with_port}/sip_accounts/#{@sip_account.try(:id)}/calls/new?url=%s",
+      :callto => "#{request.protocol}#{request.host_with_port}/sip_accounts/#{@sip_account.try(:id)}/calls/new?url=%s",
+    }
   end
 
   def new
@@ -72,7 +75,7 @@ class SipAccountsController < ApplicationController
   def destroy
     @sip_account.destroy
     m = method( :"#{@parent.class.name.underscore}_sip_accounts_url" )
-    redirect_to :root, :notice => t('sip_accounts.controller.successfuly_destroyed')
+    redirect_to m.(@parent), :notice => t('sip_accounts.controller.successfuly_destroyed')
   end
 
   private

@@ -27,7 +27,34 @@ class Gateway < ActiveRecord::Base
     "#{GATEWAY_PREFIX}#{self.id}"
   end
 
+  def status
+    if self.technology == 'sip' then
+      return status_sip
+    end
+  end
+
+  def inbound_register
+    username = self.gateway_settings.where(:name => 'inbound_username').first.try(:value)
+    if username.blank?
+      return
+    end
+
+    return SipRegistration.where(:sip_user => username).first
+  end
+
   private
+  def status_sip
+    require 'freeswitch_event'
+    result = FreeswitchAPI.api_result(FreeswitchAPI.api('sofia', 'xmlstatus', 'gateway', "gateway#{self.id}"))
+    if result =~ /^\<\?xml/
+      data = Hash.from_xml(result)
+      if data
+        return data.fetch('gateway', nil)
+      end
+    end
+    return nil
+  end
+
   def downcase_technology
     self.technology = self.technology.downcase if !self.technology.blank?
   end

@@ -50,6 +50,27 @@ class Intruder < ActiveRecord::Base
     }
   end
 
+  def perimeter_db_rescan
+    Intruder.perimeter_control(:db_rescan, :key => self.key)
+  end
+
+  def self.perimeter_db_rescan(key=nil)
+    Intruder.perimeter_control(:db_rescan, :key => key)
+  end
+
+  def self.perimeter_control(action, attributes={})
+    require 'freeswitch_event'
+    event = FreeswitchEvent.new('CUSTOM')
+    event.add_header('Event-Subclass', 'perimeter::control')
+    event.add_header('action', action)
+    attributes.each do |name, value|
+      if !name.blank? && value then
+        event.add_header(name, value)
+      end
+    end
+    return event.fire()
+  end
+
   private
   def set_key_if_empty
     if self.key.blank?
@@ -98,6 +119,7 @@ class Intruder < ActiveRecord::Base
         write_firewall_list
         restart_firewall
       end
+      self.perimeter_db_rescan
     end
   end
 
@@ -108,6 +130,7 @@ class Intruder < ActiveRecord::Base
         restart_firewall
       end
     end
+    self.perimeter_db_rescan
   end
 
   def check_if_delete_relevant
@@ -117,5 +140,6 @@ class Intruder < ActiveRecord::Base
         restart_firewall
       end
     end
+    self.perimeter_db_rescan
   end 
 end

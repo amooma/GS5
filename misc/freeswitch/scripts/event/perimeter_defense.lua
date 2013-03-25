@@ -31,9 +31,10 @@ end
 function PerimeterDefense.event_handlers(self)
   return { 
     CUSTOM = { 
-    ['sofia::pre_register'] = self.sofia_pre_register,
-    ['sofia::register_attempt'] = self.sofia_register_attempt,
-    ['sofia::register_failure'] = self.sofia_register_failure,
+      ['sofia::pre_register'] = self.sofia_pre_register,
+      ['sofia::register_attempt'] = self.sofia_register_attempt,
+      ['sofia::register_failure'] = self.sofia_register_failure,
+      ['perimeter::control'] = self.perimeter_control,
     },
     CHANNEL_HANGUP = { [true] = self.channel_hangup },
   };
@@ -111,4 +112,21 @@ end
 function PerimeterDefense.channel_hangup(self, event)
   local record = self:to_call_record(event, 'channel_hangup');
   self.perimeter:check(record);
+end
+
+
+function PerimeterDefense.control_to_action(self, event)
+  return {
+    key = event:getHeader('key'),
+  };
+end
+
+
+function PerimeterDefense.perimeter_control(self, event)
+  local action = event:getHeader('action');
+  if self.perimeter['action_' .. action] then
+    self.perimeter['action_' .. action](self.perimeter, self:control_to_action(event))
+  else
+    self.log:error('[perimeter_defense] PERIMETER_DEFENSE - could not execute action: ', action);
+  end
 end

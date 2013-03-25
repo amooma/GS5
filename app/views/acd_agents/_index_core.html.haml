@@ -1,8 +1,8 @@
 %table.table.table-striped
   %thead
     %tr
+      %th
       %th= t('acd_agents.index.name')
-      %th= t('acd_agents.index.status')
       %th= t('acd_agents.index.last_call')
       %th= t('acd_agents.index.calls_answered')
       %th= t('acd_agents.index.destination')
@@ -10,8 +10,17 @@
   %tbody
     - for acd_agent in acd_agents
       %tr
+        %td
+          - if acd_agent.status == 'active'
+            %a.btn.btn-small.btn-success{ :href => toggle_acd_agent_path(acd_agent) }
+              %i.icon-ok.icon-white
+          - elsif acd_agent.status == 'inactive'
+            %a.btn.btn-small.btn-danger{ :href => toggle_acd_agent_path(acd_agent) }
+              %i.icon-ban-circle.icon-white
+          - else
+            %a.btn.btn-small.btn-warning{ :href => toggle_acd_agent_path(acd_agent) }
+              = acd_agent.status
         %td= acd_agent.name
-        %td= acd_agent.status
         %td= acd_agent.last_call
         %td= acd_agent.calls_answered
         %td= acd_agent.destination

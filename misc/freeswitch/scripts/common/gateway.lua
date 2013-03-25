@@ -34,7 +34,11 @@ end
 
 
 function Gateway.find_by_id(self, id)
-  local sql_query = 'SELECT * FROM `gateways` WHERE `id`= ' .. tonumber(id) .. ' LIMIT 1';
+  local sql_query = 'SELECT `a`.*, `c`.`sip_host` AS `domain`, `c`.`contact` AS `contact_full`, `c`.`network_ip`, `c`.`network_port` \
+    FROM `gateways` `a` \
+    LEFT JOIN `gateway_settings` `b` ON `a`.`id` = `b`.`gateway_id` AND `b`.`name` = "inbound_username" \
+    LEFT JOIN `sip_registrations` `c` ON `b`.`value` = `c`.`sip_user` \
+    WHERE `a`.`id`= ' .. tonumber(id) .. ' LIMIT 1';
 
   local gateway = nil;
   self.database:query(sql_query, function(entry)
@@ -46,6 +50,9 @@ function Gateway.find_by_id(self, id)
     gateway.technology = entry.technology;
     gateway.outbound = common.str.to_b(entry.outbound);
     gateway.inbound = common.str.to_b(entry.inbound);
+    gateway.domain = entry.domain;
+    gateway.network_ip = entry.network_ip;
+    gateway.network_port = tonumber(entry.network_port) or 5060;
   end)
 
   if gateway then
@@ -59,7 +66,45 @@ end
 function Gateway.find_by_name(self, name)
   local gateway_name = name:gsub('([^%a%d%._%+])', '');
 
-  local sql_query = 'SELECT * FROM `gateways` WHERE `name`= "' .. gateway_name .. '" LIMIT 1';
+  local sql_query = 'SELECT `a`.*, `c`.`sip_host` `domain`, `c`.`contact` AS `contact_full`, `c`.`network_ip`, `c`.`network_port`\
+    FROM `gateways` `a` \
+    LEFT JOIN `gateway_settings` `b` ON `a`.`id` = `b`.`gateway_id` AND `b`.`name` = "inbound_username" \
+    LEFT JOIN `sip_registrations` `c` ON `b`.`value` = `c`.`sip_user` \
+    WHERE `a`.`name`= ' .. self.database:escape(gateway_name, '"') .. ' LIMIT 1';
+
+  local gateway = nil;
+  self.database:query(sql_query, function(entry)
+    require 'common.str';
+    gateway = Gateway:new(self);
+    gateway.record = entry;
+    gateway.id = tonumber(entry.id);
+    gateway.name = entry.name;
+    gateway.technology = entry.technology;
+    gateway.outbound = common.str.to_b(entry.outbound);
+    gateway.inbound = common.str.to_b(entry.inbound);
+    gateway.domain = entry.domain;
+    gateway.network_ip = entry.network_ip;
+    gateway.network_port = tonumber(entry.network_port) or 5060;
+  end)
+
+  if gateway then
+    gateway.settings = self:config_table_get('gateway_settings', gateway.id);
+  end
+
+  return gateway;
+end
+
+
+function Gateway.find_by_auth_name(self, name)
+  local auth_name = name:gsub('([^%a%d%._%+])', '');
+
+  local sql_query = 'SELECT `c`.*, `a`.`value` `password`, `b`.`value` `username` \
+    FROM `gateway_settings` `a` \
+    INNER JOIN `gateway_settings` `b` \
+    ON (`a`.`gateway_id` = `b`.`gateway_id` AND `a`.`name` = "inbound_password" AND `b`.`name` = "inbound_username" AND `b`.`value` = ' .. self.database:escape(auth_name, '"') .. ') \
+    LEFT JOIN `gateways` `c` \
+    ON (`a`.`gateway_id` = `c`.`id`) \
+    WHERE `c`.`inbound` IS TRUE OR `c`.`outbound` IS TRUE LIMIT 1';
 
   local gateway = nil;
   self.database:query(sql_query, function(entry)
@@ -82,14 +127,26 @@ end
 
 
 function Gateway.call_url(self, destination_number)
-  if self.technology == 'sip' then
-    return 'sofia/gateway/' .. self.GATEWAY_PREFIX .. self.id .. '/' .. tostring(destination_number);
-  elseif self.technology == 'xmpp' then
-    local destination_str = tostring(destination_number);
-    if self.settings.destination_domain then
-      destination_str = destination_str .. '@' .. self.settings.destination_domain;
+  require 'common.str';
+
+  if common.str.blank(self.settings.dial_string) then
+    if self.technology == 'sip' then
+      if self.settings.inbound_username and self.settings.inbound_password and not common.str.blank(self.record.domain) then
+        return 'sofia/' .. (self.settings.profile or 'gemeinschaft') .. '/' .. self.settings.inbound_username .. '%' .. self.record.domain;
+      else
+        return 'sofia/gateway/' .. self.GATEWAY_PREFIX .. self.id .. '/' .. tostring(destination_number);
+      end
+      
+    elseif self.technology == 'xmpp' then
+      local destination_str = tostring(destination_number);
+      if self.settings.destination_domain then
+        destination_str = destination_str .. '@' .. self.settings.destination_domain;
+      end
+      return 'dingaling/' .. self.GATEWAY_PREFIX .. self.id .. '/' .. destination_str;
     end
-    return 'dingaling/' .. self.GATEWAY_PREFIX .. self.id .. '/' .. destination_str;
+  else
+    require 'common.array';
+    return tostring(common.array.expand_variables(self.settings.dial_string, self, { destination_number = destination_number }));
   end
 
   return '';
@@ -174,9 +231,7 @@ function Gateway.parameters_build(self, gateway_id, technology)
       parameters.register = common.str.to_b(settings.register);
     end
 
-    if common.str.blank(settings.password) then
-      parameters.password = 'gateway' .. gateway_id;
-    else
+    if not common.str.blank(settings.password) then
       parameters.password = settings.password;
     end
 

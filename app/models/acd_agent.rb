@@ -20,6 +20,15 @@ class AcdAgent < ActiveRecord::Base
     self.name || I18n.t('acd_agents.name') + ' ID ' + self.id.to_s
   end
 
+  def toggle_status
+    if self.status == 'active'
+      self.status = 'inactive'
+    else
+      self.status = 'active'
+    end
+    return self.save
+  end
+
   private
   def set_presence
     dialplan_function = nil

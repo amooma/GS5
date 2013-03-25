@@ -60,12 +60,14 @@
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @sip_account.sip_accountable, :child => @sip_account }
 
-%p
-  %strong= t('sip_accounts.show.tel_protocol') + ':'
-%p
-  %a.btn.btn-small.btn-default{ :href => '', :onclick => "navigator.registerProtocolHandler(\"tel\", \"#{@register_tel_protocol}\", \"#{@sip_account.to_s}\");" }
-    %i.icon-plus
-    = t('sip_accounts.show.register_tel_protocol')
+- if @register_protocols.count > 0
+  %p
+    %strong= t('sip_accounts.show.call_protocols') + ':'
+  %p
+    - @register_protocols.each do |protocol, url|
+      %a.btn.btn-small.btn-default{ :href => '', :onclick => "navigator.registerProtocolHandler(\"#{protocol}\", \"#{url}\", \"#{@sip_account.to_s}\");" }
+        %i.icon-plus
+        = t("sip_accounts.show.register_#{protocol}_protocol")
 
 %p
   %strong= t('ringtones.name') + ':'
@@ -99,3 +101,10 @@
 - if @sip_account.calls.count > 0
   %h2= t("calls.index.page_title")
   = render "calls/index_core", :calls => @sip_account.calls, :parent => @sip_account
+
+- if (can?(:read, AcdAgent) && @sip_account.acd_agents.count > 0) || can?(:create, @sip_account.acd_agents.build)
+  %h2= t('acd_agents.index.page_title')
+  - if @sip_account.acd_agents.count > 0
+    = render "acd_agents/index_core", :acd_agents => @sip_account.acd_agents
+    %br
+  = render :partial => 'shared/create_link', :locals => { :parent => @sip_account, :child_class => AcdAgent }
