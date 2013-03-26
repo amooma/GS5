@@ -1224,7 +1224,21 @@
         <param name="interval" value="20"/>
         <param name="timer-name" value="soft"/>
       </directory>
-    </configuration>
+	  <directory name="mohh/shout" path="/var/opt/gemeinschaft/shout">
+	      <param name="rate" value="16000"/>
+	      <param name="shuffle" value="true"/>
+	      <param name="channels" value="1"/>
+	      <param name="interval" value="10"/>
+	      <param name="timer-name" value="soft"/>
+	  </directory>
+	  <directory name="moh/shout" path="/var/opt/gemeinschaft/shout">
+	      <param name="rate" value="8000"/>
+	      <param name="shuffle" value="true"/>
+	      <param name="channels" value="1"/>
+	      <param name="interval" value="10"/>
+	      <param name="timer-name" value="soft"/>
+	  </directory>
+	</configuration>
     <configuration name="logfile.conf" description="File Logging">
       <settings>
         <param name="rotate-on-hup" value="true"/>
@@ -1323,6 +1337,14 @@
         <param name="file-prefix" value="fax_in_"/>
       </settings>
     </configuration>
+	<configuration name="shout.conf" description="Shoutcast stream config">
+	  <settings>
+	    <!-- Don't change these unless you are insane -->
+	    <!--<param name="decoder" value="i586"/>-->
+	    <param name="volume" value="0.7"/>
+	    <!--<param name="outscale" value="8192"/>-->
+	  </settings>
+	</configuration>
     <configuration name="modules.conf" description="Modules">
       <modules>
         <load module="mod_console"/>
@@ -1342,16 +1364,20 @@
         <load module="mod_native_file"/>
         <load module="mod_local_stream"/>
         <load module="mod_tone_stream"/>
+        <load module="mod_shout"/>
         <load module="mod_say_en"/>
         <load module="mod_say_de"/>
         <load module="mod_spandsp"/>
         <load module="mod_snmp"/>
         <load module="mod_dingaling"/>
+		<!-- Uncomment the following line after running
+		     'gs-addon install fs-g729' -->
+		<!--<load module="mod_com_g729"/>-->
       </modules>
-    </configuration>  
+    </configuration>
     <configuration name="lua.conf" description="LUA Configuration">
       <settings>
-        <param name="module-directory" value="/usr/lib/i386-linux-gnu/lua/5.1/?.so;"/>
+        <param name="module-directory" value="/usr/lib/local-platform/lua/5.1/?.so;"/>
         <param name="script-directory" value="/usr/share/freeswitch/scripts/?.lua;/usr/share/lua/5.1/?.lua;"/>
         <param name="xml-handler-script" value="configuration.lua"/>
         <param name="xml-handler-bindings" value="directory|configuration"/>
