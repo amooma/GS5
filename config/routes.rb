@@ -1,5 +1,9 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  resources :voicemail_accounts do
+    resources :voicemail_settings
+  end
+
   resources :switchboards do
     resources :switchboard_entries do
       collection { post :sort }
@@ -226,6 +230,7 @@ Gemeinschaft42c::Application.routes.draw do
     resources :switchboards do
       get :display
     end
+    resources :voicemail_accounts
   end
   
   resources :user_groups do
@@ -295,6 +300,7 @@ Gemeinschaft42c::Application.routes.draw do
       end
     end
     resources :voicemail_settings
+    resources :voicemail_accounts
   end
 
   resources :phones, :only => [] do
