@@ -1,42 +1,31 @@
 App = Ember.Application.create({
   LOG_TRANSITIONS: true,
-  rootElement: '#container'
+  rootElement: '#emberjs-container',
+
+  // Reload the switchboard every x milliseconds
+  // if reload_interval != 0
+  ready: function() {
+    if (reload_interval != 0) {
+      var switchboard = App.Switchboard.find(switchboard_id);
+      setInterval(function() {
+        switchboard.reload();
+      }, reload_interval);
+    }
+  }
 });
 
 // Router
 App.Router.map(function() {
-  this.resource('switchboards', function() {
-    this.resource('switchboard', { path: ':switchboard_id' });
-  });
+  this.resource('switchboard', { path: '/' });
 });
 
-App.ApplicationRoute = Ember.Route.extend({
-  setupController: function(controller) {
-    // `controller` is the instance of ApplicationController
-    controller.set('title', "Hello world! Switchboard #" + switchboard_id);
-  }
-});
-
-App.SwitchboardsRoute = Ember.Route.extend({
+App.SwitchboardRoute = Ember.Route.extend({
   model: function() {
-    return App.Switchboard.find();
+    return App.Switchboard.find(switchboard_id);
   }
-});
-
-App.IndexRoute = Ember.Route.extend({
-  redirect: function() {
-    this.transitionTo('switchboard', App.Switchboard.find(switchboard_id));
-  }  
 });
 
 // Controller
-App.ApplicationController = Ember.Controller.extend({
-  appName: 'My First Example'
-});
-
-App.SwitchboardsController = Ember.ArrayController.extend({
-  // switchboardEntrys: table.get('tab.tabItems')
-})
 
 // Models
 App.Store = DS.Store.extend({
@@ -50,22 +39,15 @@ DS.RESTAdapter.configure("plurals", {
 App.Switchboard = DS.Model.extend({
   switchboardEntrys: DS.hasMany('App.SwitchboardEntry'),
   name: DS.attr('string'),
-  didLoad: function() {
-    console.log('Switchboard model loaded')
-  }
 });
-
-
 
 App.SwitchboardEntry = DS.Model.extend({
   switchboard: DS.belongsTo('App.Switchboard'),
+  switchboard: DS.belongsTo('App.SipAccount'),
   name: DS.attr('string'),
-  didLoad: function() {
-    console.log('SwitchboardEntry model loaded')
-  }
 });
 
-// // Views
-// App.SwitchboardView = Ember.View.extend({
-//   templateName: 'switchboard'
-// });
+App.SipAccount = DS.Model.extend({
+  switchboardEntrys: DS.hasMany('App.SwitchboardEntry'),
+  callerName: DS.attr('string'),
+});

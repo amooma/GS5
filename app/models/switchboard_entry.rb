@@ -5,6 +5,8 @@ class SwitchboardEntry < ActiveRecord::Base
   belongs_to :switchboard, :touch => true
   belongs_to :sip_account, :touch => true
 
+  has_many :phone_numbers, :through => :sip_account
+
   validates :switchboard,
             :presence => true
 

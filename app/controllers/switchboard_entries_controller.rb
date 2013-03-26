@@ -3,8 +3,17 @@ class SwitchboardEntriesController < ApplicationController
   authorize_resource :switchboard_entry, :through => :switchboard, :except => [:sort]
 
   def index
-    @switchboard_entries = @switchboard.switchboard_entries
-    spread_breadcrumbs
+    if @switchboard
+      @switchboard_entries = @switchboard.switchboard_entries
+      spread_breadcrumbs
+    else
+      @switchboard_entries = SwitchboardEntry.where(:id => params[:ids])
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @switchboard_entries }
+    end
   end
 
   def show

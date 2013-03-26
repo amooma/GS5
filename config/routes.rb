@@ -10,7 +10,7 @@ Gemeinschaft42c::Application.routes.draw do
     end
   end
 
-  resources :switchboard_entries, :only => [:show]
+  resources :switchboard_entries, :only => [:show, :index]
 
   resources :restore_jobs
 

@@ -2,23 +2,47 @@
 
 <script>
   var switchboard_id = <%= @switchboard.id %>;
+  var show_avatars = <%= @switchboard.show_avatars.to_s %>;
+  var reload_interval = <%= @switchboard.reload_interval.nil? ? 0 : @switchboard.reload_interval %>;
 </script>
 
 <div class='row'>
   <div class='span12'>
-    <div id='container'></div>
+    <div id='emberjs-container'></div>
 
-    <script type="text/x-handlebars">
-      <p>{{appName}}</p>
-      <p>{{title}}</p>
-
+    <script type="text/x-handlebars" data-template-name="application">
       {{outlet}}
     </script>
 
     <script type="text/x-handlebars" data-template-name="switchboard">
-      <h1>{{name}}</h1>
-      <p>switchboard view marker</p>
-      <p>Length: {{switchboardEntrys.length}}</p>
+      <h2>{{name}}</h2>
+
+      {{#if switchboardEntrys.length}}
+        <ul class="thumbnails">
+          {{#each switchboardEntry in switchboardEntrys}}
+            <li class="span2">
+              <div class="thumbnail">
+                <a class="thumbnail" href="/tenants/2/users/2">
+                  <img alt="User-male-16x" class="img-rounded" src="/assets/icons/user-male-16x.png" style="width: 100px;">
+                </a>
+                <p>
+                  <small>
+                    {{switchboardEntry.name}}
+                    <br>
+                    <span class="label">
+                      33
+                    </span>
+                    <br>
+                    <span class="label label-inverse">
+                      <i class="icon-ban-circle icon-white"></i>
+                    </span>
+                  </small>
+                </p>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
     </script>
 
   </div>
