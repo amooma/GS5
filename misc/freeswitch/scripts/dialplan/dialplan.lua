@@ -590,19 +590,21 @@ end
 
 
 function Dialplan.voicemail(self, destination)
-  require 'dialplan.voicemail'
+  require 'dialplan.voicemail';
 
   local voicemail_account = nil;
-
-  local sip_account_id
-  if not common.str.blank(destination.number) and false then
-    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_number(destination.number);
+  if common.str.to_i(destination.id) > 0 then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database, domain = self.domain }:find_by_id(destination.id);
+  elseif not common.str.blank(destination.number) then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database, domain = self.domain }:find_by_number(destination.number);
   elseif self.caller.auth_account and self.caller.auth_account.class == 'sipaccount' then
-    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(self.caller.auth_account.id);
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database, domain = self.domain }:find_by_sip_account_id(self.caller.auth_account.id);
+  elseif self.caller.forwarding_number then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database, domain = self.domain }:find_by_number(self.caller.forwarding_number);
   end
 
   if not voicemail_account then
-    self.log:error('VOICEMAIL - no mailbox');
+    self.log:error('VOICEMAIL - mailbox not found, ');
     return { continue = false, code = 404, phrase = 'Mailbox not found' }
   end
 
