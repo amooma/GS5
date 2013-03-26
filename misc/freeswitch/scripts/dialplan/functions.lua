@@ -756,29 +756,26 @@ function Functions.voicemail_message_leave(self, caller, phone_number)
 end
 
 
-function Functions.voicemail_check(self, caller, phone_number)
+function Functions.voicemail_check(self, caller, number)
+  require 'dialplan.voicemail';
   local voicemail_account = nil;
   local voicemail_authorized = false;
-
-  require 'dialplan.voicemail'
-
-  if phone_number then
-    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_number(phone_number);
-  else
-    if caller.auth_account_type == 'SipAccount' then
-      voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(caller.auth_account.id);
-      voicemail_authorized = true;
-    end
+  
+  if number then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_number(number);
+  elseif caller.auth_account and tostring(caller.auth_account.class):lower() == 'sipaccount' then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(caller.auth_account.id);
+    voicemail_authorized = true;
   end
 
   if not voicemail_account then
+    self.log:notice('FUNCTION_VOICEMAIL_CHECK - mailbox not found');
     return { continue = false, code = 404, phrase = 'Mailbox not found', no_cdr = true }
   end
 
-  voicemail_account:menu(caller, voicemail_authorized);
-
-  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+  return voicemail_account:menu_main(caller, voicemail_authorized);
 end
+
 
 
 function Functions.acd_membership_toggle(self, caller, agent_id, phone_number)
