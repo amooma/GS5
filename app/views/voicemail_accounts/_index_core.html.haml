@@ -1,0 +1,15 @@
+%table.table.table-striped
+  %tr
+    %th
+    %th= t('voicemail_accounts.index.name')
+
+  
+  - for voicemail_account in voicemail_accounts
+    %tr
+      %td
+        - if voicemail_account.active
+          %i.icon-ok
+        - else
+          %i.icon-ban-circle
+      %td= voicemail_account.name
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => voicemail_account.voicemail_accountable, :child => voicemail_account}

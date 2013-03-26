@@ -14,3 +14,4 @@
     = f.input :hotdeskable, :label => t('sip_accounts.form.hotdeskable.label'), :hint => conditional_hint('sip_accounts.form.hotdeskable.hint')
   = f.input :clip_no_screening, :label => t('sip_accounts.form.clip_no_screening.label'), :hint => conditional_hint('sip_accounts.form.clip_no_screening.hint')
   = f.input :language_code, :collection => Language.all.collect{|l| [l.to_s, l.code]}, :label => t('sip_accounts.form.language_code.label'), :hint => conditional_hint('sip_accounts.form.language_id.hint'), :include_blank => false
+  = f.input :voicemail_account_id, :collection => @possible_voicemail_accounts.collect{|l| [l.to_s, l.id]}, :label => t('sip_accounts.form.voicemail_account_id.label'), :hint => conditional_hint('voicemail_accounts.form.sip_account_id.hint'), :include_blank => true

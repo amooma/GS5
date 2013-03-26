@@ -1,0 +1,65 @@
+de:
+  voicemail_accounts:
+    name: 'Voicemailaccount'
+    controller:
+      successfuly_created: 'Voicemailaccount wurde angelegt.'
+      successfuly_updated: 'Voicemailaccount wurde aktualisiert.'
+      successfuly_destroyed: 'Voicemailaccount wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von Voicemailaccount'
+      uuid: 'Uuid'
+      name: 'Name'
+      active: 'Active'
+      gs_node_id: 'Gs node'
+      voicemail_accountable_type: 'Voicemail accountable type'
+      voicemail_accountable_id: 'Voicemail accountable'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Voicemailaccount'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Voicemailaccount neu anlegen für %{resource}'
+    show:
+      page_title: 'Voicemailaccount bearbeiten'
+      uuid: 'Uuid'
+      name: 'Name'
+      active: 'Active'
+      gs_node_id: 'Gs node'
+      voicemail_accountable_type: 'Voicemail accountable type'
+      voicemail_accountable_id: 'Voicemail accountable'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Voicemailaccount neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Voicemailaccount bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      uuid:
+        label: 'Uuid'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      active:
+        label: 'Active'
+        hint: ''
+      gs_node_id:
+        label: 'Gs node'
+        hint: ''
+      voicemail_accountable_type:
+        label: 'Voicemail accountable type'
+        hint: ''
+      voicemail_accountable_id:
+        label: 'Voicemail accountable'
+        hint: ''
+      submit: 'Absenden'

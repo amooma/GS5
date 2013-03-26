@@ -1,0 +1,19 @@
+- content_for :title, t("voicemail_accounts.show.page_title")
+
+%p
+  %strong= t('voicemail_accounts.show.uuid') + ":"
+  = @voicemail_account.uuid
+%p
+  %strong= t('voicemail_accounts.show.name') + ":"
+  = @voicemail_account.name
+%p
+  %strong= t('voicemail_accounts.show.active') + ":"
+  = @voicemail_account.active
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @parent, :child => @voicemail_account }
+
+%h3= t('voicemail_settings.index.page_title')
+- if @voicemail_account.voicemail_settings.any?
+  = render "voicemail_settings/index_core", :voicemail_settings => @voicemail_account.voicemail_settings
+  %br
+= render :partial => 'shared/create_link', :locals => { :parent => @voicemail_account, :child_class => VoicemailSetting }

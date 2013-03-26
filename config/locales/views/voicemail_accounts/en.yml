@@ -1,0 +1,65 @@
+en:
+  voicemail_accounts:
+    name: 'Voicemailaccount'
+    controller:
+      successfuly_created: 'Successfully created Voicemailaccount.'
+      successfuly_updated: 'Successfully updated Voicemailaccount.'
+      successfuly_destroyed: 'Successfully destroyed Voicemailaccount.'
+    index:
+      page_title: 'Listing Voicemailaccount'
+      uuid: 'Uuid'
+      name: 'Name'
+      active: 'Active'
+      gs_node_id: 'Gs node'
+      voicemail_accountable_type: 'Voicemail accountable type'
+      voicemail_accountable_id: 'Voicemail accountable'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this Voicemailaccount?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New Voicemailaccount for %{resource}'
+    show:
+      page_title: 'Show Voicemailaccount'
+      uuid: 'Uuid'
+      name: 'Name'
+      active: 'Active'
+      gs_node_id: 'Gs node'
+      voicemail_accountable_type: 'Voicemail accountable type'
+      voicemail_accountable_id: 'Voicemail accountable'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this element?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
+    new:
+      page_title: 'New Voicemailaccount'
+      actions:
+        back_to_list: 'Back to Index'
+    edit:
+      page_title: 'Editing Voicemailaccount'
+      actions:
+        back_to_list: 'Back to Index'
+        edit: 'Edit'
+        view_all: 'View All'
+    form:
+      uuid:
+        label: 'Uuid'
+        hint: ''
+      name:
+        label: 'Name'
+        hint: ''
+      active:
+        label: 'Active'
+        hint: ''
+      gs_node_id:
+        label: 'Gs node'
+        hint: ''
+      voicemail_accountable_type:
+        label: 'Voicemail accountable type'
+        hint: ''
+      voicemail_accountable_id:
+        label: 'Voicemail accountable'
+        hint: ''
+      submit: 'Submit'

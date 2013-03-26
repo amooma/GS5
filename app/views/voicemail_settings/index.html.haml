@@ -1,0 +1,6 @@
+- content_for :title, t("voicemail_settings.index.page_title")
+
+- if @voicemail_settings && @voicemail_settings.count > 0
+  = render "index_core", :voicemail_settings => @voicemail_settings
+
+= render :partial => 'shared/create_link', :locals => {:parent => @voicemail_account, :child_class => VoicemailSetting}

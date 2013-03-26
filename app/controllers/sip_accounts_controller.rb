@@ -36,6 +36,7 @@ class SipAccountsController < ApplicationController
       break unless SipAccount.exists?(:auth_name => @sip_account.auth_name)
     end
     @sip_account.password = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_PASSWORD'))
+    possible_voicemail_accounts
   end
 
   def create
@@ -61,6 +62,7 @@ class SipAccountsController < ApplicationController
   end
 
   def edit
+    possible_voicemail_accounts
   end
 
   def update
@@ -99,6 +101,11 @@ class SipAccountsController < ApplicationController
         add_breadcrumb @sip_account, tenant_sip_account_path(@tenant, @sip_account)
       end
     end
+  end
+
+  def possible_voicemail_accounts
+    @possible_voicemail_accounts = @sip_account.voicemail_accounts
+    @possible_voicemail_accounts = @possible_voicemail_accounts + @sip_account.sip_accountable.voicemail_accounts
   end
 
 end

@@ -1,26 +1,19 @@
 - content_for :title, t("voicemail_settings.show.page_title")
 
 %p
-  %strong= t('voicemail_settings.show.greeting_path') + ":"
-  = File.basename(@voicemail_setting.greeting_path.to_s)
-
+  %strong= t('voicemail_settings.show.voicemail_id') + ":"
+  = @voicemail_setting.voicemail
 %p
-  %strong= t('voicemail_settings.show.name_path') + ":"
-  = File.basename(@voicemail_setting.name_path.to_s)
-
+  %strong= t('voicemail_settings.show.name') + ":"
+  = @voicemail_setting.name
 %p
-  %strong= t('voicemail_settings.show.flags') + ":"
-  - if @voicemail_setting.notify
-    %br
-    = "- " + t('voicemail_settings.show.notify')
-  - if @voicemail_setting.attachment
-    %br
-    = "- " + t('voicemail_settings.show.attachment')
-  - if @voicemail_setting.mark_read
-    %br
-    = "- " + t('voicemail_settings.show.mark_read')
-  - if @voicemail_setting.purge
-    %br
-    = "- " + t('voicemail_settings.show.purge')
+  %strong= t('voicemail_settings.show.value') + ":"
+  = @voicemail_setting.value
+%p
+  %strong= t('voicemail_settings.show.class_type') + ":"
+  = @voicemail_setting.class_type
+%p
+  %strong= t('voicemail_settings.show.description') + ":"
+  = @voicemail_setting.description
 
-= link_to t('voicemail_settings.actions.edit'), edit_sip_account_voicemail_setting_path(@sip_account, @voicemail_setting)
+= render :partial => 'shared/show_edit_destroy_part', :locals => {:parent => @voicemail_setting.voicemail_account, :child => @voicemail_setting}
