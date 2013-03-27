@@ -275,17 +275,15 @@ function Voicemail.menu_messages(self, folder, messages)
       index = index + 1;
     end
 
-    if index > #messages then
-      digits, key = self.ivr:ivr_phrase('voicemail_no_messages', message_menu, 0, 0);
-      return;
-    end
-
     if key.action == 'delete' and self:message_delete(message) then
       self.caller:send_display('Message deleted');
       digits = self.caller.session:sayPhrase('voicemail_ack', 'deleted');
     elseif key.action == 'save' and self:message_save(message) then
       self.caller:send_display('Message saved');
       digits = self.caller.session:sayPhrase('voicemail_ack', 'saved');
+    end
+    if index > #messages then
+      digits = self.ivr:ivr_phrase('voicemail_no_messages', message_menu, 0, 0);
     end
   end
 end
