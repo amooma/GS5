@@ -42,20 +42,11 @@ class Notifications < ActionMailer::Base
     mail(from: Tenant.find(GsParameter.get('DEFAULT_API_TENANT_ID')).from_field_pin_change_email, to: "#{user.email}", :subject => "Password recovery")
   end
 
-  def new_voicemail(freeswitch_voicemail_msg, attach_file = false)
-    sip_account = SipAccount.find_by_auth_name(freeswitch_voicemail_msg.username)
-    user = sip_account.sip_accountable
-
+  def new_voicemail(freeswitch_voicemail_msg, account, email, attach_file = false)
     @voicemail = Hash.new()
-    if ! user.first_name.blank?
-      @voicemail[:greeting] = user.first_name
-    else
-      @voicemail[:greeting] = user.user_name
-    end
-
     @voicemail[:destination] = freeswitch_voicemail_msg.in_folder
     @voicemail[:from] = "#{freeswitch_voicemail_msg.cid_number} #{freeswitch_voicemail_msg.cid_name}"
-    @voicemail[:to] = sip_account.to_s
+    @voicemail[:to] = account.to_s
     @voicemail[:date] = Time.at(freeswitch_voicemail_msg.created_epoch).getlocal.to_s
     @voicemail[:duration] = Time.at(freeswitch_voicemail_msg.message_len).utc.strftime('%T')
 
@@ -67,7 +58,7 @@ class Notifications < ActionMailer::Base
       attachments["#{Time.at(freeswitch_voicemail_msg.created_epoch).getlocal.strftime('%Y%m%d-%H%M%S')}-#{caller_number}.wav"] = File.read(freeswitch_voicemail_msg.file_path)
     end
 
-    mail(from: Tenant.find(GsParameter.get('DEFAULT_API_TENANT_ID')).from_field_voicemail_email, to: "#{user.email}", :subject => "New Voicemail from #{@voicemail[:from]}, received #{Time.at(freeswitch_voicemail_msg.created_epoch).getlocal.to_s}")
+    mail(from: Tenant.find(GsParameter.get('DEFAULT_API_TENANT_ID')).from_field_voicemail_email, to: email, :subject => "New Voicemail from #{@voicemail[:from]}, received #{Time.at(freeswitch_voicemail_msg.created_epoch).getlocal.to_s}")
   end
 
   def new_fax(fax_document)
