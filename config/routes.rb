@@ -259,6 +259,7 @@ Gemeinschaft42c::Application.routes.draw do
     resources :hunt_groups
     resources :automatic_call_distributors
     resources :parking_stalls
+    resources :voicemail_accounts
   end
 
   resources :callthroughs, :only => [] do
