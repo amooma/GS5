@@ -189,7 +189,7 @@ function Voicemail.menu_main(self, caller, authorized)
     caller.session:sayPhrase('voicemail_hello');
   end
 
-  if self.settings.voicemail_message_count then
+  if #messages_new > 0 then
     caller.session:sayPhrase('voicemail_message_count', #messages_new .. ':new');
   end
 
