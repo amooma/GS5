@@ -108,7 +108,6 @@ function HuntGroup.run(self, dialplan_object, caller, destination)
     table.insert(caller.caller_id_numbers, number);
   end
 
-  self.log:debug('HUNTGROUP ', self.record.id, ' - auth: ', caller.auth_account.class, '=', caller.auth_account.id, '/', caller.auth_account.uuid, ', caller: ', caller.account.class, '=', caller.account.id, '/', caller.account.uuid);
   self.log:info('HUNTGROUP ', self.record.id, ' - clir: ', caller.clir, ', caller_id_numbers: ', table.concat(caller.caller_id_numbers, ','));
 
   local hunt_group_destination = caller.destination;
