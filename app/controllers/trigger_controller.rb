@@ -1,49 +1,44 @@
 class TriggerController < ApplicationController
 
   def voicemail
-    if !params[:sip_account_id].blank?
-      sip_account = SipAccount.where(:id => params[:sip_account_id].to_i).first
-      if sip_account
-        sip_account.voicemail_messages.where(:notification => nil).each do |message|
-          message.notification = false
-          message.save
-          if !File.exists?( message.file_path )
-            next
+    if !params[:voicemail_account_id].blank?
+      voicemail_account = VoicemailAccount.where(:id => params[:voicemail_account_id].to_i).first
+      if voicemail_account
+        voicemail_messages = voicemail_account.voicemail_messages.where(:notification => nil)
+        if voicemail_messages.count > 0 
+          if voicemail_account.voicemail_accountable.class == User
+            user = voicemail_account.voicemail_accountable
+          elsif voicemail_account.voicemail_accountable.class == SipAccount && voicemail_account.voicemail_accountable.sip_accountable.class == User
+            user = voicemail_account.voicemail_accountable = voicemail_account.voicemail_accountable.sip_accountable
           end
 
-          user = sip_account.sip_accountable
-          if user.class != User
-            next
+          if user
+            PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_or_fax_indicator').hide('fast').show('slow');")
+            PrivatePub.publish_to("/users/#{user.id}/messages/new", "document.title = '* ' + document.title.replace( '* ' , '');")
           end
+        end
 
-          # Indicate a new voicemail in the navigation bar.
-          #
-          PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_or_fax_indicator').hide('fast').show('slow');")
-          PrivatePub.publish_to("/users/#{user.id}/messages/new", "document.title = '* ' + document.title.replace( '* ' , '');")
+        email = voicemail_account.notify_to
 
-          if  user.email.blank?
-            next
-          end
+        if !email.blank?
+          voicemail_messages.each do |message|
+            message.notification = false
+            message.save
+            if !File.exists?( message.file_path )
+              next
+            end
+            message.notification = true
 
-          voicemail_settings = sip_account.voicemail_setting
-          if !voicemail_settings
-            voicemail_settings = VoicemailSetting.new(:notify => user.send_voicemail_as_email_attachment, :attachment => user.send_voicemail_as_email_attachment, :mark_read => user.send_voicemail_as_email_attachment)
-          end
-
-          message.notification = voicemail_settings.notify
-          if voicemail_settings.notify
-            if Notifications.new_voicemail(message, voicemail_settings.attachment).deliver
-              if voicemail_settings.purge
+            if Notifications.new_voicemail(message, voicemail_account, email, voicemail_account.notification_setting('attachment')).deliver
+              if voicemail_account.notification_setting('purge')
                 message.delete
                 next
               end
               message.save
-              if voicemail_settings.mark_read
+              if voicemail_account.notification_setting('mark_read')
                 message.mark_read
               end
             end
-          else
-            message.save
           end
         end
 
