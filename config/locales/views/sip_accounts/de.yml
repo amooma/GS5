@@ -87,4 +87,7 @@ de:
       language_code: 
         label: 'Sprache'
         hint: ''
+      voicemail_account_id: 
+        label: 'Default voicemail account'
+        hint: ''
       submit: 'Absenden'

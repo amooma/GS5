@@ -87,4 +87,7 @@ en:
       language_code: 
         label: 'Language'
         hint: ''
+      voicemail_account_id: 
+        label: 'Default voicemail account'
+        hint: ''
       submit: 'Submit'
