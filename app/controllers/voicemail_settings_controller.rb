@@ -27,8 +27,9 @@ class VoicemailSettingsController < ApplicationController
     @voicemail_setting = @voicemail_account.voicemail_settings.find(params[:id])
     @no_edit = {
       :name => { 
-        :input => VoicemailSetting::VOICEMAIL_SETTINGS[@voicemail_setting.name][:input], 
-        :name => @voicemail_setting.name 
+        :input => VoicemailSetting::VOICEMAIL_SETTINGS.fetch(@voicemail_setting.name,{}).fetch(:input, {}),
+        :name => @voicemail_setting.name.to_s,
+        :html => VoicemailSetting::VOICEMAIL_SETTINGS.fetch(@voicemail_setting.name,{}).fetch(:html, {}),
       }, 
       :description => true
     }
