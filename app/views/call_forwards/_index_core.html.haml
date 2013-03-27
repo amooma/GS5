@@ -22,7 +22,7 @@
           - if call_forward.destinationable_type
             %br
             = call_forward.destinationable_type
-            - if call_forward.destinationable_id
+            - if Module.constants.include?(call_forward.destinationable_type.to_sym)
               = ": #{call_forward.destinationable}"
         %td= call_forward.source
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => call_forward.call_forwardable, :child => call_forward}
