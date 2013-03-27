@@ -63,6 +63,8 @@ class Tenant < ActiveRecord::Base
   has_many :group_memberships, :as => :item, :dependent => :destroy, :uniq => true
   has_many :groups, :through => :group_memberships
 
+  has_many :voicemail_accounts, :as => :voicemail_accountable, :dependent => :destroy
+
   # Validations:
   #
   validates_presence_of :name, :state, :country, :language
