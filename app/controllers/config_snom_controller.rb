@@ -260,9 +260,13 @@ class ConfigSnomController < ApplicationController
         		:name       => sip_account.auth_name,
         		:realname   => 'Call',
         		:idle_text  => sip_account.caller_name,
-            :mailbox    => "<sip:#{sip_account.auth_name}@#{sip_account.host}>",
             :expiry     => expiry_seconds, 
           }
+
+          if sip_account.voicemail_account
+            snom_sip_account[:mailbox] = "<sip:#{sip_account.voicemail_account.name}@#{sip_account.host}>"
+          end
+
           @sip_accounts.push(snom_sip_account)
           sip_account_index = @sip_accounts.length
           sip_account.softkeys.order(:position).each do |softkey|
