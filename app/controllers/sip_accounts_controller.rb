@@ -22,7 +22,6 @@ class SipAccountsController < ApplicationController
     @sip_account.call_waiting = GsParameter.get('CALL_WAITING')
     @sip_account.clir = GsParameter.get('DEFAULT_CLIR_SETTING')
     @sip_account.clip = GsParameter.get('DEFAULT_CLIP_SETTING')
-    @sip_account.voicemail_pin = random_pin
     @sip_account.callforward_rules_act_per_sip_account = GsParameter.get('CALLFORWARD_RULES_ACT_PER_SIP_ACCOUNT_DEFAULT')
     if @parent.class == User
       @sip_account.hotdeskable = true
@@ -36,6 +35,9 @@ class SipAccountsController < ApplicationController
       break unless SipAccount.exists?(:auth_name => @sip_account.auth_name)
     end
     @sip_account.password = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_PASSWORD'))
+
+    @sip_account.voicemail_account = VoicemailAccount.where(:voicemail_accountable_type => @parent.class.name, :voicemail_accountable_id => @parent.id).first
+    @sip_account.language_code = @parent.language.try(:code)
     possible_voicemail_accounts
   end
 
