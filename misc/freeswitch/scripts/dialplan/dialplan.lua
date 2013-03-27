@@ -711,7 +711,7 @@ function Dialplan.switch(self, destination)
       end
     end
     return result;
-  elseif destination.type == 'voicemail' then
+  elseif destination.type == 'voicemail' or destination.type == 'voicemailaccount' then
     return self:voicemail(destination);
   elseif destination.type == 'dialplanfunction' then
     return self:dialplanfunction(destination);
