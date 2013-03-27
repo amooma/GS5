@@ -131,14 +131,45 @@ class CallForwardsController < ApplicationController
     phone_number_destination = CallForwardingDestination.new()
     phone_number_destination.id = ':PhoneNumber'
     phone_number_destination.label = 'Phone Number'
-    voice_mail_destination = CallForwardingDestination.new()
-    voice_mail_destination.id = ':Voicemail'
-    voice_mail_destination.label = 'Voice Mail'
 
     call_forwarding_destinations = [
       phone_number_destination,
-      voice_mail_destination,
     ]
+
+    if @parent.try(:voicemail_accounts)
+      @parent.voicemail_accounts.each do |voicemail_account|
+        call_forwards_destination = CallForwardingDestination.new()
+        call_forwards_destination.id = "#{voicemail_account.id}:VoicemailAccount"
+        call_forwards_destination.label = "VoicemailAccount: #{voicemail_account.to_s}" 
+        call_forwarding_destinations << call_forwards_destination
+      end
+    end
+
+    if @parent.class == SipAccount
+      sip_account = @parent
+      if sip_account.sip_accountable.class == User || sip_account.sip_accountable.class == Tenant
+        sip_account.sip_accountable.voicemail_accounts.each do |voicemail_account|
+          call_forwards_destination = CallForwardingDestination.new()
+          call_forwards_destination.id = "#{voicemail_account.id}:VoicemailAccount"
+          call_forwards_destination.label = "VoicemailAccount: #{voicemail_account.to_s}" 
+          call_forwarding_destinations << call_forwards_destination
+        end
+      end
+    end
+
+    if @parent.class == PhoneNumber
+      if @parent.phone_numberable.class == SipAccount
+        sip_account = @parent.phone_numberable
+        if sip_account.sip_accountable.class == User || sip_account.sip_accountable.class == Tenant
+          sip_account.sip_accountable.voicemail_accounts.each do |voicemail_account|
+            call_forwards_destination = CallForwardingDestination.new()
+            call_forwards_destination.id = "#{voicemail_account.id}:VoicemailAccount"
+            call_forwards_destination.label = "VoicemailAccount: #{voicemail_account.to_s}" 
+            call_forwarding_destinations << call_forwards_destination
+          end
+        end
+      end
+    end
 
     if GuiFunction.display?('huntgroup_in_destination_field_in_call_forward_form', current_user)
       HuntGroup.all.each do |hunt_group|
@@ -149,7 +180,7 @@ class CallForwardsController < ApplicationController
       end
     end
 
-    return call_forwarding_destinations
+    return call_forwarding_destinations.uniq
   end
 
 end
