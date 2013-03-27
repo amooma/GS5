@@ -2,7 +2,7 @@ class CallForward < ActiveRecord::Base
 
   attr_accessor :to_voicemail, :hunt_group_id
 
-  attr_accessible :phone_number_id, :call_forward_case_id, :timeout, 
+  attr_accessible :call_forward_case_id, :timeout, 
                   :destination, :source, :depth, :active, :to_voicemail,
                   :hunt_group_id,
                   :call_forwardable_type, :call_forwardable_id,
@@ -71,7 +71,7 @@ class CallForward < ActiveRecord::Base
     else
       destinationable_type = " #{self.destinationable_type}"
     end
-    if self.destinationable
+    if Module.constants.include?(destinationable_type.to_sym) && self.destinationable
       destination = "#{self.destinationable}#{destinationable_type}"
     else
       destination = "#{self.destination}#{destinationable_type}"
