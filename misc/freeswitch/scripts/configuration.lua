@@ -412,7 +412,27 @@ function directory_sip_account(database)
 
   local user_xml = nil;
 
-  if not common.str.blank(auth_name) then
+  if tostring(purpose) == 'publish-vm' and not common.str.blank(auth_name) then
+    require 'dialplan.voicemail';
+    local voicemail_account = dialplan.voicemail.Voicemail:new{ log = log, database = database }:find_by_name(auth_name);
+    if voicemail_account then
+      log:debug('DIRECTORY_VOICEMAIL_ACCOUNT - ', voicemail_account.class, '=',voicemail_account.id, '/', voicemail_account.uuid, '|', voicemail_account.name);
+      user_xml = xml:element{
+        'groups',
+        xml:element{
+          'group',
+          name = 'default',
+          xml:element{
+            'users',
+            xml:element{  
+              'user',
+              id = voicemail_account.record.name,
+            },
+          },
+        },
+      };
+    end
+  elseif not common.str.blank(auth_name) then
     require 'common.sip_account'
     local sip_account = common.sip_account.SipAccount:new{ log = log, database = database}:find_by_auth_name(auth_name);
 
@@ -435,46 +455,19 @@ function directory_sip_account(database)
         gs_account_owner_id    = sip_account.record.sip_accountable_id    
       }
 
-      if tostring(purpose) == 'publish-vm' then
-        log:debug('DIRECTORY_SIP_ACCOUNT - purpose: VoiceMail, auth_name: ', sip_account.record.auth_name, ', caller_name: ', sip_account.record.caller_name, ', domain: ', domain);
-        user_xml = xml:element{
-          'groups',
-          xml:element{
-            'group',
-            name = 'default',
-            xml:element{
-              'users',
-              xml:element{  
-                'user',
-                id = sip_account.record.auth_name,
-                xml:element{
-                  'params',
-                  xml:from_hash('param', user_parameters, 'name', 'value'),
-                },
-                xml:element{
-                  'variables',
-                  xml:from_hash('variable', user_variables, 'name', 'value'),
-                },
-              },
-            },
-          },
-        };
-      else
-        log:debug('DIRECTORY_SIP_ACCOUNT - auth_name: ', sip_account.record.auth_name, ', caller_name: ', sip_account.record.caller_name, ', domain: ', domain);
-        
-        user_xml = xml:element{
-          'user',
-          id = sip_account.record.auth_name,
-          xml:element{
-            'params',
-            xml:from_hash('param', user_parameters, 'name', 'value'),
-          },
-          xml:element{
-            'variables',
-            xml:from_hash('variable', user_variables, 'name', 'value'),
-          },
-        };
-      end
+      log:debug('DIRECTORY_SIP_ACCOUNT - auth_name: ', sip_account.record.auth_name, ', caller_name: ', sip_account.record.caller_name, ', domain: ', domain);
+      user_xml = xml:element{
+        'user',
+        id = sip_account.record.auth_name,
+        xml:element{
+          'params',
+          xml:from_hash('param', user_parameters, 'name', 'value'),
+        },
+        xml:element{
+          'variables',
+          xml:from_hash('variable', user_variables, 'name', 'value'),
+        },
+      };
     else
       require 'common.gateway'
       local sip_gateway = common.gateway.Gateway:new{ log = log, database = database }:find_by_auth_name(auth_name);
