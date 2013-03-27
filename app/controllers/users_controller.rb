@@ -22,6 +22,12 @@ class UsersController < ApplicationController
   def create
     @user = @parent.users.build(params[:user])
     if @user.save
+      if VoicemailAccount.where(:name => "user_#{@user.user_name}").count == 0
+        @user.voicemail_accounts.create(:name => "user_#{@user.user_name}", :active => true )
+      else
+        @user.voicemail_accounts.create(:active => true)
+      end
+      
       if @parent.class == Tenant
         @parent.tenant_memberships.create(:user => @user)
         if @parent.user_groups.exists?(:name => 'Users')
