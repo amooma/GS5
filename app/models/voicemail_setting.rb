@@ -6,6 +6,7 @@ class VoicemailSetting < ActiveRecord::Base
     'attachment'           => { :type => 'Boolean', :input =>  :boolean },
     'mark_read'            => { :type => 'Boolean', :input =>  :boolean },
     'purge'                => { :type => 'Boolean', :input =>  :boolean },
+    'email'                => { :type => 'String', },
     'record_length_max'    => { :type => 'Integer', :input =>  :integer, :html => { min: 0, max: 100 } },
     'record_length_min'    => { :type => 'Integer', :input =>  :integer, :html => { min: 0, max: 100 } },
     'records_max'          => { :type => 'Integer', :input =>  :integer, :html => { min: 0, max: 100 } },
