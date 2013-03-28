@@ -102,6 +102,8 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:voicemail_message_leave(caller, parameters[3]);
   elseif fid == "vmcheck" then
     result = self:voicemail_check(caller, parameters[3]);
+  elseif fid == "vmplay" then
+    result = self:voicemail_play(caller, tostring(parameters[3]) .. '-' .. tostring(parameters[4]) .. '-' .. tostring(parameters[5]) .. '-' .. tostring(parameters[6]) .. '-' .. tostring(parameters[7]));
   elseif fid == "vmtg" then
     result = self:call_forwarding_toggle(caller, nil, parameters[3]);
   elseif fid == "acdmtg" then
@@ -776,6 +778,18 @@ function Functions.voicemail_check(self, caller, number)
   return voicemail_account:menu_main(caller, voicemail_authorized);
 end
 
+
+function Functions.voicemail_play(self, caller, uuid)
+  require 'dialplan.voicemail';
+  
+  local voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(caller.auth_account.id);
+
+  if voicemail_account then
+    local message = voicemail_account:message_play(caller, uuid);
+  end
+
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
 
 
 function Functions.acd_membership_toggle(self, caller, agent_id, phone_number)
