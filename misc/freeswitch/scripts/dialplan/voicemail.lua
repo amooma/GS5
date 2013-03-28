@@ -109,6 +109,12 @@ function Voicemail.settings_get(self, id)
 end
 
 
+function Voicemail.find_message_by_uuid(self, uuid)
+  local sql_query = 'SELECT * FROM `voicemail_msgs` WHERE `uuid` = ' .. self.database:escape(uuid, '"') .. ' LIMIT 1';
+  return self.database:query_return_first(sql_query);
+end
+
+
 function Voicemail.messages_get(self, status)
   local sql_query = 'SELECT * FROM `voicemail_msgs` WHERE `username` = ' .. self.database:escape(self.name, '"');
 
@@ -289,12 +295,6 @@ function Voicemail.menu_messages(self, folder, messages)
 end
 
 
-function Voicemail.menu_options(self)
-  self.log:info('VOICEMAIL_OPTIONS_MENU');
-  self.caller:send_display('Voicemail options');
-end
-
-
 function Voicemail.message_delete(self, message)
   self.log:debug('VOICEMAIL_MESSAGE_DELETE - message: ', message.uuid);
   require 'common.fapi';
@@ -371,4 +371,64 @@ function Voicemail.trigger_notification(self, caller)
 
   require 'common.fapi';
   return common.fapi.FApi:new():execute('luarun', command);
+end
+
+
+function Voicemail.message_play(self, caller, uuid)
+  local message = self:find_message_by_uuid(uuid);
+
+  if message and message.file_path then
+    if not caller:answered() then
+      caller:answer();
+      caller:sleep(1000);
+    end
+    caller:send_display(message.cid_name .. ' ' .. message.cid_number);
+    caller:playback(message.file_path);
+  end
+
+  return message;
+end
+
+
+function Voicemail.menu_options(self)
+  self.log:info('VOICEMAIL_OPTIONS_MENU');
+  self.caller:send_display('Voicemail options');
+
+  local menu = {
+      { key = '1', method = self.greeting_record, parameters = { self } },
+      { key = '2', method = self.greeting_choose, parameters = { self } },
+      { key = '3', method = self.name_record, parameters = { self } },
+      { key = '4', method = self.pin_change, parameters = { self } },
+      { key = self.settings.key_terminator, exit = true },
+      { key = '', exit = true },
+    };
+
+  while true do
+    local digits, key = self.ivr:ivr_phrase('voicemail_config_menu', menu);
+    self.log:debug('VOICEMAIL_MAIN_MENU - digit: ', digits);
+    if key.exit then
+      break;
+    end
+
+    key.method(unpack(key.parameters));
+  end
+end
+
+function Voicemail.greeting_record(self)
+  self.log:info('VOICEMAIL_GREETING_RECORD');
+end
+
+function Voicemail.greeting_choose(self)
+  self.log:info('VOICEMAIL_GREETING_CHOSE');
+
+end
+
+function Voicemail.name_record(self)
+  self.log:info('VOICEMAIL_NAME_RECORD');
+end
+
+function Voicemail.pin_change(self)
+  self.log:info('VOICEMAIL_PIN_CHANGE');
+
+  
 end
