@@ -136,7 +136,7 @@ class CallForwardsController < ApplicationController
       phone_number_destination,
     ]
 
-    if @parent.try(:voicemail_accounts)
+    if @parent.class == SipAccount ||  @parent.class == User || @parent.class == Tenant
       @parent.voicemail_accounts.each do |voicemail_account|
         call_forwards_destination = CallForwardingDestination.new()
         call_forwards_destination.id = "#{voicemail_account.id}:VoicemailAccount"
