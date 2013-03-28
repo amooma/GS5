@@ -56,7 +56,6 @@ class CallForward < ActiveRecord::Base
     end
   }
 
-  before_save :split_and_format_destination_numbers
   after_save :set_presence
   after_save :deactivate_concurring_entries, :if => Proc.new { |cf| cf.active == true }
   before_destroy :deactivate_connected_softkeys
@@ -102,19 +101,6 @@ class CallForward < ActiveRecord::Base
   end
 
   private
-  def split_and_format_destination_numbers
-    if !self.destination.blank?
-      destinations = self.destination.gsub(/[^+0-9\,]/,'').gsub(/[\,]+/,',').split(/\,/).delete_if{|x| x.blank?}
-      self.destination = nil
-      if destinations.count > 0
-        destinations.each do |single_destination|
-          self.destination = self.destination.to_s + ", #{PhoneNumber.parse_and_format(single_destination)}"
-        end
-      end
-      self.destination = self.destination.to_s.gsub(/[^+0-9\,]/,'').gsub(/[\,]+/,',').split(/\,/).sort.delete_if{|x| x.blank?}.join(', ')
-    end
-  end
-
   def set_presence
     state = 'terminated'
 
