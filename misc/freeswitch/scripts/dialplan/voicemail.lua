@@ -134,41 +134,17 @@ function Voicemail.messages_get(self, status)
 end
 
 
-function Voicemail.check_pin(self, pin)
-  self.caller:answer();
-  self.caller:sleep(1000);
-
-  require 'dialplan.ivr';
-  local ivr = dialplan.ivr.Ivr:new{ caller = self.caller, log = self.log };
-
-  local digits = '';
-  for i = 1, 3 do
-    if digits == pin then
-      self.caller:send_display('PIN: OK');
-      break
-    elseif digits ~= "" then
-      self.caller:send_display('PIN: wrong');
-    end
-    self.caller:send_display('Enter PIN');
-    digits = ivr:read_phrase('voicemail_enter_pass', nil, self.settings.pin_length_min, self.settings.pin_length_max, self.settings.pin_timeout, self.settings.terminator_key);
-  end
-
-  if digits ~= pin then
-    return false
-  end
-
-  return true;
-end
-
-
 function Voicemail.menu_main(self, caller, authorized)
+  -- authorized = false;
+  self.settings.pin = '1234';
+
   self.caller = caller;
   
   require 'dialplan.ivr';
   self.ivr = dialplan.ivr.Ivr:new{ caller = self.caller, log = self.log };
 
   if not authorized then
-    if common.str.blank(self.pin) then
+    if common.str.blank(self.settings.pin) then
       self.log:notice('VOICEMAIL_MAIN_MENU - unaunthorized, no PIN, ', self.class, '=', self.id, '/', self.uuid, '|', self.name);
       return { continue = false, code = 500, phrase = 'Unauthorized', no_cdr = true }
     end
@@ -176,7 +152,7 @@ function Voicemail.menu_main(self, caller, authorized)
     self.caller:answer();
     self.caller:sleep(1000);
 
-    if not self.ivr:check_pin('voicemail_enter_pass', 'voicemail_fail_auth', self.pin) then
+    if not self.ivr:check_pin('voicemail_enter_pass', 'voicemail_fail_auth', self.settings.pin) then
       self.log:notice('VOICEMAIL_MAIN_MENU - wrong PIN, ', self.class, '=', self.id, '/', self.uuid, '|', self.name);
       caller.session:sayPhrase('voicemail_goodbye');
       return { continue = false, code = 500, phrase = 'Unauthorized', no_cdr = true }
@@ -414,21 +390,44 @@ function Voicemail.menu_options(self)
   end
 end
 
+
 function Voicemail.greeting_record(self)
   self.log:info('VOICEMAIL_GREETING_RECORD');
 end
+
 
 function Voicemail.greeting_choose(self)
   self.log:info('VOICEMAIL_GREETING_CHOSE');
 
 end
 
+
 function Voicemail.name_record(self)
   self.log:info('VOICEMAIL_NAME_RECORD');
 end
 
-function Voicemail.pin_change(self)
-  self.log:info('VOICEMAIL_PIN_CHANGE');
 
-  
+function Voicemail.pin_change(self)
+  self.log:info('VOICEMAIL_PIN_CHANGE - lenght: ', self.settings.pin_length_min, '-', self.settings.pin_length_max);
+
+  if not common.str.blank(self.settings.pin) then
+    if not self.ivr:check_pin('voicemail_enter_pass', 'voicemail_fail_auth', self.settings.pin) then
+      self.log:notice('VOICEMAIL_PIN_CHANGE - wrong old PIN, ', self.class, '=', self.id, '/', self.uuid, '|', self.name);
+      return false;
+    end
+  end
+
+  local digits = '';
+  for i = 1, 3 do      
+    if digits:len() < self.settings.pin_length_min then
+      self.caller:send_display('PIN too short');
+    elseif digits:len() > self.settings.pin_length_max then
+      self.caller:send_display('PIN too long');
+    else
+      self.caller:send_display('PIN: OK');
+      break
+    end
+    self.caller:send_display('Enter new PIN');
+    digits = self.ivr:read_phrase('voicemail_enter_pass', nil, self.settings.pin_length_max, self.settings.pin_length_min, self.settings.pin_timeout, self.settings.terminator_key);
+  end
 end
