@@ -127,7 +127,7 @@ class CallForwardsController < ApplicationController
   end
 
   def call_forwarding_destination_types
-
+    destinations_hash = {}
     phone_number_destination = CallForwardingDestination.new()
     phone_number_destination.id = ':PhoneNumber'
     phone_number_destination.label = 'Phone Number'
@@ -140,18 +140,37 @@ class CallForwardsController < ApplicationController
       @parent.voicemail_accounts.each do |voicemail_account|
         call_forwards_destination = CallForwardingDestination.new()
         call_forwards_destination.id = "#{voicemail_account.id}:VoicemailAccount"
-        call_forwards_destination.label = "VoicemailAccount: #{voicemail_account.to_s}" 
-        call_forwarding_destinations << call_forwards_destination
+        call_forwards_destination.label = "VoicemailAccount: #{voicemail_account.to_s}"
+        if !destinations_hash[call_forwards_destination.id]
+          destinations_hash[call_forwards_destination.id] = true
+          call_forwarding_destinations << call_forwards_destination
+        end
       end
     end
 
     if @parent.class == SipAccount
       sip_account = @parent
+      group_ids = Group.target_group_ids_by_permission(:forward_to, sip_account.groups)
+
       if sip_account.sip_accountable.class == User || sip_account.sip_accountable.class == Tenant
+        group_ids = group_ids + Group.target_group_ids_by_permission(:forward_to, sip_account.sip_accountable.groups)
         sip_account.sip_accountable.voicemail_accounts.each do |voicemail_account|
           call_forwards_destination = CallForwardingDestination.new()
           call_forwards_destination.id = "#{voicemail_account.id}:VoicemailAccount"
           call_forwards_destination.label = "VoicemailAccount: #{voicemail_account.to_s}" 
+          if !destinations_hash[call_forwards_destination.id]
+            destinations_hash[call_forwards_destination.id] = true
+            call_forwarding_destinations << call_forwards_destination
+          end
+        end
+      end
+
+      GroupMembership.where(:group_id => group_ids, :item_type => 'VoicemailAccount').each do |group_member|
+        call_forwards_destination = CallForwardingDestination.new()
+        call_forwards_destination.id = "#{group_member.item.id}:VoicemailAccount"
+        call_forwards_destination.label = "VoicemailAccount: #{group_member.item.to_s}" 
+        if !destinations_hash[call_forwards_destination.id]
+          destinations_hash[call_forwards_destination.id] = true
           call_forwarding_destinations << call_forwards_destination
         end
       end
@@ -165,7 +184,10 @@ class CallForwardsController < ApplicationController
             call_forwards_destination = CallForwardingDestination.new()
             call_forwards_destination.id = "#{voicemail_account.id}:VoicemailAccount"
             call_forwards_destination.label = "VoicemailAccount: #{voicemail_account.to_s}" 
-            call_forwarding_destinations << call_forwards_destination
+            if !destinations_hash[call_forwards_destination.id]
+              destinations_hash[call_forwards_destination.id] = true
+              call_forwarding_destinations << call_forwards_destination
+            end
           end
         end
       end
@@ -173,14 +195,17 @@ class CallForwardsController < ApplicationController
 
     if GuiFunction.display?('huntgroup_in_destination_field_in_call_forward_form', current_user)
       HuntGroup.all.each do |hunt_group|
-        hunt_group_destination = CallForwardingDestination.new()
-        hunt_group_destination.id = "#{hunt_group.id}:HuntGroup"
-        hunt_group_destination.label = "HuntGroup: #{hunt_group.to_s}"
-        call_forwarding_destinations.push(hunt_group_destination)
+        call_forwards_destination = CallForwardingDestination.new()
+        call_forwards_destination.id = "#{hunt_group.id}:HuntGroup"
+        call_forwards_destination.label = "HuntGroup: #{hunt_group.to_s}"
+        if !destinations_hash[call_forwards_destination.id]
+          destinations_hash[call_forwards_destination.id] = true
+          call_forwarding_destinations << call_forwards_destination
+        end
       end
     end
 
-    return call_forwarding_destinations.uniq
+    return call_forwarding_destinations
   end
 
 end
