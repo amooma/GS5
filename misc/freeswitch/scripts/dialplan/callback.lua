@@ -46,7 +46,7 @@ end
 
 
 function Callback.callback_unset(self, class, identifier, callback_session)
- local session_record = self.sessions[tostring(callback_session or self.session)];
+ local session_record = self.sessions[common.str.to_i(callback_session or self.session)];
   if not session_record then
     return false;
   end
