@@ -79,16 +79,16 @@ function Ivr.ivr_phrase_dtmf(self, dtmf)
 end
 
 
-function Ivr.read_phrase(self, phrase, phrase_data, max_keys, min_keys, timeout, enter_key)
+function Ivr.read_phrase(self, phrase, phrase_data, max_keys, min_keys, timeout, key_terminator)
   self.max_keys = max_keys or 64;
   self.min_keys = min_keys or 1;
-  self.enter_key = enter_key or '#';
+  self.key_terminator = key_terminator or '#';
   self.digits = '';
   self.exit = false;
   timeout = timeout or 30;
 
   global_callback:callback('dtmf', 'ivr_read_phrase', self.read_phrase_dtmf, self);
-  local continue = self:ivr_break() or self.caller.session:sayPhrase(phrase, phrase_data or enter_key or '');
+  local continue = self:ivr_break() or self.caller.session:sayPhrase(phrase, phrase_data or key_terminator or '');
   continue = self:ivr_break() or self.caller:sleep(timeout * 1000);
   global_callback:callback_unset('dtmf', 'ivr_read_phrase');
 
@@ -101,7 +101,7 @@ function Ivr.read_phrase_dtmf(self, dtmf)
     return nil;
   end
 
-  if self.enter_key == dtmf.digit then
+  if self.key_terminator == dtmf.digit then
     self.exit = true;
     return false;
   end
@@ -110,14 +110,15 @@ function Ivr.read_phrase_dtmf(self, dtmf)
 end
 
 
-function Ivr.check_pin(self, phrase_enter, phrase_incorrect, pin, pin_timeout, pin_repeat, key_enter)
+function Ivr.check_pin(self, phrase_enter, phrase_incorrect, pin, pin_timeout, pin_repeat, key_terminator)
   if not pin then
     return nil;
   end
 
+  self.exit = false;
   pin_timeout = pin_timeout or 30;
   pin_repeat = pin_repeat or 3;
-  key_enter = key_enter or '#';
+  key_terminator = key_terminator or '#';
 
   local digits = '';
   for i = 1, pin_repeat do
@@ -131,7 +132,7 @@ function Ivr.check_pin(self, phrase_enter, phrase_incorrect, pin, pin_timeout, p
       break;
     end
     self.caller:send_display('Enter PIN');
-    digits = ivr:read_phrase(phrase_enter, nil, 0, pin:len() + 1, pin_timeout, key_enter);
+    digits = ivr:read_phrase(phrase_enter, nil, 0, pin:len() + 1, pin_timeout, key_terminator);
   end
 
   if digits ~= pin then
