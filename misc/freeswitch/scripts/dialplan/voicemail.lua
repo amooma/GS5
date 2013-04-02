@@ -135,9 +135,6 @@ end
 
 
 function Voicemail.menu_main(self, caller, authorized)
-  -- authorized = false;
-  self.settings.pin = '1234';
-
   self.caller = caller;
   
   require 'dialplan.ivr';
@@ -429,5 +426,26 @@ function Voicemail.pin_change(self)
     end
     self.caller:send_display('Enter new PIN');
     digits = self.ivr:read_phrase('voicemail_enter_pass', nil, self.settings.pin_length_max, self.settings.pin_length_min, self.settings.pin_timeout, self.settings.terminator_key);
+  end
+
+  if digits:len() < self.settings.pin_length_min or digits:len() > self.settings.pin_length_max then
+    self.caller:send_display('PIN not changed');
+    return false;
+  end
+
+  local sql_query = 'UPDATE `voicemail_settings` \
+    SET `value` = ' .. self.database:escape(digits, '"') .. ', `class_type` = "String", `updated_at` = NOW() \
+    WHERE `name`="pin" AND `voicemail_account_id` = ' .. self.id;
+  if not self.settings.pin then
+    sql_query = 'INSERT INTO `voicemail_settings` \
+    (`voicemail_account_id`, `name`, `value`, `class_type`, `description`, `created_at`, `updated_at`) \
+    VALUES (' ..  self.id .. ', "pin", "' .. digits .. '", "String", "Voicemail PIN", NOW(), NOW())'; 
+  end
+
+  if self.database:query(sql_query) then
+    self.settings.pin = digits;
+    self.caller:send_display('PIN changed');
+    self.caller.session:sayPhrase('voicemail_change_pass_success');
+    return true;
   end
 end
