@@ -1,4 +1,14 @@
 Gemeinschaft42c::Application.routes.draw do
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :switchboards, :only => [:show, :index]
+      resources :switchboard_entries, :only => [:show, :index]
+      resources :sip_accounts, :only => [:show, :index]
+      resources :phone_numbers, :only => [:show, :index]
+    end
+
+    resources :rows 
+  end
 
   resources :voicemail_accounts do
     resources :voicemail_settings
@@ -9,8 +19,6 @@ Gemeinschaft42c::Application.routes.draw do
       collection { post :sort }
     end
   end
-
-  resources :switchboard_entries, :only => [:show, :index]
 
   resources :restore_jobs
 
@@ -64,9 +72,6 @@ Gemeinschaft42c::Application.routes.draw do
 
   resources :gui_functions
 
-  namespace :api do 
-    resources :rows 
-  end
 
   resources :phone_numbers, :only => [:sort] do
     collection { post :sort }

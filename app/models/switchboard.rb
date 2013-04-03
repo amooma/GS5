@@ -8,7 +8,7 @@ class Switchboard < ActiveRecord::Base
 
   validates :reload_interval,
             :numericality => { :only_integer => true, 
-                               :greater_than => 250,
+                               :greater_than => 249,
                                :allow_nil => true 
                              }
 
@@ -21,6 +21,7 @@ class Switchboard < ActiveRecord::Base
   belongs_to :user, :touch => true
   has_many :switchboard_entries, :dependent => :destroy
   has_many :sip_accounts, :through => :switchboard_entries
+  has_many :phone_numbers, :through => :sip_accounts
 
   before_validation :convert_0_to_nil
 

@@ -30,4 +30,37 @@ class SwitchboardEntry < ActiveRecord::Base
       self.name.to_s
     end
   end
+
+  def avatar_src
+    if self.sip_account.sip_accountable.class == User
+      if self.sip_account.sip_accountable.image?
+        self.sip_account.sip_accountable.image_url(:profile)
+      else
+        if self.sip_account.sip_accountable.male?
+          '/assets/icons/user-male-16x.png'
+        else
+          '/assets/icons/user-female-16x.png'
+        end
+      end
+    else
+      nil
+    end
+  end
+
+  def callstate
+    if self.sip_account.call_legs.where(callstate: 'ACTIVE').any? || self.sip_account.b_call_legs.where(b_callstate: 'ACTIVE').any?
+      'ACTIVE'
+    else
+      if self.sip_account.call_legs.where(callstate: 'EARLY').any?
+        'EARLY'
+      else
+        if self.sip_account.call_legs.where(callstate: 'RINGING').any?
+          'RINGING'
+        else
+          nil
+        end
+      end
+    end
+  end
+  
 end
