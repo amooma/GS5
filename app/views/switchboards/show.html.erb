@@ -1,0 +1,52 @@
+<% content_for :title, "Switchboard #{@switchboard.name}" %>
+
+<script>
+  var switchboard_id = <%= @switchboard.id %>;
+  var show_avatars = <%= @switchboard.show_avatars.to_s %>;
+  var reload_interval = <%= @switchboard.reload_interval.nil? ? 0 : @switchboard.reload_interval %>;
+</script>
+
+<div class='row'>
+  <div class='span12'>
+    <div id='emberjs-container'></div>
+
+    <script type="text/x-handlebars" data-template-name="application">
+      {{outlet}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="switchboard">
+      <h2>{{name}}</h2>
+
+      {{#if switchboardEntrys.length}}
+        <ul class="thumbnails">
+          {{#each switchboardEntry in switchboardEntrys}}
+            <li class="span2">
+              <div class="thumbnail">
+                {{avatar_img switchboardEntry.avatar_src}}
+                <p>
+                  <small>
+                    {{switchboardEntry.name}}<br>
+
+                    {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumbers}}
+                      <span class="label">
+                        {{phoneNumber.number}}
+                      </span>
+                    {{/each}}
+                    <br>
+                    {{show_callstate switchboardEntry.callstate}}
+                  </small>
+                </p>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
+    </script>
+
+  </div>
+</div>
+
+<script src="/js/libs/handlebars.js"></script>
+<script src="/js/libs/ember.js"></script>
+<script src="/js/libs/ember-data.js"></script>
+<script src="/js/app.js"></script>

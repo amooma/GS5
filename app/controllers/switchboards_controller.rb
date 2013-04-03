@@ -15,6 +15,9 @@ class SwitchboardsController < ApplicationController
 
   def new
     @switchboard = @user.switchboards.build
+    @switchboard.show_avatars = true
+    @switchboard.entry_width = 2
+    @switchboard.reload_interval = 2000
     spread_breadcrumbs
   end
 
@@ -52,7 +55,7 @@ class SwitchboardsController < ApplicationController
 
   private
   def switchboard_params
-    params.require(:switchboard).permit(:name)
+    params.require(:switchboard).permit(:name, :reload_interval, :show_avatars, :entry_width)
   end
 
   def spread_breadcrumbs

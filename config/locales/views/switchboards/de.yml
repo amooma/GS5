@@ -9,6 +9,9 @@ de:
       page_title: 'Switchboards'
       name: 'Name'
       user_id: 'User'
+      reload_interval:: 'Reload Interval'
+      show_avatars: 'Show avatars'
+      entry_width: 'Entry width'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Switchboard'
         destroy: 'Löschen'
@@ -20,6 +23,9 @@ de:
       page_title: 'Switchboard bearbeiten'
       name: 'Name'
       user_id: 'User'
+      reload_interval:: 'Reload Interval'
+      show_avatars: 'Show avatars'
+      entry_width: 'Entry width'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
@@ -41,5 +47,14 @@ de:
         hint: ''
       user_id:
         label: 'User'
+        hint: ''
+      reload_interval:
+        label: 'Reload Interval'
+        hint: 'Milliseconds. nil = no reload'
+      show_avatars:
+        label: 'Show avatars'
+        hint: ''
+      entry_width:
+        label: 'Entry width'
         hint: ''
       submit: 'Absenden'
