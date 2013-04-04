@@ -12,6 +12,7 @@ de:
       reload_interval:: 'Reload Interval'
       show_avatars: 'Show avatars'
       entry_width: 'Entry width'
+      amount_of_displayed_phone_numbers: 'Anzahl der angezeigten Telefonnummern'     
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Switchboard'
         destroy: 'Löschen'
@@ -26,6 +27,7 @@ de:
       reload_interval:: 'Reload Interval'
       show_avatars: 'Show avatars'
       entry_width: 'Entry width'
+      amount_of_displayed_phone_numbers: 'Anzahl der angezeigten Telefonnummern'     
       actions:
         confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
@@ -50,11 +52,14 @@ de:
         hint: ''
       reload_interval:
         label: 'Reload Interval'
-        hint: 'Milliseconds. nil = no reload'
+        hint: 'Millisekunden. nil = kein reload'
       show_avatars:
-        label: 'Show avatars'
+        label: 'Avatare anzeigen'
         hint: ''
       entry_width:
-        label: 'Entry width'
-        hint: ''
+        label: 'Weite eines Eintrages'
+        hint: '1 - 4'
+      amount_of_displayed_phone_numbers:
+        label: 'Anzahl Telefonnummern'
+        hint: 'Wie viel Telefonnummern werden in einem Eintrag angezeigt.'        
       submit: 'Absenden'

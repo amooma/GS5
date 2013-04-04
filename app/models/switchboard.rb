@@ -18,6 +18,12 @@ class Switchboard < ActiveRecord::Base
                                :less_than => 5
                              }
 
+  validates :amount_of_displayed_phone_numbers,
+            :numericality => { :only_integer => true, 
+                               :greater_than_or_equal_to => 0,
+                               :less_than => 20
+                             }
+
   belongs_to :user, :touch => true
   has_many :switchboard_entries, :dependent => :destroy
   has_many :sip_accounts, :through => :switchboard_entries
