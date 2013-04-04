@@ -71,7 +71,13 @@ App.SipAccount = DS.Model.extend({
   switchboardEntrys: DS.hasMany('App.SwitchboardEntry'),
   phoneNumbers: DS.hasMany('App.PhoneNumber'),
   callerName: DS.attr('string'),
-  authName: DS.attr('string')
+  authName: DS.attr('string'),
+
+  phoneNumberShortList: Ember.computed(function() {
+      var phoneNumbers = this.get('phoneNumbers');
+      return phoneNumbers.slice(0,amount_of_displayed_phone_numbers);
+  }).property('phoneNumbers.@each.number')
+
 });
 
 App.PhoneNumber = DS.Model.extend({

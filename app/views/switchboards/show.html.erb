@@ -4,6 +4,7 @@
   var switchboard_id = <%= @switchboard.id %>;
   var show_avatars = <%= @switchboard.show_avatars.to_s %>;
   var reload_interval = <%= @switchboard.reload_interval.nil? ? 0 : @switchboard.reload_interval %>;
+  var amount_of_displayed_phone_numbers = <%= @switchboard.amount_of_displayed_phone_numbers %>;
 </script>
 
 <div class='row'>
@@ -27,7 +28,7 @@
                   <small>
                     {{switchboardEntry.name}}<br>
 
-                    {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumbers}}
+                    {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumberShortList}}
                       <span class="label">
                         {{phoneNumber.number}}
                       </span>
