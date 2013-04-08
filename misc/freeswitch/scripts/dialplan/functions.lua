@@ -116,6 +116,8 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:call_parking_inout(caller, parameters[3], parameters[4]);
   elseif fid == "cpai" then
     result = self:call_parking_inout_index(caller, parameters[3]);
+  elseif fid == "test" then
+    result = self:test(caller, parameters[3]);
   end
 
   return result or { continue = false, code = 505, phrase = 'Error executing function', no_cdr = true };
@@ -909,6 +911,23 @@ function Functions.call_parking_inout_index(self, caller, stall_index)
 
   self.log:info('FUNCTION_CALL_PARKING_INOUT_INDEX parking/retrieving call - parkingstall=', parking_stall.id, '/', parking_stall.name, ', index: ', stall_index);
   parking_stall:park_retrieve();
+
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
+
+function Functions.test(self, caller, name)
+  if tostring(name) == 'dtmf' then
+    while caller:ready() do
+      local digits = caller.session:read(1, 1, '', 30000, '');
+      if digits == "" then
+        break;
+      end
+      caller:send_display('DTMF: ', digits);
+      caller.session:say(digits, "en", "number", "pronounced");                                                                                             
+      self.log:devel('DTMF: ', digits);
+    end
+  end
 
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
