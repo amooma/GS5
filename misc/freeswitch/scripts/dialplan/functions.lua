@@ -918,14 +918,21 @@ end
 
 function Functions.test(self, caller, name)
   if tostring(name) == 'dtmf' then
+    local digits = '';
     while caller:ready() do
-      local digits = caller.session:read(1, 1, '', 30000, '');
-      if digits == "" then
-        break;
+      if digits == '' then
+        caller:playback('ivr/ivr-love_those_touch_tones.wav');
       end
-      caller:send_display('DTMF: ', digits);
-      caller.session:say(digits, "en", "number", "pronounced");                                                                                             
+      digits = caller.session:read(1, 1, '', 5000, '');
       self.log:devel('DTMF: ', digits);
+      caller:send_display('DTMF: ', digits);
+      if digits == '*' then
+        caller:playback('digits/star.wav');
+      elseif digits == '#' then
+        caller:playback('digits/pound.wav');
+      elseif digits ~= '' then
+        caller.session:say(digits, "en", "number", "pronounced");
+      end                                                                                         
     end
   end
 
