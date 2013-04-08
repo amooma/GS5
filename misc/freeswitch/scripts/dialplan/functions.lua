@@ -918,13 +918,15 @@ end
 
 function Functions.test(self, caller, name)
   if tostring(name) == 'dtmf' then
+    self.log:info('FUNCTION_TEST_DTMF');
     local digits = '';
+    caller:answer();
     while caller:ready() do
       if digits == '' then
         caller:playback('ivr/ivr-love_those_touch_tones.wav');
       end
       digits = caller.session:read(1, 1, '', 5000, '');
-      self.log:devel('DTMF: ', digits);
+      self.log:info('DTMF: ', digits);
       caller:send_display('DTMF: ', digits);
       if digits == '*' then
         caller:playback('digits/star.wav');
