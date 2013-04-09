@@ -4,6 +4,8 @@
 
 module(...,package.seeall)
 
+MAX_JSON_DEPTH = 100;
+
 function try(array, arguments)
   if type(arguments) ~= 'string' or type(array) ~= 'table' then
     return nil;
@@ -79,12 +81,19 @@ function keys_to_s(array, separator, prefix, suffix)
 end
 
 -- convert to JSON
-function to_json(array)
+function to_json(array, max_depth)
+  max_depth = tonumber(max_depth) or MAX_JSON_DEPTH;
+  max_depth = max_depth - 1;
+
+  if max_depth <= 0 then
+    return 'null';
+  end 
+
   require 'common.str';
   local buffer = '{';
   for key, value in pairs(array) do
     if type(value) == 'table' then
-      buffer = buffer .. '"' .. key .. '":' .. to_json(value) .. ',';
+      buffer = buffer .. '"' .. key .. '":' .. to_json(value, max_depth) .. ',';
     else
       buffer = buffer .. '"' .. key .. '":' .. common.str.to_json(value) .. ',';
     end
