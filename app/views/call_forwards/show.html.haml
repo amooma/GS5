@@ -10,6 +10,8 @@
   %strong= t('call_forwards.show.destination') + ":"
   - if @call_forward.destinationable_id && @call_forward.destinationable
     = "#{@call_forward.destinationable_type}: #{@call_forward.destinationable}"
+    - if !@call_forward.destination.blank?
+      = "(#{@call_forward.destination})"
   - elsif !@call_forward.destinationable_type.blank?
     = "#{@call_forward.destinationable_type}: #{@call_forward.destination}"
   - else
