@@ -8,6 +8,13 @@ class GenericFile < ActiveRecord::Base
 
   belongs_to :owner, :polymorphic => true
 
+  validates :name,
+            :presence => true,
+            :uniqueness => {:scope => [:owner_id, :owner_type]}
+
+  validates :file,
+            :presence => true
+
   before_save :determine_file_type
 
   def store_dir
