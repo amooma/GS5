@@ -1,44 +1,44 @@
 de:
   generic_files:
-    name: 'Genericfile'
+    name: 'Datei'
     controller:
-      successfuly_created: 'Genericfile wurde angelegt.'
-      successfuly_updated: 'Genericfile wurde aktualisiert.'
-      successfuly_destroyed: 'Genericfile wurde gelöscht.'
+      successfuly_created: 'Datei wurde angelegt.'
+      successfuly_updated: 'Datei wurde aktualisiert.'
+      successfuly_destroyed: 'Datei wurde gelöscht.'
     index:
-      page_title: 'Übersicht von Genericfile'
+      page_title: 'Datei'
       name: 'Name'
-      file: 'File'
-      file_type: 'File type'
-      category: 'Category'
-      owner_id: 'Owner'
-      owner_type: 'Owner type'
+      file: 'Datei'
+      file_type: 'Type'
+      category: 'Kategorie'
+      owner_id: 'Besitzer'
+      owner_type: 'Besitzer typ'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Genericfile'
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Datei löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
         create: 'Neu anlegen'
-        create_for: 'Genericfile neu anlegen für %{resource}'
+        create_for: 'Datei neu anlegen für %{resource}'
     show:
-      page_title: 'Genericfile bearbeiten'
+      page_title: 'Datei bearbeiten'
       name: 'Name'
-      file: 'File'
-      file_type: 'File type'
-      category: 'Category'
-      owner_id: 'Owner'
-      owner_type: 'Owner type'
+      file: 'Datei'
+      file_type: 'Typ'
+      category: 'Kategorie'
+      owner_id: 'Besitzer'
+      owner_type: 'Besitzer typ'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass die diese Datei löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     new:
-      page_title: 'Genericfile neu anlegen'
+      page_title: 'Datei neu anlegen'
       actions:
         back_to_list: 'Zurück zur Übersicht'
     edit:
-      page_title: 'Genericfile bearbeiten'
+      page_title: 'Datei bearbeiten'
       actions:
         back_to_list: 'Zurück zur Übersicht'
         edit: 'Bearbeiten'
@@ -48,18 +48,18 @@ de:
         label: 'Name'
         hint: ''
       file:
-        label: 'File'
+        label: 'Datei'
         hint: ''
       file_type:
-        label: 'File type'
+        label: 'Typ'
         hint: ''
       category:
-        label: 'Category'
+        label: 'Kategorie'
         hint: ''
       owner_id:
-        label: 'Owner'
+        label: 'Besitzer'
         hint: ''
       owner_type:
-        label: 'Owner type'
+        label: 'Besitzer typ'
         hint: ''
       submit: 'Absenden'
