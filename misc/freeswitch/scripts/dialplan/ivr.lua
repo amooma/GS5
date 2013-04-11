@@ -146,16 +146,23 @@ function Ivr.check_pin(self, phrase_enter, phrase_incorrect, pin, pin_timeout, p
 end
 
 
-function Ivr.record(self, file_name, phrase_record, phrase_too_short, record_length_max, record_length_min, record_repeat, silence_level, silence_lenght_abort)
+function Ivr.record(self, file_name, beep, phrase_record, phrase_too_short, record_length_max, record_length_min, record_repeat, silence_level, silence_lenght_abort)
   local duration = nil;
   for index=1, record_repeat do
     if (duration and duration >= record_length_min) or not self.caller:ready() then
       break;
     elseif duration then
       self.caller:send_display('Recording too short');
-      self.caller.session:sayPhrase(phrase_too_short);
+      if phrase_too_short then
+        self.caller.session:sayPhrase(phrase_too_short);
+      end
     end
-    self.caller.session:sayPhrase(phrase_record);
+    if phrase_record then
+      self.caller.session:sayPhrase(phrase_record);
+    end
+    if beep then
+      self.caller:playback(beep);
+    end
     self.caller:send_display('Recording...');
     local result = self.caller.session:recordFile(file_name, record_length_max, silence_level, silence_lenght_abort);
     duration = self.caller:to_i('record_seconds');
