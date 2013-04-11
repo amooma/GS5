@@ -289,9 +289,9 @@ function conf_event_socket(database)
   require 'configuration.simple_xml'
   local xml = configuration.simple_xml.SimpleXml:new();
 
-  local settings = { password = 'ClueCon', ['listen-ip'] = '127.0.0.1', ['listen-port'] = '80212' };
+  local settings = { password = 'ClueCon', ['listen-ip'] = '127.0.0.1', ['listen-port'] = '8021' };
   require 'common.configuration_table';
-  settings = common.configuration_table.get(database, 'event_socket', 'settings', settings) or settings;
+  settings = common.configuration_table.get(database, 'event_socket', 'settings', {settings = settings});
 
   XML_STRING = xml:element{
     'document', 
