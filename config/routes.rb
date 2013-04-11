@@ -1,4 +1,5 @@
 Gemeinschaft42c::Application.routes.draw do
+
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :switchboards, :only => [:show, :index]
@@ -9,6 +10,8 @@ Gemeinschaft42c::Application.routes.draw do
 
     resources :rows 
   end
+
+  resources :generic_files
 
   resources :voicemail_accounts do
     resources :voicemail_settings
@@ -238,6 +241,7 @@ Gemeinschaft42c::Application.routes.draw do
       get :display
     end
     resources :voicemail_accounts
+    resources :generic_files
   end
   
   resources :user_groups do
