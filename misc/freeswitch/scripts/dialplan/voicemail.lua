@@ -288,28 +288,40 @@ function Voicemail.message_save(self, message)
 end
 
 
-function Voicemail.leave(self, caller, greeting)
-  local forwarding_number = caller.forwarding_number;
-  self.log:info('VOICEMAIL_LEAVE - voicemail_account=', self.record.id, '/', self.record.uuid, '|', self.record.name, ', forwarding_number: ', forwarding_number);
+function Voicemail.leave(self, caller, greeting, number)
+  self.log:info('VOICEMAIL_LEAVE - voicemail_account=', self.record.id, '/', self.record.uuid, '|', self.record.name, ', forwarding_number: ', number, ', greeting: ', greeting);
 
-  caller:set_callee_id(forwarding_number, common.array.try(caller, 'auth_account.caller_name') or common.array.try(caller, 'auth_account.name'));
+  caller:set_callee_id(number, common.array.try(caller, 'auth_account.caller_name') or common.array.try(caller, 'auth_account.name'));
   caller:answer();
   caller:send_display(common.array.try(caller, 'auth_account.caller_name') or common.array.try(caller, 'auth_account.name'));
   caller:sleep(1000);
 
-  if not common.str.blank(forwarding_number) then
-    caller.session:sayPhrase('voicemail_play_greeting', (tostring(forwarding_number):gsub('[%D]', '')));
+  local greeting_file = nil;
+  if not common.str.blank(greeting) then
+    greeting_file = self:greeting_get(greeting, caller.auth_account.owner.class, caller.auth_account.owner.id)
+  end
+
+  if not common.str.blank(greeting_file) then
+    self.log:debug('VOICEMAIL_LEAVE greeting_file: ', greeting_file);
+    caller:playback(greeting_file);
+  elseif not common.str.blank(number) then
+    caller.session:sayPhrase('voicemail_play_greeting', (tostring(number):gsub('[%D]', '')));
   end
 
   local record_file_name = self.settings.record_file_path ..self.settings.record_file_prefix .. caller.uuid .. self.settings.record_file_suffix;
   self.log:info('VOICEMAIL_LEAVE - recording to file: ', tostring(record_file_name));
   
+  local voicemail_record_message = nil;
+  if common.str.blank(greeting_file) then
+    voicemail_record_message = 'voicemail_record_message';
+  end
+
   require 'dialplan.ivr';
   local ivr = dialplan.ivr.Ivr:new{ caller = caller, log = self.log };
-
   local duration = ivr:record(
-    record_file_name, 
-    'voicemail_record_message', 
+    record_file_name,
+    self.settings.beep,
+    voicemail_record_message, 
     'voicemail_message_too_short', 
     self.settings.record_length_max, 
     self.settings.record_length_min, 
@@ -360,6 +372,26 @@ function Voicemail.message_play(self, caller, uuid)
   end
 
   return message;
+end
+
+
+function Voicemail.greeting_get(self, name, owner_type, owner_id, file_types)
+  local store_dir = '/var/opt/gemeinschaft/generic_files/';
+
+  file_types = file_types or {'audio/x-wav'}
+  local sql_query = 'SELECT * FROM `generic_files` \
+    WHERE `name` = ' .. self.database:escape(name, '"') .. ' \
+    AND `owner_type` = ' .. self.database:escape(owner_type, '"') .. ' \
+    AND `owner_id` = ' .. self.database:escape(owner_id, '"') .. ' \
+    AND `file_type` IN ("' .. table.concat(file_types, '","') .. '") LIMIT 1';
+
+  local greeting = self.database:query_return_first(sql_query);
+
+  if not greeting or common.str.blank(greeting.file) then
+    return nil;
+  end
+
+  return store_dir .. greeting.id .. '/' .. greeting.file;
 end
 
 
