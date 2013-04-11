@@ -595,8 +595,6 @@ function Dialplan.voicemail(self, destination)
   local voicemail_account = nil;
   if common.str.to_i(destination.id) > 0 then
     voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database, domain = self.domain }:find_by_id(destination.id);
-  elseif not common.str.blank(destination.number) then
-    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database, domain = self.domain }:find_by_number(destination.number);
   elseif self.caller.auth_account and self.caller.auth_account.class == 'sipaccount' then
     voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database, domain = self.domain }:find_by_sip_account_id(self.caller.auth_account.id);
   elseif self.caller.forwarding_number then
@@ -608,7 +606,7 @@ function Dialplan.voicemail(self, destination)
     return { continue = false, code = 404, phrase = 'Mailbox not found' }
   end
 
-  voicemail_account:leave(self.caller, self.caller.forwarding_number);
+  voicemail_account:leave(self.caller, destination.number, self.caller.forwarding_number);
 
   if self.caller:to_s("voicemail_message_len") == '' then
     self.log:info('VOICEMAIL - no message saved');
