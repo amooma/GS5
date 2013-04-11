@@ -915,6 +915,13 @@
               </match>
             </input>
           </macro>
+          <macro name="voicemail_message_too_short">
+            <input pattern="^(.*)$">
+              <match>
+                <action function="play-file" data="voicemail/vm-too-small.wav"/>
+              </match>
+            </input>
+          </macro>
           <macro name="voicemail_greeting_selected">
             <input pattern="^(\d+)$">
               <match>
