@@ -1,0 +1,7 @@
+.inputs
+  - if @generic_file.new_record?
+    = f.input :file, :label => t('generic_files.form.file.label'), :hint => conditional_hint('generic_files.form.file.hint')
+  - else
+    = f.input :file_type, :label => t('generic_files.form.file_type.label'), :hint => conditional_hint('generic_files.form.file_type.hint'), :disabled => true
+  = f.input :name, :label => t('generic_files.form.name.label'), :hint => conditional_hint('generic_files.form.name.hint')
+  = f.input :category, :label => t('generic_files.form.category.label'), :collection => GenericFile::CATEGORIES, :hint => conditional_hint('generic_files.form.category.hint'), :include_blank => false

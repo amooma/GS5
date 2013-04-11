@@ -1,0 +1,7 @@
+= simple_form_for([@parent, @generic_file]) do |f|
+  = f.error_notification
+
+  = render "form_core", :f => f
+
+  .form-actions
+    = f.button :submit, conditional_t('generic_files.form.submit')

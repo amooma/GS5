@@ -1,0 +1,65 @@
+de:
+  generic_files:
+    name: 'Genericfile'
+    controller:
+      successfuly_created: 'Genericfile wurde angelegt.'
+      successfuly_updated: 'Genericfile wurde aktualisiert.'
+      successfuly_destroyed: 'Genericfile wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von Genericfile'
+      name: 'Name'
+      file: 'File'
+      file_type: 'File type'
+      category: 'Category'
+      owner_id: 'Owner'
+      owner_type: 'Owner type'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Genericfile'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Genericfile neu anlegen für %{resource}'
+    show:
+      page_title: 'Genericfile bearbeiten'
+      name: 'Name'
+      file: 'File'
+      file_type: 'File type'
+      category: 'Category'
+      owner_id: 'Owner'
+      owner_type: 'Owner type'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Genericfile neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Genericfile bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      file:
+        label: 'File'
+        hint: ''
+      file_type:
+        label: 'File type'
+        hint: ''
+      category:
+        label: 'Category'
+        hint: ''
+      owner_id:
+        label: 'Owner'
+        hint: ''
+      owner_type:
+        label: 'Owner type'
+        hint: ''
+      submit: 'Absenden'
