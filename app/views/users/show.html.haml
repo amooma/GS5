@@ -90,3 +90,6 @@
 
     - cache(['user_switchboards_overview', I18n.locale, @user, @user.switchboards]) do
       = render :partial => 'switchboards', :locals => {:user => @user}
+
+    - cache(['user_show_generic_files_overview', I18n.locale, @user, @user.generic_files]) do
+      = render :partial => 'generic_files', :locals => {:user => @user}
