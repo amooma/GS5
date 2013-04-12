@@ -32,8 +32,10 @@ DEFAULT_SETTINGS = {
   notify = true,
   attachment = true,
   mark_read = true,
-  purge = false, 
+  purge = false,
+  generic_file_path = '/var/opt/gemeinschaft/generic_files/',
 }
+
 
 -- create voicemail object
 function Voicemail.new(self, arg)
@@ -376,8 +378,6 @@ end
 
 
 function Voicemail.greeting_get(self, name, owner_type, owner_id, file_types)
-  local store_dir = '/var/opt/gemeinschaft/generic_files/';
-
   file_types = file_types or {'audio/x-wav'}
   local sql_query = 'SELECT * FROM `generic_files` \
     WHERE `name` = ' .. self.database:escape(name, '"') .. ' \
@@ -391,7 +391,7 @@ function Voicemail.greeting_get(self, name, owner_type, owner_id, file_types)
     return nil;
   end
 
-  return store_dir .. greeting.id .. '/' .. greeting.file;
+  return self.settings.generic_file_path .. greeting.id .. '/' .. greeting.file;
 end
 
 
@@ -401,9 +401,7 @@ function Voicemail.menu_options(self)
 
   local menu = {
       { key = '1', method = self.greeting_record, parameters = { self } },
-      { key = '2', method = self.greeting_choose, parameters = { self } },
-      { key = '3', method = self.name_record, parameters = { self } },
-      { key = '4', method = self.pin_change, parameters = { self } },
+      { key = '3', method = self.pin_change, parameters = { self } },
       { key = self.settings.key_terminator, exit = true },
       { key = '', exit = true },
     };
@@ -422,17 +420,53 @@ end
 
 function Voicemail.greeting_record(self)
   self.log:info('VOICEMAIL_GREETING_RECORD');
-end
 
+  local record_file_name = self.settings.record_file_path ..self.settings.record_file_prefix .. self.caller.uuid .. self.settings.record_file_suffix;
 
-function Voicemail.greeting_choose(self)
-  self.log:info('VOICEMAIL_GREETING_CHOSE');
+  require 'dialplan.ivr';
+  local ivr = dialplan.ivr.Ivr:new{ caller = self.caller, log = self.log };
+  local duration = ivr:record(
+    record_file_name,
+    self.settings.beep,
+    'voicemail_record_greeting', 
+    'voicemail_message_too_short', 
+    self.settings.record_length_max, 
+    1, 
+    self.settings.record_repeat, 
+    self.settings.silence_level,
+    self.settings.silence_lenght_abort);
 
-end
+  if duration >= 0 then
+    self.caller:playback(record_file_name);
+  end
 
+  if duration >= 1 then
+    local name = 'greeting_' .. os.time();
+    local file_name = name .. self.settings.record_file_suffix
 
-function Voicemail.name_record(self)
-  self.log:info('VOICEMAIL_NAME_RECORD');
+    local generic_file_record = {
+      name = name,
+      file = file_name,
+      file_type = 'audio/x-wav',
+      category = 'greeting',
+      owner_id = self.record.voicemail_accountable_id,
+      owner_type = self.record.voicemail_accountable_type,
+      updated_at = { 'NOW()', raw = true },
+      created_at = { 'NOW()', raw = true },
+    };
+
+    if self.database:insert_or_update('generic_files', generic_file_record) then
+      local file_id = self.database:last_insert_id();
+
+      local destination_directory = self.settings.generic_file_path .. file_id;
+      self.log:info('VOICEMAIL_GREETING_RECORD recorded greeting - id: ', file_id, ',  file: ', destination_directory .. '/' .. file_name, ', duration: ', duration);
+      os.execute('mkdir ' .. destination_directory);
+      local result, error_string = os.rename(record_file_name, destination_directory .. '/' .. file_name);
+      if not result then
+        self.log:error('VOICEMAIL_GREETING_RECORD - ', error_string);
+      end
+    end
+  end
 end
 
 
@@ -481,3 +515,4 @@ function Voicemail.pin_change(self)
     return true;
   end
 end
+
