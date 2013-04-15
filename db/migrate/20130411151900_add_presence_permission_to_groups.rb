@@ -1,4 +1,4 @@
-class AddInitialGroups < ActiveRecord::Migration
+class AddPresencePermissionToGroups < ActiveRecord::Migration
   def up
     user_sip_accounts = Group.where(:name => 'user_sip_accounts').first
     if user_sip_accounts
