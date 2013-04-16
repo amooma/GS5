@@ -248,7 +248,7 @@ function Dialplan.destination_new(self, arg)
         destination.account = self:object_find{ class = destination.type, id = destination.id};
         if self.caller then
           require 'common.call_forwarding';
-          local call_forwarding_class = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database }
+          local call_forwarding_class = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database, caller = self.caller }
           destination.call_forwarding = call_forwarding_class:list_by_owner(destination.id, destination.type, self.caller.caller_phone_numbers);
           for service, call_forwarding_entry in pairs(call_forwarding_class:list_by_owner(destination.phone_number.id, destination.phone_number.class, self.caller.caller_phone_numbers)) do
             destination.call_forwarding[service] = call_forwarding_entry;
