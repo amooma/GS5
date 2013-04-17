@@ -1,0 +1,5 @@
+-# Files
+-#
+%h2= t('generic_files.index.page_title')
+= render "generic_files/index_core", :generic_files => tenant.generic_files
+= render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => GenericFile}

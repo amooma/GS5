@@ -271,6 +271,8 @@ Gemeinschaft42c::Application.routes.draw do
     resources :automatic_call_distributors
     resources :parking_stalls
     resources :voicemail_accounts
+    resources :fax_accounts
+    resources :generic_files
   end
 
   resources :callthroughs, :only => [] do
