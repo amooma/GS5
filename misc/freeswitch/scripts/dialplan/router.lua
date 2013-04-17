@@ -149,6 +149,14 @@ function Router.route_match(self, route)
         elseif command == 'hdr' then
           local search_string = self.caller:to_s('sip_h_' .. variable_name);
           result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
+        elseif command == 'fun' then
+          if self['fun_' .. variable_name] then
+            local arguments = {};
+            for index, argument in ipairs(common.str.to_a(element.replacement, ',')) do
+              table.insert(arguments, common.array.expand_variables(argument, destination, self.variables));
+            end
+            result, replacement = self['fun_' .. variable_name](self, unpack(arguments))
+          end
         end
       end
 
@@ -212,5 +220,34 @@ function Router.route_run(self, table_name, find_first)
 
   if not find_first then
     return routes;
+  end
+end
+
+
+function Router.fun_speeddial(self, number, name)
+  local owner_class = common.array.try(self, 'caller.auth_account.owner.class');
+  local owner_id = common.array.try(self, 'caller.auth_account.owner.id')
+  
+  local user_id = nil;
+  local tenant_id = nil;
+
+  if tostring(owner_class) == 'user' then
+    user_id = owner_id;
+    tenant_id = common.array.try(self, 'caller.auth_account.owner.record.current_nenant_id');
+  elseif
+    tostring(owner_class) == 'tenant' then
+    tenant_id = owner_id;
+  end
+
+  require 'dialplan.phone_book'
+  local phone_book_class = dialplan.phone_book.PhoneBook:new{ log = self.log, database = self.database }
+  local phone_book_entry = phone_book_class:find_entry_by_number_user_tenant({number}, user_id, tenant_id, 'speeddial');
+
+  if phone_book_entry then
+    local phone_numbers = phone_book_class:numbers(phone_book_entry.id, name, 'speeddial');
+    for index, phone_number in ipairs(phone_numbers) do
+      self.log:info('SPEEDDIAL: ', number, ' => ', phone_number.number)
+       return true, phone_number.number;
+    end
   end
 end
