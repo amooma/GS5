@@ -1,7 +1,8 @@
 class FaxAccountsController < ApplicationController
   load_resource :user
+  load_resource :tenant
   load_resource :user_group
-  load_and_authorize_resource :fax_account, :through => [:user, :user_group]
+  load_and_authorize_resource :fax_account, :through => [:user, :user_group, :tenant]
 
   before_filter :set_and_authorize_parent
   before_filter :spread_breadcrumbs
@@ -54,7 +55,7 @@ class FaxAccountsController < ApplicationController
 
   private
   def set_and_authorize_parent
-    @parent = @user || @user_group
+    @parent = @user || @user_group || @tenant
     authorize! :read, @parent
   end
 

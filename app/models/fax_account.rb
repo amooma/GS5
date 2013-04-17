@@ -49,6 +49,7 @@ class FaxAccount < ActiveRecord::Base
         tenant = case self.fax_accountable_type
       	  when 'UserGroup' ; fax_accountable.tenant
       	  when 'User'      ; fax_accountable.current_tenant || fax_accountable.tenants.last
+          when 'Tenant'    ; fax_accountable
       	  else nil
       	end
         self.tenant_id = tenant.id if tenant != nil
