@@ -156,6 +156,13 @@ function Router.route_match(self, route)
               table.insert(arguments, common.array.expand_variables(argument, destination, self.variables));
             end
             result, replacement = self['fun_' .. variable_name](self, unpack(arguments))
+            if self.log_details or true then
+              if result then
+                self.log:debug('ELEMENT_MATCH - function: ', variable_name, '(', table.concat(arguments, ', '), ') => ', replacement);
+              else
+                self.log:debug('ELEMENT_NO_MATCH - function: ', variable_name, '(', table.concat(arguments, ', '), ') => ', tostring(replacement));
+              end
+            end
           end
         end
       end
@@ -233,7 +240,7 @@ function Router.fun_speeddial(self, number, name)
 
   if tostring(owner_class) == 'user' then
     user_id = owner_id;
-    tenant_id = common.array.try(self, 'caller.auth_account.owner.record.current_nenant_id');
+    tenant_id = common.array.try(self, 'caller.auth_account.owner.record.current_tenant_id');
   elseif
     tostring(owner_class) == 'tenant' then
     tenant_id = owner_id;
@@ -243,10 +250,12 @@ function Router.fun_speeddial(self, number, name)
   local phone_book_class = dialplan.phone_book.PhoneBook:new{ log = self.log, database = self.database }
   local phone_book_entry = phone_book_class:find_entry_by_number_user_tenant({number}, user_id, tenant_id, 'speeddial');
 
+  self.log:debug('SPEEDDIAL - user=', user_id, ', tenant=', tenant_id, ', entry: "', common.array.try(phone_book_entry, 'phone_book_name'), '" => "', common.array.try(phone_book_entry, 'caller_id_name'), '"');
+
   if phone_book_entry then
     local phone_numbers = phone_book_class:numbers(phone_book_entry.id, name, 'speeddial');
     for index, phone_number in ipairs(phone_numbers) do
-      self.log:info('SPEEDDIAL: ', number, ' => ', phone_number.number)
+      self.log:info('SPEEDDIAL - ', number, ' => ', phone_number.number)
        return true, phone_number.number;
     end
   end
