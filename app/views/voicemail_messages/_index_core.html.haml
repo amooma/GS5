@@ -40,6 +40,5 @@
               = link_to t('voicemail_messages.index.actions.destroy'), voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :delete
 
   %footer.entries-nav= render :partial => "voicemail_messages/navigation"
-  = link_to Haml::Engine.new("%i.icon-remove").render + ' test ', root_url
   = image_submit_tag('icons/cross-16x.png', :confirm => t("voicemail_messages.index.actions.confirm_selected"))
   = t("voicemail_messages.index.actions.destroy_multiple")
