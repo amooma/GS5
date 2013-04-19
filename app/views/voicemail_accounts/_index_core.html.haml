@@ -2,6 +2,7 @@
   %tr
     %th
     %th= t('voicemail_accounts.index.name')
+    %th= t('voicemail_messages.index.page_title')
 
   
   - for voicemail_account in voicemail_accounts
@@ -12,4 +13,6 @@
         - else
           %i.icon-ban-circle
       %td= voicemail_account.name
+      %td= link_to voicemail_account.voicemail_messages.count, voicemail_account_voicemail_messages_path(voicemail_account)
+
       =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => voicemail_account.voicemail_accountable, :child => voicemail_account}
