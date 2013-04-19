@@ -15,6 +15,16 @@ Gemeinschaft42c::Application.routes.draw do
 
   resources :voicemail_accounts do
     resources :voicemail_settings
+    resources :voicemail_messages do
+      collection do
+        delete 'destroy_multiple'
+      end
+      member do
+        put 'call'
+        put 'mark_read'
+        put 'mark_unread'
+      end
+    end
   end
 
   resources :switchboards do
@@ -303,17 +313,6 @@ Gemeinschaft42c::Application.routes.draw do
         put 'call'
       end
     end
-    resources :voicemail_messages do
-      collection do
-        delete 'destroy_multiple'
-      end
-      member do
-        put 'call'
-        put 'mark_read'
-        put 'mark_unread'
-      end
-    end
-    resources :voicemail_settings
     resources :voicemail_accounts
   end
 
