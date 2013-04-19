@@ -1,12 +1,12 @@
 en:
   voicemail_accounts:
-    name: 'Voicemailaccount'
+    name: 'Voicemail Account'
     controller:
-      successfuly_created: 'Successfully created Voicemailaccount.'
-      successfuly_updated: 'Successfully updated Voicemailaccount.'
-      successfuly_destroyed: 'Successfully destroyed Voicemailaccount.'
+      successfuly_created: 'Successfully created Voicemail Account.'
+      successfuly_updated: 'Successfully updated Voicemail Account.'
+      successfuly_destroyed: 'Successfully destroyed Voicemail Account.'
     index:
-      page_title: 'Listing Voicemailaccount'
+      page_title: 'Voicemail Accounts'
       uuid: 'Uuid'
       name: 'Name'
       active: 'Active'
@@ -14,14 +14,14 @@ en:
       voicemail_accountable_type: 'Voicemail accountable type'
       voicemail_accountable_id: 'Voicemail accountable'
       actions:
-        confirm_destroy: 'Are you sure you want to delete this Voicemailaccount?'
+        confirm_destroy: 'Are you sure you want to delete this Voicemail Account?'
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
         create: 'New'
-        create_for: 'New Voicemailaccount for %{resource}'
+        create_for: 'New Voicemail Account for %{resource}'
     show:
-      page_title: 'Show Voicemailaccount'
+      page_title: 'Show Voicemail Account'
       uuid: 'Uuid'
       name: 'Name'
       active: 'Active'
@@ -34,11 +34,11 @@ en:
         edit: 'Edit'
         view_all: 'View All'
     new:
-      page_title: 'New Voicemailaccount'
+      page_title: 'New Voicemail Account'
       actions:
         back_to_list: 'Back to Index'
     edit:
-      page_title: 'Editing Voicemailaccount'
+      page_title: 'Editing Voicemail Account'
       actions:
         back_to_list: 'Back to Index'
         edit: 'Edit'
