@@ -181,6 +181,7 @@ class Ability
 
           # Voicemail
           #
+          can :read, VoicemailAccount
           can :manage, VoicemailMessage
           can :manage, VoicemailSetting
 
