@@ -24,6 +24,8 @@
       %h2 Gemeinschaft Konfiguration
       = render :partial => 'tenants/gs_parameter_table', :locals => {:tenant => tenant}
 
+      = render :partial => 'tenants/table_of_groups', :locals => {:tenant => tenant}
+
       %p
         Das System kann  
         = PhoneModel.count

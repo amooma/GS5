@@ -12,6 +12,7 @@
       = render :partial => 'tenants/table_of_automatic_call_distributors', :locals => {:tenant => tenant}
 
     = render :partial => 'tenants/users_table', :locals => {:tenant => tenant}
+    
     = render :partial => 'tenants/user_groups_table', :locals => {:tenant => tenant}
 
     = render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => tenant}
@@ -23,6 +24,8 @@
     .well
       %h2 Gemeinschaft Configuration
       = render :partial => 'tenants/gs_parameter_table', :locals => {:tenant => tenant}
+
+      = render :partial => 'tenants/table_of_groups', :locals => {:tenant => tenant}
 
       %p
         This system can provision a total of   
