@@ -20,9 +20,10 @@
             %li
               %a{:href => sip_account_call_histories_path(current_user.sip_accounts.first)}
                 =t("call_histories.index.page_title")
-            %li
-              %a{:href => sip_account_voicemail_messages_path(current_user.sip_accounts.first)}
-                =t("voicemail_messages.index.page_title")
+            - if current_user.voicemail_accounts.first
+              %li
+                %a{:href => voicemail_account_voicemail_messages_path(current_user.voicemail_accounts.first)}
+                  =t("voicemail_messages.index.page_title")
    
       - if current_user
         %ul.nav.pull-right
