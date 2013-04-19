@@ -16,6 +16,8 @@
 
     = render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => tenant}
 
+    = render :partial => 'tenants/table_of_voicemail_accounts', :locals => {:tenant => tenant}
+
     = render :partial => 'generic_files', :locals => {:tenant => tenant}
 
     .well
