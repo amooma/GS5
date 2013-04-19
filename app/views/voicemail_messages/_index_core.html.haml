@@ -1,4 +1,4 @@
-= form_tag(destroy_multiple_sip_account_voicemail_messages_path(@sip_account), :method => :delete, :id => 'voicemail_message_form') do
+= form_tag(destroy_multiple_voicemail_account_voicemail_messages_path(@voicemail_account), :method => :delete, :id => 'voicemail_message_form') do
   %header.entries-nav= render :partial => "voicemail_messages/navigation"
   .content
     %table.table.table-striped
@@ -26,18 +26,18 @@
               = t("voicemail_messages.index.flags.#{voicemail_message.flags}")
           %td.form-actions
             - if can?(:show, voicemail_message) && File.readable?(voicemail_message.file_path)
-              = link_to t('voicemail_messages.index.actions.download'), sip_account_voicemail_message_path(@sip_account, voicemail_message, :format => :wav), :method => :get
-          %td.actions  
-            - if @sip_account.registration && can?(:call, voicemail_message)
-              = link_to t('voicemail_messages.index.actions.call'), call_sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :put
+              = link_to t('voicemail_messages.index.actions.download'), voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message, :format => :wav), :method => :get
+          /%td.actions  
+          /  - if @voicemail_account.registration && can?(:call, voicemail_message)
+          /    = link_to t('voicemail_messages.index.actions.call'), call_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
           %td.form-actions
             - if can?(:edit, voicemail_message) && voicemail_message.read_epoch > 0
-              = link_to t('voicemail_messages.index.actions.mark_unread'), mark_unread_sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :put
+              = link_to t('voicemail_messages.index.actions.mark_unread'), mark_unread_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
             - else
-              = link_to t('voicemail_messages.index.actions.mark_read'), mark_read_sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :put
+              = link_to t('voicemail_messages.index.actions.mark_read'), mark_read_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
           %td.form-actions
             - if can? :destroy, voicemail_message
-              = link_to t('voicemail_messages.index.actions.destroy'), sip_account_voicemail_message_path(@sip_account, voicemail_message), :method => :delete
+              = link_to t('voicemail_messages.index.actions.destroy'), voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :delete
 
   %footer.entries-nav= render :partial => "voicemail_messages/navigation"
   = link_to Haml::Engine.new("%i.icon-remove").render + ' test ', root_url
