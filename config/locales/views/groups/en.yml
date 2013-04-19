@@ -6,7 +6,7 @@ en:
       successfuly_updated: 'Successfully updated Group.'
       successfuly_destroyed: 'Successfully destroyed Group.'
     index:
-      page_title: 'Listing Group'
+      page_title: 'Groups'
       name: 'Name'
       active: 'Active'
       comment: 'Comment'
