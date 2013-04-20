@@ -28,7 +28,7 @@
         %td
           - if call_history.voicemail_message?
             .voicemail-message
-              %a{:href => sip_account_voicemail_messages_path(@sip_account, :anchor => "message_#{call_history.voicemail_message.id}")}
+              %a{:href => voicemail_account_voicemail_messages_path(@sip_account.voicemail_account, :anchor => "message_#{call_history.voicemail_message.id}")}
                 = image_tag('icons/gs_envelope_16x.png') 
               = call_history.display_call_date(t("call_histories.index.date_format"), t("call_histories.index.date_today_format"))
 
