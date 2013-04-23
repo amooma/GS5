@@ -38,15 +38,19 @@ function Router.read_table(self, table_name, force_reload)
     JOIN `route_elements` `b` ON `a`.`id` = `b`.`call_route_id`\
     WHERE `a`.`routing_table` = "' .. table_name .. '" \
     ORDER BY `a`.`position`, `b`.`position`';
-
-  local last_id = 0;
+  
+  local call_routes = {};
+  
   self.database:query(sql_query, function(route)
-    if last_id ~= tonumber(route.call_route_id) then
-      last_id = tonumber(route.call_route_id);
-      table.insert(routing_table, {id = route.call_route_id, name = route.name, endpoint_type = route.endpoint_type , endpoint_id = route.endpoint_id, elements = {} });
+    if call_routes[route.call_route_id] then
+      call_route = call_routes[route.call_route_id];
+    else
+      call_route = {id = route.call_route_id, name = route.name, endpoint_type = route.endpoint_type , endpoint_id = route.endpoint_id, elements = {} };
+      call_routes[route.call_route_id] = call_route;
+      table.insert(routing_table, call_route);
     end
     
-    table.insert(routing_table[#routing_table].elements, {
+    table.insert(call_route.elements, {
       var_in = route.var_in, 
       var_out = route.var_out, 
       pattern = route.pattern,
