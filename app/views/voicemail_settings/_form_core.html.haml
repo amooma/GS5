@@ -1,11 +1,5 @@
 
 .inputs
-  - if !@no_edit or !@no_edit[:name]
-    = f.input :name, :collection => VoicemailSetting::VOICEMAIL_SETTINGS.keys.collect{|i, k| [t("voicemail_settings.settings.#{i}"), i]}, :label => t('voicemail_settings.form.name.label'), :hint => conditional_hint('voicemail_settings.form.name.hint'), :autofocus => true, :include_blank => false
-    = f.input :value, :label => t('voicemail_settings.form.value.label'), :hint => conditional_hint('voicemail_settings.form.value.hint')
-  - else
-    = f.input :value, :label => t("voicemail_settings.settings.#{@no_edit[:name][:name]}"), :hint => conditional_hint('voicemail_settings.form.value.hint'), :as => @no_edit[:name][:input], input_html: @no_edit[:name][:html]
-
-  - if !@no_edit or !@no_edit[:description]
-    = f.input :description, :label => t('voicemail_settings.form.description.label'), :hint => conditional_hint('voicemail_settings.form.description.hint')
-    
+  = f.input :name, :collection => @names_possible, :label => t('voicemail_settings.form.name.label'), :hint => conditional_hint('voicemail_settings.form.name.hint'), :autofocus => true, :include_blank => false
+  = f.input :value, :label => t('voicemail_settings.form.value.label'), :hint => conditional_hint('voicemail_settings.form.value.hint')
+  = f.input :description, :label => t('voicemail_settings.form.description.label'), :hint => conditional_hint('voicemail_settings.form.description.hint')
