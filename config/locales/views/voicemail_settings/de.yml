@@ -1,8 +1,8 @@
 de:
   voicemail_settings:
     name: 'Voicemail Einstellungen'
-    settigs:
-      password: 'PIN'
+    settings:
+      pin: 'PIN'
       notify: 'Notify'
       attachment: 'Attachment'
       mark_read: 'Mark read'
