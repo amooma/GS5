@@ -60,7 +60,7 @@ class VoicemailSetting < ActiveRecord::Base
       when 'Integer'
         self.value = self.value.to_i
       when 'Boolean'
-        self.value = ActiveRecord::ConnectionAdapters::Column.value_to_boolean(self.value)
+        self.value = ActiveRecord::ConnectionAdapters::Column.value_to_boolean(self.value).to_s
       end
     end
   end
