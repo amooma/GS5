@@ -31,6 +31,15 @@ class VoicemailAccountsController < ApplicationController
   def create
     @voicemail_account = @parent.voicemail_accounts.new(params[:voicemail_account])
     if @voicemail_account.save
+      if @parent.class == User
+        @email = @parent.email
+      end
+      @voicemail_account.voicemail_settings.create(:name => 'pin',        :value => ("%06d" % SecureRandom.random_number(999999)),  :class_type => 'String')
+      @voicemail_account.voicemail_settings.create(:name => 'notify',     :value => 'true',  :class_type => 'Boolean')
+      @voicemail_account.voicemail_settings.create(:name => 'attachment', :value => 'true',  :class_type => 'Boolean')
+      @voicemail_account.voicemail_settings.create(:name => 'mark_read',  :value => 'true',  :class_type => 'Boolean')
+      @voicemail_account.voicemail_settings.create(:name => 'purge',      :value => 'false',  :class_type => 'Boolean')
+      @voicemail_account.voicemail_settings.create(:name => 'email',      :value => @email,  :class_type => 'String')
       m = method( :"#{@parent.class.name.underscore}_voicemail_accounts_url" )
       redirect_to m.( @parent ), :notice => t('voicemail_accounts.controller.successfuly_created')
     else
@@ -65,4 +74,5 @@ class VoicemailAccountsController < ApplicationController
 
     authorize! :read, @parent
   end
+
 end
