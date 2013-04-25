@@ -10,6 +10,19 @@ class VoicemailSettingsController < ApplicationController
   end
 
   def new
+    @names_possible = []
+    VoicemailSetting::VOICEMAIL_SETTINGS.keys.each do |name|
+      if @voicemail_account.voicemail_settings.where(:name => name).first
+        next
+      end
+
+      label = t("voicemail_settings.settings.#{name}")
+      if label =~ /^translation missing/
+        label = name.to_s.gsub('_', ' ').capitalize;
+      end
+
+      @names_possible << [label, name]
+    end
   end
 
   def create
@@ -25,14 +38,8 @@ class VoicemailSettingsController < ApplicationController
 
   def edit
     @voicemail_setting = @voicemail_account.voicemail_settings.find(params[:id])
-    @no_edit = {
-      :name => { 
-        :input => VoicemailSetting::VOICEMAIL_SETTINGS.fetch(@voicemail_setting.name,{}).fetch(:input, {}),
-        :name => @voicemail_setting.name.to_s,
-        :html => VoicemailSetting::VOICEMAIL_SETTINGS.fetch(@voicemail_setting.name,{}).fetch(:html, {}),
-      }, 
-      :description => true
-    }
+    @input_type = VoicemailSetting::VOICEMAIL_SETTINGS.fetch(@voicemail_setting.name,{}).fetch(:input, 'String')
+    @input_html = VoicemailSetting::VOICEMAIL_SETTINGS.fetch(@voicemail_setting.name,{}).fetch(:html, {})
   end
 
   def update
@@ -41,6 +48,8 @@ class VoicemailSettingsController < ApplicationController
       m = method( :"#{@voicemail_account.voicemail_accountable.class.name.underscore}_voicemail_account_path" )
       redirect_to m.( @voicemail_account.voicemail_accountable, @voicemail_account ), :notice  => t('voicemail_settings.controller.successfuly_updated')
     else
+      @input_type = VoicemailSetting::VOICEMAIL_SETTINGS.fetch(@voicemail_setting.name,{}).fetch(:input, 'String')
+      @input_html = VoicemailSetting::VOICEMAIL_SETTINGS.fetch(@voicemail_setting.name,{}).fetch(:html, {})
       render :edit
     end
   end
