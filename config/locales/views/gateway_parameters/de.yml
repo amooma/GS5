@@ -6,7 +6,7 @@ de:
       successfuly_updated: 'Gatewayparameter wurde aktualisiert.'
       successfuly_destroyed: 'Gatewayparameter wurde gelöscht.'
     index:
-      page_title: 'Übersicht von Gatewayparameter'
+      page_title: 'Parameter'
       gateway_id: 'Gateway'
       name: 'Name'
       value: 'Value'
@@ -21,7 +21,7 @@ de:
         create_for: 'Gatewayparameter neu anlegen für %{resource}'
     show:
       page_title: 'Gatewayparameter bearbeiten'
-      gateway_id: 'Gateway'
+      gateway: 'Gateway'
       name: 'Name'
       value: 'Value'
       class_type: 'Class type'
