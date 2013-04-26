@@ -1,27 +1,27 @@
 de:
   gateway_settings:
-    name: 'Gateway Einstellungen'
+    name: 'Einstellungen'
     controller:
-      successfuly_created: 'Gateway Einstellung wurde angelegt.'
-      successfuly_updated: 'Gateway Einstellung wurde aktualisiert.'
-      successfuly_destroyed: 'Gateway Einstellung wurde gelöscht.'
+      successfuly_created: 'Einstellung wurde angelegt.'
+      successfuly_updated: 'Einstellung wurde aktualisiert.'
+      successfuly_destroyed: 'Einstellung wurde gelöscht.'
     index:
-      page_title: 'Gateway Einstellungen'
+      page_title: 'Einstellungen'
       gateway_id: 'Gateway'
       name: 'Name'
       value: 'Value'
       class_type: 'Class type'
       description: 'Beschreibung'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Gateway Einstellungen'
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Einstellungen'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
         create: 'Neu anlegen'
-        create_for: 'Gateway Einstellungen neu anlegen für %{resource}'
+        create_for: 'Einstellungen neu anlegen für %{resource}'
     show:
-      page_title: 'Gateway Einstellungen bearbeiten'
-      gateway_id: 'Gateway'
+      page_title: 'Einstellungen bearbeiten'
+      gateway: 'Gateway'
       name: 'Name'
       value: 'Value'
       class_type: 'Class type'
@@ -32,11 +32,11 @@ de:
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     new:
-      page_title: 'Gateway Einstellungen neu anlegen'
+      page_title: 'Einstellungen neu anlegen'
       actions:
         back_to_list: 'Zurück zur Übersicht'
     edit:
-      page_title: 'Gateway Einstellungen bearbeiten'
+      page_title: 'Einstellungen bearbeiten'
       actions:
         back_to_list: 'Zurück zur Übersicht'
         edit: 'Bearbeiten'

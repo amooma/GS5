@@ -21,7 +21,7 @@ en:
         create_for: 'New settings entry for %{resource}'
     show:
       page_title: 'Show Gatewaysetting'
-      gateway_id: 'Gateway'
+      gateway: 'Gateway'
       name: 'Name'
       value: 'Value'
       class_type: 'Class type'
