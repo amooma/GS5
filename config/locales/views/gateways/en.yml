@@ -6,7 +6,7 @@ en:
       successfuly_updated: 'Successfully updated Gateway.'
       successfuly_destroyed: 'Successfully destroyed Gateway.'
     index:
-      page_title: 'Listing Gateway'
+      page_title: 'Gateways'
       name: 'Name'
       technology: 'Technology'
       inbound: 'Inbound'
