@@ -79,7 +79,7 @@ class GenericFilesController < ApplicationController
 
     add_breadcrumb t("generic_files.index.page_title"), method( :"#{@parent.class.name.underscore}_generic_files_url" ).(@parent)
 
-    if @generic_file
+    if !@generic_file.to_s.blank?
       add_breadcrumb @generic_file
     end
 
