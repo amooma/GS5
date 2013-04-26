@@ -42,6 +42,13 @@ class GenericFile < ActiveRecord::Base
     end
   end
 
+  def file_extension
+    mime_type = Mime::LOOKUP[self.file_type]
+    if mime_type.class == Mime::Type
+      return mime_type.symbol
+    end
+  end
+
   private
   def determine_file_type
     if self.file_changed?
