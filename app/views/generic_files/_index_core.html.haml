@@ -9,6 +9,10 @@
       %td= generic_file.category
       %td= generic_file.name
       %td= generic_file.file_type
-      
+      %td
+        %p
+          %a{:href => method( :"#{@parent.class.name.underscore}_generic_file_path" ).(@parent, generic_file, :format => generic_file.file_extension), :method => :get}
+            %i{:class => 'icon-download'}
+            = t("generic_files.index.actions.download")
 
       =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => generic_file.owner, :child => generic_file}
