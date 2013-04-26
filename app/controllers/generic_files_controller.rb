@@ -17,7 +17,15 @@ class GenericFilesController < ApplicationController
   end
 
   def show
-    
+    respond_to do |format|
+      format.html
+      format.xml {render :xml => @generic_file}
+      format.all {
+        if request.format == @generic_file.file_type
+          send_file @generic_file.file.path, :type => @generic_file.file_type, :filename => "#{@generic_file.name}.#{request.parameters[:format].to_s}"
+        end
+      }
+    end
   end
 
   def new
