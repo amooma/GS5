@@ -4,7 +4,7 @@
   %strong= t('group_permissions.show.permission') + ":"
   = @group_permission.permission
 %p
-  %strong= t('group_permissions.show.target_group_id') + ":"
-  = @group_permission.target_group_id
+  %strong= t('group_permissions.show.target_group') + ":"
+  = @group_permission.target_group
 
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @group, :child => @group_permission }
