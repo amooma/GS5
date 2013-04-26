@@ -11,6 +11,7 @@ class GenericFilesController < ApplicationController
   load_and_authorize_resource :generic_file, :through => [:sip_account, :conference, :hunt_group, :automatic_call_distributor, :user, :tenant]
 
   before_filter :set_and_authorize_parent
+  before_filter :spread_breadcrumbs
 
   def index
     @generic_files = @parent.generic_files
@@ -68,5 +69,19 @@ class GenericFilesController < ApplicationController
     @parent = @sip_account || @conference || @hunt_group || @automatic_call_distributor || @user || @tenant
 
     authorize! :read, @parent
+  end
+
+  def spread_breadcrumbs
+    if @parent.class == User
+      add_breadcrumb t("users.index.page_title"), tenant_users_path(@parent.current_tenant)
+      add_breadcrumb @parent, tenant_user_path(@parent.current_tenant, @parent)
+    end
+
+    add_breadcrumb t("generic_files.index.page_title"), method( :"#{@parent.class.name.underscore}_generic_files_url" ).(@parent)
+
+    if @generic_file
+      add_breadcrumb @generic_file
+    end
+
   end
 end
