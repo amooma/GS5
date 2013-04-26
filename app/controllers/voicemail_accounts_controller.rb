@@ -10,6 +10,7 @@ class VoicemailAccountsController < ApplicationController
   load_and_authorize_resource :phone_number, :through => [:sip_account, :conference, :hunt_group, :automatic_call_distributor, :user, :tenant]
 
   before_filter :set_and_authorize_parent
+  before_filter :spread_breadcrumbs
 
   def index
     @voicemail_accounts = @parent.voicemail_accounts
@@ -73,6 +74,19 @@ class VoicemailAccountsController < ApplicationController
     @parent = @sip_account || @conference || @hunt_group || @automatic_call_distributor || @user || @tenant
 
     authorize! :read, @parent
+  end
+
+  def spread_breadcrumbs
+    if @parent.class == User
+      add_breadcrumb t("users.index.page_title"), tenant_users_path(@parent.current_tenant)
+      add_breadcrumb @parent, tenant_user_path(@parent.current_tenant, @parent)
+    end
+
+    add_breadcrumb t("voicemail_accounts.index.page_title"), method( :"#{@parent.class.name.underscore}_voicemail_accounts_url" ).(@parent)
+
+    if !@voicemail_account.to_s.blank?
+      add_breadcrumb @voicemail_account.name
+    end
   end
 
 end
