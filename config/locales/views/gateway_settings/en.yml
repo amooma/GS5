@@ -1,12 +1,12 @@
 en:
   gateway_settings:
-    name: 'Gatewaysetting'
+    name: 'Setting'
     controller:
       successfuly_created: 'Successfully created entry.'
       successfuly_updated: 'Successfully updated entry.'
       successfuly_destroyed: 'Successfully destroyed entry.'
     index:
-      page_title: 'Gateway settings'
+      page_title: 'Settings'
       gateway_id: 'Gateway'
       name: 'Name'
       value: 'Value'
@@ -20,7 +20,7 @@ en:
         create: 'New'
         create_for: 'New settings entry for %{resource}'
     show:
-      page_title: 'Show Gatewaysetting'
+      page_title: 'Show Setting'
       gateway: 'Gateway'
       name: 'Name'
       value: 'Value'
