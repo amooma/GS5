@@ -18,6 +18,7 @@ en:
         destroy: 'Delete'
         edit: 'Edit'
         show: 'View'
+        download: 'Download'
         create: 'New'
         create_for: 'New File for %{resource}'
     show:

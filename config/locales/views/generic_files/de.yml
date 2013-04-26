@@ -18,6 +18,7 @@ de:
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
+        download: 'Herunterladen'
         create: 'Neu anlegen'
         create_for: 'Datei neu anlegen für %{resource}'
     show:
