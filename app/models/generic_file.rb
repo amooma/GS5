@@ -17,6 +17,10 @@ class GenericFile < ActiveRecord::Base
 
   before_save :determine_file_type
 
+  def to_s
+    self.name
+  end
+
   def store_dir
     "/var/opt/gemeinschaft/generic_files/#{self.id.to_i}"
   end
