@@ -11,7 +11,7 @@
       %td= generic_file.file_type
       %td
         %p
-          %a{:href => method( :"#{@parent.class.name.underscore}_generic_file_path" ).(@parent, generic_file, :format => generic_file.file_extension), :method => :get}
+          %a{:href => method( :"#{generic_file.owner.class.name.underscore}_generic_file_path" ).(generic_file.owner, generic_file, :format => generic_file.file_extension), :method => :get}
             %i{:class => 'icon-download'}
             = t("generic_files.index.actions.download")
 
