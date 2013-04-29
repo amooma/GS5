@@ -1,5 +1,8 @@
 class CallHistoriesController < ApplicationController
-  
+  MAX_CALL_HISTORY_ENTRIES = 10000;
+
+  helper_method :sort_column, :sort_descending
+
   load_resource :sip_account
 
   before_filter :set_and_authorize_parent
@@ -18,12 +21,7 @@ class CallHistoriesController < ApplicationController
   def index
     hunt_group_member_ids = PhoneNumber.where(:phone_numberable_type => 'HuntGroupMember', :number => @sip_account.phone_numbers.map {|a| a.number}).map {|a| a.phone_numberable_id}
     hunt_group_ids = HuntGroupMember.where(:id => hunt_group_member_ids, :active => true).map {|a| a.hunt_group_id}
-    calls = CallHistory.where('(call_historyable_type = "SipAccount" AND call_historyable_id = ?) OR (call_historyable_type = "HuntGroup" AND call_historyable_id IN (?))', @sip_account.id, hunt_group_ids).order('start_stamp DESC')
-    
-    @call_histories = calls.paginate(
-      :page => @pagination_page_number,
-      :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
-    )
+    calls = CallHistory.where('(call_historyable_type = "SipAccount" AND call_historyable_id = ?) OR (call_historyable_type = "HuntGroup" AND call_historyable_id IN (?))', @sip_account.id, hunt_group_ids).order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC'))
 
     @calls_count = calls.count
     @calls_received_count = calls.where(:entry_type => 'received').count
@@ -32,10 +30,15 @@ class CallHistoriesController < ApplicationController
     @calls_forwarded_count = calls.where(:entry_type => 'forwarded').count
 
     if ! @type.blank?
-      @call_histories = @call_histories.where(:entry_type => @type)
+      @call_histories = calls.where(:entry_type => @type).limit(MAX_CALL_HISTORY_ENTRIES)
+    else
+      @call_histories = calls.limit(MAX_CALL_HISTORY_ENTRIES)
     end
 
-    @call_histories = @call_histories.order(:created_at).reverse_order.limit(1000)
+    @call_histories =  @call_histories.paginate(
+      :page => @pagination_page_number,
+      :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
+    )
   end
 
 
@@ -100,6 +103,18 @@ class CallHistoriesController < ApplicationController
        add_breadcrumb @call_history, sip_account_call_history_path(@sip_account, @call_history)
      end
     end
+  end
+
+  def sort_descending
+    if sort_column == 'start_stamp' && params[:desc].to_s.blank?
+      return true
+    end
+   
+    params[:desc].to_s == 'true'
+  end
+
+  def sort_column
+    CallHistory.column_names.include?(params[:sort]) ? params[:sort] : 'start_stamp'
   end
 
 end
