@@ -20,6 +20,9 @@ module ApplicationHelper
 	end
 
   def sortable(column, title)
+    if !defined?(sort_descending)
+      return title
+    end
     link_class = (column.to_s == sort_column.to_s) ? "sort_descending #{sort_descending}" : nil
     desc = (column.to_s == sort_column.to_s) ? !!(!sort_descending && column) : nil
     link_to title, {:sort => column, :desc => desc, :type => @type}, {:class => link_class}
