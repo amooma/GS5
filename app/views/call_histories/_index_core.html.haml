@@ -24,16 +24,30 @@
         %tr{:id => "call_history_id_#{call_history.id}_tr", :class => (call_history.duration.blank? ? 'warning' : '')}
           %td.select_box= check_box_tag("selected_ids[]", call_history.id, false, :uuid => "select_item_#{call_history.id}", :class => 'select_item')
           %td
-            -if call_history.entry_type == 'dialed'
-              %i{:class => 'icon-arrow-left'}
-            -elsif call_history.entry_type == 'missed'
-              %i{:class => 'icon-time'}
-            -elsif call_history.entry_type == 'forwarded'
-              %i{:class => 'icon-random'}
-            - else
-              %i{:class => 'icon-arrow-right'}
             = l call_history.start_stamp, :format => :short
-            %br= t("call_histories.index.missed.#{call_history.entry_type}")
+            %br
+              -if call_history.entry_type == 'dialed'
+                %i{:class => 'icon-arrow-left'}
+              -elsif call_history.entry_type == 'missed'
+                %i{:class => 'icon-time'}
+              -elsif call_history.entry_type == 'forwarded'
+                - if call_history.callee_account_type.to_s.downcase == 'voicemailaccount'
+                  %i{:class => 'icon-envelope'}
+                - else
+                  %i{:class => 'icon-random'}
+              - else
+                %i{:class => 'icon-arrow-right'}
+
+              - if call_history.entry_type == 'forwarded'
+                - if call_history.callee_account_type.to_s.downcase == 'phonenumber'
+                  = call_history.destination_number
+                - if call_history.callee_account_type.to_s.downcase == 'voicemailaccount'
+                  = VoicemailAccount.where(:id => call_history.callee_account_id).first.to_s
+              - elsif call_history.entry_type == 'dialed'
+                = call_history.caller_id_number
+              - else
+                = call_history.destination_number
+            
           %td
             - image = call_history.display_image(:mini, phone_book_entry)
             - if image
@@ -56,6 +70,7 @@
               = call_history.result.gsub('_', ' ').titleize
             - else
               = t("call_histories.call_results.#{call_history.result}")
+            /= call_history.inspect
           %td
             - if @sip_account.registration && can?(:call, call_history)
               = link_to raw("<i class = 'icon-bell'></i> ") + t('call_histories.index.actions.call'), call_sip_account_call_history_path(@sip_account, call_history), :method => :put, :class => 'btn btn-mini'
