@@ -5,8 +5,14 @@ class UsersController < ApplicationController
   
   before_filter :set_and_authorize_parent
   before_filter :spread_breadcrumbs
+
+  helper_method :sort_column, :sort_descending
   
   def index
+    @users = User.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
+      :page => @pagination_page_number,
+      :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
+    )
   end
 
   def show
@@ -86,6 +92,14 @@ class UsersController < ApplicationController
         add_breadcrumb @user, tenant_user_path(@tenant, @user)
       end
     end
+  end
+
+  def sort_descending
+    params[:desc].to_s == 'true'
+  end
+
+  def sort_column
+    User.column_names.include?(params[:sort]) ? params[:sort] : 'id'
   end
 
 end
