@@ -1,6 +1,7 @@
 - cache(['user_table_row_inner_td', I18n.locale, current_user, users.reorder(:updated_at).last, users.count, GsParameter.get('NUMBER_OF_SHOWN_ITEMS')]) do
   .pagination
-    = will_paginate users, :renderer => BootstrapPagination::Rails
+    - if defined?(users.total_pages)
+      = will_paginate users, :renderer => BootstrapPagination::Rails
   %table.table.table-striped
     %thead
       %tr
