@@ -54,11 +54,12 @@ de:
         label: 'Zeitüberschreitung in Sekunden'
         hint: 'Nur für "nicht antworten" benötigt.'
       destination:
-        label: 'Ziel Telefonnummer'
+        label: 'Ziel'
         hint: 'Format: +49-30-2270 für eine normale Telefonnummer. 42 für eine interne Durchwahl.'
+        hint: 'Abhängig vom gewählten Zielart oben: z.B. Telefonnummer (+49301234567 oder 42), Mailboxansage (greeting_12345)'
       call_forwarding_destination:
         label: 'Zielauswahl'
-        hint: 'Ziel auswählen oder Rufnummer unten eingeben.'
+        hint: 'Ziel auswählen und zusätzliche Informationen unten eingeben.'
       hunt_group: 
         label: 'Rufgruppen-Verknüpfung'
         hint: 'Die hier ausgewählt Rufgruppe schaltet automatisch diese Weiterleitung an und aus.'
@@ -66,8 +67,8 @@ de:
         label: 'Weiterleitung zum Anrufbeantworter'
         hint: 'Kann nicht zusammen mit einer Ziel Telefonnummer aktiert werden.'
       source:
-        label: 'Quelle'
-        hint: "Für welche Anrufer Telefonnummern soll diese Rufumleitung aktiv sein? Wenn kein Eintrag, dann für alle."
+        label: 'Beschränkung'
+        hint: "Rufnummern (z.B. +49301234567,100,42) oder key-value Paare (z.B. date=[1-5]$, time!=080000-163000)"
       depth:
         label: 'Weiterleitungs-Sprünge'
         hint: "Die maximale Anzahl von Rufumleitungssprüngen. 1 bedeutet, das der Anruf nur bis zum nächsten Ziel weitergeleitet wird."
