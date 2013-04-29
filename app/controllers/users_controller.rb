@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   helper_method :sort_column, :sort_descending
   
   def index
-    @users = User.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
+    @users = @parent.users.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
       :page => @pagination_page_number,
       :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
     )
