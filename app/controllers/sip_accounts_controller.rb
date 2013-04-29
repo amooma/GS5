@@ -6,7 +6,13 @@ class SipAccountsController < ApplicationController
   before_filter :set_and_authorize_parent
   before_filter :spread_breadcrumbs
 
+  helper_method :sort_column, :sort_descending
+
   def index
+    @sip_accounts = @parent.sip_accounts.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
+      :page => @pagination_page_number,
+      :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
+    )
   end
 
   def show
@@ -108,6 +114,14 @@ class SipAccountsController < ApplicationController
   def possible_voicemail_accounts
     @possible_voicemail_accounts = @sip_account.voicemail_accounts
     @possible_voicemail_accounts = @possible_voicemail_accounts + @sip_account.sip_accountable.voicemail_accounts
+  end
+
+  def sort_descending
+    params[:desc].to_s == 'true'
+  end
+
+  def sort_column
+    SipAccount.column_names.include?(params[:sort]) ? params[:sort] : 'id'
   end
 
 end
