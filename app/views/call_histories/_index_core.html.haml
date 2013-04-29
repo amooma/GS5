@@ -1,85 +1,64 @@
-= render :partial => "call_histories/navigation"
 
-%table.table.table-striped
-  %thead
-    %tr
-      %th
-        Datum
-      %th
-        Uhrzeit
-      %th
-        Misc
-      %th
-        Avatar
-      %th
-        Teilnehmer
-      %th
-        Status
+= render :partial => "call_histories/navigation", :locals => {:call_histories => call_histories, :type => @type}
 
-  %tbody
-    - for call_history in call_histories
-      - if !call_history.display_number.blank?
-        - phone_book_entry = call_history.phone_book_entry_by_number(call_history.display_number)
-      %tr{:id => "call_history_id_#{call_history.id}_tr", :class => (call_history.duration.blank? ? 'warning' : '')}
-        %td
-          = l call_history.start_stamp, :format => :short
-        %td
-          = l call_history.start_stamp, :format => :short          
-        %td
-          - if call_history.voicemail_message?
-            .voicemail-message
-              %a{:href => voicemail_account_voicemail_messages_path(@sip_account.voicemail_account, :anchor => "message_#{call_history.voicemail_message.id}")}
-                = image_tag('icons/gs_envelope_16x.png') 
-              = call_history.display_call_date(t("call_histories.index.date_format"), t("call_histories.index.date_today_format"))
+= form_tag(destroy_multiple_sip_account_call_histories_path(@sip_account), :method => :delete, :id => 'call_hostory_form') do
+  %table.table.table-striped
+    %thead
+      %tr
+        %th{:width => '10px'}
+        %th
+          =sortable :start_stamp, t("call_histories.index.date")
+        %th{:width => '10px'}
+        %th
+          =sortable :caller_id_name, t("call_histories.index.called_party")
+        %th
+          =sortable :duration, t("call_histories.index.duration")
+        %th
+          =sortable :result, t("call_histories.index.status")
+        %th
 
-          - else
-            - case call_history.entry_type
-            - when 'forwarded'
-              .call-forwarded= call_history.display_call_date(t("call_histories.index.date_format"), t("call_histories.index.date_today_format"))
-              - if call_history.callee_account_type.to_s.downcase == 'voicemail'
-                = t("call_histories.index.voicemail")
-              - else
-                = call_history.destination_number
-            - when 'dialed'
-              .call-placed= call_history.display_call_date(t("call_histories.index.date_format"), t("call_histories.index.date_today_format"))
-            - when 'received'
-              .call-received= call_history.display_call_date(t("call_histories.index.date_format"), t("call_histories.index.date_today_format"))
-            - when 'missed'
-              .call-missed= call_history.display_call_date(t("call_histories.index.date_format"), t("call_histories.index.date_today_format"))
-            - else 
-              .call-unknown
-              = t("call_histories.index.#{call_history.entry_type}")
-              = call_history.display_call_date(t("call_histories.index.date_format"), t("call_histories.index.date_today_format"))
-
-          - if call_history.forwarding_service && call_history.entry_type != 'forwarded'
-            = t("call_histories.index.forwarded_by")
-            = call_history.display_auth_account_name
-        %td
-          - image = call_history.display_image(:small, phone_book_entry)
-          - if image
-            %ul.thumbnails
-              %li.span1
-                %div.thumbnail
-                  %a.thumbnail{:href => call_history.display_image(:profile, phone_book_entry)}
-                    =image_tag(image, :alt => phone_book_entry.to_s, :class => 'img-rounded')
-        %td
-          - display_name = call_history.display_name
-          - if display_name.blank?
-            - display_name = phone_book_entry.to_s
-          - if phone_book_entry
-            %a.name{:href => phone_book_phone_book_entry_path(phone_book_entry.phone_book, phone_book_entry), :itemprop => "name"}= display_name
-          - else
-            .name= display_name
-          .phone= call_history.display_number
-        %td
-          - if call_history.display_duration
-            = call_history.display_duration
-          - else
-            = t("call_histories.call_results.#{call_history.result}")
-        %td
-          - if @sip_account.registration && can?(:call, call_history)
-            = link_to raw("<i class = 'icon-bell'></i> ") + t('call_histories.index.actions.call'), call_sip_account_call_history_path(@sip_account, call_history), :method => :put, :class => 'btn btn-mini'
-        %td
-          - if can? :destroy, call_history
-            = link_to raw("<i class = 'icon-trash icon-white'></i> ") + t('call_histories.index.actions.destroy'), [@sip_account, call_history], :method => :delete, :remote => true, :class => 'btn btn-mini btn-danger'
-           
+    %tbody
+      - for call_history in call_histories
+        - if !call_history.display_number.blank?
+          - phone_book_entry = call_history.phone_book_entry_by_number(call_history.display_number)
+        %tr{:id => "call_history_id_#{call_history.id}_tr", :class => (call_history.duration.blank? ? 'warning' : '')}
+          %td.select_box= check_box_tag("selected_ids[]", call_history.id, false, :uuid => "select_item_#{call_history.id}", :class => 'select_item')
+          %td
+            -if call_history.entry_type == 'dialed'
+              %i{:class => 'icon-arrow-left'}
+            -elsif call_history.entry_type == 'missed'
+              %i{:class => 'icon-time'}
+            -elsif call_history.entry_type == 'forwarded'
+              %i{:class => 'icon-random'}
+            - else
+              %i{:class => 'icon-arrow-right'}
+            = l call_history.start_stamp, :format => :short
+            %br= t("call_histories.index.missed.#{call_history.entry_type}")
+          %td
+            - image = call_history.display_image(:mini, phone_book_entry)
+            - if image
+              %ul.thumbnails
+                =image_tag(image, :alt => phone_book_entry.to_s, :class => 'img-rounded')
+          %td
+            - display_name = call_history.display_name
+            - if display_name.blank?
+              - display_name = phone_book_entry.to_s
+            - if phone_book_entry
+              %a.name{:href => phone_book_phone_book_entry_path(phone_book_entry.phone_book, phone_book_entry), :itemprop => "name"}= display_name
+            - else
+              .name= display_name
+            .phone= call_history.display_number
+          %td
+            - if call_history.display_duration
+              = call_history.display_duration
+          %td
+            - if t("call_histories.call_results.#{call_history.result}").include?('translation missing')
+              = call_history.result.gsub('_', ' ').titleize
+            - else
+              = t("call_histories.call_results.#{call_history.result}")
+          %td
+            - if @sip_account.registration && can?(:call, call_history)
+              = link_to raw("<i class = 'icon-bell'></i> ") + t('call_histories.index.actions.call'), call_sip_account_call_history_path(@sip_account, call_history), :method => :put, :class => 'btn btn-mini'
+          %td
+            - if can? :destroy, call_history
+              = link_to raw("<i class = 'icon-trash icon-white'></i> ") + t('call_histories.index.actions.destroy'), [@sip_account, call_history], :method => :delete, :remote => true, :class => 'btn btn-mini btn-danger'
