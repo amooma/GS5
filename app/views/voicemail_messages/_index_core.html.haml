@@ -29,6 +29,10 @@
     %tbody
       - for voicemail_message in voicemail_messages
         - phone_book_entry = nil
+        - image = nil
+        - if !voicemail_message.cid_number.blank?
+          - phone_book_entry = voicemail_message.phone_book_entry_by_number(voicemail_message.cid_number)
+          - image = phone_book_entry.image_url(:mini)
         %tr{:id => "message_#{voicemail_message.uuid}"}
           %td.select_box= check_box_tag("selected_uuids[]", voicemail_message.uuid, false, :uuid => "select_item_#{voicemail_message.uuid}", :class => 'select_item')
           %td
@@ -42,7 +46,6 @@
                 %i{:class => 'icon-envelope'}
                 = t("voicemail_messages.index.unread")
           %td
-            - image = nil
             - if image
               %ul.thumbnails
                 =image_tag(image, :alt => phone_book_entry.to_s, :class => 'img-rounded')
@@ -57,6 +60,7 @@
           %td
             - if ! voicemail_message.flags.blank?
               = t("voicemail_messages.index.flags.#{voicemail_message.flags}")
+            = voicemail_message.phone_book_entry_by_number(voicemail_message.cid_number)
           %td
             - if can?(:show, voicemail_message) && File.readable?(voicemail_message.file_path)
               = link_to raw("<i class = 'icon-download'></i> ") + t('voicemail_messages.index.actions.download'), voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message, :format => :wav), :method => :get
