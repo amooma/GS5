@@ -5,6 +5,8 @@ class VoicemailMessagesController < ApplicationController
 
   before_filter :set_and_authorize_parent
   before_filter :spread_breadcrumbs
+
+  helper_method :sort_column, :sort_descending
   
   before_filter { |controller|
     if ! params[:type].blank? then
@@ -22,17 +24,17 @@ class VoicemailMessagesController < ApplicationController
     @messages_read_count = @messages_count - @messages_unread_count
 
     if @type == 'read'
-      @voicemail_messages = @voicemail_account.voicemail_messages.where('read_epoch > 0').order('created_epoch DESC').paginate(
+      @voicemail_messages = @voicemail_account.voicemail_messages.where('read_epoch > 0').order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
                             :page => @pagination_page_number,
                             :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
                           )
     elsif @type == 'unread'
-      @voicemail_messages = @voicemail_account.voicemail_messages.where(:read_epoch => 0).order('created_epoch DESC').paginate(
+      @voicemail_messages = @voicemail_account.voicemail_messages.where(:read_epoch => 0).order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
                             :page => @pagination_page_number,
                             :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
                           )
     else
-      @voicemail_messages = @voicemail_account.voicemail_messages.order('created_epoch DESC').paginate(
+      @voicemail_messages = @voicemail_account.voicemail_messages.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
                             :page => @pagination_page_number,
                             :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
                           )
@@ -135,6 +137,18 @@ class VoicemailMessagesController < ApplicationController
        add_breadcrumb @voicemail_message, voicemail_account_voicemail_message_path(@voicemail_account, @voicemail_message)
      end
     end
+  end
+
+  def sort_descending
+    if sort_column == 'created_epoch' && params[:desc].to_s.blank?
+      return true
+    end
+   
+    params[:desc].to_s == 'true'
+  end
+
+  def sort_column
+    VoicemailMessage.column_names.include?(params[:sort]) ? params[:sort] : 'created_epoch'
   end
 
 end
