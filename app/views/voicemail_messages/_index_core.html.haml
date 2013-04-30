@@ -1,44 +1,63 @@
-= form_tag(destroy_multiple_voicemail_account_voicemail_messages_path(@voicemail_account), :method => :delete, :id => 'voicemail_message_form') do
-  %header.entries-nav= render :partial => "voicemail_messages/navigation"
-  .content
-    %table.table.table-striped
-      
-      - for voicemail_message in voicemail_messages
-        %tr.voicemail-messages-entry{:id => "message_#{voicemail_message.uuid}"}
-          %td.select_box= check_box_tag("selected_uuids[]", voicemail_message.uuid, false, :uuid => "select_item_#{voicemail_message.uuid}", :class => 'select_item')
-          %td.time
-            .voicemail-received
-              = voicemail_message.format_date(voicemail_message.created_epoch, t("voicemail_messages.index.date_format"), t("voicemail_messages.index.date_today_format"))
 
-            - read_date = voicemail_message.format_date(voicemail_message.read_epoch, t("voicemail_messages.index.date_format"), t("voicemail_messages.index.date_today_format"))
-            - if read_date
-              .voicemail-read
-                = read_date
-          %td.folder
-            = t("voicemail_messages.index.mailbox.#{voicemail_message.in_folder}")
-          %td.user
-            .name= voicemail_message.cid_name
+= render :partial => "voicemail_messages/navigation", :locals => {:type => @type}
+
+= form_tag(destroy_multiple_voicemail_account_voicemail_messages_path(@voicemail_account), :method => :delete, :id => 'Setting_form') do 
+  %table.table.table-striped
+    %thead
+      %tr
+        %th{:width => '10px'}
+          = button_tag(:type => 'submit', :class => 'btn btn-mini btn-danger', :confirm => t("voicemail_messages.index.actions.confirm_selected")) do
+            %i{:class => 'icon-trash icon-white'}
+        %th
+          =sortable :created_epoch, t("voicemail_messages.index.date")
+        %th{:width => '10px'}
+        %th
+          =sortable :cid_name, t("voicemail_messages.index.calling_party")
+        %th
+          =sortable :message_len, t("voicemail_messages.index.duration")
+        %th
+          =sortable :flags, t("voicemail_messages.index.message_flags")
+        %th
+        %th
+
+    %tbody
+      - for voicemail_message in voicemail_messages
+        - phone_book_entry = nil
+        %tr{:id => "message_#{voicemail_message.uuid}"}
+          %td.select_box= check_box_tag("selected_uuids[]", voicemail_message.uuid, false, :uuid => "select_item_#{voicemail_message.uuid}", :class => 'select_item')
+          %td
+            = l Time.at(voicemail_message.created_epoch).to_datetime, :format => :short
+            - if voicemail_message.read_epoch > 0
+              %br
+                %i{:class => 'icon-bullhorn'}
+                = l Time.at(voicemail_message.read_epoch).to_datetime, :format => :short
+            - else
+              %br
+                %i{:class => 'icon-envelope'}
+                = t("voicemail_messages.index.unread")
+          %td
+            - image = nil
+            - if image
+              %ul.thumbnails
+                =image_tag(image, :alt => phone_book_entry.to_s, :class => 'img-rounded')
+          %td
+            - if phone_book_entry
+              %a.name{:href => phone_book_phone_book_entry_path(phone_book_entry.phone_book, phone_book_entry), :itemprop => "name"}= voicemail_message.cid_name
+            - else
+              .name= voicemail_message.cid_name
             .phone= voicemail_message.cid_number
-          %td.status
-            .duration= voicemail_message.display_duration
+          %td
+            = voicemail_message.display_duration
           %td
             - if ! voicemail_message.flags.blank?
               = t("voicemail_messages.index.flags.#{voicemail_message.flags}")
-          %td.form-actions
+          %td
             - if can?(:show, voicemail_message) && File.readable?(voicemail_message.file_path)
-              = link_to t('voicemail_messages.index.actions.download'), voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message, :format => :wav), :method => :get
-          /%td.actions  
-          /  - if @voicemail_account.registration && can?(:call, voicemail_message)
-          /    = link_to t('voicemail_messages.index.actions.call'), call_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
-          %td.form-actions
+              = link_to raw("<i class = 'icon-download'></i> ") + t('voicemail_messages.index.actions.download'), voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message, :format => :wav), :method => :get
             - if can?(:edit, voicemail_message) && voicemail_message.read_epoch > 0
-              = link_to t('voicemail_messages.index.actions.mark_unread'), mark_unread_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
+              = link_to raw("<i class = 'icon-envelope'></i> ") + t('voicemail_messages.index.actions.mark_unread'), mark_unread_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
             - else
-              = link_to t('voicemail_messages.index.actions.mark_read'), mark_read_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
-          %td.form-actions
+              = link_to raw("<i class = 'icon-bullhorn'></i> ") + t('voicemail_messages.index.actions.mark_read'), mark_read_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
+          %td
             - if can? :destroy, voicemail_message
-              = link_to t('voicemail_messages.index.actions.destroy'), voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :delete
-
-  %footer.entries-nav= render :partial => "voicemail_messages/navigation"
-  = image_submit_tag('icons/cross-16x.png', :confirm => t("voicemail_messages.index.actions.confirm_selected"))
-  = t("voicemail_messages.index.actions.destroy_multiple")
+              = link_to raw("<i class = 'icon-trash icon-white'></i> ") + t('voicemail_messages.index.actions.destroy'), [@voicemail_account, voicemail_message], :method => :delete, :remote => true, :class => 'btn btn-mini btn-danger'
