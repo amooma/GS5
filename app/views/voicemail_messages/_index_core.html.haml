@@ -32,7 +32,8 @@
         - image = nil
         - if !voicemail_message.cid_number.blank?
           - phone_book_entry = voicemail_message.phone_book_entry_by_number(voicemail_message.cid_number)
-          - image = phone_book_entry.image_url(:mini)
+          - if phone_book_entry
+            - image = phone_book_entry.image_url(:mini)
         %tr{:id => "message_#{voicemail_message.uuid}"}
           %td.select_box= check_box_tag("selected_uuids[]", voicemail_message.uuid, false, :uuid => "select_item_#{voicemail_message.uuid}", :class => 'select_item')
           %td
