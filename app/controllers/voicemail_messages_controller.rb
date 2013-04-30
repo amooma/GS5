@@ -137,18 +137,25 @@ class VoicemailMessagesController < ApplicationController
   end
 
   def spread_breadcrumbs
-    if @parent.class == SipAccount
-     if @voicemail_account.voicemail_accountable.class == User
-       add_breadcrumb t("#{@voicemail_account.voicemail_accountable.class.name.underscore.pluralize}.index.page_title"), method( :"tenant_#{@voicemail_account.voicemail_accountable.class.name.underscore.pluralize}_path" ).(@voicemail_account.tenant)
-       add_breadcrumb @voicemail_account.voicemail_accountable, method( :"tenant_#{@voicemail_account.voicemail_accountable.class.name.underscore}_path" ).(@voicemail_account.tenant, @voicemail_account.voicemail_accountable)
-     end
-     add_breadcrumb t("voicemail_accounts.index.page_title"), method( :"#{@voicemail_account.voicemail_accountable.class.name.underscore}_voicemail_accounts_path" ).(@voicemail_account.voicemail_accountable)
-     add_breadcrumb @voicemail_account, method( :"#{@voicemail_account.voicemail_accountable.class.name.underscore}_voicemail_account_path" ).(@voicemail_account.voicemail_accountable, @voicemail_account)
-     add_breadcrumb t("voicemail_messages.index.page_title"), voicemail_account_voicemail_messages_path(@voicemail_account)
-     if @voicemail_message && !@voicemail_message.new_record?
-       add_breadcrumb @voicemail_message, voicemail_account_voicemail_message_path(@voicemail_account, @voicemail_message)
-     end
+    parent = @voicemail_account.voicemail_accountable
+   
+    if parent.class == User
+      add_breadcrumb t("users.index.page_title"), tenant_users_path(parent.current_tenant)
+      add_breadcrumb parent, tenant_user_path(parent.current_tenant, parent)
+    elsif parent.class == SipAccount
+      if parent.sip_accountable.class == User
+        add_breadcrumb t("users.index.page_title"), tenant_users_path(parent.sip_accountable.current_tenant)
+        add_breadcrumb parent.sip_accountable, tenant_user_path(parent.sip_accountable.current_tenant, parent.sip_accountable)
+      end
+
+      add_breadcrumb t("sip_accounts.index.page_title"), method( :"#{parent.sip_accountable.class.name.underscore}_sip_accounts_url" ).(parent.sip_accountable)
+      add_breadcrumb parent, method( :"#{parent.sip_accountable.class.name.underscore}_sip_account_path" ).(parent.sip_accountable, parent)
     end
+
+    add_breadcrumb t("voicemail_accounts.index.page_title"), method( :"#{parent.class.name.underscore}_voicemail_accounts_url" ).(parent)
+    add_breadcrumb @voicemail_account.name, method( :"#{parent.class.name.underscore}_voicemail_account_path" ).(parent, @voicemail_account)
+
+    add_breadcrumb t("voicemail_messages.index.page_title")
   end
 
   def sort_descending
