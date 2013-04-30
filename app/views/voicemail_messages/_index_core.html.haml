@@ -19,7 +19,13 @@
           =sortable :flags, t("voicemail_messages.index.message_flags")
         %th
         %th
-
+    %tfoot
+      %tr
+        %td{:colspan => 2}
+          = button_tag(:type => 'submit', :class => 'btn btn-mini btn-danger', :confirm => t("voicemail_messages.index.actions.confirm_selected")) do
+            %i{:class => 'icon-trash icon-white'}
+          = t("voicemail_messages.index.actions.destroy_multiple")
+        %td{:colspan => 4}
     %tbody
       - for voicemail_message in voicemail_messages
         - phone_book_entry = nil
