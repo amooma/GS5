@@ -18,7 +18,13 @@
         %th
           =sortable :result, t("call_histories.index.status")
         %th
-
+    %tfoot
+      %tr
+        %td{:colspan => 2}
+          = button_tag(:type => 'submit', :class => 'btn btn-mini btn-danger', :confirm => t("call_histories.index.actions.confirm_selected")) do
+            %i{:class => 'icon-trash icon-white'}
+          = t("call_histories.index.actions.destroy_multiple")
+        %td{:colspan => 5}
     %tbody
       - for call_history in call_histories
         - if !call_history.display_number.blank?
