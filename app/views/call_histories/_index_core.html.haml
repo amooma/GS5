@@ -6,6 +6,8 @@
     %thead
       %tr
         %th{:width => '10px'}
+          = button_tag(:type => 'submit', :class => 'btn btn-mini btn-danger', :confirm => t("call_histories.index.actions.confirm_selected")) do
+            %i{:class => 'icon-trash icon-white'}
         %th
           =sortable :start_stamp, t("call_histories.index.date")
         %th{:width => '10px'}
