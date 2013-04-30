@@ -72,10 +72,9 @@
               = call_history.result.gsub('_', ' ').titleize
             - else
               = t("call_histories.call_results.#{call_history.result}")
-            /= call_history.inspect
           %td
             - if @sip_account.registration && can?(:call, call_history)
               = link_to raw("<i class = 'icon-bell'></i> ") + t('call_histories.index.actions.call'), call_sip_account_call_history_path(@sip_account, call_history), :method => :put, :class => 'btn btn-mini'
-          %td
+
             - if can? :destroy, call_history
               = link_to raw("<i class = 'icon-trash icon-white'></i> ") + t('call_histories.index.actions.destroy'), [@sip_account, call_history], :method => :delete, :remote => true, :class => 'btn btn-mini btn-danger'
