@@ -39,6 +39,8 @@ class VoicemailMessagesController < ApplicationController
                             :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
                           )
     end
+
+    @available_sip_account = available_sip_account()
   end
 
   def show
@@ -94,10 +96,20 @@ class VoicemailMessagesController < ApplicationController
     end
   end
 
+  def available_sip_account
+    voicemail_accountable = @voicemail_account.voicemail_accountable
+    if voicemail_accountable.class == SipAccount
+      return voicemail_accountable
+    elsif voicemail_accountable.class == User
+      return voicemail_accountable.sip_accounts.first
+    end
+  end
+
   def call
     phone_number = @voicemail_message.cid_number
-    if ! phone_number.blank? && @voicemail_account.registration
-      @voicemail_account.call(phone_number)
+    sip_account = self.available_sip_account
+    if ! phone_number.blank? && sip_account && sip_account.registration
+      sip_account.call(phone_number)
     end
     redirect_to(:back)
   end
