@@ -9,6 +9,11 @@ de:
       page_title_unread: 'Ungelesene Nachrichten'
       date_format: '%d.%m.%Y %H:%M'
       date_today_format: '%H:%M'
+      date: 'Empfangen'
+      calling_party: 'Teilnehmer'
+      duration: 'Zeit'
+      message_flags: 'Flags'
+      unread: 'Ungelesen'
       navigation:
         read: 'Gelesen: %{count}'
         unread: 'Ungelesen: %{count}'
@@ -21,6 +26,7 @@ de:
         call: 'Anrufen'
         mark_read: 'gelesen'
         mark_unread: 'ungelesen'
+        download: 'Download'
       mailbox:
         inbox: 'Eingang'
       flags:
