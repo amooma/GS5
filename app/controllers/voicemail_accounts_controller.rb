@@ -80,6 +80,14 @@ class VoicemailAccountsController < ApplicationController
     if @parent.class == User
       add_breadcrumb t("users.index.page_title"), tenant_users_path(@parent.current_tenant)
       add_breadcrumb @parent, tenant_user_path(@parent.current_tenant, @parent)
+    elsif @parent.class == SipAccount
+      if @parent.sip_accountable.class == User
+        add_breadcrumb t("users.index.page_title"), tenant_users_path(@parent.sip_accountable.current_tenant)
+        add_breadcrumb @parent.sip_accountable, tenant_user_path(@parent.sip_accountable.current_tenant, @parent.sip_accountable)
+      end
+
+      add_breadcrumb t("sip_accounts.index.page_title"), method( :"#{@parent.sip_accountable.class.name.underscore}_sip_accounts_url" ).(@parent.sip_accountable)
+      add_breadcrumb @parent, method( :"#{@parent.sip_accountable.class.name.underscore}_sip_account_path" ).(@parent.sip_accountable, @parent)
     end
 
     add_breadcrumb t("voicemail_accounts.index.page_title"), method( :"#{@parent.class.name.underscore}_voicemail_accounts_url" ).(@parent)
