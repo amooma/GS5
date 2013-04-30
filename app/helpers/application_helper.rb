@@ -23,9 +23,18 @@ module ApplicationHelper
     if !defined?(sort_descending)
       return title
     end
-    link_class = (column.to_s == sort_column.to_s) ? "sort_descending #{sort_descending}" : nil
-    desc = (column.to_s == sort_column.to_s) ? !!(!sort_descending && column) : nil
-    link_to title, {:sort => column, :desc => desc, :type => @type}, {:class => link_class}
+
+    if column.to_s == sort_column.to_s
+      link_class = "sort_descending #{sort_descending}"
+      desc = !!(!sort_descending && column)
+      icon = sort_descending ? ' <i class = "icon-chevron-up"></i> ' : ' <i class = "icon-chevron-down"></i> '
+    else
+      link_class = nil
+      desc = nil
+      icon = ''
+    end
+
+    link_to raw('') + title + raw(icon), {:sort => column, :desc => desc, :type => @type}, {:class => link_class}
   end
 
 end
