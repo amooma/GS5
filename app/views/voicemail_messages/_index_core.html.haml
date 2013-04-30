@@ -59,5 +59,8 @@
             - else
               = link_to raw("<i class = 'icon-bullhorn'></i> ") + t('voicemail_messages.index.actions.mark_read'), mark_read_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
           %td
+            - if @available_sip_account && @available_sip_account.registration && can?(:call, voicemail_message)
+              = link_to raw("<i class = 'icon-bell'></i> ") + t('voicemail_messages.index.actions.call'), call_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put, :class => 'btn btn-mini'
+
             - if can? :destroy, voicemail_message
               = link_to raw("<i class = 'icon-trash icon-white'></i> ") + t('voicemail_messages.index.actions.destroy'), [@voicemail_account, voicemail_message], :method => :delete, :remote => true, :class => 'btn btn-mini btn-danger'
