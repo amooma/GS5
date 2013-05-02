@@ -1,14 +1,15 @@
-%ul{:class => 'nav nav-pills'}
-  %li{:class => (type.blank? ? :active : nil )}
-    %a{ :href => "?type=" }= t("call_histories.index.navigation.all", :calls => @calls_count)
-  %li{:class => (type == 'missed' ? :active : nil )}
-    %a{ :href => "?type=missed" }= t("call_histories.index.navigation.missed", :calls => @calls_missed_count)
-  %li{:class => (type == 'received' ? :active : nil )}
-    %a{ :href => "?type=received" }= t("call_histories.index.navigation.received", :calls => @calls_received_count)
-  %li{:class => (type == 'dialed' ? :active : nil )}
-    %a{ :href => "?type=dialed" }= t("call_histories.index.navigation.dialed", :calls => @calls_dialed_count)
-  %li{:class => (type == 'forwarded' ? :active : nil )}
-    %a{ :href => "?type=forwarded" }= t("call_histories.index.navigation.forwarded", :calls => @calls_forwarded_count)
+%div{:class => 'pagination'}
+  %ul
+    %li{:class => (type.blank? ? :active : nil )}
+      %a{ :href => "?type=" }= t("call_histories.index.navigation.all", :calls => @calls_count)
+    %li{:class => (type == 'missed' ? :active : nil )}
+      %a{ :href => "?type=missed" }= t("call_histories.index.navigation.missed", :calls => @calls_missed_count)
+    %li{:class => (type == 'received' ? :active : nil )}
+      %a{ :href => "?type=received" }= t("call_histories.index.navigation.received", :calls => @calls_received_count)
+    %li{:class => (type == 'dialed' ? :active : nil )}
+      %a{ :href => "?type=dialed" }= t("call_histories.index.navigation.dialed", :calls => @calls_dialed_count)
+    %li{:class => (type == 'forwarded' ? :active : nil )}
+      %a{ :href => "?type=forwarded" }= t("call_histories.index.navigation.forwarded", :calls => @calls_forwarded_count)
 
-.pagination
-  = will_paginate call_histories, :renderer => BootstrapPagination::Rails
+
+  = will_paginate call_histories, :renderer => BootstrapPagination::Rails, :previous_label => raw('<i class = "icon-chevron-left"></i>'), :next_label => raw('<i class = "icon-chevron-right"></i>'), :class => nil
