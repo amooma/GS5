@@ -1,10 +1,10 @@
-%ul{:class => 'nav nav-pills'}
-  %li{:class => (type.blank? ? :active : nil )}
-    %a{ :href => "?type=" }= t('voicemail_messages.index.navigation.all', :count => @messages_count)
-  %li{:class => (type == 'read' ? :active : nil )}
-    %a{ :href => "?type=read" }= t('voicemail_messages.index.navigation.read', :count => @messages_read_count)
-  %li{:class => (type == 'unread' ? :active : nil )}
-    %a{ :href => "?type=unread" }= t('voicemail_messages.index.navigation.unread', :count => @messages_unread_count)
+%div{:class => 'pagination'}
+  %ul
+    %li{:class => (type.blank? ? :active : nil )}
+      %a{ :href => "?type=" }= t('voicemail_messages.index.navigation.all', :count => @messages_count)
+    %li{:class => (type == 'read' ? :active : nil )}
+      %a{ :href => "?type=read" }= t('voicemail_messages.index.navigation.read', :count => @messages_read_count)
+    %li{:class => (type == 'unread' ? :active : nil )}
+      %a{ :href => "?type=unread" }= t('voicemail_messages.index.navigation.unread', :count => @messages_unread_count)
 
-.pagination
-  = will_paginate @voicemail_messages, :renderer => BootstrapPagination::Rails
+    = will_paginate @voicemail_messages, :renderer => BootstrapPagination::Rails, :previous_label => raw('<i class = "icon-chevron-left"></i>'), :next_label => raw('<i class = "icon-chevron-right"></i>'), :class => nil
