@@ -1,77 +1,77 @@
 
 = render :partial => "voicemail_messages/navigation", :locals => {:type => @type}
 
-= form_tag(destroy_multiple_voicemail_account_voicemail_messages_path(@voicemail_account), :method => :delete, :id => 'Setting_form') do 
-  %table.table.table-striped
-    %thead
-      %tr
-        %th{:width => '10px'}
-          = button_tag(:type => 'submit', :class => 'btn btn-mini btn-danger', :confirm => t("voicemail_messages.index.actions.confirm_selected")) do
-            %i{:class => 'icon-trash icon-white'}
-        %th
-          =sortable :created_epoch, t("voicemail_messages.index.date")
-        %th{:width => '10px'}
-        %th
-          =sortable :cid_name, t("voicemail_messages.index.calling_party")
-        %th
-          =sortable :message_len, t("voicemail_messages.index.duration")
-        %th
-          =sortable :flags, t("voicemail_messages.index.message_flags")
-        %th
-        %th
-    %tfoot
-      %tr
-        %td{:colspan => 2}
-          = button_tag(:type => 'submit', :class => 'btn btn-mini btn-danger', :confirm => t("voicemail_messages.index.actions.confirm_selected")) do
-            %i{:class => 'icon-trash icon-white'}
-          = t("voicemail_messages.index.actions.destroy_multiple")
-        %td{:colspan => 4}
-    %tbody
-      - for voicemail_message in voicemail_messages
-        - phone_book_entry = nil
-        - image = nil
-        - if !voicemail_message.cid_number.blank?
-          - phone_book_entry = voicemail_message.phone_book_entry_by_number(voicemail_message.cid_number)
-          - if phone_book_entry
-            - image = phone_book_entry.image_url(:mini)
-        %tr{:id => "message_#{voicemail_message.uuid}"}
-          %td.select_box= check_box_tag("selected_uuids[]", voicemail_message.uuid, false, :uuid => "select_item_#{voicemail_message.uuid}", :class => 'select_item')
-          %td
-            = l Time.at(voicemail_message.created_epoch).to_datetime, :format => :short
-            - if voicemail_message.read_epoch > 0
-              %br
-                %i{:class => 'icon-bullhorn'}
-                = l Time.at(voicemail_message.read_epoch).to_datetime, :format => :short
-            - else
-              %br
-                %i{:class => 'icon-envelope'}
-                = t("voicemail_messages.index.unread")
-          %td
-            - if image
-              %ul.thumbnails
-                =image_tag(image, :alt => phone_book_entry.to_s, :class => 'img-rounded')
-          %td
+- if voicemail_messages.any?
+  = form_tag(destroy_multiple_voicemail_account_voicemail_messages_path(@voicemail_account), :method => :delete, :id => 'Setting_form') do 
+    %table.table.table-striped
+      %thead
+        %tr
+          %th{:width => '10px'}
+            = button_tag(:type => 'submit', :class => 'btn btn-mini btn-danger', :confirm => t("voicemail_messages.index.actions.confirm_selected")) do
+              %i{:class => 'icon-trash icon-white'}
+          %th
+            =sortable :created_epoch, t("voicemail_messages.index.date")
+          %th{:width => '10px'}
+          %th
+            =sortable :cid_name, t("voicemail_messages.index.calling_party")
+          %th
+            =sortable :message_len, t("voicemail_messages.index.duration")
+          %th
+            =sortable :flags, t("voicemail_messages.index.message_flags")
+          %th
+          %th
+      %tfoot
+        %tr
+          %td{:colspan => 2}
+            = button_tag(:type => 'submit', :class => 'btn btn-mini btn-danger', :confirm => t("voicemail_messages.index.actions.confirm_selected")) do
+              %i{:class => 'icon-trash icon-white'}
+            = t("voicemail_messages.index.actions.destroy_multiple")
+          %td{:colspan => 4}
+      %tbody
+        - for voicemail_message in voicemail_messages
+          - phone_book_entry = nil
+          - image = nil
+          - if !voicemail_message.cid_number.blank?
+            - phone_book_entry = voicemail_message.phone_book_entry_by_number(voicemail_message.cid_number)
             - if phone_book_entry
-              %a.name{:href => phone_book_phone_book_entry_path(phone_book_entry.phone_book, phone_book_entry), :itemprop => "name"}= voicemail_message.cid_name
-            - else
-              .name= voicemail_message.cid_name
-            .phone= voicemail_message.cid_number
-          %td
-            = voicemail_message.display_duration
-          %td
-            - if ! voicemail_message.flags.blank?
-              = t("voicemail_messages.index.flags.#{voicemail_message.flags}")
-            = voicemail_message.phone_book_entry_by_number(voicemail_message.cid_number)
-          %td
-            - if can?(:show, voicemail_message) && File.readable?(voicemail_message.file_path)
-              = link_to raw("<i class = 'icon-download'></i> ") + t('voicemail_messages.index.actions.download'), voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message, :format => :wav), :method => :get
-            - if can?(:edit, voicemail_message) && voicemail_message.read_epoch > 0
-              = link_to raw("<i class = 'icon-envelope'></i> ") + t('voicemail_messages.index.actions.mark_unread'), mark_unread_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
-            - else
-              = link_to raw("<i class = 'icon-bullhorn'></i> ") + t('voicemail_messages.index.actions.mark_read'), mark_read_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
-          %td
-            - if @available_sip_account && @available_sip_account.registration && can?(:call, voicemail_message)
-              = link_to raw("<i class = 'icon-bell'></i> ") + t('voicemail_messages.index.actions.call'), call_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put, :class => 'btn btn-mini'
+              - image = phone_book_entry.image_url(:mini)
+          %tr{:id => "message_#{voicemail_message.uuid}"}
+            %td.select_box= check_box_tag("selected_uuids[]", voicemail_message.uuid, false, :uuid => "select_item_#{voicemail_message.uuid}", :class => 'select_item')
+            %td
+              = l Time.at(voicemail_message.created_epoch).to_datetime, :format => :short
+              - if voicemail_message.read_epoch > 0
+                %br
+                  %i{:class => 'icon-bullhorn'}
+                  = l Time.at(voicemail_message.read_epoch).to_datetime, :format => :short
+              - else
+                %br
+                  %i{:class => 'icon-envelope'}
+                  = t("voicemail_messages.index.unread")
+            %td
+              - if image
+                %ul.thumbnails
+                  =image_tag(image, :alt => phone_book_entry.to_s, :class => 'img-rounded')
+            %td
+              - if phone_book_entry
+                %a.name{:href => phone_book_phone_book_entry_path(phone_book_entry.phone_book, phone_book_entry), :itemprop => "name"}= voicemail_message.cid_name
+              - else
+                .name= voicemail_message.cid_name
+              .phone= voicemail_message.cid_number
+            %td
+              = voicemail_message.display_duration
+            %td
+              - if ! voicemail_message.flags.blank?
+                = t("voicemail_messages.index.flags.#{voicemail_message.flags}")
+            %td
+              - if can?(:show, voicemail_message) && File.readable?(voicemail_message.file_path)
+                = link_to raw("<i class = 'icon-download'></i> ") + t('voicemail_messages.index.actions.download'), voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message, :format => :wav), :method => :get
+              - if can?(:edit, voicemail_message) && voicemail_message.read_epoch > 0
+                = link_to raw("<i class = 'icon-envelope'></i> ") + t('voicemail_messages.index.actions.mark_unread'), mark_unread_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
+              - else
+                = link_to raw("<i class = 'icon-bullhorn'></i> ") + t('voicemail_messages.index.actions.mark_read'), mark_read_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put
+            %td
+              - if @available_sip_account && @available_sip_account.registration && can?(:call, voicemail_message)
+                = link_to raw("<i class = 'icon-bell'></i> ") + t('voicemail_messages.index.actions.call'), call_voicemail_account_voicemail_message_path(@voicemail_account, voicemail_message), :method => :put, :class => 'btn btn-mini'
 
-            - if can? :destroy, voicemail_message
-              = link_to raw("<i class = 'icon-trash icon-white'></i> ") + t('voicemail_messages.index.actions.destroy'), [@voicemail_account, voicemail_message], :method => :delete, :remote => true, :class => 'btn btn-mini btn-danger'
+              - if can? :destroy, voicemail_message
+                = link_to raw("<i class = 'icon-trash icon-white'></i> ") + t('voicemail_messages.index.actions.destroy'), [@voicemail_account, voicemail_message], :method => :delete, :remote => true, :class => 'btn btn-mini btn-danger'
