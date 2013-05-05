@@ -56,6 +56,8 @@ class CallForward < ActiveRecord::Base
     end
   }
 
+  before_validation :resolve_prerouting
+
   after_save :set_presence
   after_save :deactivate_concurring_entries, :if => Proc.new { |cf| cf.active == true }
   before_destroy :deactivate_connected_softkeys
@@ -135,6 +137,18 @@ class CallForward < ActiveRecord::Base
     end 
   end
 
+  def resolve_prerouting
+    if self.destinationable_type == 'PhoneNumber' && GsParameter.get('CALLFORWARD_DESTINATION_RESOLVE') != false
+      if self.call_forwardable.class == PhoneNumber
+        prerouting = PhoneNumber.resolve_prerouting(self.destination, self.call_forwardable.phone_numberable)
+      else
+        prerouting = PhoneNumber.resolve_prerouting(self.destination, self.call_forwardable)
+      end
+      if prerouting && !prerouting['destination_number'].blank? && prerouting['type'] == 'phonenumber'
+        self.destination = prerouting['destination_number']
+      end
+    end
+  end
 
   def send_presence_event(state, call_forwarding_service = nil)
     dialplan_function = "cftg-#{self.id}"
