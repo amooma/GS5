@@ -240,7 +240,9 @@ class PhoneNumber < ActiveRecord::Base
       'caller.account_uuid' => account.try(:uuid),
     })
 
-    return routes['routes']['1']
+    if routes
+      return routes['routes']['1']
+    end
   end
   
   # Find the (grand-)parent tenant of this phone number:
