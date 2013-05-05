@@ -223,6 +223,25 @@ class PhoneNumber < ActiveRecord::Base
       end
     end
   end
+
+  def resolve_prerouting
+    return PhoneNumber.resolve_prerouting(self.number, self.phone_numberable)
+  end
+
+  def self.resolve_prerouting(number, account = SipAccount.first)
+
+    routes = CallRoute.test_route(:prerouting, {
+      'caller.destination_number' => number,
+      'caller.auth_account_type' => account.class.name, 
+      'caller.auth_account_id' => account.id, 
+      'caller.auth_account_uuid' => account.try(:uuid),
+      'caller.account_type' => account.class.name, 
+      'caller.account_id' => account.id, 
+      'caller.account_uuid' => account.try(:uuid),
+    })
+
+    return routes['routes']['1']
+  end
   
   # Find the (grand-)parent tenant of this phone number:
   #
