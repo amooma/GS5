@@ -210,6 +210,10 @@ class PhoneNumber < ActiveRecord::Base
         self.central_office_code = nil
         self.extension = self.number.to_s.strip         
       else
+        prerouting = resolve_prerouting
+        if prerouting && !prerouting['destination_number'].blank? && prerouting['type'] == 'phonenumber'
+          self.number = prerouting['destination_number']
+        end 
         parsed_number = PhoneNumber.parse( self.number )
         if parsed_number
           self.country_code = parsed_number[:country_code]
@@ -225,10 +229,11 @@ class PhoneNumber < ActiveRecord::Base
   end
 
   def resolve_prerouting
-    return PhoneNumber.resolve_prerouting(self.number, self.phone_numberable)
+    return PhoneNumber.resolve_prerouting(self.number.strip, self.phone_numberable)
   end
 
-  def self.resolve_prerouting(number, account = SipAccount.first)
+  def self.resolve_prerouting(number, account = nil)
+    account = account || SipAccount.first
 
     routes = CallRoute.test_route(:prerouting, {
       'caller.destination_number' => number,
