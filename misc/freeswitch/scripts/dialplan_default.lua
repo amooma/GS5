@@ -117,6 +117,8 @@ else
   start_dialplan:run(start_destination);
 end
 
+start_caller.session:unsetInputCallback();
+
 -- release database handle
 if database then
   database:release();
