@@ -233,11 +233,19 @@ function SipCall.fork(self, destinations, arg )
     end
 
     if arg.detect_dtmf_after_bridge_caller and self.caller.auth_account then
-      session:execute('start_dtmf');
+      if not string.match(self.caller:to_s('switch_r_sdp'), '101 telephone%-event') then
+        self.log:notice('FORK A_LEG inband dtmf detection - channel_uuid: ', session:get_uuid());
+        session:execute('start_dtmf');
+      end
     end
+    
     if arg.detect_dtmf_after_bridge_callee and destination.type == 'sipaccount' then
-      session_callee:execute('start_dtmf');
+      if not string.match(tostring(session_callee:getVariable('switch_r_sdp')), '101 telephone%-event') then
+        self.log:notice('FORK B_LEG inband dtmf detection - channel_uuid: ', session_callee:get_uuid());
+        session_callee:execute('start_dtmf');
+      end
     end
+
     if arg.bypass_media_network then
       local callee_uuid = session_callee:get_uuid();
 
