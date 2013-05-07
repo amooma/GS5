@@ -802,7 +802,7 @@ AAAA'
 
     @phone_xml_object = { 
       :name => 'snom_phone_directory',
-      :title => "$(lang:menu100_phone_book) #{@dialpad_keys}".strip,
+      :title => "#{t('config_snom.phone_book.title')} #{@dialpad_keys}".strip,
       :entries => [],
       :softkeys => [],
     }
@@ -865,7 +865,6 @@ AAAA'
   end
 
   def call_history
-
     if ! @sip_account
       render(
         :status => 404,
@@ -876,10 +875,10 @@ AAAA'
       return
     end
 
-    if ['dialed', 'missed', 'received'].include? @type
+    if ['dialed', 'missed', 'received', 'forwarded'].include? @type
       @phone_xml_object = { 
         :name => "snom_phone_directory",
-        :title => "$(lang:menu100_call_lists) - #{@type.to_s.camelize}",
+        :title => "#{t('config_snom.call_history.title')} - #{@type.to_s.camelize}",
         :entries => []
       }
 
@@ -909,11 +908,81 @@ AAAA'
       base_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath.split("?")[0]}"
       @phone_xml_object = { 
         :name => 'snom_phone_menu',
-        :title => '$(lang:menu100_call_lists)',
+        :title => t('config_snom.call_history.title'),
         :entries => [
-          {:text => '$(lang:list_missed)', :url => "#{base_url}?&type=missed",   :selected => false},
-          {:text => '$(lang:list_taken)',  :url => "#{base_url}?&type=received", :selected => false},
-          {:text => '$(lang:list_dialed)', :url => "#{base_url}?&type=dialed",   :selected => false},
+          {:text => t('config_snom.call_history.missed'), :url => "#{base_url}?&type=missed",   :selected => false},
+          {:text => t('config_snom.call_history.received'),  :url => "#{base_url}?&type=received", :selected => false},
+          {:text => t('config_snom.call_history.dialed'), :url => "#{base_url}?&type=dialed",   :selected => false},
+        ]
+      }
+    end
+
+    respond_to { |format|
+      format.any {
+        self.formats = [ :xml ]
+        render :action => "_#{@phone_xml_object[:name]}"
+      }
+    }
+
+  end
+
+  def voicemail
+    if ! @sip_account
+      render(
+        :status => 404,
+        :layout => false,
+        :content_type => 'text/plain',
+        :text => "<!-- SipAccount not found -->",
+      )
+      return
+    end
+
+    if !@sip_account.voicemail_account
+      render(
+        :status => 404,
+        :layout => false,
+        :content_type => 'text/plain',
+        :text => "<!-- VoicemailAccount not found -->",
+      )
+      return
+    end
+
+    account = @sip_account.voicemail_account
+
+    if ['read', 'unread'].include? @type
+      if @type == 'unread'
+        messages = account.voicemail_messages.where('read_epoch IS NULL OR read_epoch = 0')
+      elsif @type == 'read'
+        messages = account.voicemail_messages.where('read_epoch > 0')
+      end
+      @phone_xml_object = { 
+        :name => "snom_phone_directory",
+        :title => t("config_snom.voicemail.#{@type}_count", :count => messages.count),
+        :entries => []
+      }
+      messages.each do |message|
+        @phone_xml_object[:entries].push({
+            :selected => false, 
+            :number => "f-vmplay-#{message.uuid}",
+            :text => "#{call_date_compact(Time.at(message.created_epoch).to_datetime)} #{message.cid_name} #{message.cid_number}",
+            })
+      end
+    elsif @type == 'settings'
+      base_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath.split("?")[0]}"
+      @phone_xml_object = { 
+        :name => 'snom_phone_menu',
+        :title => t('config_snom.voicemail_settings.title'),
+        :entries => []
+      }
+    else
+      base_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath.split("?")[0]}"
+      @phone_xml_object = { 
+        :name => 'snom_phone_menu',
+        :title => account,
+        :entries => [
+          {:text => t('config_snom.voicemail.unread_count', :count => account.voicemail_messages.where('read_epoch IS NULL OR read_epoch = 0').count), :url => "#{base_url}?&type=unread", :selected => false},
+          {:text => t('config_snom.voicemail.read_count', :count => account.voicemail_messages.where('read_epoch > 0').count), :url => "#{base_url}?&type=read", :selected => false},
+          {:text => t('config_snom.voicemail.settings'), :url => "#{base_url}?&type=settings", :selected => false},
         ]
       }
     end
