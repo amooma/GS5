@@ -242,6 +242,7 @@ class ConfigSnomController < ApplicationController
     phone_sip_accounts = Array.new()
 
     if send_sensitve
+      phone_parameters = GsParameter.get_list('phones', 'snom')
       if @phone.sip_accounts && @phone.sip_accounts.count > 0
         phone_sip_accounts = @phone.sip_accounts
       elsif @phone.fallback_sip_account
@@ -250,6 +251,7 @@ class ConfigSnomController < ApplicationController
       expiry_seconds = GsParameter.get('SIP_EXPIRY_SECONDS')
       phone_sip_accounts.each do |sip_account|
         if (sip_account.sip_accountable_type == @phone.phoneable_type) and (sip_account.sip_accountable_id == @phone.phoneable_id)
+
         	snom_sip_account = {
             :id         => sip_account.id,
             :active     => 'on',
@@ -259,12 +261,22 @@ class ConfigSnomController < ApplicationController
         		:outbound   => sip_account.host,
         		:name       => sip_account.auth_name,
         		:realname   => 'Call',
-        		:idle_text  => sip_account.caller_name,
+        		:user_idle_text  => sip_account.caller_name,
             :expiry     => expiry_seconds, 
           }
 
           if sip_account.voicemail_account
             snom_sip_account[:mailbox] = "<sip:#{sip_account.voicemail_account.name}@#{sip_account.host}>"
+          end
+
+          phone_parameters.each do |name, value|
+            snom_sip_account[name.to_sym] = value.gsub!(/\{([a-z0-9_\.]+)\}/) { |v| 
+              source = sip_account
+              $1.split('.').each do |method|
+                source = source.send(method) if source.respond_to?(method)
+              end
+              source.to_s
+            }
           end
 
           @sip_accounts.push(snom_sip_account)
