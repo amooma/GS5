@@ -169,6 +169,7 @@ Gemeinschaft42c::Application.routes.draw do
   get "config_snom/:phone/:sip_account/phone_book"         => "config_snom#phone_book"
   get "config_snom/:phone/:sip_account/call_history"       => "config_snom#call_history"
   get "config_snom/:phone/:sip_account/call_history_:type" => "config_snom#call_history"
+  get "config_snom/:phone/:sip_account/voicemail"          => "config_snom#voicemail"
   get "config_snom/:phone/:sip_account/call_forwarding"    => "config_snom#call_forwarding"
   get "config_snom/exit"                                   => "config_snom#exit"
   get "config_snom/:phone/exit"                            => "config_snom#exit"
