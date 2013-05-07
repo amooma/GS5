@@ -1,0 +1,37 @@
+en:
+  config_snom:
+    main_menu:
+      phone_book: 'Telefonbuch'
+      call_history: 'Anrufliste'
+      voicemail: 'Voicemail'
+      sip_account: 'SIP Account'
+      log_in: 'Log in'
+      log_out: 'Log out'
+      preferences: 'Einstellungen'
+      maintenance: 'Wartung'
+    call_history:
+      title: 'Anrufe'
+      missed: 'Verpasst'
+      received: 'Empfangen'
+      dialed: 'Gewählt'
+      forwarded: 'Weitergeleitet'
+    voicemail:
+      title: 'Voicemail'
+      unread_count: 'Ungelesen: %{count}'
+      read_count: 'Gelesen: %{count}'
+      settings: 'Einstellungen'
+    preferences:
+      contrast: 'Kontrast'
+      use_backlight: 'Hintergrundbeleuchtung'
+      backlight_active: 'Hintergrundbeleuchtung aktiv'
+      backlight_idle: 'Hintergrundbeleuchtung inaktiv'
+      equalizer: 'Equalizer'
+    maintenance:
+      system_info: 'System Information'
+      reboot: 'Neustart'
+      reset_settings: 'Werkseinstellungen'
+      software_update: 'Software Update'
+    phone_book:
+      title: 'Telefonbuch'
+    voicemail_settings:
+      title: 'Voicemail Einstellungen'
