@@ -194,6 +194,18 @@ class ConfigSiemensController < ApplicationController
       #logger.debug(@phone_items)
       @my_nonce = params[:WorkpointMessage][:Message][:nonce]
       @new_settings = Array.new
+
+      phone_parameters = GsParameter.get_list('phones', 'siemens')
+      phone_parameters.each do |name, value|
+        value = value.gsub!(/\{([a-z0-9_\.]+)\}/) { |v| 
+          source = @sip_account
+          $1.split('.').each do |method|
+            source = source.send(method) if source.respond_to?(method)
+          end
+          source.to_s
+        }
+        @new_settings << [name, nil,  value]
+      end
       
       @new_settings << ['dhcp', nil,  'true']
       @new_settings << ['hostname', nil,  mac_address.gsub(':', '') ]
@@ -478,7 +490,6 @@ class ConfigSiemensController < ApplicationController
       @new_settings << ['feature-availability', 31,  'false'] # feature toggle
       @new_settings << ['feature-availability', 33,  'true'] # line overview
       @new_settings << ['feature-availability', 33,  'false'] # phone lock
-
 
       @soft_keys = Array.new
       # Fill softkeys with keys dependent on limit of phone      
