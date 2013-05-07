@@ -129,7 +129,7 @@
     != "\<!-- sip accounts: #{@sip_accounts.count} --\>"
     - @sip_accounts.each_with_index do |sip_account, array_index|
       - index = array_index + 1 
-      != "\<!-- sip account #{array_index}: #{sip_account[:idle_text]}, #{sip_account[:active]} --\>"
+      != "\<!-- sip account #{array_index}: #{sip_account[:user_idle_text]}, #{sip_account[:active]} --\>"
       %user_active{:idx => index, :perm => 'R'}= sip_account[:active]
       %user_pname{:idx => index, :perm => 'R'}= sip_account[:pname]
       %user_pass{:idx => index, :perm => 'R'}= sip_account[:pass]
@@ -137,7 +137,7 @@
       %user_outbound{:idx => index, :perm => 'R'}= sip_account[:outbound]
       %user_name{:idx => index, :perm => 'R'}= sip_account[:name]
       %user_realname{:idx => index, :perm => 'R'}= sip_account[:realname]
-      %user_idle_text{:idx => index, :perm => 'R'}= sip_account[:idle_text]
+      %user_idle_text{:idx => index, :perm => 'R'}= sip_account[:user_idle_text]
       %user_mailbox{:idx => index, :perm => 'R'}= sip_account[:mailbox]
       %user_expiry{:idx => index, :perm => 'R'}= sip_account[:expiry]
       %user_server_type{:idx => index, :perm => 'R'}= 'default'
