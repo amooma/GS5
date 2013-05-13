@@ -10,7 +10,7 @@ class SipAccountsController < ApplicationController
 
   def index
     @sip_accounts = @parent.sip_accounts.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
-      :page => @pagination_page_number,
+      :page => params[:page],
       :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
     )
   end
