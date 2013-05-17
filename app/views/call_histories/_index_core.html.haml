@@ -41,17 +41,29 @@
                   %i{:class => 'icon-time'}
                 -elsif call_history.entry_type == 'forwarded'
                   - if call_history.callee_account_type.to_s.downcase == 'voicemailaccount'
-                    %i{:class => 'icon-envelope'}
+                    - voicemail_message = call_history.voicemail_message
+                    - if voicemail_message
+                      - if voicemail_message.read_epoch > 0
+                        %i{:class => 'icon-bullhorn'}
+                      - else
+                        %i{:class => 'icon-envelope'}
+                    - else
+                      %i{:class => 'icon-random'}
                   - else
                     %i{:class => 'icon-random'}
                 - else
                   %i{:class => 'icon-arrow-right'}
 
                 - if call_history.entry_type == 'forwarded'
-                  - if call_history.callee_account_type.to_s.downcase == 'phonenumber'
-                    = call_history.destination_number
                   - if call_history.callee_account_type.to_s.downcase == 'voicemailaccount'
-                    = VoicemailAccount.where(:id => call_history.callee_account_id).first.to_s
+                    - if voicemail_message
+                      %a.name{:href => voicemail_account_voicemail_messages_path(voicemail_message.voicemail_account, :anchor => "message_#{voicemail_message.uuid}")}
+                        = voicemail_message.display_duration
+                      /= VoicemailAccount.where(:id => call_history.callee_account_id).first.to_s
+                    - else
+                      = VoicemailAccount.where(:id => call_history.callee_account_id).first.to_s
+                  - else
+                    = call_history.destination_number                    
                 - elsif call_history.entry_type == 'dialed'
                   = call_history.caller_id_number
                 - else
