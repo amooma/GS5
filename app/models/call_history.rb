@@ -133,19 +133,14 @@ class CallHistory < ActiveRecord::Base
       
   end
 
-  def voicemail_message?
-    begin 
-      return self.call_historyable.voicemail_messages.where(:forwarded_by => self.caller_channel_uuid).any?
-    rescue
-      return nil
-    end
-  end
-
   def voicemail_message
-    begin 
-      return self.call_historyable.voicemail_messages.where(:forwarded_by => self.caller_channel_uuid).first
-    rescue
-      return nil
+    if self.callee_account_type.downcase == 'voicemailaccount'
+      voicemail_account = VoicemailAccount.where(:id => self.callee_account_id).first
+      if voicemail_account
+        return voicemail_account.voicemail_messages.where(:forwarded_by => self.caller_channel_uuid).first
+      else
+        return nil
+      end
     end
   end
 
