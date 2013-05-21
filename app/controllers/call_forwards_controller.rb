@@ -92,6 +92,14 @@ class CallForwardsController < ApplicationController
     if @parent 
       if @parent.class == PhoneNumber && @parent.phone_numberable_type == 'SipAccount'
         @sip_account = @parent.phone_numberable
+      elsif @parent.class == PhoneNumber && @parent.phone_numberable_type == 'HuntGroup'
+        add_breadcrumb t("hunt_groups.index.page_title"), tenant_hunt_groups_path(@parent.phone_numberable.tenant)
+        add_breadcrumb @parent.phone_numberable, tenant_hunt_group_path(@parent.phone_numberable.tenant, @parent.phone_numberable)
+        add_breadcrumb t("phone_numbers.index.page_title"), hunt_group_phone_numbers_path(@parent.phone_numberable)
+        add_breadcrumb @parent, hunt_group_phone_number_path(@parent.phone_numberable, @parent)
+      elsif @parent.class == HuntGroup
+        add_breadcrumb t("hunt_groups.index.page_title"), tenant_hunt_groups_path(@parent.tenant)
+        add_breadcrumb @parent, tenant_hunt_group_path(@parent.tenant, @parent)
       end
 
       if @sip_account
