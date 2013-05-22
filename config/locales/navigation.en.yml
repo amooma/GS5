@@ -1,3 +1,5 @@
 en:
   navigation:
     admin_docu: 'Admin-Doc'
+    search_placeholder: 'Search ...'
+
