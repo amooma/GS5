@@ -113,7 +113,7 @@ class CallRoutesController < ApplicationController
 
   private
   def call_route_parameter_params
-    params.require(:call_route).permit(:routing_table, :name, :endpoint_type, :endpoint_id, :position)
+    params.require(:call_route).permit(:routing_table, :name, :endpoint_type, :endpoint_id, :position, :xml)
   end
 
   def spread_breadcrumbs

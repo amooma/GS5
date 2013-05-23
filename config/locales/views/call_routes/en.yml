@@ -52,4 +52,8 @@ en:
       position:
         label: 'Position'
         hint: ''
+      xml:
+        separator: 'or define as XML'
+        label: 'XML'
+        hint: 'Enter XML route'
       submit: 'Submit'
