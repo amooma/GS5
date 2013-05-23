@@ -56,6 +56,12 @@ en:
       destination:
         label: 'Destination'
         hint: 'Depends on type specified above: e.g. phone number (+15551234567 or 42), voicemail greeting (greeting_12345)'
+      destination_phone_number:
+        label: 'Phone Number'
+        hint: 'Phone number (e.g. +15551234567 or 42)'
+      destination_greeting:
+        label: 'Greeting'
+        hint: 'Voicemail greeting'
       call_forwarding_destination:
         label: 'Destination Type'
         hint: 'Select destination and enter additinal information (e.g. phone number) below'        

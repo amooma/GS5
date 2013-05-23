@@ -30,6 +30,7 @@ class CallForwardsController < ApplicationController
     @call_forward.active = true
     @call_forwarding_destinations = call_forwarding_destination_types()
     @call_forward.destination = GsParameter.get('CALLFORWARD_DESTINATION_DEFAULT').to_s if defined?(GsParameter.get('CALLFORWARD_DESTINATION_DEFAULT'))
+    @destination_phone_number = @call_forward.destination
 
     @available_call_forward_cases = []
     CallForwardCase.all.each do |available_call_forward_case|
@@ -45,6 +46,8 @@ class CallForwardsController < ApplicationController
       @call_forward.call_forward_case_id = CallForwardCase.find_by_value('noanswer').id
       @call_forward.timeout = 45
     end
+
+    @available_greetings = available_greetings()
   end
 
   def create
@@ -62,6 +65,8 @@ class CallForwardsController < ApplicationController
   def edit
     @available_call_forward_cases = CallForwardCase.all
     @call_forwarding_destinations = call_forwarding_destination_types()
+    @available_greetings = available_greetings()
+    @destination_phone_number = @call_forward.destination if @call_forward.call_forwarding_destination == ':PhoneNumber'
   end
 
   def update
@@ -81,7 +86,6 @@ class CallForwardsController < ApplicationController
     redirect_to m.( @parent ), :notice => t('call_forwards.controller.successfuly_destroyed')
   end
 
-  private
   private
   def set_and_authorize_parent
     @parent = @phone_number || @sip_account || @automatic_call_distributor || @hunt_group
@@ -214,6 +218,22 @@ class CallForwardsController < ApplicationController
     end
 
     return call_forwarding_destinations
+  end
+
+  def available_greetings
+    if @parent.class == PhoneNumber
+      owner = @parent.phone_numberable
+    else
+      owner = @parent
+    end
+
+    if owner.class == SipAccount
+      owner = owner.sip_accountable
+    elsif owner.class == FaxAccount
+      owner = owner.fax_accountable
+    end
+
+    return GenericFile.where(:category => 'greeting', :owner_type => owner.class.to_s, :owner_id => owner.id).map {|x| [x.to_s, x.name] }
   end
 
 end

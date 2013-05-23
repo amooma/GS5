@@ -57,6 +57,12 @@ de:
         label: 'Ziel'
         hint: 'Format: +49-30-2270 für eine normale Telefonnummer. 42 für eine interne Durchwahl.'
         hint: 'Abhängig vom gewählten Zielart oben: z.B. Telefonnummer (+49301234567 oder 42), Mailboxansage (greeting_12345)'
+      destination_phone_number:
+        label: 'Telefonnummer'
+        hint: 'Telefonnummer (z.B. +49301234567 oder 42)'
+      destination_greeting:
+        label: 'Mailboxansage'
+        hint: 'Mailboxansage'
       call_forwarding_destination:
         label: 'Zielauswahl'
         hint: 'Ziel auswählen und zusätzliche Informationen unten eingeben.'
