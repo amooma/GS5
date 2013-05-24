@@ -5,4 +5,5 @@ class SwitchboardSerializer < ActiveModel::Serializer
   has_many :switchboard_entries
   has_many :sip_accounts, :through => :switchboard_entries
   has_many :phone_numbers
+  has_many :active_calls
 end

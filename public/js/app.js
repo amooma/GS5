@@ -31,6 +31,11 @@ App.SwitchboardRoute = Ember.Route.extend({
 });
 
 // Controller
+App.SwitchboardController = Ember.ObjectController.extend({
+  blind_transfer: function() {
+    console.log('transfer')
+  }
+});
 
 // Models
 App.Store = DS.Store.extend({
@@ -47,7 +52,10 @@ DS.RESTAdapter.reopen({
 
 App.Switchboard = DS.Model.extend({
   switchboardEntrys: DS.hasMany('App.SwitchboardEntry'),
+  activeCalls: DS.hasMany('App.ActiveCall'),
   name: DS.attr('string')
+
+
 });
 
 App.SwitchboardEntry = DS.Model.extend({
@@ -56,7 +64,15 @@ App.SwitchboardEntry = DS.Model.extend({
   name: DS.attr('string'),
   path_to_user: DS.attr('string'),
   avatar_src: DS.attr('string'),
-  callstate: DS.attr('string')
+  callstate: DS.attr('string')  
+});
+
+App.ActiveCall = DS.Model.extend({
+  start_stamp: DS.attr('number'),
+  callstate: DS.attr('string'),
+  b_callstate: DS.attr('string'),
+  destination: DS.attr('string'),
+  b_caller_id_number: DS.attr('string')
 });
 
 App.Adapter = DS.RESTAdapter.extend();
@@ -69,6 +85,7 @@ App.store.adapter.serializer.configure(App.SwitchboardEntry, { sideloadAs: 'swit
 
 App.SipAccount = DS.Model.extend({
   switchboardEntrys: DS.hasMany('App.SwitchboardEntry'),
+  calls: DS.hasMany('App.Call'),
   phoneNumbers: DS.hasMany('App.PhoneNumber'),
   callerName: DS.attr('string'),
   authName: DS.attr('string'),
@@ -82,7 +99,25 @@ App.SipAccount = DS.Model.extend({
 
 App.PhoneNumber = DS.Model.extend({
   name: DS.attr('string'),
-  number: DS.attr('string')
+  number: DS.attr('string'),
+  destination: DS.attr('string')
+});
+
+App.Call = DS.Model.extend({
+  start_stamp: DS.attr('number'),
+  callstate: DS.attr('string'),
+  b_callstate: DS.attr('string'),
+  destination: DS.attr('string'),
+  b_caller_id_number: DS.attr('string'),
+
+  isActive: function() {
+    if (this.get('b_callstate') == 'ACTIVE') {
+      return true
+    } else {
+      return false
+    }
+  }.property('b_callstate')  
+
 });
 
 App.store.adapter.serializer.configure(App.PhoneNumber, { sideloadAs: 'phone_numbers' });

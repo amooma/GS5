@@ -11,7 +11,7 @@
   <div class='span12'>
     <div id='emberjs-container'></div>
 
-    <script type="text/x-handlebars" data-template-name="application">
+    <script type="text/x-handlebars">
       {{outlet}}
     </script>
 
@@ -24,19 +24,45 @@
             <li class="span2">
               <div class="thumbnail">
                 {{avatar_img switchboardEntry.avatar_src}}
-                <p>
                   <small>
-                    {{switchboardEntry.name}}<br>
+                    <p>
+                      <span class="label">{{switchboardEntry.name}}</span>
 
-                    {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumberShortList}}
-                      <span class="label">
-                        {{phoneNumber.number}}
-                      </span>
-                    {{/each}}
-                    <br>
+                      {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumberShortList}}
+                        <span class="label">
+                          {{phoneNumber.number}}
+                        </span>
+                      {{/each}}
+                    </p>
+
                     {{show_callstate switchboardEntry.callstate}}
+                    {{#if switchboardEntry.sipAccount.calls.length}}
+                      <p>
+                      Anrufe:
+                      <br>
+                      {{#each call in switchboardEntry.sipAccount.calls}}
+                        <span {{bindAttr class=":label call.isActive:label-success"}}>
+                            {{call.b_caller_id_number}} -> {{call.destination}}
+                            {{#if call.isActive}}
+                            *
+                            {{/if}}
+                        </span>
+                      {{/each}}
+                      </p>
+                    {{/if}}
+
+                    {{#if activeCalls.length}}
+                      <p>
+                        Verbinden mit:
+                        <br>
+                          {{#each activeCall in activeCalls}}
+                            <button {{action blind_transfer}}>
+                              {{activeCall.b_caller_id_number}}
+                            </button>
+                          {{/each}}
+                      </p>
+                    {{/if}}
                   </small>
-                </p>
               </div>
             </li>
           {{/each}}

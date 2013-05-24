@@ -35,6 +35,10 @@ class Switchboard < ActiveRecord::Base
     self.name.to_s
   end
 
+  def active_calls
+    self.switchboard_entries.where(:switchable => true).map{|se| se.sip_account}.uniq.map{|sip_account| sip_account.calls}.flatten
+  end
+
   private
   def convert_0_to_nil
     if self.reload_interval == 0
