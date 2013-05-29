@@ -36,7 +36,7 @@ class Call < ActiveRecord::Base
 
   def delete
     require 'freeswitch_event'
-    return FreeswitchAPI.execute('uuid_kill', self.uuid, true);
+    return FreeswitchAPI.execute('uuid_kill', self.uuid, true)
   end
 
   def transfer_blind(destination, call_leg=:aleg, auth_account=nil)
@@ -63,6 +63,25 @@ class Call < ActiveRecord::Base
     return FreeswitchAPI.api_result(FreeswitchAPI.api('uuid_transfer', channel_uuid, destination))
   end
 
+
+  def self.bridge(call_uuid1, call_uuid2, hangup_uuids=[])
+    if call_uuid1.blank? || call_uuid2.blank?
+      return nil
+    end
+
+    require 'freeswitch_event'
+    result = FreeswitchAPI.api_result(FreeswitchAPI.api('uuid_bridge', call_uuid1, call_uuid2))
+    
+    if result 
+      hangup_uuids.each do |kill_uuid|
+        FreeswitchAPI.execute('uuid_kill', kill_uuid, true)
+      end
+    end
+
+    return result
+  end
+
+  
   def get_variable_from_uuid(channel_uuid, variable_name)
     if channel_uuid.blank? 
       return nil
