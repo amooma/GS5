@@ -56,8 +56,14 @@ function Perimeter.setup(self, event)
 
   self.checks.register = config.checks_register or {};
   self.checks.call = config.checks_call or {};
-  self.bad_headers.register = config.bad_headers_register;
-  self.bad_headers.call = config.bad_headers_call;
+
+  for header, patterns in pairs(config.bad_headers_register) do
+    self.bad_headers.register[header] = common.str.strip_to_a(patterns, ',');
+  end 
+
+  for header, patterns in pairs(config.bad_headers_call) do
+    self.bad_headers.call[header] = common.str.strip_to_a(patterns, ',');
+  end 
 
   self.log:info('[perimeter] PERIMETER - setup perimeter defense');
 end
@@ -205,12 +211,14 @@ end
 
 function Perimeter.check_bad_headers(self, event)
   local points = nil;
-  for name, pattern in pairs(self.bad_headers[event.action]) do
-    pattern = common.array.expand_variables(pattern, event);
-    local success, result = pcall(string.find, event[name], pattern);
-    if success and result then
-      self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
-      points = (points or 0) + 1;
+  for name, patterns in pairs(self.bad_headers[event.action]) do
+    for index, pattern in ipairs(patterns) do
+      pattern = common.array.expand_variables(pattern, event);
+      local success, result = pcall(string.find, event[name], pattern);
+      if success and result then
+        self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
+        points = (points or 0) + 1;
+      end
     end
   end
 
