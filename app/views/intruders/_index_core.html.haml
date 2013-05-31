@@ -2,6 +2,7 @@
   %tr
     %th
     %th= t('intruders.index.contact_ip')
+    %th= t('intruders.index.country')
     %th= t('intruders.index.points')
     %th= t('intruders.index.ban_last')
     %th= t('intruders.index.contact_count')
@@ -31,6 +32,7 @@
           %i.icon-warning-sign
 
       %td= intruder.contact_ip
+      %td= intruder.country
       %td= intruder.points
       %td 
         - if intruder.ban_last
