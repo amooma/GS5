@@ -1,5 +1,9 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  resources :pager_group_destinations
+
+  resources :pager_groups
+
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       resources :switchboards, :only => [:show, :index]
@@ -315,6 +319,7 @@ Gemeinschaft42c::Application.routes.draw do
       end
     end
     resources :voicemail_accounts
+    resources :pager_groups
   end
 
   resources :phones, :only => [] do

@@ -209,8 +209,8 @@ GEM
       chronic (>= 0.6.3)
     whois (2.7.0)
     will_paginate (3.0.4)
-	will_paginate-bootstrap (0.2.2)
-	  will_paginate (>= 3.0.3)
+    will_paginate-bootstrap (0.2.2)
+      will_paginate (>= 3.0.3)
     yajl-ruby (1.1.0)
 
 PLATFORMS
@@ -259,3 +259,4 @@ DEPENDENCIES
   whenever
   whois
   will_paginate
+  will_paginate-bootstrap

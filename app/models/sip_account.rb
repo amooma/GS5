@@ -46,6 +46,8 @@ class SipAccount < ActiveRecord::Base
   has_many :voicemail_accounts, :as => :voicemail_accountable, :dependent => :destroy
   belongs_to :voicemail_account
 
+  has_many :pager_groups, :dependent => :destroy
+
   # Delegations:
   #
   delegate :host, :to => :sip_domain, :allow_nil => true

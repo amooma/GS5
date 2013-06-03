@@ -1,0 +1,6 @@
+- content_for :title, t("pager_group_destinations.index.page_title")
+
+- if @pager_group_destinations && @pager_group_destinations.count > 0
+  = render "index_core", :pager_group_destinations => @pager_group_destinations
+
+= render :partial => 'shared/create_link', :locals => {:child_class => PagerGroupDestination}

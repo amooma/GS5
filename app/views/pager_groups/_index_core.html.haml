@@ -1,0 +1,11 @@
+%table.table.table-striped
+  %tr
+    %th= t('pager_groups.index.sip_account_id')
+    %th= t('pager_groups.index.callback_url')
+
+  
+  - for pager_group in pager_groups
+    %tr
+      %td= pager_group.sip_account_id
+      %td= pager_group.callback_url
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => pager_group}

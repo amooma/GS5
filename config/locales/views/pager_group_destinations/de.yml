@@ -1,0 +1,45 @@
+de:
+  pager_group_destinations:
+    name: 'Pagergroupdestination'
+    controller:
+      successfuly_created: 'Pagergroupdestination wurde angelegt.'
+      successfuly_updated: 'Pagergroupdestination wurde aktualisiert.'
+      successfuly_destroyed: 'Pagergroupdestination wurde gelöscht.'
+    index:
+      page_title: 'Übersicht von Pagergroupdestination'
+      pager_group_id: 'Pager group'
+      sip_account_id: 'Sip account'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Pagergroupdestination'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Pagergroupdestination neu anlegen für %{resource}'
+    show:
+      page_title: 'Pagergroupdestination bearbeiten'
+      pager_group_id: 'Pager group'
+      sip_account_id: 'Sip account'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Pagergroupdestination neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Pagergroupdestination bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      pager_group_id:
+        label: 'Pager group'
+        hint: ''
+      sip_account_id:
+        label: 'Sip account'
+        hint: ''
+      submit: 'Absenden'

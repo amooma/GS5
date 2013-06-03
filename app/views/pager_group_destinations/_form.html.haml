@@ -1,0 +1,7 @@
+= simple_form_for(@pager_group_destination) do |f|
+  = f.error_notification
+
+  = render "form_core", :f => f
+
+  .form-actions
+    = f.button :submit, conditional_t('pager_group_destinations.form.submit')

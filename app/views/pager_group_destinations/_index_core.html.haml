@@ -1,0 +1,11 @@
+%table.table.table-striped
+  %tr
+    %th= t('pager_group_destinations.index.pager_group_id')
+    %th= t('pager_group_destinations.index.sip_account_id')
+
+  
+  - for pager_group_destination in pager_group_destinations
+    %tr
+      %td= pager_group_destination.pager_group_id
+      %td= pager_group_destination.sip_account_id
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:child => pager_group_destination}
