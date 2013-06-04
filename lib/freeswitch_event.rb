@@ -60,7 +60,7 @@ class FreeswitchEventSocket
       if ! body.blank?
         message['_BODY'] = body
       end
-      header.split("\n").each do |line|
+      header.to_s.split("\n").each do |line|
         key, value = line.split(/\: */, 2)
         message[key] = value
       end
