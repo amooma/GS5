@@ -118,6 +118,8 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:call_parking_inout_index(caller, parameters[3]);
   elseif fid == "test" then
     result = self:test(caller, parameters[3]);
+  elseif fid == "pager" then
+    result = self:pager(caller, parameters[3]);
   end
 
   return result or { continue = false, code = 505, phrase = 'Error executing function', no_cdr = true };
@@ -937,6 +939,23 @@ function Functions.test(self, caller, name)
       end                                                                                         
     end
   end
+
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
+
+function Functions.pager(self, caller, pager_group_id)
+  require 'common.pager';
+  local pager = common.pager.Pager:new{ log = self.log, database = self.database, caller = caller }:find_by_id(pager_group_id);
+
+  if not pager then
+    self.log:notice('FUNCTION_PAGER not found - pager_group=', pager_group_id);
+    return { continue = false, code = 404, phrase = 'No such pager group', no_cdr = true }
+  end
+
+  self.log:info('FUNCTION_PAGER pager_group=', pager_group_id);
+  caller:answer();
+  pager:enter();
 
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
