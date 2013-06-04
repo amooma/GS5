@@ -36,9 +36,14 @@ function Pager.find_by_id(self, id)
 end
 
 
-function Pager.enter(self, originator)
+function Pager.enter(self)
   local flags = 'mute';
-  if originator then
+
+  if not self.caller.account or self.caller.account.class ~= 'sipaccount'  then
+    return false;
+  end
+
+  if tonumber(self.record.sip_account_id) == tonumber(self.caller.account.id) then
     flags = 'moderator';
   end
 
@@ -56,7 +61,7 @@ function Pager.callback(self)
     state = 'terminated',
   }
 
-  if self.caller.account and self.caller.account.class:lower() == 'sipaccount' then
+  if self.caller.account and self.caller.account.class == 'sipaccount' then
     destination.sip_account_id = self.caller.account.id;
   end
 
