@@ -50,7 +50,7 @@ function Pager.enter(self)
   self:callback();
 
   local result = self.caller:execute('conference', self.identifier .. "@profile_" .. self.identifier .. "++flags{" .. flags .. "}");
-
+  self.caller:hangup('NORMAL_CLEARING');
   self:callback();
 end
 
@@ -70,7 +70,6 @@ function Pager.callback(self)
   end
 
   local command = 'http_request.lua ' .. self.caller.uuid .. ' ' .. common.array.expand_variables(self.record.callback_url, destination, self.caller);
-
   require 'common.fapi';
   return common.fapi.FApi:new():execute('luarun', command);
 end
