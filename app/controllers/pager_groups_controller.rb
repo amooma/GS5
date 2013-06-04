@@ -1,6 +1,8 @@
 class PagerGroupsController < ApplicationController
+  load_resource :sip_account
+  load_resource :pager_group, :through => :sip_account
+
   def index
-    @pager_groups = PagerGroup.all
   end
 
   def show

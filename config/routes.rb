@@ -1,7 +1,7 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  # To-Do: Delete these two entries and remap path on the views.
   resources :pager_group_destinations
-
   resources :pager_groups
 
   namespace :api, defaults: {format: 'json'} do
@@ -9,6 +9,7 @@ Gemeinschaft42c::Application.routes.draw do
       resources :switchboards, :only => [:show, :index]
       resources :switchboard_entries, :only => [:show, :index]
       resources :sip_accounts, :only => [:show, :index]
+      resources :pager_groups
       resources :phone_numbers, :only => [:show, :index]
     end
 
