@@ -1,24 +1,16 @@
 module Api
   module V1
     class PagerGroupsController < ApplicationController
+      skip_before_filter :verify_authenticity_token
       respond_to :json
 
-      skip_before_filter :verify_authenticity_token
-
       def index
-        # if params[:ids]
-        #   @sip_accounts = SipAccount.where(:id => params[:ids])
-        # else
-        #   @sip_accounts = SipAccount.all
-        # end
         @pager_groups = PagerGroup.all
-
         respond_with @pager_groups
       end
 
       def show
         @pager_group = PagerGroup.find(params[:id])
-
         respond_with @pager_group
       end 
 
@@ -34,19 +26,12 @@ module Api
 
       end
 
-      # def create
-      #   @pager_group = PagerGroup.new(params[:pager_group])
-      #   if @pager_group.save
-      #     redirect_to @pager_group, :notice => t('pager_groups.controller.successfuly_created')
-      #   else
-      #     render :new
-      #   end
-      # end
-
       def destroy
         @pager_group = PagerGroup.find(params[:id])
-        @pager_group.destroy
-        respond_with nil
+        if @pager_group
+          @pager_group.destroy
+          respond_with @pager_group
+        end
       end      
 
     end
