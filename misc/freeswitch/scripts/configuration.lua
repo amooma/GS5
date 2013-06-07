@@ -194,8 +194,8 @@ function conf_conference(database)
     local conf_name    = params:getHeader('conf_name');
     local profile_name = params:getHeader('profile_name');
 
-    if conf_name then
-      require 'common.conference'
+    if conf_name:find('^conference%d+') then
+      require 'common.conference';
       conference = common.conference.Conference:new{log=log, database=database}:find_by_id(common.str.to_i(conf_name));
       if conference then
         log:debug('CONFIG_CONFERENCE ', conf_name, ' name: ', conference.record.name, ', profile: ', profile_name);
@@ -210,6 +210,27 @@ function conf_conference(database)
         };
       else
         log:error('CONFIG_CONFERENCE ', conf_name, ' - conference not found');
+      end
+    elseif conf_name:find('^pager%d+') then
+      local parameters = {
+        ['moh-sound'] = '',
+        ['caller-controls'] = "speaker",
+        ['moderator-controls'] = "moderator",
+        ['comfort-noise'] = false,
+      }                                                      
+
+      require 'common.pager';
+      pager = common.pager.Pager:new{log=log, database=database}:find_by_id(common.str.to_i(conf_name));
+      if pager then
+        log:debug('CONFIG_PAGER ', conf_name, ', profile: ', profile_name);
+        profiles = xml:element{
+          'profiles',
+          xml:element{
+            'profile',
+            name = profile_name,
+            xml:from_hash('param', parameters, 'name', 'value'),
+          },
+        };
       end
     else
       log:notice('CONFIG_CONFERENCE - no conference name');
