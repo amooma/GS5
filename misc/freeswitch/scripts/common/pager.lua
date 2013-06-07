@@ -44,7 +44,7 @@ function Pager.enter(self)
   end
 
   if tonumber(self.record.sip_account_id) == tonumber(self.caller.account.id) then
-    flags = 'moderator';
+    flags = 'moderator|endconf';
   end
 
   self:callback();
