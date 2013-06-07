@@ -20,6 +20,12 @@
 
   = f.input :default_system_email, :label => t('gemeinschaft_setups.form.default_system_email.label'), :hint => conditional_hint('gemeinschaft_setups.form.default_system_email.hint')
 
+  %strong Angriffserkennung
+
+  = f.input :detect_attacks, :as => :boolean, :label => t('gemeinschaft_setups.form.detect_attacks.label'), :hint => conditional_hint('gemeinschaft_setups.form.detect_attacks.hint')
+  = f.input :report_attacks, :as => :boolean, :label => t('gemeinschaft_setups.form.report_attacks.label'), :hint => conditional_hint('gemeinschaft_setups.form.report_attacks.hint')
+
+
   %h3 SIP-Domain
   %p In den meisten Fällen sollten Sie den gleichen Wert für SIP-Realm und SIP-Domain benutzen. Wenn Sie mit diesen Begriffen nichts anfangen können, dann geben Sie hier bitte die IP-Adresse dieses Servers ein.
 
