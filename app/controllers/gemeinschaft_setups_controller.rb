@@ -99,6 +99,22 @@ class GemeinschaftSetupsController < ApplicationController
       # Auto-Login:
       session[:user_id] = user.id
       
+      # Perimeter settings
+      if !@gemeinschaft_setup.detect_attacks
+        detect_attacks = GsParameter.where(:entity => 'events', :section => 'modules', :name => 'perimeter_defense').first
+        if detect_attacks
+          detect_attacks.update_attributes(:value => '0', :class_type => 'Integer')
+        end
+      end
+
+      if !@gemeinschaft_setup.report_attacks
+        GsParameter.create(:entity => 'perimeter', :section => 'general', :name => 'report_url', :value => '', :class_type => 'String', :description => '')
+        report_url = GsParameter.where(:entity => 'perimeter', :section => 'general', :name => 'report_url').first
+        if report_url
+          report_url.update_attributes(:value => '', :class_type => 'String')
+        end
+      end
+
       # Redirect to the user
       redirect_to page_help_path, :notice => t('gemeinschaft_setups.initial_setup.successful_setup')
     else
