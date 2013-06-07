@@ -35,7 +35,7 @@ function Intruder.update_blacklist(self, event)
     contacts_per_second_max = event.contacts_per_second_max,
     user_agent = event.user_agent,
     to_user = event.to_user,
-    comment = 'Permimeter',
+    comment = 'Perimeter',
     created_at = {'NOW()', raw = true },
     updated_at = {'NOW()', raw = true },
   };
