@@ -20,6 +20,12 @@
 
   = f.input :default_system_email, :label => t('gemeinschaft_setups.form.default_system_email.label'), :hint => conditional_hint('gemeinschaft_setups.form.default_system_email.hint')
 
+  %strong Intrusion detection / prevention
+
+  = f.input :detect_attacks, :as => :boolean, :label => t('gemeinschaft_setups.form.detect_attacks.label'), :hint => conditional_hint('gemeinschaft_setups.form.detect_attacks.hint')
+  = f.input :report_attacks, :as => :boolean, :label => t('gemeinschaft_setups.form.report_attacks.label'), :hint => conditional_hint('gemeinschaft_setups.form.report_attacks.hint')
+
+
   %h3 SIP-Domain
   %p You should use the same value for the SIP realm as for the SIP domain to ensure compatibility with different phone models. In case you have no clue what we are talking about: Just enter the IP address of this server.
 
