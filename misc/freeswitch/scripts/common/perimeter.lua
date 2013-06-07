@@ -47,6 +47,7 @@ function Perimeter.setup(self, event)
   self.ban_tries = 1;
   self.checks = { register = {}, call = {} };
   self.bad_headers = { register = {}, call = {} };
+  self.serial = freeswitch.getGlobalVariable('switch_serial');
 
   if config and config.general then
     for key, value in pairs(config.general) do
@@ -99,6 +100,7 @@ function Perimeter.record_update(self, event)
   event.record.span_start = event.span_start or event.record.span_start;
   event.record.span_contact_count = (event.span_contact_count or event.record.span_contact_count) + 1;
   event.record.users = event.users or event.record.users;
+  event.record.updated = event.updated or event.record.updated;
 end
 
 
@@ -150,6 +152,7 @@ function Perimeter.check(self, event)
       end
       self:execute_ban(event);
       event.ban_time = os.time();
+      event.banned = true;
     end
         
     event.record.banned = event.record.banned + 1;
@@ -255,6 +258,17 @@ end
 function Perimeter.update_intruder(self, event)
   require 'common.intruder';
   local result = common.intruder.Intruder:new{ log = self.log, database = self.database }:update_blacklist(event);
+
+  if not common.str.blank(self.report_url) and (not event.record.updated or event.banned) then
+    event.serial = common.fapi.FApi:new():execute('md5', self.serial);
+    event.blacklisted = tostring(common.str.to_b(event.banned));
+    local command = 'http_request.lua perimeter ' .. common.array.expand_variables(self.report_url, event);
+    require 'common.fapi'
+    common.fapi.FApi:new():execute('luarun', command);
+    self.log:devel(command);
+  end
+
+  event.updated = common.str.to_i(event.updated) + 1;
 end
 
 
