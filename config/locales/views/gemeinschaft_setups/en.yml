@@ -36,5 +36,11 @@ en:
         hint: 'e.g. name of the company'
       default_system_email:
         label: 'System e-mail address'
-        hint: 'From field for voicemail or fax e-mails.'        
+        hint: 'From field for voicemail or fax e-mails.'
+      detect_attacks:
+        label: 'Detect attacks'
+        hint: 'Run Perimeter intrusion detection at startup'
+      report_attacks:
+        label: 'Report attacks'
+        hint: 'Report attacks to the cloud.'
       submit: 'Create this PBX'
