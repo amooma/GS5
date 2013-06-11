@@ -96,6 +96,18 @@ function SipCall.fork(self, destinations, arg )
       table.insert(origination_variables, 'ignore_display_updates=true');
     end
 
+    local origination_privacy = '';
+
+    if self.caller.clir then
+      origination_privacy = 'hide_name:hide_number';
+    end
+
+    if self.caller.account then
+      origination_privacy = origination_privacy .. ':screen';
+    end
+
+    table.insert(origination_variables, 'origination_privacy=' .. origination_privacy);
+
     if not destination.node_local or destination.type == 'node' then
       require 'common.node'
       local node = nil;
@@ -167,6 +179,9 @@ function SipCall.fork(self, destinations, arg )
         end
         if destination.caller_id_name then
           table.insert(origination_variables, "origination_caller_id_name='" .. destination.caller_id_name .. "'");
+        end
+        if gateway.settings.sip_cid_type then
+          table.insert(origination_variables, "sip_cid_type='" .. gateway.settings.sip_cid_type .. "'");
         end
         if destination.channel_variables then
           for key, value in pairs(destination.channel_variables) do
