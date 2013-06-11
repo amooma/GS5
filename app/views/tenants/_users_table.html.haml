@@ -4,4 +4,4 @@
   = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => User}
 - else
   %p
-    = link_to "Liste aller User.", tenant_users_path(tenant)
+    = link_to t('users.index.page_title'), tenant_users_path(tenant)
