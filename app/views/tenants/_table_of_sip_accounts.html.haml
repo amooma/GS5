@@ -19,6 +19,9 @@
       -# SIP accounts
       -#
       %h2= t('sip_accounts.index.page_title')
-      - if tenant.sip_accounts.any?
+      - if @tenant.sip_accounts.count <= GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
         = render "sip_accounts/index_core", :sip_accounts => tenant.sip_accounts
-      = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
+        = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
+      - else
+        %p
+          = link_to t('sip_accounts.index.page_title'), tenant_sip_accounts_path(tenant)
