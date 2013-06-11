@@ -372,7 +372,6 @@ function Dialplan.dial(self, destination)
     self.caller:set_caller_id(destination.caller_id_number, destination.caller_id_name or self.caller.caller_id_name);
   else
     self.caller:set_caller_id('anonymous', 'Unknown');
-    self.caller:set_privacy(true);
   end
 
   local destinations = { destination };
@@ -418,7 +417,6 @@ function Dialplan.huntgroup(self, destination)
     end
   else
     self.caller:set_caller_id('anonymous', tostring(hunt_group.record.name));
-    self.caller:set_privacy(true);
   end
   
   self.caller.auth_account = hunt_group;
@@ -449,7 +447,6 @@ function Dialplan.acd(self, destination)
     end
   else
     self.caller:set_caller_id('anonymous', tostring(acd.record.name));
-    self.caller:set_privacy(true);
   end
 
   self.caller.auth_account = acd;
