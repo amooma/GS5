@@ -2,6 +2,9 @@
   -# Phones
   -#
   %h2= t('phones.index.page_title')
-  - if tenant.phones.any?
+  - if @tenant.phones.count <= GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
     = render "phones/index_core", :phones => tenant.phones
-  = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => Phone}
+    = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => Phone}
+  - else
+    %p
+      = link_to t('phones.index.page_title'), tenant_phones_path(tenant) 
