@@ -370,8 +370,6 @@ function Dialplan.dial(self, destination)
       end
     end
     self.caller:set_caller_id(destination.caller_id_number, destination.caller_id_name or self.caller.caller_id_name);
-  else
-    self.caller:set_caller_id('anonymous', 'Unknown');
   end
 
   local destinations = { destination };
@@ -416,7 +414,7 @@ function Dialplan.huntgroup(self, destination)
       self:set_caller_picture(self.caller.account.owner.id, self.caller.account.owner.class);
     end
   else
-    self.caller:set_caller_id('anonymous', tostring(hunt_group.record.name));
+    self.caller.anonymous_name = tostring(hunt_group.record.name);
   end
   
   self.caller.auth_account = hunt_group;
@@ -446,7 +444,7 @@ function Dialplan.acd(self, destination)
       self:set_caller_picture(self.caller.account.owner.id, self.caller.account.owner.class);
     end
   else
-    self.caller:set_caller_id('anonymous', tostring(acd.record.name));
+    self.caller.anonymous_name = tostring(acd.record.name);
   end
 
   self.caller.auth_account = acd;
@@ -814,6 +812,10 @@ function Dialplan.run(self, destination)
   self.caller.date = os.date('%y%m%d%w');
   self.caller.time = os.date('%H%M%S');
 
+  if self.config then
+    self.caller:export_variable('sip_cid_type=' .. (self.config.sip_cid_type or 'none'));
+  end
+  
   if type(self.config.variables) == 'table' then
     for key, value in pairs(self.config.variables) do
       self.caller:set_variable(key, value);
