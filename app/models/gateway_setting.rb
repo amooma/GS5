@@ -14,7 +14,7 @@ class GatewaySetting < ActiveRecord::Base
       'contact' =>  'String',
       'dial_string' =>  'String',
       'profile' =>  'String',
-      'sip_cid_type' => 'String',
+      'caller_id_type' => 'String',
     },
    'xmpp' => { 
       'server' => 'String', 
