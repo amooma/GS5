@@ -96,18 +96,6 @@ function SipCall.fork(self, destinations, arg )
       table.insert(origination_variables, 'ignore_display_updates=true');
     end
 
-    local origination_privacy = '';
-
-    if self.caller.clir then
-      origination_privacy = 'hide_name:hide_number';
-    end
-
-    if self.caller.account then
-      origination_privacy = origination_privacy .. ':screen';
-    end
-
-    table.insert(origination_variables, 'origination_privacy=' .. origination_privacy);
-
     if not destination.node_local or destination.type == 'node' then
       require 'common.node'
       local node = nil;
@@ -124,6 +112,7 @@ function SipCall.fork(self, destinations, arg )
         table.insert(origination_variables, 'sip_h_X-GS_auth_account_type=' .. tostring(self.caller.auth_account_type));
         table.insert(origination_variables, 'sip_h_X-GS_auth_account_uuid=' .. tostring(self.caller.auth_account_uuid));
         table.insert(origination_variables, 'sip_h_X-GS_loop_count=' .. tostring(self.caller.loop_count));
+        table.insert(origination_variables, 'sip_h_X-GS_clir=' .. tostring(self.caller.clir));
         table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. node.record.name .. '/' .. destination.number);
       end
     elseif destination.type == 'sipaccount' then
@@ -158,6 +147,11 @@ function SipCall.fork(self, destinations, arg )
             table.insert(origination_variables, "gs_auth_account_uuid='" .. common.str.to_s(self.caller.auth_account.uuid) .. "'");
           end
 
+          if self.caller.clir then
+            table.insert(origination_variables, "origination_caller_id_number='anonymous'");
+            table.insert(origination_variables, "origination_caller_id_name='" .. ( self.caller.anonymous_name or 'Anonymous') .. "'");
+          end
+
           table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/' .. sip_account.record.profile_name .. '/' .. sip_account.record.auth_name .. '%' .. sip_account.record.sip_host);
           if destination.pickup_groups and #destination.pickup_groups > 0 then
             for key=1, #destination.pickup_groups do
@@ -174,15 +168,41 @@ function SipCall.fork(self, destinations, arg )
       local gateway = common.gateway.Gateway:new{ log = self.log, database = self.database}:find_by_id(destination.id);
 
       if gateway and gateway.outbound then
-        if destination.caller_id_number then
-          table.insert(origination_variables, "origination_caller_id_number='" .. destination.caller_id_number .. "'");
+        local caller_id_type = tostring(gateway.settings.caller_id_type);
+
+        if caller_id_type == 'pid' or caller_id_type == '' or caller_id_type == 'nil' then
+          local identity = '"' .. (destination.caller_id_name or self.caller.caller_id_name) .. '" <sip:' .. (destination.caller_id_number or self.caller.caller_id_number) .. '@' .. gateway.domain .. '>';
+
+          local account_uuid = common.array.try(self.caller, 'account.uuid');
+          local auth_account_uuid = common.array.try(self.caller, 'auth_account.uuid');
+
+          if account_uuid and auth_account_uuid and account_uuid == auth_account_uuid then
+            table.insert(origination_variables, "sip_h_P-Asserted-Identity='" .. identity .. "'");
+          else
+            table.insert(origination_variables, "sip_h_P-Preferred-Identity='" .. identity .. "'");
+          end
+
+          if self.caller.clir then
+            table.insert(origination_variables, "origination_caller_id_number='anonymous'");
+            table.insert(origination_variables, "origination_caller_id_name='" .. ( self.caller.anonymous_name or 'Anonymous') .. "'");
+            table.insert(origination_variables, "sip_h_P-Privacy='id'");
+          else
+            if destination.caller_id_number then
+              table.insert(origination_variables, "origination_caller_id_number='" .. destination.caller_id_number .. "'");
+            end
+            if destination.caller_id_name then
+              table.insert(origination_variables, "origination_caller_id_name='" .. destination.caller_id_name .. "'");
+            end
+          end
+        else
+          if destination.caller_id_number then
+            table.insert(origination_variables, "origination_caller_id_number='" .. destination.caller_id_number .. "'");
+          end
+          if destination.caller_id_name then
+            table.insert(origination_variables, "origination_caller_id_name='" .. destination.caller_id_name .. "'");
+          end
         end
-        if destination.caller_id_name then
-          table.insert(origination_variables, "origination_caller_id_name='" .. destination.caller_id_name .. "'");
-        end
-        if gateway.settings.sip_cid_type then
-          table.insert(origination_variables, "sip_cid_type='" .. gateway.settings.sip_cid_type .. "'");
-        end
+
         if destination.channel_variables then
           for key, value in pairs(destination.channel_variables) do
             table.insert(origination_variables, tostring(key) .. "='" .. tostring(value) .. "'");
