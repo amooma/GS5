@@ -173,6 +173,9 @@ function Router.route_match(self, route)
 
       if element.action == 'not_match' then
         result = not result;
+        if result then
+          replacement = tostring(element.replacement);
+        end
       end
 
       if not result then
