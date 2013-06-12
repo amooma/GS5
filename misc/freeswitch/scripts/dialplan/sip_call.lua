@@ -181,8 +181,6 @@ function SipCall.fork(self, destinations, arg )
         local caller_id_name = destination.caller_id_name or self.caller.caller_id_name;
         local from_uri = common.array.expand_variables(gateway.settings.from, destination, self.caller, { gateway = gateway });
 
-        self.log:devel('DESTINATION: ', destination);
-
         if gateway.settings.asserted_identity then
           local identity = common.array.expand_variables(gateway.settings.asserted_identity, destination, self.caller, { gateway = gateway })
           
