@@ -16,7 +16,6 @@ class PhoneNumber < ActiveRecord::Base
   validate :validate_inbound_uniqueness
     
   before_save :save_value_of_to_s
-  after_create :copy_existing_call_forwards_if_necessary
   before_validation :'parse_and_split_number!'
   validate :validate_number, :if => Proc.new { |phone_number| GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') && GsParameter.get('STRICT_DID_HANDLING') }
   validate :check_if_number_is_available, :if => Proc.new { |phone_number| GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') && GsParameter.get('STRICT_DID_HANDLING') }
@@ -313,18 +312,4 @@ class PhoneNumber < ActiveRecord::Base
   def save_value_of_to_s
     self.value_of_to_s = self.to_s
   end
-  
-  def copy_existing_call_forwards_if_necessary
-    if self.phone_numberable.class == SipAccount && self.phone_numberable.callforward_rules_act_per_sip_account == true
-      sip_account = SipAccount.find(self.phone_numberable)
-      if sip_account.phone_numbers.where('id != ?', self.id).count > 0
-        if sip_account.phone_numbers.where('id != ?', self.id).order(:created_at).first.call_forwards.count > 0
-          sip_account.phone_numbers.where('id != ?', self.id).first.call_forwards.each do |call_forward|
-            call_forward.set_this_callforward_rule_to_all_phone_numbers_of_the_parent_sip_account
-          end
-        end
-      end
-    end
-  end
-
 end
