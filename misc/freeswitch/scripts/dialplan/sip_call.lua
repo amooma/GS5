@@ -179,16 +179,16 @@ function SipCall.fork(self, destinations, arg )
         local asserted_identity_clir = tostring(gateway.settings.asserted_identity);
         local caller_id_number = destination.caller_id_number or self.caller.caller_id_number;
         local caller_id_name = destination.caller_id_name or self.caller.caller_id_name;
-        local from_uri = common.array.expand_variables(gateway.settings.from, destination, self.caller, { gateway = gateway });
+        local from_uri = common.array.expand_variables(gateway.settings.from or '', destination, self.caller, { gateway = gateway });
 
         if gateway.settings.asserted_identity then
-          local identity = common.array.expand_variables(gateway.settings.asserted_identity, destination, self.caller, { gateway = gateway })
+          local identity = common.array.expand_variables(gateway.settings.asserted_identity or '', destination, self.caller, { gateway = gateway })
           
           if self.caller.clir then
             caller_id_number = self.caller.anonymous_number or 'anonymous';
             caller_id_name = self.caller.anonymous_name or 'Anonymous';
-            from_uri = common.array.expand_variables(gateway.settings.from_clir, destination, self.caller, { gateway = gateway }) or from_uri;
-            identity = common.array.expand_variables(gateway.settings.asserted_identity_clir, destination, self.caller, { gateway = gateway }) or identity;
+            from_uri = common.array.expand_variables(gateway.settings.from_clir or '', destination, self.caller, { gateway = gateway }) or from_uri;
+            identity = common.array.expand_variables(gateway.settings.asserted_identity_clir or '', destination, self.caller, { gateway = gateway }) or identity;
             table.insert(origination_variables, "origination_caller_id_number='" .. caller_id_number .. "'");
             table.insert(origination_variables, "origination_caller_id_name='" .. caller_id_name .. "'");
             table.insert(origination_variables, "sip_h_Privacy='id'");
