@@ -61,6 +61,9 @@ function Gateway.find_by_id(self, id)
 
   if gateway then
     gateway.settings = self:config_table_get('gateway_settings', gateway.id);
+    if common.str.blank(gateway.domain) then
+      gateway.domain = gateway.settings.domain;
+    end
   end
 
   return gateway;
