@@ -8,7 +8,11 @@
   %tbody
     - for gateway_setting in gateway_settings
       %tr
-        %td= gateway_setting.name
+        %td= t("gateway_settings.settings.#{@gateway.technology}.#{gateway_setting.name}.label")
         %td= gateway_setting.value
-        %td= gateway_setting.description
+        %td
+          - if gateway_setting.description.blank?
+            = t("gateway_settings.settings.#{@gateway.technology}.#{gateway_setting.name}.hint")
+          - else
+            = gateway_setting.description
         =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => gateway_setting.gateway, :child => gateway_setting}
