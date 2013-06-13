@@ -16,6 +16,7 @@ de:
       http_password: 'Phone WebGUI Passwort'
       nightly_reboot: 'Nachts automatischer Reboot'
       provisioning_key_active: 'Provisioning Schlüssel aktiv'
+      phoneable: 'Besitzer'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie diese Telefon aus Gemeinschaft entfernen möchten?'
         destroy: 'Löschen'
