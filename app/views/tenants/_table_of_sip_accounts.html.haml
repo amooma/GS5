@@ -5,7 +5,7 @@
       -#
       %h2= t('sip_accounts.index.page_title')
       - if tenant.sip_accounts.any?
-        = render "sip_accounts/index_core", :sip_accounts => tenant.sip_accounts
+        = render "sip_accounts/index_core", :sip_accounts => tenant.sip_accounts, :show_sip_accountable => true
       = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
 
     .span8
@@ -18,9 +18,10 @@
     .span12
       -# SIP accounts
       -#
+      - sip_accounts = @tenant.tenant_user_sip_accounts
       %h2= t('sip_accounts.index.page_title')
-      - if @tenant.sip_accounts.count <= GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
-        = render "sip_accounts/index_core", :sip_accounts => tenant.sip_accounts
+      - if sip_accounts.count <= GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
+        = render "sip_accounts/index_core", :sip_accounts => sip_accounts, :show_sip_accountable => true
         = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => SipAccount}
       - else
         %p

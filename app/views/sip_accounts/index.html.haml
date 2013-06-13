@@ -1,6 +1,6 @@
 - content_for :title, t("sip_accounts.index.page_title")
 
 - if @sip_accounts.count > 0
-  = render "index_core", :sip_accounts => @sip_accounts
+  = render "index_core", :sip_accounts => @sip_accounts, :show_sip_accountable => (@parent.class == Tenant)
 
 = render :partial => 'shared/create_link', :locals => {:parent => @parent, :child_class => SipAccount}

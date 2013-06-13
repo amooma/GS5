@@ -5,6 +5,8 @@
 %table.table.table-striped
   %thead
     %tr
+      - if defined?(show_sip_accountable) && show_sip_accountable
+        %th= sortable :sip_accountable_id, t('sip_accounts.index.sip_accountable')
       %th
         %span.hidden-phone
           = t('sip_accounts.index.online')
@@ -20,6 +22,9 @@
   %tbody
     - for sip_account in sip_accounts
       %tr{:class => (sip_account.registration ? '' : 'warning')}
+        - if defined?(show_sip_accountable) && show_sip_accountable
+          %td
+            = sip_account.sip_accountable
         %td
           - if sip_account.registration
             %i.icon-ok
