@@ -19,6 +19,7 @@ de:
       clip_no_screening: 'Spezifische Rufnummernanzeige (CLIP -no screening-)'
       callforward_rules_act_per_sip_account: 'Rufweiterleitungen gelten für das gesamte SIP-Account'
       online: 'Online'
+      sip_accountable: 'Besitzer'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie diesen SIP-Account löschen möchten?'
         destroy: 'Löschen'
