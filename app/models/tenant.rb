@@ -214,6 +214,14 @@ class Tenant < ActiveRecord::Base
     self.array_of_available_internal_extensions + self.array_of_available_dids
   end
 
+  def tenant_user_sip_accounts
+    SipAccount.where('(sip_accountable_type = "Tenant" AND sip_accountable_id = ?) OR (sip_accountable_type = "User" AND sip_accountable_id IN (?))', self.id, self.users.pluck(:id))
+  end
+
+  def tenant_user_phones
+    Phone.where('(phoneable_type = "Tenant" AND phoneable_id = ?) OR (phoneable_type = "User" AND phoneable_id IN (?))', self.id, self.users.pluck(:id))
+  end
+
   private
   
   # Create a public phone book for this tenant
