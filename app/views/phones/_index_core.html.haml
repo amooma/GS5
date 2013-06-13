@@ -4,6 +4,8 @@
 %table.table.table-striped
   %thead
     %tr
+      - if defined?(show_phoneable) && show_phoneable
+        %th= sortable :phoneable_id, t('phones.index.phoneable')
       %th= sortable :mac_address, t('phones.index.mac_address')
       %th
         %span.hidden-phone
@@ -20,6 +22,9 @@
   %tbody
     - for phone in phones
       %tr{:class => (phone.ip_address.blank? ? 'warning' : '')}
+        - if defined?(show_phoneable) && show_phoneable
+          %td
+            = phone.phoneable
         %td= phone.pretty_mac_address
         %td= phone.phone_model
         %td

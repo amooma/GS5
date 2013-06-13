@@ -9,10 +9,17 @@ class PhonesController < ApplicationController
   helper_method :sort_column, :sort_descending
 
   def index
-    @phones = @parent.phones.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
-      :page => params[:page],
-      :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
-    )
+    if @parent.class == Tenant
+      @phones = @parent.tenant_user_phones.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
+        :page => params[:page],
+        :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
+      )
+    else
+      @phones = @parent.phones.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
+        :page => params[:page],
+        :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
+      )
+    end
   end
 
   def show
