@@ -278,8 +278,24 @@ end
 
 
 function Router.fun_expression(self, expression_str)
-  expression_str = expression_str:gsub('[^%d%.%+%(%)%^%%%*%/-<>]', '');
-  result = loadstring("return (" .. expression_str .. ")")();
+  if common.str.blank(expression_str) then
+    self.log:error('EXPRESSION - no expression specified');
+    return false;
+  end
+  
+  expression_str = expression_str:gsub('[^%d%.%+%(%)%^%%%*%/-<>=!|&]', '');
+  expression_str = expression_str:gsub('&&', ' and ');
+  expression_str = expression_str:gsub('||', ' or ');
+  expression_str = expression_str:gsub('!=', '~=');
+  
+  local expression = loadstring("return (" .. expression_str .. ")")
+
+  if not expression then
+    self.log:error('EXPRESSION - invalid expression: ', expression_str);
+    return false;
+  end
+
+  result = expression();
   if result then
     return true, result;
   else
