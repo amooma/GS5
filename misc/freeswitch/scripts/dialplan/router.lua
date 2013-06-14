@@ -160,13 +160,21 @@ function Router.route_match(self, route)
               table.insert(arguments, common.array.expand_variables(argument, destination, self.variables));
             end
             result, replacement = self['fun_' .. variable_name](self, unpack(arguments))
-            if self.log_details or true then
+            if not common.str.blank(element.pattern) then
+              if self.log_details then
+                self.log:debug('ELEMENT_FUNCTION - function: ', variable_name, '(', table.concat(arguments, ', '), ') => ', replacement);
+              end
+              result, replacement = self:element_match(tostring(element.pattern), tostring(replacement), tostring(replacement));
+            end
+            if self.log_details then
               if result then
                 self.log:debug('ELEMENT_MATCH - function: ', variable_name, '(', table.concat(arguments, ', '), ') => ', replacement);
               else
                 self.log:debug('ELEMENT_NO_MATCH - function: ', variable_name, '(', table.concat(arguments, ', '), ') => ', tostring(replacement));
               end
             end
+          else
+            self.log:error('ELEMENT_FUNCTION - function not found: ', 'fun_' .. variable_name);
           end
         end
       end
@@ -265,5 +273,16 @@ function Router.fun_speeddial(self, number, name)
       self.log:info('SPEEDDIAL - ', number, ' => ', phone_number.number)
        return true, phone_number.number;
     end
+  end
+end
+
+
+function Router.fun_expression(self, expression_str)
+  expression_str = expression_str:gsub('[^%d%.%+%(%)%^%%%*%/-<>]', '');
+  result = loadstring("return (" .. expression_str .. ")")();
+  if result then
+    return true, result;
+  else
+    return false, result;
   end
 end
