@@ -38,9 +38,7 @@ App.SwitchboardController = Ember.ObjectController.extend({
 });
 
 // Models
-App.Store = DS.Store.extend({
-  revision: 12
-});
+App.Store = DS.Store.extend();
 
 DS.RESTAdapter.configure("plurals", {
   switchboard_entry: "switchboard_entries"
