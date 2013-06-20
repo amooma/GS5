@@ -47,6 +47,7 @@ function Perimeter.setup(self, event)
   self.ban_tries = 1;
   self.checks = { register = {}, call = {} };
   self.bad_headers = { register = {}, call = {} };
+  self.serial = freeswitch.getGlobalVariable('switch_serial');
 
   if config and config.general then
     for key, value in pairs(config.general) do
@@ -56,8 +57,14 @@ function Perimeter.setup(self, event)
 
   self.checks.register = config.checks_register or {};
   self.checks.call = config.checks_call or {};
-  self.bad_headers.register = config.bad_headers_register;
-  self.bad_headers.call = config.bad_headers_call;
+
+  for header, patterns in pairs(config.bad_headers_register) do
+    self.bad_headers.register[header] = common.str.strip_to_a(patterns, ',');
+  end 
+
+  for header, patterns in pairs(config.bad_headers_call) do
+    self.bad_headers.call[header] = common.str.strip_to_a(patterns, ',');
+  end 
 
   self.log:info('[perimeter] PERIMETER - setup perimeter defense');
 end
@@ -93,6 +100,7 @@ function Perimeter.record_update(self, event)
   event.record.span_start = event.span_start or event.record.span_start;
   event.record.span_contact_count = (event.span_contact_count or event.record.span_contact_count) + 1;
   event.record.users = event.users or event.record.users;
+  event.record.updated = event.updated or event.record.updated;
 end
 
 
@@ -144,6 +152,7 @@ function Perimeter.check(self, event)
       end
       self:execute_ban(event);
       event.ban_time = os.time();
+      event.banned = true;
     end
         
     event.record.banned = event.record.banned + 1;
@@ -205,12 +214,14 @@ end
 
 function Perimeter.check_bad_headers(self, event)
   local points = nil;
-  for name, pattern in pairs(self.bad_headers[event.action]) do
-    pattern = common.array.expand_variables(pattern, event);
-    local success, result = pcall(string.find, event[name], pattern);
-    if success and result then
-      self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
-      points = (points or 0) + 1;
+  for name, patterns in pairs(self.bad_headers[event.action]) do
+    for index, pattern in ipairs(patterns) do
+      pattern = common.array.expand_variables(pattern, event);
+      local success, result = pcall(string.find, event[name], pattern);
+      if success and result then
+        self.log:debug('[', event.key, '/', event.sequence, '] PERIMETER_BAD_HEADERS - ', name, '=', event[name], ' ~= ', pattern);
+        points = (points or 0) + 1;
+      end
     end
   end
 
@@ -247,6 +258,17 @@ end
 function Perimeter.update_intruder(self, event)
   require 'common.intruder';
   local result = common.intruder.Intruder:new{ log = self.log, database = self.database }:update_blacklist(event);
+
+  if not common.str.blank(self.report_url) and (not event.record.updated or event.banned) then
+    event.serial = common.fapi.FApi:new():execute('md5', self.serial);
+    event.blacklisted = tostring(common.str.to_b(event.banned));
+    local command = 'http_request.lua perimeter ' .. common.array.expand_variables(self.report_url, event);
+    require 'common.fapi'
+    common.fapi.FApi:new():execute('luarun', command);
+    self.log:devel(command);
+  end
+
+  event.updated = common.str.to_i(event.updated) + 1;
 end
 
 

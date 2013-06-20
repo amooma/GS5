@@ -36,5 +36,11 @@ de:
         hint: 'z.B. Firmenname'
       default_system_email:
         label: 'System E-Mail Adresse'
-        hint: 'Für den E-Mail Versand von Faxen und Voicemails.'   
+        hint: 'Für den E-Mail Versand von Faxen und Voicemails.'
+      detect_attacks:
+        label: 'Angriffserkennung'
+        hint: 'Perimeter Angriffserkennung starten'
+      report_attacks:
+        label: 'Angriffe melden'
+        hint: 'Angriffe an Cloud Dienst melden' 
       submit: 'Anlage einrichten'

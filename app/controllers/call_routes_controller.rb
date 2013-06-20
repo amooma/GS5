@@ -92,6 +92,8 @@ class CallRoutesController < ApplicationController
       account = SipAccount.where(:id => params[:sip_account_id]).first
     elsif !params[:hunt_group_id].blank?
       account = HuntGroup.where(:id => params[:hunt_group_id]).first
+    elsif !params[:fax_account_id].blank?
+      account = FaxAccount.where(:id => params[:fax_account_id]).first
     end
 
     if account
@@ -111,7 +113,7 @@ class CallRoutesController < ApplicationController
 
   private
   def call_route_parameter_params
-    params.require(:call_route).permit(:routing_table, :name, :endpoint_type, :endpoint_id, :position)
+    params.require(:call_route).permit(:routing_table, :name, :endpoint_type, :endpoint_id, :position, :xml)
   end
 
   def spread_breadcrumbs

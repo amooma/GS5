@@ -8,12 +8,11 @@
     :options:
       :fields:
       - id
-      - phone_number
+      - call_forwardable 
       - call_forward_case
       - timeout
       - destination
       - source
-      - depth
       - active
   PhoneNumberRange:
     :options:

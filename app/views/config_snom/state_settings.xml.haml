@@ -1,49 +1,56 @@
 !!! XML
 %SnomIPPhoneMenu{:state => 'relevant', :title => "Gemeinschaft #{GsParameter.get('GEMEINSCHAFT_VERSION')}"}
-  %MenuItem{:name => '$(lang:menu100_phone_book)'}
+  %MenuItem{:name => t('config_snom.main_menu.phone_book')}
     %URL= "#{@base_url}/#{@sip_account_ids.first}/phone_book.xml"
-  %Menu{:name => '$(lang:menu100_call_lists)'}
-    %MenuItem{:name => '$(lang:list_missed)'}
+  %Menu{:name => t('config_snom.main_menu.call_history')}
+    %MenuItem{:name => t('config_snom.call_history.missed')}
       - @sip_account_ids.each_with_index do |id, index|
         %If{:condition => "$(current_line)==#{index+1}"}
           %URL= "#{@base_url}/#{id}/call_history_missed.xml"
-    %MenuItem{:name => '$(lang:list_taken)'}
+    %MenuItem{:name => t('config_snom.call_history.received')}
       - @sip_account_ids.each_with_index do |id, index|
         %If{:condition => "$(current_line)==#{index+1}"}
           %URL= "#{@base_url}/#{id}/call_history_received.xml"
-    %MenuItem{:name => '$(lang:list_dialed)'}
+    %MenuItem{:name => t('config_snom.call_history.dialed')}
       - @sip_account_ids.each_with_index do |id, index|
         %If{:condition => "$(current_line)==#{index+1}"}
           %URL= "#{@base_url}/#{id}/call_history_dialed.xml"
-  %MenuItem{:name => '$(lang:sel100_activeline)'}
+    %MenuItem{:name => t('config_snom.call_history.forwarded')}
+      - @sip_account_ids.each_with_index do |id, index|
+        %If{:condition => "$(current_line)==#{index+1}"}
+          %URL= "#{@base_url}/#{id}/call_history_forwarded.xml"
+
+  %MenuItem{:name => t('config_snom.main_menu.voicemail')}
+    %URL= "#{@base_url}/#{@sip_account_ids.first}/voicemail.xml"
+  %MenuItem{:name => t('config_snom.main_menu.sip_account')}
     %Action= 'active_line'
     
   - if @enable_login
-    %MenuItem{:name => 'Log in'}
+    %MenuItem{:name => t('config_snom.main_menu.log_in')}
       %URL= "#{@base_url}/log_in.xml"
   - if @enable_logout
-    %MenuItem{:name => 'Log out'}
+    %MenuItem{:name => t('config_snom.main_menu.log_out')}
       %URL= "#{@base_url}/log_out.xml"
 
-  %Menu{:name => '$(lang:preferences_settings)'}
-    %MenuItem{:name => '$(lang:menu_gen_contrast)'}
+  %Menu{:name => t('config_snom.main_menu.preferences')}
+    %MenuItem{:name => t('config_snom.preferences.contrast')}
       %Action= 'contrast'
-    %MenuItem{:name => '$(lang:use_backlight)'}
+    %MenuItem{:name => t('config_snom.preferences.use_backlight')}
       %Action= 'use_backlight'
-    %MenuItem{:name => '$(lang:use_backlight) $(lang:backlight_when_active)'}
+    %MenuItem{:name => t('config_snom.preferences.backlight_active')}
       %Action= 'backlight_active'
-    %MenuItem{:name => '$(lang:use_backlight) $(lang:backlight_when_idle)'}
+    %MenuItem{:name => t('config_snom.preferences.backlight_idle')}
       %Action= 'backlight_idle'
-    %MenuItem{:name => '$(lang:menu_equalizer)'}
+    %MenuItem{:name => t('config_snom.preferences.equalizer')}
       %Action= 'equalizer'
-  %Menu{:name => '$(lang:maintenance_settings)'}
-    %MenuItem{:name => '$(lang:system_information_menu)'}
+  %Menu{:name => t('config_snom.main_menu.maintenance')}
+    %MenuItem{:name => t('config_snom.maintenance.system_info')}
       %Action= 'sysinfo'
-    %MenuItem{:name => '$(lang:sel100_reboot)'}
+    %MenuItem{:name => t('config_snom.maintenance.reboot')}
       %Action= 'reboot'
     %If{:condition => '$(set:admin_mode)'}
-      %MenuItem{:name => '$(lang:reset_settings)'}
+      %MenuItem{:name => t('config_snom.maintenance.reset_settings')}
         %Action= 'reset_settings'
     %If{:condition => '$(update_available)'}
-      %MenuItem{:name => '$(lang:update_header)'}
+      %MenuItem{:name => t('config_snom.maintenance.software_update')}
         %Action= 'software_update'

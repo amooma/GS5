@@ -1,10 +1,16 @@
+
+- if defined?(users.total_pages)
+  = will_paginate users, :renderer => BootstrapPagination::Rails, :previous_label => raw('<i class = "icon-chevron-left"></i>'), :next_label => raw('<i class = "icon-chevron-right"></i>')
+  
 %table.table.table-striped
   %thead
     %tr
+      - if defined?(show_sip_accountable) && show_sip_accountable
+        %th= sortable :sip_accountable_id, t('sip_accounts.index.sip_accountable')
       %th
         %span.hidden-phone
           = t('sip_accounts.index.online')
-      %th= t('sip_accounts.index.caller_name')
+      %th= sortable :caller_name, t('sip_accounts.index.caller_name')
       %th
         %span.hidden-phone
           = t('sip_accounts.index.phone_numbers')
@@ -16,6 +22,9 @@
   %tbody
     - for sip_account in sip_accounts
       %tr{:class => (sip_account.registration ? '' : 'warning')}
+        - if defined?(show_sip_accountable) && show_sip_accountable
+          %td
+            = sip_account.sip_accountable
         %td
           - if sip_account.registration
             %i.icon-ok

@@ -15,6 +15,8 @@ class CallRoute < ActiveRecord::Base
 
   acts_as_list :scope => '`routing_table` = \'#{routing_table}\''
 
+  after_save :create_elements
+
   def to_s
     name.to_s
   end
@@ -253,6 +255,47 @@ class CallRoute < ActiveRecord::Base
     end
   end
 
+  def xml
+    @xml
+  end
+
+  def xml=(xml_string)
+    @xml = xml_string
+    if xml_string.blank?
+      return
+    end
+
+    begin
+      route_hash = Hash.from_xml(xml_string)
+    rescue Exception => e
+      errors.add(:xml, e.message)
+      return
+    end
+
+    if route_hash['call_route'].class == Hash
+      call_route = route_hash['call_route']
+      self.routing_table = call_route['routing_table'].downcase
+      self.name = call_route['name'].downcase
+      self.position = call_route['position']
+      self.endpoint_type = call_route['endpoint_type']
+      endpoint_from_type_name(call_route['endpoint_type'], call_route['endpoint'])
+      
+      if route_hash['call_route']['route_elements'] && route_hash['call_route']['route_elements']['route_element']
+        if route_hash['call_route']['route_elements']['route_element'].class == Hash
+          @elements_array = [route_hash['call_route']['route_elements']['route_element']]
+        else
+          @elements_array = route_hash['call_route']['route_elements']['route_element']
+        end
+      end
+    elsif route_hash['route_elements'].class == Hash && route_hash['route_elements']['route_element']
+      if route_hash['route_elements']['route_element'].class == Hash
+        @elements_array = [route_hash['route_elements']['route_element']]
+      else
+        @elements_array = route_hash['route_elements']['route_element']
+      end
+    end
+
+  end
 
   def self.test_route(table, caller)
     arguments = ["'#{table}' table"]
@@ -267,6 +310,29 @@ class CallRoute < ActiveRecord::Base
     end
 
     return JSON.parse(result)
+  end
+
+  private
+  def endpoint_from_type_name(endpoint_type, endpoint_name)
+    endpoint_type = endpoint_type.to_s.downcase
+    if endpoint_type == 'phonenumber'
+      self.endpoint_type = 'PhoneNumber'
+      self.endpoint_id = nil
+    elsif endpoint_type == 'gateway'
+      gateway = Gateway.where(:name => endpoint_name).first
+      if gateway
+        self.endpoint_type ='Gateway'
+        self.endpoint_id = gateway.id
+      end
+    end
+  end
+
+  def create_elements
+    if @elements_array && @elements_array.any?
+      @elements_array.each do |element_hash|
+        element = self.route_elements.create(element_hash)
+      end
+    end
   end
 
 end

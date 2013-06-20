@@ -5214,7 +5214,7 @@ class AreaCodesGermany < ActiveRecord::Migration
     # Mobilfunknetze
     #
     '01511, 01512, 01514, 01515, 0160, 0170, 0171, 0175'.gsub(/[^0-9\,]/,'').split(/,/).each do |area_code|
-      AreaCode.create(:country => germany, :name => "D1 Mobilfunknetz (Telekom)", :area_code => area_code.gsub(/^0/,''))
+      AreaCode.create(:country => germany, :name => "Telekom Mobilfunknetz", :area_code => area_code.gsub(/^0/,''))
     end
 
     '01520, 01522, 01525, 0162, 0172, 0173, 0174'.gsub(/[^0-9\,]/,'').split(/,/).each do |area_code|
@@ -5226,7 +5226,7 @@ class AreaCodesGermany < ActiveRecord::Migration
     end
 
     '0176, 0179, 0159, 01505'.gsub(/[^0-9\,]/,'').split(/,/).each do |area_code|
-      AreaCode.create(:country => germany, :name => "O2 Mobilfunknetz", :area_code => area_code.gsub(/^0/,''))
+      AreaCode.create(:country => germany, :name => "o2 Mobilfunknetz", :area_code => area_code.gsub(/^0/,''))
     end
 
     # Sondervorwahlen

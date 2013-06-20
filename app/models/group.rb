@@ -29,4 +29,12 @@ class Group < ActiveRecord::Base
 
     return group_ids.uniq
   end
+
+  def self.target_group_ids_by_permission(permission, *group_sets)
+    target_groups = []
+    group_sets.each do |groups|
+      target_groups = target_groups + Group.union(groups.collect{|g| g.permission_targets(permission)})
+    end
+    return target_groups.uniq
+  end
 end

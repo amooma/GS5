@@ -1,0 +1,79 @@
+<% content_for :title, "Switchboard #{@switchboard.name}" %>
+
+<script>
+  var switchboard_id = <%= @switchboard.id %>;
+  var show_avatars = <%= @switchboard.show_avatars.to_s %>;
+  var reload_interval = <%= @switchboard.reload_interval.nil? ? 0 : @switchboard.reload_interval %>;
+  var amount_of_displayed_phone_numbers = <%= @switchboard.amount_of_displayed_phone_numbers %>;
+</script>
+
+<div class='row'>
+  <div class='span12'>
+    <div id='emberjs-container'></div>
+
+    <script type="text/x-handlebars">
+      {{outlet}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="switchboard">
+      <h2>{{name}}</h2>
+
+      {{#if switchboardEntrys.length}}
+        <ul class="thumbnails">
+          {{#each switchboardEntry in switchboardEntrys}}
+            <li class="span2">
+              <div class="thumbnail">
+                {{avatar_img switchboardEntry.avatar_src}}
+                  <small>
+                    <p>
+                      <span class="label">{{switchboardEntry.name}}</span>
+
+                      {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumberShortList}}
+                        <span class="label">
+                          {{phoneNumber.number}}
+                        </span>
+                      {{/each}}
+                    </p>
+
+                    {{show_callstate switchboardEntry.callstate}}
+                    {{#if switchboardEntry.sipAccount.calls.length}}
+                      <p>
+                      Anrufe:
+                      <br>
+                      {{#each call in switchboardEntry.sipAccount.calls}}
+                        <span {{bindAttr class=":label call.isActive:label-success"}}>
+                            {{call.b_caller_id_number}} -> {{call.destination}}
+                            {{#if call.isActive}}
+                            *
+                            {{/if}}
+                        </span>
+                      {{/each}}
+                      </p>
+                    {{/if}}
+
+                    {{#if activeCalls.length}}
+                      <p>
+                        Verbinden mit:
+                        <br>
+                          {{#each activeCall in activeCalls}}
+                            <button {{action blind_transfer}}>
+                              {{activeCall.b_caller_id_number}}
+                            </button>
+                          {{/each}}
+                      </p>
+                    {{/if}}
+                  </small>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
+    </script>
+
+  </div>
+</div>
+
+<script src="/js/libs/handlebars.js"></script>
+<script src="/js/libs/ember.js"></script>
+<script src="/js/libs/ember-data.js"></script>
+<script src="/js/app.js"></script>

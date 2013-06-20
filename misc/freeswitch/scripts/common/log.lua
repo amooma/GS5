@@ -38,7 +38,7 @@ function Log.message(self, log_level, message_arguments )
     if type(index) == 'number' then
       if type(value) == 'table' then
         require 'common.array';
-        message = message .. common.array.to_json(value);
+        message = message .. common.array.to_json(value, 3);
       else
         message = message .. tostring(value);
       end

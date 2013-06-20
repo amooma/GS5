@@ -29,6 +29,9 @@ function input_call_back_callee(s, object_type, object_data, arg)
   end
 end
 
+function global_callback_handler(...)
+  return global_callback:run({...});
+end
 
 -- initialize logging
 require 'common.log'
@@ -90,6 +93,10 @@ else
   end
 end
 
+require 'dialplan.callback';
+global_callback = dialplan.callback.Callback:new{ session = session, log = log };
+
+
 if start_caller.from_node then
   log:debug('AUTHENTICATION_REQUIRED_NODE - node_id: ', start_caller.node_id, ', domain: ', start_dialplan.domain);
   start_dialplan:hangup(407, start_dialplan.domain);
@@ -109,6 +116,8 @@ else
 
   start_dialplan:run(start_destination);
 end
+
+start_caller.session:unsetInputCallback();
 
 -- release database handle
 if database then

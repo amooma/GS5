@@ -2,6 +2,8 @@ class GatewaySettingsController < ApplicationController
   load_and_authorize_resource :gateway
   load_and_authorize_resource :gateway_setting, :through => [:gateway]
 
+  before_filter :spread_breadcrumbs
+
   def index
     @gateway_settings = @gateway.gateway_settings
   end
@@ -40,5 +42,16 @@ class GatewaySettingsController < ApplicationController
     @gateway_setting = @gateway.gateway_settings.find(params[:id])
     @gateway_setting.destroy
     redirect_to gateway_path(@gateway), :notice => t('gateway_settings.controller.successfuly_destroyed')
+  end
+
+  private
+  def spread_breadcrumbs
+    add_breadcrumb t("gateways.index.page_title"), gateways_path
+    add_breadcrumb @gateway, @gateway
+    add_breadcrumb t("gateway_settings.index.page_title"), gateway_gateway_settings_url(@gateway)
+
+    if @gateway_setting && !@gateway_setting.new_record?
+      add_breadcrumb @gateway_setting
+    end
   end
 end

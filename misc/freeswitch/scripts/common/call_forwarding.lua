@@ -17,6 +17,7 @@ function CallForwarding.new(self, arg, object)
   self.record = arg.record;
   self.domain = arg.domain;
   self.parent = arg.parent;
+  self.caller = arg.caller;
   return object;
 end
 
@@ -70,11 +71,37 @@ function CallForwarding.list_by_owner(self, call_forwardable_id, call_forwardabl
     else
       local sources = common.str.strip_to_a(forwarding_entry.source, ',')
       for source_index=1, #sources do
-        for caller_id_index=1, #caller_ids do
-          if caller_ids[caller_id_index]:match(sources[source_index]) then
-            entry_match = true;
-            self.log:debug('CALL_FORWARDING - source match: ', sources[source_index], ' ~ ', caller_ids[caller_id_index] );
+        local variable_name, pattern = common.str.partition(sources[source_index], '!=')
+        local invert = variable_name ~= nil;
+        if not variable_name then
+          variable_name, pattern = common.str.partition(sources[source_index], '=')
+        end
+        if variable_name and self.caller then
+          local search_string = tostring(common.array.try(self.caller, variable_name));
+          local success, result = pcall(string.find, pattern, '^%d+-%d+$');
+          
+          if success and result and tonumber(search_string) then
+            local min, max = common.str.partition(pattern, '-')
+            entry_match = tonumber(search_string) >= tonumber(min) and tonumber(search_string) <= tonumber(max);
+          else
+            local success, result = pcall(string.find, search_string, pattern);
+            entry_match = common.str.to_b(result);
+          end
+          if invert then
+            entry_match = not entry_match;
+          end
+
+          if entry_match == false then
             break;
+          end
+          self.log:debug('CALL_FORWARDING ', forwarding_entry.service, ' - element match: ', entry_match, ', variable: ', variable_name, ' = ', pattern, ' ~ ', search_string);
+        else
+          for caller_id_index=1, #caller_ids do
+            if caller_ids[caller_id_index]:match(sources[source_index]) then
+              entry_match = true;
+              self.log:debug('CALL_FORWARDING ', forwarding_entry.service, ' - source match: ', sources[source_index], ' ~ ', caller_ids[caller_id_index] );
+              break;
+            end
           end
         end
       end

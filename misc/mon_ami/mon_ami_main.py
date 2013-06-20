@@ -9,7 +9,7 @@ from signal import signal, SIGHUP, SIGTERM, SIGINT
 from optparse import OptionParser
 from freeswitch import FreeswitchEventSocket
 from mon_ami_server import MonAMIServer
-from sqliter import SQLiteR
+from mysqlr import MySQLR
 
 def signal_handler(signal_number, frame):
   global event_socket
@@ -40,7 +40,7 @@ def user_password_authentication(user_name, password):
       return True
     return False
 
-  db = SQLiteR(configuration_options.user_db_name)
+  db = MySQLR(configuration_options.user_db_name, configuration_options.user_db_user, configuration_options.user_db_password)
   if not db.connect():
     lerror('cound not connect to user database "%s"' % configuration_options.user_db_name)
     return False
@@ -53,6 +53,7 @@ def user_password_authentication(user_name, password):
     return True
 
   linfo('user-password authentication failed - user: %s, password: %s' % (user_name, '*' * len(str(password))))
+
   return False
 
 def main():
@@ -76,7 +77,9 @@ def main():
   option_parser.add_option("-p", "--port", "--ami-port",       action="store", type="int",    dest="ami_port",    default=5038)
 
   # User database
-  option_parser.add_option("--user-db-name",         action="store", type="string", dest="user_db_name",         default='/opt/GS5/db/development.sqlite3')
+  option_parser.add_option("--user-db-name",         action="store", type="string", dest="user_db_name",         default='gemeinschaft')
+  option_parser.add_option("--user-db-user",         action="store", type="string", dest="user_db_user",         default='gemeinschaft')
+  option_parser.add_option("--user-db-password",     action="store", type="string", dest="user_db_password",     default='gemeinschaft')
   option_parser.add_option("--user-db-table",        action="store", type="string", dest="user_db_table",        default='sip_accounts')
   option_parser.add_option("--user-db-name-row",     action="store", type="string", dest="user_db_name_row",     default='auth_name')
   option_parser.add_option("--user-db-password-row", action="store", type="string", dest="user_db_password_row", default='password')

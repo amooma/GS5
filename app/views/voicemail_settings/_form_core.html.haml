@@ -1,11 +1,5 @@
-.inputs
 
-  = f.input :greeting_path,  :as => :select, :label => t('voicemail_settings.form.greeting.label'), :hint => conditional_hint('voicemail_settings.form.greeting.hint'), :collection => @greeting_files
-  = f.input :name_path,  :as => :select, :label => t('voicemail_settings.form.name.label'), :hint => conditional_hint('voicemail_settings.form.name.hint'), :collection => @name_files
-  
-  = f.input :password, :label => t('voicemail_settings.form.pin.label'), :hint => conditional_hint('voicemail_settings.form.pin.hint')
-  
-  = f.input :notify, :as => :boolean, :label => t('voicemail_settings.form.notify.label'), :hint => conditional_hint('voicemail_settings.form.notify.hint')
-  = f.input :attachment, :as => :boolean, :label => t('voicemail_settings.form.attachment.label'), :hint => conditional_hint('voicemail_settings.form.attachment.hint')
-  = f.input :mark_read, :as => :boolean, :label => t('voicemail_settings.form.mark_read.label'), :hint => conditional_hint('voicemail_settings.form.mark_read.hint')
-  = f.input :purge, :as => :boolean, :label => t('voicemail_settings.form.purge.label'), :hint => conditional_hint('voicemail_settings.form.purge.hint')
+.inputs
+  = f.input :name, :collection => @names_possible, :label => t('voicemail_settings.form.name.label'), :hint => conditional_hint('voicemail_settings.form.name.hint'), :autofocus => true, :include_blank => false
+  = f.input :value, :label => t('voicemail_settings.form.value.label'), :hint => conditional_hint('voicemail_settings.form.value.hint')
+  = f.input :description, :label => t('voicemail_settings.form.description.label'), :hint => conditional_hint('voicemail_settings.form.description.hint')

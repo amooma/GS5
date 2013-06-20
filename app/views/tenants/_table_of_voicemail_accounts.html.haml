@@ -1,0 +1,8 @@
+- cache(['table_of_pbx_features_voicemail_accounts_row', I18n.locale, tenant, tenant.voicemail_accounts.count, tenant.voicemail_accounts.reorder(:updated_at).last]) do
+  -# VoicemailAccounts
+  -#
+  - if (can?( :index, VoicemailAccount ) && tenant.voicemail_accounts.count > 0 ) || can?( :create, VoicemailAccount )
+    %h2= t('voicemail_accounts.index.page_title')
+    - if can?( :index, VoicemailAccount ) && tenant.voicemail_accounts.count > 0
+      = render "voicemail_accounts/index_core", :voicemail_accounts => tenant.voicemail_accounts
+    = render :partial => 'shared/create_link', :locals => {:parent => tenant, :child_class => VoicemailAccount}

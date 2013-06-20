@@ -9,6 +9,10 @@ en:
       page_title: 'Switchboards'
       name: 'Name'
       user_id: 'User'
+      reload_interval:: 'Reload Interval'
+      show_avatars: 'Show avatars'
+      entry_width: 'Entry width'
+      amount_of_displayed_phone_numbers: 'Amount of displayed phone numbers'     
       actions:
         confirm_destroy: 'Are you sure you want to delete this Switchboard?'
         destroy: 'Delete'
@@ -20,6 +24,10 @@ en:
       page_title: 'Show Switchboard'
       name: 'Name'
       user_id: 'User'
+      reload_interval:: 'Reload Interval'
+      show_avatars: 'Show avatars'
+      entry_width: 'Entry width'
+      amount_of_displayed_phone_numbers: 'Amount of displayed phone numbers'     
       actions:
         confirm_destroy: 'Are you sure you want to delete this element?'
         destroy: 'Delete'
@@ -42,4 +50,16 @@ en:
       user_id:
         label: 'User'
         hint: ''
+      reload_interval:
+        label: 'Reload Interval'
+        hint: 'Milliseconds. nil = no reload'
+      show_avatars:
+        label: 'Show avatars'
+        hint: ''
+      entry_width:
+        label: 'Entry width'
+        hint: ''
+      amount_of_displayed_phone_numbers:
+        label: 'Amount of phone numbers'
+        hint: 'How many phone numbers should be displayed for a single entry.'
       submit: 'Submit'

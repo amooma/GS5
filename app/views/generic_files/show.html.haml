@@ -1,0 +1,25 @@
+- content_for :title, t("generic_files.show.page_title")
+
+%p
+  %strong= t('generic_files.show.category') + ":"
+  = @generic_file.category
+
+%p
+  %strong= t('generic_files.show.name') + ":"
+  = @generic_file.name
+
+%p
+  %strong= t('generic_files.show.file_type') + ":"
+  = @generic_file.file_type
+
+%p
+  %strong= t('generic_files.show.file_size') + ":"
+  = number_to_human_size(@generic_file.file_size)
+
+%p
+  %i{:class => 'icon-download'}
+  %strong= t('generic_files.index.actions.download') + ":"
+  %a{:href => method( :"#{@parent.class.name.underscore}_generic_file_path" ).(@parent, @generic_file, :format => @generic_file.file_extension), :method => :get}
+    = "#{@generic_file.name}.#{@generic_file.file_extension}"
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @parent, :child => @generic_file }

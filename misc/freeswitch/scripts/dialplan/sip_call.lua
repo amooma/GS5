@@ -90,7 +90,7 @@ function SipCall.fork(self, destinations, arg )
   for index, destination in ipairs(destinations) do
     local origination_variables = { 'gs_fork_index=' .. index }
 
-    self.log:info('FORK ', index, '/', #destinations, ' - ', destination.type, '=', destination.id, '/', destination.uuid, '@', destination.node_id, ', number: ', destination.number, ', caller_id: "', destination.caller_id_name, '" <', destination.caller_id_number, '>');
+    self.log:info('FORK ', index, '/', #destinations, ' - ', destination.type, '=', destination.id, '/', destination.uuid, '@', destination.node_id, ', number: ', destination.number);
     
     if not common.str.to_b(arg.update_callee_display) then
       table.insert(origination_variables, 'ignore_display_updates=true');
@@ -112,6 +112,7 @@ function SipCall.fork(self, destinations, arg )
         table.insert(origination_variables, 'sip_h_X-GS_auth_account_type=' .. tostring(self.caller.auth_account_type));
         table.insert(origination_variables, 'sip_h_X-GS_auth_account_uuid=' .. tostring(self.caller.auth_account_uuid));
         table.insert(origination_variables, 'sip_h_X-GS_loop_count=' .. tostring(self.caller.loop_count));
+        table.insert(origination_variables, 'sip_h_X-GS_clir=' .. tostring(self.caller.clir));
         table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/gateway/' .. node.record.name .. '/' .. destination.number);
       end
     elseif destination.type == 'sipaccount' then
@@ -124,6 +125,8 @@ function SipCall.fork(self, destinations, arg )
       else
         local call_waiting = self:call_waiting_busy(sip_account);
         if not call_waiting then
+          local caller_id_number = destination.caller_id_number or self.caller.caller_id_number;
+          local caller_id_name = destination.caller_id_name or self.caller.caller_id_name;
           destinations[index].numbers = sip_account:phone_numbers();
 
           if not arg.callee_id_name then
@@ -146,6 +149,16 @@ function SipCall.fork(self, destinations, arg )
             table.insert(origination_variables, "gs_auth_account_uuid='" .. common.str.to_s(self.caller.auth_account.uuid) .. "'");
           end
 
+          if self.caller.clir then
+            caller_id_number = self.caller.anonymous_number or 'anonymous';
+            caller_id_name = self.caller.anonymous_name or 'Anonymous';
+            table.insert(origination_variables, "origination_caller_id_number='" .. caller_id_number .. "'");
+            table.insert(origination_variables, "origination_caller_id_name='" .. caller_id_name .. "'");
+            table.insert(origination_variables, "sip_h_Privacy='id'");
+          end
+
+          self.log:info('FORK ', index, '/', #destinations, ' - caller_id: "', caller_id_name, '" <', caller_id_number, '>, privacy: ', self.caller.clir);
+
           table.insert(dial_strings, '[' .. table.concat(origination_variables , ',') .. ']sofia/' .. sip_account.record.profile_name .. '/' .. sip_account.record.auth_name .. '%' .. sip_account.record.sip_host);
           if destination.pickup_groups and #destination.pickup_groups > 0 then
             for key=1, #destination.pickup_groups do
@@ -162,12 +175,50 @@ function SipCall.fork(self, destinations, arg )
       local gateway = common.gateway.Gateway:new{ log = self.log, database = self.database}:find_by_id(destination.id);
 
       if gateway and gateway.outbound then
-        if destination.caller_id_number then
-          table.insert(origination_variables, "origination_caller_id_number='" .. destination.caller_id_number .. "'");
+        local asserted_identity = tostring(gateway.settings.asserted_identity);
+        local asserted_identity_clir = tostring(gateway.settings.asserted_identity);
+        local caller_id_number = destination.caller_id_number or self.caller.caller_id_number;
+        local caller_id_name = destination.caller_id_name or self.caller.caller_id_name;
+        local from_uri = common.array.expand_variables(gateway.settings.from or '', destination, self.caller, { gateway = gateway });
+
+        if gateway.settings.asserted_identity then
+          local identity = common.array.expand_variables(gateway.settings.asserted_identity or '', destination, self.caller, { gateway = gateway })
+          
+          if self.caller.clir then
+            caller_id_number = self.caller.anonymous_number or 'anonymous';
+            caller_id_name = self.caller.anonymous_name or 'Anonymous';
+            from_uri = common.array.expand_variables(gateway.settings.from_clir or '', destination, self.caller, { gateway = gateway }) or from_uri;
+            identity = common.array.expand_variables(gateway.settings.asserted_identity_clir or '', destination, self.caller, { gateway = gateway }) or identity;
+            table.insert(origination_variables, "origination_caller_id_number='" .. caller_id_number .. "'");
+            table.insert(origination_variables, "origination_caller_id_name='" .. caller_id_name .. "'");
+            table.insert(origination_variables, "sip_h_Privacy='id'");
+          else
+            if destination.caller_id_number then
+              table.insert(origination_variables, "origination_caller_id_number='" .. destination.caller_id_number .. "'");
+            end
+            if destination.caller_id_name then
+              table.insert(origination_variables, "origination_caller_id_name='" .. destination.caller_id_name .. "'");
+            end
+          end
+
+          if from_uri then
+            table.insert(origination_variables, "sip_from_uri='" .. from_uri .. "'");
+          end
+
+          if identity then
+            table.insert(origination_variables, "sip_h_P-Asserted-Identity='" .. identity .. "'");
+          end
+
+          self.log:info('FORK ', index, '/', #destinations, ' - from: ', from_uri, ', identity: ', identity, ', privacy: ', self.caller.clir);
+        else
+          if destination.caller_id_number then
+            table.insert(origination_variables, "origination_caller_id_number='" .. destination.caller_id_number .. "'");
+          end
+          if destination.caller_id_name then
+            table.insert(origination_variables, "origination_caller_id_name='" .. destination.caller_id_name .. "'");
+          end
         end
-        if destination.caller_id_name then
-          table.insert(origination_variables, "origination_caller_id_name='" .. destination.caller_id_name .. "'");
-        end
+
         if destination.channel_variables then
           for key, value in pairs(destination.channel_variables) do
             table.insert(origination_variables, tostring(key) .. "='" .. tostring(value) .. "'");
@@ -233,11 +284,19 @@ function SipCall.fork(self, destinations, arg )
     end
 
     if arg.detect_dtmf_after_bridge_caller and self.caller.auth_account then
-      session:execute('start_dtmf');
+      if not string.match(self.caller:to_s('switch_r_sdp'), '101 telephone%-event') then
+        self.log:notice('FORK A_LEG inband dtmf detection - channel_uuid: ', session:get_uuid());
+        session:execute('start_dtmf');
+      end
     end
+    
     if arg.detect_dtmf_after_bridge_callee and destination.type == 'sipaccount' then
-      session_callee:execute('start_dtmf');
+      if not string.match(tostring(session_callee:getVariable('switch_r_sdp')), '101 telephone%-event') then
+        self.log:notice('FORK B_LEG inband dtmf detection - channel_uuid: ', session_callee:get_uuid());
+        session_callee:execute('start_dtmf');
+      end
     end
+
     if arg.bypass_media_network then
       local callee_uuid = session_callee:get_uuid();
 

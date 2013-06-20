@@ -1,0 +1,8 @@
+%h2= t("groups.index.page_title")
+
+- if Group.count <= GsParameter.get('NUMBER_OF_SHOWN_ITEMS')
+  = render "groups/index_core", :groups => Group.all
+  = render :partial => 'shared/create_link', :locals => {:child_class => Group}
+- else
+  %p
+    = link_to t("groups.index.page_title"), groups_path

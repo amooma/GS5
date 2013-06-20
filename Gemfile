@@ -14,6 +14,7 @@ gem 'state_machine'
 gem 'acts_as_list'
 gem 'dalli' # memcached
 gem 'inifile'
+gem 'active_model_serializers' # JSON
 
 # Useful Rails 4 stuff
 #
@@ -62,6 +63,9 @@ gem "mini_magick"
 
 # Pagination https://github.com/mislav/will_paginate/wiki/Installation
 gem 'will_paginate'
+
+# Pagination for Twitter bootstrap
+gem 'will_paginate-bootstrap'
 
 # DelayedJob https://github.com/collectiveidea/delayed_job
 gem 'daemons'

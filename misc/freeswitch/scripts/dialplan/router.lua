@@ -22,6 +22,7 @@ function Router.new(self, arg)
   self.variables = arg.variables or {};
   self.log_details = arg.log_details;
   self.routing_tables = {};
+
   return object;
 end
 
@@ -38,15 +39,19 @@ function Router.read_table(self, table_name, force_reload)
     JOIN `route_elements` `b` ON `a`.`id` = `b`.`call_route_id`\
     WHERE `a`.`routing_table` = "' .. table_name .. '" \
     ORDER BY `a`.`position`, `b`.`position`';
-
-  local last_id = 0;
+  
+  local call_routes = {};
+  
   self.database:query(sql_query, function(route)
-    if last_id ~= tonumber(route.call_route_id) then
-      last_id = tonumber(route.call_route_id);
-      table.insert(routing_table, {id = route.call_route_id, name = route.name, endpoint_type = route.endpoint_type , endpoint_id = route.endpoint_id, elements = {} });
+    if call_routes[route.call_route_id] then
+      call_route = call_routes[route.call_route_id];
+    else
+      call_route = {id = route.call_route_id, name = route.name, endpoint_type = route.endpoint_type , endpoint_id = route.endpoint_id, elements = {} };
+      call_routes[route.call_route_id] = call_route;
+      table.insert(routing_table, call_route);
     end
     
-    table.insert(routing_table[#routing_table].elements, {
+    table.insert(call_route.elements, {
       var_in = route.var_in, 
       var_out = route.var_out, 
       pattern = route.pattern,
@@ -71,8 +76,9 @@ function Router.element_match(self, pattern, search_string, replacement, route_v
     local replace_by = common.array.expand_variables(replacement, route_variables, self.variables)
     result = search_string:gsub(pattern, replace_by);
     if self.log_details then
-      self.log:debug('ELEMENT_MATCH - ', search_string, ' ~= ', pattern, ' => ', replacement, ' => ', replace_by);
+      self.log:debug('ELEMENT_MATCH - ', search_string, ' ~= ', pattern, ' => ', replacement, ' => ', result);
     end
+
     return true, result;
   end
 
@@ -105,6 +111,37 @@ function Router.element_match_group(self, pattern, groups, replacement, use_key,
 end
 
 
+function Router.element_run_function(self, variable_name, element, destination)
+  local result = nil;
+  local replacement = nil;
+
+  if self['fun_' .. variable_name] then
+    local arguments = {};
+    for index, argument in ipairs(common.str.to_a(element.replacement, ',')) do
+      table.insert(arguments, common.array.expand_variables(argument, destination, self.variables));
+    end
+    result, replacement = self['fun_' .. variable_name](self, unpack(arguments))
+    if not common.str.blank(element.pattern) then
+      if self.log_details then
+        self.log:debug('ELEMENT_FUNCTION - function: ', variable_name, '(', table.concat(arguments, ', '), ') => ', replacement);
+      end
+      result, replacement = self:element_match(tostring(element.pattern), tostring(replacement), tostring(replacement));
+    end
+    if self.log_details then
+      if result then
+        self.log:debug('ELEMENT_MATCH - function: ', variable_name, '(', table.concat(arguments, ', '), ') => ', replacement);
+      else
+        self.log:debug('ELEMENT_NO_MATCH - function: ', variable_name, '(', table.concat(arguments, ', '), ') => ', tostring(replacement));
+      end
+    end
+  else
+    self.log:error('ELEMENT_FUNCTION - function not found: ', 'fun_' .. variable_name);
+  end
+
+  return result, replacement;
+end
+
+
 function Router.route_match(self, route)
   local destination = {
     gateway = 'gateway' .. route.endpoint_id,
@@ -128,7 +165,7 @@ function Router.route_match(self, route)
     end
 
     if element.action ~= 'none' then
-      if common.str.blank(element.var_in) or common.str.blank(element.pattern) and element.action == 'set' then
+      if common.str.blank(element.var_in) and element.action == 'set' then
         result = true;
         replacement = common.array.expand_variables(element.replacement, destination, self.variables);
       else
@@ -149,11 +186,16 @@ function Router.route_match(self, route)
         elseif command == 'hdr' then
           local search_string = self.caller:to_s('sip_h_' .. variable_name);
           result, replacement = self:element_match(tostring(element.pattern), search_string, tostring(element.replacement));
+        elseif command == 'fun' then
+          result, replacement = self:element_run_function(variable_name, element, destination);
         end
       end
 
       if element.action == 'not_match' then
         result = not result;
+        if result then
+          replacement = tostring(element.replacement);
+        end
       end
 
       if not result then
@@ -212,5 +254,63 @@ function Router.route_run(self, table_name, find_first)
 
   if not find_first then
     return routes;
+  end
+end
+
+
+function Router.fun_speeddial(self, number, name)
+  local owner_class = common.array.try(self, 'caller.auth_account.owner.class');
+  local owner_id = common.array.try(self, 'caller.auth_account.owner.id')
+  
+  local user_id = nil;
+  local tenant_id = nil;
+
+  if tostring(owner_class) == 'user' then
+    user_id = owner_id;
+    tenant_id = common.array.try(self, 'caller.auth_account.owner.record.current_tenant_id');
+  elseif
+    tostring(owner_class) == 'tenant' then
+    tenant_id = owner_id;
+  end
+
+  require 'dialplan.phone_book'
+  local phone_book_class = dialplan.phone_book.PhoneBook:new{ log = self.log, database = self.database }
+  local phone_book_entry = phone_book_class:find_entry_by_number_user_tenant({number}, user_id, tenant_id, 'speeddial');
+
+  self.log:debug('SPEEDDIAL - user=', user_id, ', tenant=', tenant_id, ', entry: "', common.array.try(phone_book_entry, 'phone_book_name'), '" => "', common.array.try(phone_book_entry, 'caller_id_name'), '"');
+
+  if phone_book_entry then
+    local phone_numbers = phone_book_class:numbers(phone_book_entry.id, name, 'speeddial');
+    for index, phone_number in ipairs(phone_numbers) do
+      self.log:info('SPEEDDIAL - ', number, ' => ', phone_number.number)
+       return true, phone_number.number;
+    end
+  end
+end
+
+
+function Router.fun_expression(self, expression_str)
+  if common.str.blank(expression_str) then
+    self.log:error('EXPRESSION - no expression specified');
+    return false;
+  end
+
+  expression_str = expression_str:gsub('[^%d%.%+%(%)%^%%%*%/-<>=!|&]', '');
+  expression_str = expression_str:gsub('&&', ' and ');
+  expression_str = expression_str:gsub('||', ' or ');
+  expression_str = expression_str:gsub('!=', '~=');
+  
+  local expression = loadstring("return (" .. expression_str .. ")")
+
+  if not expression then
+    self.log:error('EXPRESSION - invalid expression: ', expression_str);
+    return false;
+  end
+
+  result = expression();
+  if result then
+    return true, result;
+  else
+    return false, result;
   end
 end

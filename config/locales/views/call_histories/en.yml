@@ -20,6 +20,10 @@ en:
       date_format: '%m/%d/%Y %H:%M'
       date_today_format: '%H:%M'
       forwarded_by: 'via'
+      date: 'Date'
+      called_party: 'Called party'
+      duration: 'Time'
+      status: 'Status'
       navigation:
         missed: 'Missed:%{calls}'
         dialed: 'Placed:%{calls}'

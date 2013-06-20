@@ -54,11 +54,17 @@ en:
         label: 'Timeout in seconds'
         hint: 'Just needed for the "noanswer" case.'
       destination:
-        label: 'Destination phone number'
-        hint: 'Format: +49-30-2270 for a normal phone number or 42 for an internal extension.'
+        label: 'Destination'
+        hint: 'Depends on type specified above: e.g. phone number (+15551234567 or 42), voicemail greeting (greeting_12345)'
+      destination_phone_number:
+        label: 'Phone Number'
+        hint: 'Phone number (e.g. +15551234567 or 42)'
+      destination_greeting:
+        label: 'Greeting'
+        hint: 'Voicemail greeting'
       call_forwarding_destination:
         label: 'Destination Type'
-        hint: 'Select destination or enter phone number below'        
+        hint: 'Select destination and enter additinal information (e.g. phone number) below'        
       hunt_group:
         label: 'Hunt group connection'
         hint: 'This hunt group auto activates this call forward.'
@@ -66,8 +72,8 @@ en:
         label: 'Forward to voicemail'
         hint: 'Can not be activated together with a destination number.'
       source:
-        label: 'Source'
-        hint: "The caller's ID for which this call forward should be valid. Leave empty for calls from any number."
+        label: 'Constraint'
+        hint: "Comma separated list of caller IDs (e.g. +15551234567,100,42) or key-value pairs (e.g. date=[1-5]$, time!=080000-163000)"
       depth:
         label: 'Hops'
         hint: "The maximum number of hops you want to permit. 1 means calls won't be forwarded beyond the next destination."

@@ -94,6 +94,10 @@ class User < ActiveRecord::Base
   
   has_many :switchboards, :dependent => :destroy
 
+  has_many :voicemail_accounts, :as => :voicemail_accountable, :dependent => :destroy
+
+  has_many :generic_files, :as => :owner, :dependent => :destroy
+
   # Avatar like photo  
   mount_uploader :image, ImageUploader  
 

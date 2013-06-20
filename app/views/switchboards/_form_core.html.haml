@@ -1,2 +1,6 @@
 .inputs
   = f.input :name, :label => t('switchboards.form.name.label'), :hint => conditional_hint('switchboards.form.name.hint'), :autofocus => true
+  = f.input :reload_interval, :label => t('switchboards.form.reload_interval.label'), :hint => conditional_hint('switchboards.form.reload_interval.hint')
+  = f.input :show_avatars, :label => t('switchboards.form.show_avatars.label'), :hint => conditional_hint('switchboards.form.show_avatars.hint')
+  = f.input :entry_width, :label => t('switchboards.form.entry_width.label'), :hint => conditional_hint('switchboards.form.entry_width.hint')
+  = f.input :amount_of_displayed_phone_numbers, :label => t('switchboards.form.amount_of_displayed_phone_numbers.label'), :hint => conditional_hint('switchboards.form.amount_of_displayed_phone_numbers.hint')

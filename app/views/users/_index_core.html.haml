@@ -1,16 +1,20 @@
-- cache(['user_table_row_inner_td', I18n.locale, current_user, users.reorder(:updated_at).last, users.count, GsParameter.get('NUMBER_OF_SHOWN_ITEMS')]) do
+- cache(['user_table_row_inner_td', I18n.locale, current_user, users.reorder(:updated_at).last, users.first, users.last, GsParameter.get('NUMBER_OF_SHOWN_ITEMS')]) do
+
+  - if defined?(users.total_pages)
+    = will_paginate users, :renderer => BootstrapPagination::Rails, :previous_label => raw('<i class = "icon-chevron-left"></i>'), :next_label => raw('<i class = "icon-chevron-right"></i>')
+    
   %table.table.table-striped
     %thead
       %tr
         %th
-        %th= t('users.index.user_name')
+        %th= sortable :user_name, t('users.index.user_name')
         %th
           %span.hidden-phone
-            = t('users.index.email')
+            = sortable :email, t('users.index.email')
         %th
           %span.hidden-phone
-            = t('users.index.first_name')
-        %th= t('users.index.last_name')
+            = sortable :first_name, t('users.index.first_name')
+        %th= sortable :last_name, t('users.index.last_name')
 
     %tbody
       - for user in users

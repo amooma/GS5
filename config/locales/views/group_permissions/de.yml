@@ -1,50 +1,50 @@
 de:
   group_permissions:
-    name: 'Grouppermission'
+    name: 'Berechtigung'
     controller:
-      successfuly_created: 'Grouppermission wurde angelegt.'
-      successfuly_updated: 'Grouppermission wurde aktualisiert.'
-      successfuly_destroyed: 'Grouppermission wurde gelöscht.'
+      successfuly_created: 'Berechtigung wurde angelegt.'
+      successfuly_updated: 'Berechtigung wurde aktualisiert.'
+      successfuly_destroyed: 'Berechtigung wurde gelöscht.'
     index:
-      page_title: 'Übersicht von Grouppermission'
-      group_id: 'Group'
-      permission: 'Permission'
-      target_group_id: 'Target group'
+      page_title: 'Berechtigungen'
+      group_id: 'Gruppe'
+      permission: 'Berechtigung'
+      target_group_id: 'Zielgruppe'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Grouppermission'
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Berechtigung'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
         create: 'Neu anlegen'
-        create_for: 'Grouppermission neu anlegen für %{resource}'
+        create_for: 'Berechtigung neu anlegen für %{resource}'
     show:
-      page_title: 'Grouppermission bearbeiten'
-      group_id: 'Group'
-      permission: 'Permission'
-      target_group_id: 'Target group'
+      page_title: 'Berechtigung bearbeiten'
+      group_id: 'Gruppe'
+      permission: 'Berechtigung'
+      target_group: 'Zielgruppe'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     new:
-      page_title: 'Grouppermission neu anlegen'
+      page_title: 'Berechtigung neu anlegen'
       actions:
         back_to_list: 'Zurück zur Übersicht'
     edit:
-      page_title: 'Grouppermission bearbeiten'
+      page_title: 'Berechtigung bearbeiten'
       actions:
         back_to_list: 'Zurück zur Übersicht'
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     form:
       group_id:
-        label: 'Group'
+        label: 'Gruppe'
         hint: ''
       permission:
-        label: 'Permission'
+        label: 'Berechtigung'
         hint: ''
       target_group_id:
-        label: 'Target group'
+        label: 'Zielgruppe'
         hint: ''
       submit: 'Absenden'

@@ -5,8 +5,14 @@ class UsersController < ApplicationController
   
   before_filter :set_and_authorize_parent
   before_filter :spread_breadcrumbs
+
+  helper_method :sort_column, :sort_descending
   
   def index
+    @users = @parent.users.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
+      :page => params[:page],
+      :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
+    )
   end
 
   def show
@@ -22,6 +28,12 @@ class UsersController < ApplicationController
   def create
     @user = @parent.users.build(params[:user])
     if @user.save
+      if VoicemailAccount.where(:name => "user_#{@user.user_name}").count == 0
+        @user.voicemail_accounts.create(:name => "user_#{@user.user_name}", :active => true )
+      else
+        @user.voicemail_accounts.create(:active => true)
+      end
+      
       if @parent.class == Tenant
         @parent.tenant_memberships.create(:user => @user)
         if @parent.user_groups.exists?(:name => 'Users')
@@ -80,6 +92,14 @@ class UsersController < ApplicationController
         add_breadcrumb @user, tenant_user_path(@tenant, @user)
       end
     end
+  end
+
+  def sort_descending
+    params[:desc].to_s == 'true'
+  end
+
+  def sort_column
+    User.column_names.include?(params[:sort]) ? params[:sort] : 'id'
   end
 
 end

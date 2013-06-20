@@ -1,0 +1,10 @@
+- content_for :title, t("pager_groups.show.page_title")
+
+%p
+  %strong= t('pager_groups.show.sip_account_id') + ":"
+  = @pager_group.sip_account_id
+%p
+  %strong= t('pager_groups.show.callback_url') + ":"
+  = @pager_group.callback_url
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :child => @pager_group }

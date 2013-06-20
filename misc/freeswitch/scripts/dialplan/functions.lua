@@ -102,6 +102,8 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:voicemail_message_leave(caller, parameters[3]);
   elseif fid == "vmcheck" then
     result = self:voicemail_check(caller, parameters[3]);
+  elseif fid == "vmplay" then
+    result = self:voicemail_play(caller, tostring(parameters[3]) .. '-' .. tostring(parameters[4]) .. '-' .. tostring(parameters[5]) .. '-' .. tostring(parameters[6]) .. '-' .. tostring(parameters[7]));
   elseif fid == "vmtg" then
     result = self:call_forwarding_toggle(caller, nil, parameters[3]);
   elseif fid == "acdmtg" then
@@ -114,6 +116,10 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:call_parking_inout(caller, parameters[3], parameters[4]);
   elseif fid == "cpai" then
     result = self:call_parking_inout_index(caller, parameters[3]);
+  elseif fid == "test" then
+    result = self:test(caller, parameters[3]);
+  elseif fid == "pager" then
+    result = self:pager(caller, parameters[3]);
   end
 
   return result or { continue = false, code = 505, phrase = 'Error executing function', no_cdr = true };
@@ -756,26 +762,35 @@ function Functions.voicemail_message_leave(self, caller, phone_number)
 end
 
 
-function Functions.voicemail_check(self, caller, phone_number)
+function Functions.voicemail_check(self, caller, number)
+  require 'dialplan.voicemail';
   local voicemail_account = nil;
   local voicemail_authorized = false;
-
-  require 'dialplan.voicemail'
-
-  if phone_number then
-    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_number(phone_number);
-  else
-    if caller.auth_account_type == 'SipAccount' then
-      voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(caller.auth_account.id);
-      voicemail_authorized = true;
-    end
+  
+  if number then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_number(number);
+  elseif caller.auth_account and tostring(caller.auth_account.class):lower() == 'sipaccount' then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(caller.auth_account.id);
+    voicemail_authorized = true;
   end
 
   if not voicemail_account then
+    self.log:notice('FUNCTION_VOICEMAIL_CHECK - mailbox not found');
     return { continue = false, code = 404, phrase = 'Mailbox not found', no_cdr = true }
   end
 
-  voicemail_account:menu(caller, voicemail_authorized);
+  return voicemail_account:menu_main(caller, voicemail_authorized);
+end
+
+
+function Functions.voicemail_play(self, caller, uuid)
+  require 'dialplan.voicemail';
+  
+  local voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(caller.auth_account.id);
+
+  if voicemail_account then
+    local message = voicemail_account:message_play(caller, uuid);
+  end
 
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
@@ -898,6 +913,49 @@ function Functions.call_parking_inout_index(self, caller, stall_index)
 
   self.log:info('FUNCTION_CALL_PARKING_INOUT_INDEX parking/retrieving call - parkingstall=', parking_stall.id, '/', parking_stall.name, ', index: ', stall_index);
   parking_stall:park_retrieve();
+
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
+
+function Functions.test(self, caller, name)
+  if tostring(name) == 'dtmf' then
+    self.log:info('FUNCTION_TEST_DTMF');
+    local digits = '';
+    caller:answer();
+    while caller:ready() do
+      if digits == '' then
+        caller:playback('ivr/ivr-love_those_touch_tones.wav');
+      end
+      digits = caller.session:read(1, 1, '', 5000, '');
+      self.log:info('DTMF: ', digits);
+      caller:send_display('DTMF: ', digits);
+      if digits == '*' then
+        caller:playback('digits/star.wav');
+      elseif digits == '#' then
+        caller:playback('digits/pound.wav');
+      elseif digits ~= '' then
+        caller.session:say(digits, "en", "number", "pronounced");
+      end                                                                                         
+    end
+  end
+
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
+
+function Functions.pager(self, caller, pager_group_id)
+  require 'common.pager';
+  local pager = common.pager.Pager:new{ log = self.log, database = self.database, caller = caller }:find_by_id(pager_group_id);
+
+  if not pager then
+    self.log:notice('FUNCTION_PAGER not found - pager_group=', pager_group_id);
+    return { continue = false, code = 404, phrase = 'No such pager group', no_cdr = true }
+  end
+
+  self.log:info('FUNCTION_PAGER pager_group=', pager_group_id);
+  caller:answer();
+  pager:enter();
 
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end

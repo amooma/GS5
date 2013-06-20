@@ -16,9 +16,15 @@
 
     = render :partial => 'tenants/table_of_phone_books', :locals => {:tenant => tenant}
 
+    = render :partial => 'tenants/table_of_voicemail_accounts', :locals => {:tenant => tenant}
+
+    = render :partial => 'generic_files', :locals => {:tenant => tenant}
+
     .well
       %h2 Gemeinschaft Konfiguration
       = render :partial => 'tenants/gs_parameter_table', :locals => {:tenant => tenant}
+
+      = render :partial => 'tenants/table_of_groups', :locals => {:tenant => tenant}
 
       %p
         Das System kann  

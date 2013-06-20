@@ -16,7 +16,6 @@ class PhoneNumber < ActiveRecord::Base
   validate :validate_inbound_uniqueness
     
   before_save :save_value_of_to_s
-  after_create :copy_existing_call_forwards_if_necessary
   before_validation :'parse_and_split_number!'
   validate :validate_number, :if => Proc.new { |phone_number| GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') && GsParameter.get('STRICT_DID_HANDLING') }
   validate :check_if_number_is_available, :if => Proc.new { |phone_number| GsParameter.get('STRICT_INTERNAL_EXTENSION_HANDLING') && GsParameter.get('STRICT_DID_HANDLING') }
@@ -210,6 +209,10 @@ class PhoneNumber < ActiveRecord::Base
         self.central_office_code = nil
         self.extension = self.number.to_s.strip         
       else
+        prerouting = resolve_prerouting
+        if prerouting && !prerouting['destination_number'].blank? && prerouting['type'] == 'phonenumber'
+          self.number = prerouting['destination_number']
+        end 
         parsed_number = PhoneNumber.parse( self.number )
         if parsed_number
           self.country_code = parsed_number[:country_code]
@@ -221,6 +224,28 @@ class PhoneNumber < ActiveRecord::Base
           self.number = self.to_s.gsub( /[^\+0-9]/, '' )
         end
       end
+    end
+  end
+
+  def resolve_prerouting
+    return PhoneNumber.resolve_prerouting(self.number.strip, self.phone_numberable)
+  end
+
+  def self.resolve_prerouting(number, account = nil)
+    account = account || SipAccount.first
+
+    routes = CallRoute.test_route(:prerouting, {
+      'caller.destination_number' => number,
+      'caller.auth_account_type' => account.class.name, 
+      'caller.auth_account_id' => account.id, 
+      'caller.auth_account_uuid' => account.try(:uuid),
+      'caller.account_type' => account.class.name, 
+      'caller.account_id' => account.id, 
+      'caller.account_uuid' => account.try(:uuid),
+    })
+
+    if routes
+      return routes['routes']['1']
     end
   end
   
@@ -287,18 +312,4 @@ class PhoneNumber < ActiveRecord::Base
   def save_value_of_to_s
     self.value_of_to_s = self.to_s
   end
-  
-  def copy_existing_call_forwards_if_necessary
-    if self.phone_numberable.class == SipAccount && self.phone_numberable.callforward_rules_act_per_sip_account == true
-      sip_account = SipAccount.find(self.phone_numberable)
-      if sip_account.phone_numbers.where('id != ?', self.id).count > 0
-        if sip_account.phone_numbers.where('id != ?', self.id).order(:created_at).first.call_forwards.count > 0
-          sip_account.phone_numbers.where('id != ?', self.id).first.call_forwards.each do |call_forward|
-            call_forward.set_this_callforward_rule_to_all_phone_numbers_of_the_parent_sip_account
-          end
-        end
-      end
-    end
-  end
-
 end

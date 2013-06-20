@@ -1,5 +1,37 @@
 Gemeinschaft42c::Application.routes.draw do
 
+  # To-Do: Delete these two entries and remap path on the views.
+  resources :pager_group_destinations
+  resources :pager_groups
+
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :switchboards, :only => [:show, :index]
+      resources :switchboard_entries, :only => [:show, :index]
+      resources :sip_accounts, :only => [:show, :index]
+      resources :pager_groups
+      resources :phone_numbers, :only => [:show, :index]
+    end
+
+    resources :rows 
+  end
+
+  resources :generic_files
+
+  resources :voicemail_accounts do
+    resources :voicemail_settings
+    resources :voicemail_messages do
+      collection do
+        delete 'destroy_multiple'
+      end
+      member do
+        put 'call'
+        put 'mark_read'
+        put 'mark_unread'
+      end
+    end
+  end
+
   resources :switchboards do
     resources :switchboard_entries do
       collection { post :sort }
@@ -58,9 +90,6 @@ Gemeinschaft42c::Application.routes.draw do
 
   resources :gui_functions
 
-  namespace :api do 
-    resources :rows 
-  end
 
   resources :phone_numbers, :only => [:sort] do
     collection { post :sort }
@@ -145,6 +174,7 @@ Gemeinschaft42c::Application.routes.draw do
   get "config_snom/:phone/:sip_account/phone_book"         => "config_snom#phone_book"
   get "config_snom/:phone/:sip_account/call_history"       => "config_snom#call_history"
   get "config_snom/:phone/:sip_account/call_history_:type" => "config_snom#call_history"
+  get "config_snom/:phone/:sip_account/voicemail"          => "config_snom#voicemail"
   get "config_snom/:phone/:sip_account/call_forwarding"    => "config_snom#call_forwarding"
   get "config_snom/exit"                                   => "config_snom#exit"
   get "config_snom/:phone/exit"                            => "config_snom#exit"
@@ -226,6 +256,8 @@ Gemeinschaft42c::Application.routes.draw do
     resources :switchboards do
       get :display
     end
+    resources :voicemail_accounts
+    resources :generic_files
   end
   
   resources :user_groups do
@@ -254,6 +286,9 @@ Gemeinschaft42c::Application.routes.draw do
     resources :hunt_groups
     resources :automatic_call_distributors
     resources :parking_stalls
+    resources :voicemail_accounts
+    resources :fax_accounts
+    resources :generic_files
   end
 
   resources :callthroughs, :only => [] do
@@ -284,17 +319,8 @@ Gemeinschaft42c::Application.routes.draw do
         put 'call'
       end
     end
-    resources :voicemail_messages do
-      collection do
-        delete 'destroy_multiple'
-      end
-      member do
-        put 'call'
-        put 'mark_read'
-        put 'mark_unread'
-      end
-    end
-    resources :voicemail_settings
+    resources :voicemail_accounts
+    resources :pager_groups
   end
 
   resources :phones, :only => [] do

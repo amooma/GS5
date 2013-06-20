@@ -2,7 +2,8 @@ class VoicemailMessage < ActiveRecord::Base
   self.table_name = 'voicemail_msgs'
   self.primary_key = 'uuid'
 
-#  belongs_to :sip_account, :foreign_key => 'username', :primary_key => 'auth_name', :readonly => true
+  belongs_to :voicemail_account, :foreign_key => 'username', :primary_key => 'name', :readonly => true
+
   # Prevent objects from being destroyed
   def before_destroy
     raise ActiveRecord::ReadOnlyRecord
@@ -47,6 +48,45 @@ class VoicemailMessage < ActiveRecord::Base
       seconds = self.message_len - minutes.minutes.seconds
       return '%i:%02i' % [minutes, seconds]
     end
+  end
+
+  def phone_book_entry_by_number(number)
+    begin
+      voicemail_accountable = self.voicemail_account.voicemail_accountable
+    rescue
+      return nil
+    end
+
+    if ! voicemail_accountable
+      return nil
+    end
+
+    if voicemail_accountable.class == SipAccount
+      owner = voicemail_accountable.sip_accountable
+    else
+      owner = voicemail_accountable
+    end
+
+    if owner.class == User
+      phone_books = owner.phone_books.all
+      phone_books.concat(owner.current_tenant.phone_books.all)
+    elsif owner.class == Tenant
+      phone_books = owner.phone_books.all
+    end
+
+    if ! phone_books
+      return nil
+    end
+
+    phone_books.each do |phone_book|
+      phone_book_entry = phone_book.find_entry_by_number(number)
+      if phone_book_entry
+        return phone_book_entry
+      end
+    end
+
+    return nil
+      
   end
 
 end

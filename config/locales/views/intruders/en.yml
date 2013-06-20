@@ -22,6 +22,7 @@ en:
       user_agent: 'User agent'
       to_user: 'To'
       comment: 'Comment'
+      country: 'Country'
       actions:
         confirm_destroy: 'Are you sure you want to delete this Intruder?'
         destroy: 'Delete'
@@ -46,6 +47,7 @@ en:
       user_agent: 'User agent'
       to_user: 'To user'
       comment: 'Comment'
+      country: 'Country'
       actions:
         confirm_destroy: 'Are you sure you want to delete this element?'
         destroy: 'Delete'

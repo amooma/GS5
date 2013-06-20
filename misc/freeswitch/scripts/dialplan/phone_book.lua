@@ -19,7 +19,7 @@ function PhoneBook.new(self, arg)
 end
 
 
-function PhoneBook.find_entry_by_number_user_tenant(self, numbers, user_id, tenant_id)
+function PhoneBook.find_entry_by_number_user_tenant(self, numbers, user_id, tenant_id, name)
   user_id = tonumber(user_id) or 0;
   tenant_id = tonumber(tenant_id) or 0;
   
@@ -37,7 +37,7 @@ function PhoneBook.find_entry_by_number_user_tenant(self, numbers, user_id, tena
     `c`.`name` AS `phone_book_name`, \
     `d`.`bellcore_id` \
     FROM `phone_numbers` `a` \
-    JOIN `phone_book_entries` `b` ON `a`.`phone_numberable_id` = `b`.`id` AND `a`.`phone_numberable_type` = "PhoneBookENtry" \
+    JOIN `phone_book_entries` `b` ON `a`.`phone_numberable_id` = `b`.`id` AND `a`.`phone_numberable_type` = "PhoneBookEntry" \
     JOIN `phone_books` `c` ON `b`.`phone_book_id` = `c`.`id` \
     LEFT JOIN `ringtones` `d` ON `a`.`id` = `d`.`ringtoneable_id` AND `d`.`ringtoneable_type` = "PhoneNumber" \
     WHERE ((`c`.`phone_bookable_type` = "User" AND `c`.`phone_bookable_id` = ' .. user_id .. ') \
@@ -45,8 +45,13 @@ function PhoneBook.find_entry_by_number_user_tenant(self, numbers, user_id, tena
     AND `a`.`number` IN (' .. numbers_sql .. ') \
     AND `a`.`state` = "active" \
     AND `b`.`state` = "active" \
-    AND `c`.`state` = "active" \
-    ORDER BY `c`.`phone_bookable_type` DESC LIMIT 1';
+    AND `c`.`state` = "active"';
+
+  if name then
+    sql_query = sql_query ..' AND `a`.`name` = ' .. self.database:escape(name, '"');
+  end
+
+  sql_query = sql_query ..' ORDER BY `c`.`phone_bookable_type` DESC LIMIT 1';
 
   local phone_book_entry = nil;
 
@@ -60,4 +65,20 @@ function PhoneBook.find_entry_by_number_user_tenant(self, numbers, user_id, tena
   end)
 
   return phone_book_entry;
+end
+
+
+function PhoneBook.numbers(self, phone_book_entry_id, name, not_name)
+  local sql_query = 'SELECT * FROM `phone_numbers` \
+    WHERE `phone_numberable_id` = ' .. phone_book_entry_id .. ' AND `phone_numberable_type` = "PhoneBookEntry"';
+
+  if name then
+    sql_query = sql_query ..' AND `name` = ' .. self.database:escape(name, '"');
+  end
+
+  if not_name then
+    sql_query = sql_query ..' AND `name` != ' .. self.database:escape(not_name, '"');
+  end
+
+  return self.database:query_return_all(sql_query);
 end

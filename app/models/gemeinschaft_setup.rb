@@ -20,6 +20,28 @@ class GemeinschaftSetup < ActiveRecord::Base
 
   before_validation :format_default_area_code
 
+  def detect_attacks
+    if self[:detect_attacks] == nil
+      return true
+    end
+    return self[:detect_attacks]
+  end
+
+  def detect_attacks=(value)
+    self[:detect_attacks] = value
+  end
+
+  def report_attacks
+    if self[:report_attacks] == nil
+      return true
+    end
+    return self[:report_attacks]
+  end
+
+  def report_attacks=(value)
+    self[:report_attacks] = value
+  end
+
   private
   def expire_cache
     ActionController::Base.expire_page(Rails.application.routes.url_helpers.new_gemeinschaft_setup_path)

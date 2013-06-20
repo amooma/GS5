@@ -211,17 +211,6 @@ function Session.set_callee_id(self, number, name)
   end
 end
 
--- Set caller Privacy header
-function Session.set_privacy(self, privacy)
-  if privacy then
-    self.session:setVariable('cid_type', 'none');
-    self.session:setVariable('sip_h_Privacy', 'id');
-  else
-    self.session:setVariable('cid_type', 'none');
-    self.session:setVariable('sip_h_Privacy', 'none');
-  end
-end
-
 
 function Session.set_auth_account(self, auth_account)
   if auth_account then

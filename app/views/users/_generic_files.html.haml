@@ -1,0 +1,7 @@
+-# Files
+-#
+- if (can?( :index, GenericFile ) && user.generic_files.count > 0 ) || can?( :create, GenericFile )
+  %h2= t('generic_files.index.page_title')
+  - if can?( :index, GenericFile ) && user.generic_files.count > 0
+    = render "generic_files/index_core", :generic_files => user.generic_files
+  = render :partial => 'shared/create_link', :locals => {:parent => user, :child_class => GenericFile}

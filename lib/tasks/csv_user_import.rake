@@ -129,6 +129,16 @@ namespace :user_import do
         end
 
         if user
+          # Create voicemail account
+          voicemail_account = user.voicemail_accounts.first
+          if !voicemail_account
+            if VoicemailAccount.where(:name => "user_#{user.user_name}").count == 0
+              voicemail_account = user.voicemail_accounts.create(:name => "user_#{user.user_name}", :active => true )
+            else
+              voicemail_account = user.voicemail_accounts.create(:active => true)
+            end
+          end
+
           # Find or create a sip_accounts
           ['VoipNr1', 'VoipNr2', 'VoipNr3'].each_with_index do |phone_number_type, index|
             
@@ -141,6 +151,9 @@ namespace :user_import do
             if !phone_number_type.blank? && !csv_user[phone_number_type].blank?
               sip_account = user.sip_accounts.where(:auth_name => auth_name).first
               if sip_account
+                if sip_account.voicemail_account != voicemail_account
+                  sip_account.update_attributes(:voicemail_account_id => voicemail_account.id)
+                end
                 if sip_account.caller_name.to_s != user.to_s
                   sip_account.update_attributes(:caller_name => user.to_s)
                 end
@@ -154,6 +167,7 @@ namespace :user_import do
                   :hotdeskable   => true,
                   :callforward_rules_act_per_sip_account => true,
                   :gs_node_id    => gs_node_id,
+                  :voicemail_account_id => voicemail_account.id,
                   )
               end
 

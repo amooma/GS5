@@ -6,7 +6,7 @@ de:
       successfuly_updated: 'Gateway wurde aktualisiert.'
       successfuly_destroyed: 'Gateway wurde gelöscht.'
     index:
-      page_title: 'Liste aller Gateways'
+      page_title: 'Gateways'
       name: 'Name'
       technology: 'Technologie'
       inbound: 'Inbound'

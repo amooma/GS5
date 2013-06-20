@@ -248,7 +248,7 @@ function Dialplan.destination_new(self, arg)
         destination.account = self:object_find{ class = destination.type, id = destination.id};
         if self.caller then
           require 'common.call_forwarding';
-          local call_forwarding_class = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database }
+          local call_forwarding_class = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database, caller = self.caller }
           destination.call_forwarding = call_forwarding_class:list_by_owner(destination.id, destination.type, self.caller.caller_phone_numbers);
           for service, call_forwarding_entry in pairs(call_forwarding_class:list_by_owner(destination.phone_number.id, destination.phone_number.class, self.caller.caller_phone_numbers)) do
             destination.call_forwarding[service] = call_forwarding_entry;
@@ -370,9 +370,6 @@ function Dialplan.dial(self, destination)
       end
     end
     self.caller:set_caller_id(destination.caller_id_number, destination.caller_id_name or self.caller.caller_id_name);
-  else
-    self.caller:set_caller_id('anonymous', 'Unknown');
-    self.caller:set_privacy(true);
   end
 
   local destinations = { destination };
@@ -417,8 +414,7 @@ function Dialplan.huntgroup(self, destination)
       self:set_caller_picture(self.caller.account.owner.id, self.caller.account.owner.class);
     end
   else
-    self.caller:set_caller_id('anonymous', tostring(hunt_group.record.name));
-    self.caller:set_privacy(true);
+    self.caller.anonymous_name = tostring(hunt_group.record.name);
   end
   
   self.caller.auth_account = hunt_group;
@@ -448,8 +444,7 @@ function Dialplan.acd(self, destination)
       self:set_caller_picture(self.caller.account.owner.id, self.caller.account.owner.class);
     end
   else
-    self.caller:set_caller_id('anonymous', tostring(acd.record.name));
-    self.caller:set_privacy(true);
+    self.caller.anonymous_name = tostring(acd.record.name);
   end
 
   self.caller.auth_account = acd;
@@ -590,23 +585,23 @@ end
 
 
 function Dialplan.voicemail(self, destination)
-  require 'dialplan.voicemail'
+  require 'dialplan.voicemail';
 
   local voicemail_account = nil;
-
-  local sip_account_id
-  if not common.str.blank(destination.number) and false then
-    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_number(destination.number);
+  if common.str.to_i(destination.id) > 0 then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database, domain = self.domain }:find_by_id(destination.id);
   elseif self.caller.auth_account and self.caller.auth_account.class == 'sipaccount' then
-    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database }:find_by_sip_account_id(self.caller.auth_account.id);
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database, domain = self.domain }:find_by_sip_account_id(self.caller.auth_account.id);
+  elseif self.caller.forwarding_number then
+    voicemail_account = dialplan.voicemail.Voicemail:new{ log = self.log, database = self.database, domain = self.domain }:find_by_number(self.caller.forwarding_number);
   end
 
   if not voicemail_account then
-    self.log:error('VOICEMAIL - no mailbox');
+    self.log:error('VOICEMAIL - mailbox not found, ');
     return { continue = false, code = 404, phrase = 'Mailbox not found' }
   end
 
-  voicemail_account:leave(self.caller, self.caller.forwarding_number);
+  voicemail_account:leave(self.caller, destination.number, self.caller.forwarding_number);
 
   if self.caller:to_s("voicemail_message_len") == '' then
     self.log:info('VOICEMAIL - no message saved');
@@ -709,7 +704,7 @@ function Dialplan.switch(self, destination)
       end
     end
     return result;
-  elseif destination.type == 'voicemail' then
+  elseif destination.type == 'voicemail' or destination.type == 'voicemailaccount' then
     return self:voicemail(destination);
   elseif destination.type == 'dialplanfunction' then
     return self:dialplanfunction(destination);
@@ -817,6 +812,10 @@ function Dialplan.run(self, destination)
   self.caller.date = os.date('%y%m%d%w');
   self.caller.time = os.date('%H%M%S');
 
+  if self.config then
+    self.caller:export_variable('sip_cid_type=' .. (self.config.sip_cid_type or 'none'));
+  end
+  
   if type(self.config.variables) == 'table' then
     for key, value in pairs(self.config.variables) do
       self.caller:set_variable(key, value);

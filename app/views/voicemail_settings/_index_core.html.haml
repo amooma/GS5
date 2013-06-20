@@ -1,0 +1,14 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th= t('voicemail_settings.index.name')
+      %th= t('voicemail_settings.index.value')
+      %th= t('voicemail_settings.index.description')
+
+  %tbody
+    - for voicemail_setting in voicemail_settings
+      %tr
+        %td= t("voicemail_settings.settings.#{voicemail_setting.name}")
+        %td= voicemail_setting.value
+        %td= voicemail_setting.description
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => voicemail_setting.voicemail_account, :child => voicemail_setting}

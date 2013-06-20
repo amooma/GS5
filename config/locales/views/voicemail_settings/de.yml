@@ -1,52 +1,69 @@
 de:
   voicemail_settings:
-    name: 'Anrufbeantworter Einstellungen'
+    name: 'Voicemail Einstellungen'
+    settings:
+      pin: 'PIN'
+      notify: 'Notify'
+      attachment: 'Attachment'
+      mark_read: 'Mark read'
+      purge: 'Purge'
+      record_length_max: 'Record max.'
+      record_length_min: 'Record min.'
+      records_max: 'Records max.'
     controller:
-      successfuly_destroyed: 'Einstellungen wurden gelöscht.'
-      successfuly_created: 'Einstellungen wurden erstellt.'
-      successfuly_updated: 'Einstellungen wurden aktuallisiert.'
+      successfuly_created: 'Voicemail Einstellung wurde angelegt.'
+      successfuly_updated: 'Voicemail Einstellung wurde aktualisiert.'
+      successfuly_destroyed: 'Voicemail Einstellung wurde gelöscht.'
     index:
-      page_title: 'Anrufbeantworter Einstellungen'
+      page_title: 'Voicemail Einstellungen'
+      voicemail_account_id: 'Voicemail'
+      name: 'Name'
+      value: 'Value'
+      class_type: 'Class type'
+      description: 'Beschreibung'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie die Einstellungen löschen möchten?'
-        destroy: 'Löschen'
-    show:
-      page_title: 'Anrufbeantworter Einstellungen'
-      greeting_path: 'Begrüßung'
-      name_path: 'Name'
-      flags: 'Flags'
-      notify: 'Benachrichtigung'
-      attachment: 'Datei anfügen'
-      mark_read: 'Als gelesen markieren'
-      purge: 'Löschen'
-      actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie die Einstellungen löschen möchten?'
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Voicemail Einstellungen'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Voicemail Einstellungen neu anlegen für %{resource}'
+    show:
+      page_title: 'Voicemail Einstellungen bearbeiten'
+      voicemail_account_id: 'Voicemail'
+      name: 'Name'
+      value: 'Value'
+      class_type: 'Class type'
+      description: 'Beschreibung'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
     new:
-      page_title: 'Anrufbeantworter Einstellungen'
+      page_title: 'Voicemail Einstellungen neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
     edit:
-      page_title: 'Anrufbeantworter Einstellungen'
+      page_title: 'Voicemail Einstellungen bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
     form:
-      greeting:
-        label: 'Begrüßung'
+      voicemail_account_id:
+        label: 'Voicemail'
         hint: ''
       name:
         label: 'Name'
         hint: ''
-      pin:
-        label: 'Anrufbeantworter PIN'
+      value:
+        label: 'Value'
         hint: ''
-      notify:
-        label: 'Benachrichtigung'
-        hint: 'Benachrichtigung per E-Mail'
-      attachment:
-        label: 'Datei anfügen'
-        hint: 'Datei an E-Mail anfügen'
-      mark_read:
-        label: 'Als gelesen markieren'
-        hint: 'Markieren als gelesen'
-      purge:
-        label: 'Löschen'
-        hint: 'Nachricht löschen'
+      class_type:
+        label: 'Class type'
+        hint: ''
+      description:
+        label: 'Beschreibung'
+        hint: ''
       submit: 'Absenden'

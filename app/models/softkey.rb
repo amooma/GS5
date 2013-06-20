@@ -35,10 +35,9 @@ class Softkey < ActiveRecord::Base
                                  map{ |phone_number| phone_number.phone_numberable.hunt_group.id }.
                                  uniq
 
-    call_forwards = call_forwards + CallForward.where(:destinationable_type => 'HuntGroup', :destinationable_id => hunt_group_ids, :call_forwardable_type => 'PhoneNumber').
-                                where('call_forwardable_id NOT IN (?)', phone_numbers_ids)
+    call_forwards = call_forwards + CallForward.where(:destinationable_type => 'HuntGroup', :destinationable_id => hunt_group_ids, :call_forward_case_id => CallForwardCase.where(:value => 'assistant').first.try(:id))
 
-    return call_forwards
+    return call_forwards.uniq
   end
 
   def possible_blf_sip_accounts

@@ -181,8 +181,11 @@ class Ability
 
           # Voicemail
           #
+          can :read, VoicemailAccount
           can :manage, VoicemailMessage
-          can :manage, VoicemailSetting
+          can [:read, :edit, :update], VoicemailSetting
+
+          can :manage, GenericFile, :owner_type => 'User', :owner_id => user.id
 
           # Switchboard
           #

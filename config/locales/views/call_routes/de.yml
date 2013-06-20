@@ -52,4 +52,8 @@ de:
       position:
         label: 'Position'
         hint: ''
+      xml:
+        separator: 'oder als XML definieren'
+        label: 'XML'
+        hint: 'Route als XML eingeben'
       submit: 'Absenden'

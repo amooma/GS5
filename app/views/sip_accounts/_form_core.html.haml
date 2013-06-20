@@ -6,7 +6,6 @@
   - else
     = f.input :auth_name, :as => :string, :label => t('sip_accounts.form.auth_name.label'), :hint => conditional_hint('sip_accounts.form.auth_name.hint')
     = f.input :password, :as => :string, :label => t('sip_accounts.form.password.label'), :hint => conditional_hint('sip_accounts.form.password.hint')
-  = f.input :voicemail_pin, :as => :string, :label => t('sip_accounts.form.voicemail_pin.label'), :hint => conditional_hint('sip_accounts.form.voicemail_pin.hint')
   = f.input :call_waiting, :label => t('sip_accounts.form.call_waiting.label'), :hint => conditional_hint('sip_accounts.form.call_waiting.hint')
   = f.input :clir, :label => t('sip_accounts.form.clir.label'), :hint => conditional_hint('sip_accounts.form.clir.hint')
   = f.input :clip, :label => t('sip_accounts.form.clip.label'), :hint => conditional_hint('sip_accounts.form.clip.hint')
@@ -14,3 +13,4 @@
     = f.input :hotdeskable, :label => t('sip_accounts.form.hotdeskable.label'), :hint => conditional_hint('sip_accounts.form.hotdeskable.hint')
   = f.input :clip_no_screening, :label => t('sip_accounts.form.clip_no_screening.label'), :hint => conditional_hint('sip_accounts.form.clip_no_screening.hint')
   = f.input :language_code, :collection => Language.all.collect{|l| [l.to_s, l.code]}, :label => t('sip_accounts.form.language_code.label'), :hint => conditional_hint('sip_accounts.form.language_id.hint'), :include_blank => false
+  = f.input :voicemail_account_id, :collection => @possible_voicemail_accounts.collect{|l| [l.to_s, l.id]}, :label => t('sip_accounts.form.voicemail_account_id.label'), :hint => conditional_hint('voicemail_accounts.form.sip_account_id.hint'), :include_blank => true

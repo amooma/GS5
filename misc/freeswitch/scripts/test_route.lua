@@ -41,6 +41,8 @@ local dialplan_object = dialplan.dialplan.Dialplan:new{ log = log, caller = call
 dialplan_object:configuration_read();
 caller.dialplan = dialplan_object;
 caller.local_node_id = dialplan_object.node_id;
+caller.date = os.date('%y%m%d%w');
+caller.time = os.date('%H%M%S');
 
 dialplan_object:retrieve_caller_data();
 local destination = arguments.destination or dialplan_object:destination_new{ number = caller.destination_number };

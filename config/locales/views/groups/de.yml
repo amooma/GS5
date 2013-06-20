@@ -1,24 +1,24 @@
 de:
   groups:
-    name: 'Group'
+    name: 'Gruppe'
     controller:
-      successfuly_created: 'Group wurde angelegt.'
-      successfuly_updated: 'Group wurde aktualisiert.'
-      successfuly_destroyed: 'Group wurde gelöscht.'
+      successfuly_created: 'Gruppe wurde angelegt.'
+      successfuly_updated: 'Gruppe wurde aktualisiert.'
+      successfuly_destroyed: 'Gruppe wurde gelöscht.'
     index:
-      page_title: 'Übersicht von Group'
+      page_title: 'Gruppen'
       name: 'Name'
       active: 'Active'
       comment: 'Comment'
       actions:
-        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Group'
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Gruppe'
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         show: 'Anzeigen'
         create: 'Neu anlegen'
-        create_for: 'Group neu anlegen für %{resource}'
+        create_for: 'Gruppe neu anlegen für %{resource}'
     show:
-      page_title: 'Group bearbeiten'
+      page_title: 'Gruppe bearbeiten'
       name: 'Name'
       active: 'Active'
       comment: 'Comment'
@@ -28,11 +28,11 @@ de:
         edit: 'Bearbeiten'
         view_all: 'Alle anzeigen'
     new:
-      page_title: 'Group neu anlegen'
+      page_title: 'Gruppe neu anlegen'
       actions:
         back_to_list: 'Zurück zur Übersicht'
     edit:
-      page_title: 'Group bearbeiten'
+      page_title: 'Gruppe bearbeiten'
       actions:
         back_to_list: 'Zurück zur Übersicht'
         edit: 'Bearbeiten'

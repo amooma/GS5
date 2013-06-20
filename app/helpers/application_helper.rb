@@ -19,4 +19,22 @@ module ApplicationHelper
     end
 	end
 
+  def sortable(column, title)
+    if !defined?(sort_descending)
+      return title
+    end
+
+    if column.to_s == sort_column.to_s
+      link_class = "sort_descending #{sort_descending}"
+      desc = !!(!sort_descending && column)
+      icon = sort_descending ? ' <i class = "icon-chevron-up"></i> ' : ' <i class = "icon-chevron-down"></i> '
+    else
+      link_class = nil
+      desc = nil
+      icon = ''
+    end
+
+    link_to raw('') + title + raw(icon), {:sort => column, :desc => desc, :type => @type}, {:class => link_class}
+  end
+
 end

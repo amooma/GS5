@@ -25,32 +25,32 @@ namespace :backup do
       tmp_dir = "/tmp/gs5_restore_directory"
       FileUtils.rm_rf tmp_dir
       FileUtils.mkdir_p tmp_dir
-      system "cd #{tmp_dir} && nice -n 19 sudo /bin/tar xzf #{restore_job.backup_file.path}"
+      system "cd #{tmp_dir} && nice -n 19 ionice -c2 -n7 sudo /bin/tar xzf #{restore_job.backup_file.path}"
       restore_directory = Dir.glob("/tmp/gs5_restore_directory/*").first
-      system "cd #{restore_directory} && nice -n 19 sudo /bin/tar xf GS5.tar && rm GS5.tar"
+      system "cd #{restore_directory} && nice -n 19 ionice -c2 -n7 sudo /bin/tar xf GS5.tar && rm GS5.tar"
 
       # Restore faxes
       #
       if File.exists?("#{restore_directory}/GS5/archives/faxes.tar.gz")
-        system "cd / && nice -n 19 sudo /bin/tar xzfP #{restore_directory}/GS5/archives/faxes.tar.gz"
+        system "cd / && nice -n 19 ionice -c2 -n7 sudo /bin/tar xzfP #{restore_directory}/GS5/archives/faxes.tar.gz"
       end
 
       # Restore voicemails
       #
       if File.exists?("#{restore_directory}/GS5/archives/voicemails.tar.gz")
-        system "cd / && nice -n 19 sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
+        system "cd / && nice -n 19 ionice -c2 -n7 sudo /bin/tar xzfP #{restore_directory}/GS5/archives/voicemails.tar.gz"
       end
 
       # Restore recordings
       #
       if File.exists?("#{restore_directory}/GS5/archives/recordings.tar.gz")
-        system "cd / && nice -n 19 sudo /bin/tar xzfP #{restore_directory}/GS5/archives/recordings.tar.gz"
+        system "cd / && nice -n 19 ionice -c2 -n7 sudo /bin/tar xzfP #{restore_directory}/GS5/archives/recordings.tar.gz"
       end
 
       # Restore avatars
       #
       if File.exists?("#{restore_directory}/GS5/archives/avatars.tar.gz")
-        system "cd / && nice -n 19 sudo /bin/tar xzfP #{restore_directory}/GS5/archives/avatars.tar.gz"
+        system "cd / && nice -n 19 ionice -c2 -n7 sudo /bin/tar xzfP #{restore_directory}/GS5/archives/avatars.tar.gz"
       end
 
       # Delete the archive tar.gz to get more air to breathe
@@ -65,11 +65,11 @@ namespace :backup do
       db_user = system_odbc_configuration['gemeinschaft']['USER']
       db_password = system_odbc_configuration['gemeinschaft']['PASSWORD']
 
-      system "nice -n 19 gunzip < #{restore_directory}/GS5/databases/MySQL/gemeinschaft.sql.gz | nice -n 19 mysql -u #{db_user} -p#{db_password} #{database}"
+      system "nice -n 19 ionice -c2 -n7 gunzip < #{restore_directory}/GS5/databases/MySQL/gemeinschaft.sql.gz | nice -n 19 ionice -c2 -n7 mysql -u #{db_user} -p#{db_password} #{database}"
 
       FileUtils.rm_rf tmp_dir
 
-      system "cd /opt/gemeinschaft && nice -n 19 rake db:migrate"
+      system "cd /opt/gemeinschaft && nice -n 19 ionice -c2 -n7 rake db:migrate"
 
       # Rebuild the thumbnails
       #

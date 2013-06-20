@@ -6,7 +6,8 @@ class SipAccount < ActiveRecord::Base
   attr_accessible :auth_name, :caller_name, :password, :voicemail_pin, 
                   :tenant_id, :call_waiting, :clir, :clip_no_screening,
                   :clip, :description, :callforward_rules_act_per_sip_account,
-                  :hotdeskable, :gs_node_id, :language_code
+                  :hotdeskable, :gs_node_id, :language_code, :voicemail_account_id
+
 
   # Associations:
   #
@@ -27,8 +28,6 @@ class SipAccount < ActiveRecord::Base
 
   has_many :call_histories, :as => :call_historyable, :dependent => :destroy
 
-  has_one :voicemail_setting, :class_name => "VoicemailSetting", :primary_key => 'auth_name', :foreign_key => 'username', :dependent => :destroy
-
   belongs_to :gs_node
 
   belongs_to :language, :foreign_key => 'language_code', :primary_key => 'code'
@@ -44,6 +43,11 @@ class SipAccount < ActiveRecord::Base
   has_many :acd_agents, :as => :destination, :dependent => :destroy
   has_many :switchboard_entries, :dependent => :destroy
 
+  has_many :voicemail_accounts, :as => :voicemail_accountable, :dependent => :destroy
+  belongs_to :voicemail_account
+
+  has_many :pager_groups, :dependent => :destroy
+
   # Delegations:
   #
   delegate :host, :to => :sip_domain, :allow_nil => true
@@ -58,15 +62,11 @@ class SipAccount < ActiveRecord::Base
   
   validate_sip_password :password
   
-  validates_format_of :voicemail_pin, :with => /[0-9]+/,
-    :allow_nil => true, :allow_blank => true
-  
   validates_uniqueness_of :auth_name, :scope => :sip_domain_id
 
   # Before and after hooks:
   # 
   before_save :save_value_of_to_s
-  after_save :create_voicemail_setting, :if => :'voicemail_setting == nil'
   before_validation :find_and_set_tenant_id
   before_validation :set_sip_domain_id
   before_validation :convert_umlauts_in_caller_name
@@ -154,11 +154,12 @@ class SipAccount < ActiveRecord::Base
     return SipRegistration.where(:sip_user => self.auth_name).first
   end
 
-  def call( phone_number )
+  def call( phone_number, origin_cid_number = nil, origin_cid_name = 'Call' )
+    origin_cid_number = origin_cid_number || phone_number
     require 'freeswitch_event'
     return FreeswitchAPI.execute(
       'originate', 
-      "{origination_uuid=#{UUID.new.generate},origination_caller_id_number='#{phone_number}',origination_caller_id_name='Call'}user/#{self.auth_name} #{phone_number}", 
+      "{origination_uuid=#{UUID.new.generate},origination_caller_id_number='#{phone_number}',origination_caller_id_name='#{origin_cid_name}'}user/#{self.auth_name} #{phone_number}", 
       true
     );
   end
@@ -277,18 +278,6 @@ class SipAccount < ActiveRecord::Base
         phone.user_logout;
       end
     end
-  end
-
-  def create_voicemail_setting
-    voicemail_setting = VoicemailSetting.new()
-    voicemail_setting.username = self.auth_name
-    voicemail_setting.domain = self.sip_domain.try(:host)
-    voicemail_setting.password = self.voicemail_pin
-    voicemail_setting.notify = true
-    voicemail_setting.attachment = true
-    voicemail_setting.mark_read = true
-    voicemail_setting.purge = false
-    voicemail_setting.save
   end
 
   def create_default_group_memberships

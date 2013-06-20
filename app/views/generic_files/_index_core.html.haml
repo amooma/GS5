@@ -1,0 +1,20 @@
+%table.table.table-striped
+  %tr
+    %th= t('generic_files.index.category')
+    %th= t('generic_files.index.name')
+    %th= t('generic_files.index.file_type')
+    %th
+    %th
+    
+  - for generic_file in generic_files
+    %tr
+      %td= generic_file.category
+      %td= generic_file.name
+      %td= generic_file.file_type
+      %td
+        %p
+          %a{:href => method( :"#{generic_file.owner.class.name.underscore}_generic_file_path" ).(generic_file.owner, generic_file, :format => generic_file.file_extension), :method => :get}
+            %i{:class => 'icon-download'}
+            = t("generic_files.index.actions.download")
+
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => generic_file.owner, :child => generic_file}

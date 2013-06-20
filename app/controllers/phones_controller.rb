@@ -6,7 +6,20 @@ class PhonesController < ApplicationController
   before_filter :set_and_authorize_parent
   before_filter :spread_breadcrumbs
 
+  helper_method :sort_column, :sort_descending
+
   def index
+    if @parent.class == Tenant
+      @phones = @parent.tenant_user_phones.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
+        :page => params[:page],
+        :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
+      )
+    else
+      @phones = @parent.phones.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
+        :page => params[:page],
+        :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
+      )
+    end
   end
 
   def show
@@ -84,6 +97,14 @@ class PhonesController < ApplicationController
       used_sip_account_ids = used_sip_account_ids - [ @phone.fallback_sip_account_id ]
     end
     @fallback_sip_accounts = SipAccount.where(:sip_accountable_type => 'Tenant') - SipAccount.where(:id => used_sip_account_ids)
+  end
+
+  def sort_descending
+    params[:desc].to_s == 'true'
+  end
+
+  def sort_column
+    Phone.column_names.include?(params[:sort]) ? params[:sort] : 'id'
   end
   
 end

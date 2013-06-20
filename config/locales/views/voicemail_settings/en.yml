@@ -1,52 +1,69 @@
 en:
   voicemail_settings:
-    name: 'Voicemail Settings'
-    controller:
-      successfuly_destroyed: 'Successfully destroyed voicemail settings.'
-      successfuly_created: 'Successfully created voicemail settings.'
-      successfuly_updated: 'Successfully updated voicemail settings.'
-    index:
-      page_title: 'Voicemail Settings'
-      actions:
-        confirm_destroy: 'Are you sure you want to delete voicemail settings?'
-        destroy: 'Delete'
-    show:
-      page_title: 'Voicemail Settings'
-      greeting_path: 'Greeting'
-      name_path: 'Name'
-      flags: 'Flags'
-      notify: 'Notify by email'
-      attachment: 'Attach file'
+    name: 'Voicemailsetting'
+    settings:
+      pin: 'PIN'
+      notify: 'Notify'
+      attachment: 'Attachment'
       mark_read: 'Mark read'
-      purge: 'Delete'
+      purge: 'Purge'
+      record_length_max: 'Record max.'
+      record_length_min: 'Record min.'
+      records_max: 'Records max.'
+    controller:
+      successfuly_created: 'Successfully created entry.'
+      successfuly_updated: 'Successfully updated entry.'
+      successfuly_destroyed: 'Successfully destroyed entry.'
+    index:
+      page_title: 'Voicemail settings'
+      voicemail_account_id: 'Voicemail'
+      name: 'Name'
+      value: 'Value'
+      class_type: 'Class type'
+      description: 'Description'
       actions:
-        confirm_destroy: 'Are you sure you want to delete voicemail settings?'
+        confirm_destroy: 'Are you sure you want to delete this entry?'
         destroy: 'Delete'
         edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New settings entry for %{resource}'
+    show:
+      page_title: 'Show Voicemailsetting'
+      voicemail_account_id: 'Voicemail'
+      name: 'Name'
+      value: 'Value'
+      class_type: 'Class type'
+      description: 'Description'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this element?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        view_all: 'View All'
     new:
-      page_title: 'Voicemail Settings'
+      page_title: 'New Voicemail settings entry'
+      actions:
+        back_to_list: 'Back to Index'
     edit:
-      page_title: 'Voicemail Settings'
+      page_title: 'Editing Voicemail settings'
+      actions:
+        back_to_list: 'Back to Index'
+        edit: 'Edit'
+        view_all: 'View All'
     form:
-      greeting:
-        label: 'Greeting'
-        hint: 'Voicemail greeting'
+      voicemail_account_id:
+        label: 'Voicemail'
+        hint: ''
       name:
         label: 'Name'
-        hint: 'Voicemail name'
-      pin:
-        label: 'Voicemail PIN'
-        hint: 'Voicemail PIN'
-      notify:
-        label: 'Notify by email'
-        hint: 'Notify user by email'
-      attachment:
-        label: 'Attach file'
-        hint: 'Attach file to notification email'
-      mark_read:
-        label: 'Mark read'
-        hint: 'Mark message read after notification is sent'
-      purge:
-        label: 'Delete'
-        hint: 'Delete message after notification is sent'
+        hint: ''
+      value:
+        label: 'Value'
+        hint: ''
+      class_type:
+        label: 'Class type'
+        hint: ''
+      description:
+        label: 'Description'
+        hint: ''
       submit: 'Submit'

@@ -19,6 +19,7 @@ en:
       clip_no_screening: 'CLIP -no screening-'
       callforward_rules_act_per_sip_account: 'Callforwards work for the whole sip account'
       online: 'Online'
+      sip_accountable: 'Owner'
       actions:
         confirm_destroy: 'Are you sure you want to delete this SIP account?'
         destroy: 'Delete'
@@ -86,5 +87,8 @@ en:
         hint: ''
       language_code: 
         label: 'Language'
+        hint: ''
+      voicemail_account_id: 
+        label: 'Default voicemail account'
         hint: ''
       submit: 'Submit'

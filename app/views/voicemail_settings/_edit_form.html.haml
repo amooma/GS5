@@ -1,0 +1,8 @@
+
+= simple_form_for([@voicemail_account, @voicemail_setting]) do |f|
+  = f.error_notification
+
+  = render "edit_form_core", :f => f
+
+  .form-actions
+    = f.button :submit, conditional_t('voicemail_settings.form.submit')

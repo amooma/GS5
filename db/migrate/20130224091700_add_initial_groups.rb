@@ -6,6 +6,7 @@ class AddInitialGroups < ActiveRecord::Migration
 
     user_sip_accounts = Group.create(:name => 'user_sip_accounts', :active => true, :comment => 'SIP accounts owned by user accounts')
     user_sip_accounts.group_permissions.create(:permission => 'pickup', :target_group_id => user_sip_accounts.id)
+    user_sip_accounts.group_permissions.create(:permission => 'presence', :target_group_id => user_sip_accounts.id)
 
     Group.create(:name => 'international_calls', :active => true, :comment => 'International calls permitted')
     Group.create(:name => 'national_calls', :active => true, :comment => 'National calls permitted')

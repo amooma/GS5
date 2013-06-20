@@ -43,12 +43,11 @@
             %strong ...
           %p
             =link_to t("call_histories.index.page_title"), sip_account_call_histories_path(sip_account)
-            %br
-            =link_to t("voicemail_messages.index.page_title"), sip_account_voicemail_messages_path(sip_account)
+            - if ! sip_account.voicemail_account.blank?
+              %br
+              =link_to t("voicemail_messages.index.page_title"), voicemail_account_voicemail_messages_path(sip_account.voicemail_account)
             %br
             =link_to t("call_forwards.index.page_title"), sip_account_call_forwards_path(sip_account)
-            %br
-            =link_to t("voicemail_settings.index.page_title"), sip_account_voicemail_settings_path(sip_account)
             %br
             =link_to t("softkeys.index.page_title"), sip_account_softkeys_path(sip_account)
             %br
@@ -85,8 +84,14 @@
     - cache(['user_show_fax_accounts_overview', I18n.locale, @user, @user.fax_accounts]) do
       = render :partial => 'fax_accounts', :locals => {:user => @user}
 
+    - cache(['user_show_voicemail_accounts_overview', I18n.locale, @user, @user.voicemail_accounts]) do
+      = render :partial => 'voicemail_accounts', :locals => {:user => @user}
+
     - cache(['user_show_conferences_overview', I18n.locale, @user, @user.conferences]) do
       = render :partial => 'conferences', :locals => {:user => @user}
 
     - cache(['user_switchboards_overview', I18n.locale, @user, @user.switchboards]) do
       = render :partial => 'switchboards', :locals => {:user => @user}
+
+    - cache(['user_show_generic_files_overview', I18n.locale, @user, @user.generic_files]) do
+      = render :partial => 'generic_files', :locals => {:user => @user}

@@ -63,6 +63,10 @@ class Tenant < ActiveRecord::Base
   has_many :group_memberships, :as => :item, :dependent => :destroy, :uniq => true
   has_many :groups, :through => :group_memberships
 
+  has_many :voicemail_accounts, :as => :voicemail_accountable, :dependent => :destroy
+
+  has_many :generic_files, :as => :owner, :dependent => :destroy
+
   # Validations:
   #
   validates_presence_of :name, :state, :country, :language
@@ -208,6 +212,14 @@ class Tenant < ActiveRecord::Base
 
   def array_of_available_internal_extensions_and_dids
     self.array_of_available_internal_extensions + self.array_of_available_dids
+  end
+
+  def tenant_user_sip_accounts
+    SipAccount.where('(sip_accountable_type = "Tenant" AND sip_accountable_id = ?) OR (sip_accountable_type = "User" AND sip_accountable_id IN (?))', self.id, self.users.pluck(:id))
+  end
+
+  def tenant_user_phones
+    Phone.where('(phoneable_type = "Tenant" AND phoneable_id = ?) OR (phoneable_type = "User" AND phoneable_id IN (?))', self.id, self.users.pluck(:id))
   end
 
   private

@@ -1,0 +1,66 @@
+de:
+  generic_files:
+    name: 'Datei'
+    controller:
+      successfuly_created: 'Datei wurde angelegt.'
+      successfuly_updated: 'Datei wurde aktualisiert.'
+      successfuly_destroyed: 'Datei wurde gelöscht.'
+    index:
+      page_title: 'Datei'
+      name: 'Name'
+      file: 'Datei'
+      file_type: 'Type'
+      category: 'Kategorie'
+      owner_id: 'Besitzer'
+      owner_type: 'Besitzer typ'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Datei löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        download: 'Herunterladen'
+        create: 'Neu anlegen'
+        create_for: 'Datei neu anlegen für %{resource}'
+    show:
+      page_title: 'Datei bearbeiten'
+      name: 'Name'
+      file: 'Datei'
+      file_type: 'Typ'
+      category: 'Kategorie'
+      owner_id: 'Besitzer'
+      owner_type: 'Besitzer typ'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die diese Datei löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Datei neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Datei bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      name:
+        label: 'Name'
+        hint: ''
+      file:
+        label: 'Datei'
+        hint: ''
+      file_type:
+        label: 'Typ'
+        hint: ''
+      category:
+        label: 'Kategorie'
+        hint: ''
+      owner_id:
+        label: 'Besitzer'
+        hint: ''
+      owner_type:
+        label: 'Besitzer typ'
+        hint: ''
+      submit: 'Absenden'

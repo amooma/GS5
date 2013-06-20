@@ -25,6 +25,10 @@ class Intruder < ActiveRecord::Base
     key
   end
 
+  def country
+    GeoIpCountry.find_by_ip(self.contact_ip)
+  end
+
   def whois(ip_address = self.contact_ip)
     if ! ip_address.blank?
       begin

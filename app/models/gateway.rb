@@ -19,6 +19,8 @@ class Gateway < ActiveRecord::Base
   after_initialize :set_defaults
   before_validation :downcase_technology
 
+  after_create :create_default_settings
+
   def to_s
     name
   end
@@ -62,6 +64,14 @@ class Gateway < ActiveRecord::Base
   def set_defaults 
     if TECHNOLOGIES.count == 1
       self.technology = TECHNOLOGIES.first
+    end
+  end
+
+  def create_default_settings
+    if self.technology == 'sip' then
+      GsParameter.where(:entity => 'sip_gateways', :section => 'settings').each do |default_setting|
+        self.gateway_settings.create(:name => default_setting.name, :value => default_setting.value, :class_type => default_setting.class_type, :description => default_setting.description)
+      end
     end
   end
 

@@ -6,7 +6,20 @@ class SipAccountsController < ApplicationController
   before_filter :set_and_authorize_parent
   before_filter :spread_breadcrumbs
 
+  helper_method :sort_column, :sort_descending
+
   def index
+    if @parent.class == Tenant
+      @sip_accounts = @parent.tenant_user_sip_accounts.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
+        :page => params[:page],
+        :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
+      )
+    else
+      @sip_accounts = @parent.sip_accounts.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
+        :page => params[:page],
+        :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
+      )
+    end
   end
 
   def show
@@ -22,7 +35,6 @@ class SipAccountsController < ApplicationController
     @sip_account.call_waiting = GsParameter.get('CALL_WAITING')
     @sip_account.clir = GsParameter.get('DEFAULT_CLIR_SETTING')
     @sip_account.clip = GsParameter.get('DEFAULT_CLIP_SETTING')
-    @sip_account.voicemail_pin = random_pin
     @sip_account.callforward_rules_act_per_sip_account = GsParameter.get('CALLFORWARD_RULES_ACT_PER_SIP_ACCOUNT_DEFAULT')
     if @parent.class == User
       @sip_account.hotdeskable = true
@@ -36,6 +48,10 @@ class SipAccountsController < ApplicationController
       break unless SipAccount.exists?(:auth_name => @sip_account.auth_name)
     end
     @sip_account.password = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_PASSWORD'))
+
+    @sip_account.voicemail_account = VoicemailAccount.where(:voicemail_accountable_type => @parent.class.name, :voicemail_accountable_id => @parent.id).first
+    @sip_account.language_code = @parent.language.try(:code)
+    possible_voicemail_accounts
   end
 
   def create
@@ -61,6 +77,7 @@ class SipAccountsController < ApplicationController
   end
 
   def edit
+    possible_voicemail_accounts
   end
 
   def update
@@ -99,6 +116,19 @@ class SipAccountsController < ApplicationController
         add_breadcrumb @sip_account, tenant_sip_account_path(@tenant, @sip_account)
       end
     end
+  end
+
+  def possible_voicemail_accounts
+    @possible_voicemail_accounts = @sip_account.voicemail_accounts
+    @possible_voicemail_accounts = @possible_voicemail_accounts + @sip_account.sip_accountable.voicemail_accounts
+  end
+
+  def sort_descending
+    params[:desc].to_s == 'true'
+  end
+
+  def sort_column
+    SipAccount.column_names.include?(params[:sort]) ? params[:sort] : 'id'
   end
 
 end

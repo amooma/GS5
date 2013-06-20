@@ -1,22 +1,30 @@
+- if defined?(phones.total_pages)
+  = will_paginate phones, :renderer => BootstrapPagination::Rails, :previous_label => raw('<i class = "icon-chevron-left"></i>'), :next_label => raw('<i class = "icon-chevron-right"></i>')
+
 %table.table.table-striped
   %thead
     %tr
-      %th= t('phones.index.mac_address')
+      - if defined?(show_phoneable) && show_phoneable
+        %th= sortable :phoneable_id, t('phones.index.phoneable')
+      %th= sortable :mac_address, t('phones.index.mac_address')
       %th
         %span.hidden-phone
-          = t('phones.index.phone_model_id')
+          = sortable :phone_model_id, t('phones.index.phone_model_id')
         %span.visible-phone
           = truncate(t('phones.index.phone_model_id'), :length => 9)
       %th
         %span.hidden-phone
-          = t('phones.index.hot_deskable')
+          = sortable :hot_deskable, t('phones.index.hot_deskable')
       %th
         %span.hidden-phone
-          = t('phones.index.ip_address')
+          = sortable :ip_address, t('phones.index.ip_address')
 
   %tbody
     - for phone in phones
       %tr{:class => (phone.ip_address.blank? ? 'warning' : '')}
+        - if defined?(show_phoneable) && show_phoneable
+          %td
+            = phone.phoneable
         %td= phone.pretty_mac_address
         %td= phone.phone_model
         %td

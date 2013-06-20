@@ -1,5 +1,28 @@
 %h2= 'Routing Test'
 
+= form_tag('test', :method => "get") do |f|
+  %p
+    %strong Routing Table
+    = label_tag(:routing_table_outbound, "Outbound")
+    = radio_button_tag(:routing_table, "outbound")
+    = label_tag(:routing_table_inbound, "Inbound")
+    = radio_button_tag(:routing_table, "inbound")
+    = label_tag(:routing_table_prerouting, "Prerouting")
+    = radio_button_tag(:routing_table, "prerouting")
+  %p
+    %strong From
+    %br
+    = collection_select(nil, :sip_account_id, SipAccount.all, :id, :to_s, {:include_blank => false, :prompt => 'Select SIP Account'})
+    = collection_select(nil, :fax_account_id, FaxAccount.all, :id, :to_s, {:include_blank => false, :prompt => 'Select Fax Account'})
+    = collection_select(nil, :hunt_group_id, HuntGroup.all, :id, :to_s, {:include_blank => false, :prompt => 'Select Hunt Group'})
+
+  %p
+    %strong Number
+    %br
+    = text_field_tag(:destination_number)
+
+  %p= submit_tag("Test Route")
+
 - if @route_test
   - if  @route_test['destination']
     %h3= 'Destination'

@@ -34,6 +34,10 @@ end
 
 
 function Gateway.find_by_id(self, id)
+  if not tonumber(id) then
+    return nil;
+  end
+
   local sql_query = 'SELECT `a`.*, `c`.`sip_host` AS `domain`, `c`.`contact` AS `contact_full`, `c`.`network_ip`, `c`.`network_port` \
     FROM `gateways` `a` \
     LEFT JOIN `gateway_settings` `b` ON `a`.`id` = `b`.`gateway_id` AND `b`.`name` = "inbound_username" \
@@ -57,6 +61,9 @@ function Gateway.find_by_id(self, id)
 
   if gateway then
     gateway.settings = self:config_table_get('gateway_settings', gateway.id);
+    if common.str.blank(gateway.domain) then
+      gateway.domain = gateway.settings.domain;
+    end
   end
 
   return gateway;

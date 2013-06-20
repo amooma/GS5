@@ -1,10 +1,12 @@
 class VoicemailMessagesController < ApplicationController
 
-  load_resource :sip_account
-  load_and_authorize_resource :voicemail_message, :through => [:sip_account]
+  load_resource :voicemail_account
+  load_and_authorize_resource :voicemail_message, :through => [:voicemail_account]
 
   before_filter :set_and_authorize_parent
   before_filter :spread_breadcrumbs
+
+  helper_method :sort_column, :sort_descending
   
   before_filter { |controller|
     if ! params[:type].blank? then
@@ -17,26 +19,28 @@ class VoicemailMessagesController < ApplicationController
   }
 
   def index
-    @messages_count = @sip_account.voicemail_messages.count
-    @messages_unread_count = @sip_account.voicemail_messages.where(:read_epoch => 0).count
+    @messages_count = @voicemail_account.voicemail_messages.count
+    @messages_unread_count = @voicemail_account.voicemail_messages.where(:read_epoch => 0).count
     @messages_read_count = @messages_count - @messages_unread_count
 
     if @type == 'read'
-      @voicemail_messages = @sip_account.voicemail_messages.where('read_epoch > 0').order('created_epoch DESC').paginate(
+      @voicemail_messages = @voicemail_account.voicemail_messages.where('read_epoch > 0').order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
                             :page => @pagination_page_number,
                             :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
                           )
     elsif @type == 'unread'
-      @voicemail_messages = @sip_account.voicemail_messages.where(:read_epoch => 0).order('created_epoch DESC').paginate(
+      @voicemail_messages = @voicemail_account.voicemail_messages.where(:read_epoch => 0).order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
                             :page => @pagination_page_number,
                             :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
                           )
     else
-      @voicemail_messages = @sip_account.voicemail_messages.order('created_epoch DESC').paginate(
+      @voicemail_messages = @voicemail_account.voicemail_messages.order(sort_column + ' ' + (sort_descending ? 'DESC' : 'ASC')).paginate(
                             :page => @pagination_page_number,
                             :per_page => GsParameter.get('DEFAULT_PAGINATION_ENTRIES_PER_PAGE')
                           )
     end
+
+    @available_sip_account = available_sip_account()
   end
 
   def show
@@ -78,7 +82,7 @@ class VoicemailMessagesController < ApplicationController
   def destroy_multiple
     result = false
     if ! params[:selected_uuids].blank? then
-      voicemail_messages = @sip_account.voicemail_messages.where(:uuid => params[:selected_uuids])
+      voicemail_messages = @voicemail_account.voicemail_messages.where(:uuid => params[:selected_uuids])
       voicemail_messages.each do |voicemail_message|
         result = voicemail_message.destroy
       end
@@ -92,10 +96,20 @@ class VoicemailMessagesController < ApplicationController
     end
   end
 
+  def available_sip_account
+    voicemail_accountable = @voicemail_account.voicemail_accountable
+    if voicemail_accountable.class == SipAccount
+      return voicemail_accountable
+    elsif voicemail_accountable.class == User
+      return voicemail_accountable.sip_accounts.first
+    end
+  end
+
   def call
     phone_number = @voicemail_message.cid_number
-    if ! phone_number.blank? && @sip_account.registration
-      @sip_account.call(phone_number)
+    sip_account = self.available_sip_account
+    if ! phone_number.blank? && sip_account && sip_account.registration
+      sip_account.call(phone_number)
     end
     redirect_to(:back)
   end
@@ -112,7 +126,7 @@ class VoicemailMessagesController < ApplicationController
 
   private
   def set_and_authorize_parent
-    @parent = @sip_account
+    @parent = @voicemail_account
 
     authorize! :read, @parent
 
@@ -123,18 +137,37 @@ class VoicemailMessagesController < ApplicationController
   end
 
   def spread_breadcrumbs
-    if @parent.class == SipAccount
-     if @sip_account.sip_accountable.class == User
-       add_breadcrumb t("#{@sip_account.sip_accountable.class.name.underscore.pluralize}.index.page_title"), method( :"tenant_#{@sip_account.sip_accountable.class.name.underscore.pluralize}_path" ).(@sip_account.tenant)
-       add_breadcrumb @sip_account.sip_accountable, method( :"tenant_#{@sip_account.sip_accountable.class.name.underscore}_path" ).(@sip_account.tenant, @sip_account.sip_accountable)
-     end
-     add_breadcrumb t("sip_accounts.index.page_title"), method( :"#{@sip_account.sip_accountable.class.name.underscore}_sip_accounts_path" ).(@sip_account.sip_accountable)
-     add_breadcrumb @sip_account, method( :"#{@sip_account.sip_accountable.class.name.underscore}_sip_account_path" ).(@sip_account.sip_accountable, @sip_account)
-     add_breadcrumb t("voicemail_messages.index.page_title"), sip_account_voicemail_messages_path(@sip_account)
-     if @voicemail_message && !@voicemail_message.new_record?
-       add_breadcrumb @voicemail_message, sip_account_voicemail_message_path(@sip_account, @voicemail_message)
-     end
+    parent = @voicemail_account.voicemail_accountable
+   
+    if parent.class == User
+      add_breadcrumb t("users.index.page_title"), tenant_users_path(parent.current_tenant)
+      add_breadcrumb parent, tenant_user_path(parent.current_tenant, parent)
+    elsif parent.class == SipAccount
+      if parent.sip_accountable.class == User
+        add_breadcrumb t("users.index.page_title"), tenant_users_path(parent.sip_accountable.current_tenant)
+        add_breadcrumb parent.sip_accountable, tenant_user_path(parent.sip_accountable.current_tenant, parent.sip_accountable)
+      end
+
+      add_breadcrumb t("sip_accounts.index.page_title"), method( :"#{parent.sip_accountable.class.name.underscore}_sip_accounts_url" ).(parent.sip_accountable)
+      add_breadcrumb parent, method( :"#{parent.sip_accountable.class.name.underscore}_sip_account_path" ).(parent.sip_accountable, parent)
     end
+
+    add_breadcrumb t("voicemail_accounts.index.page_title"), method( :"#{parent.class.name.underscore}_voicemail_accounts_url" ).(parent)
+    add_breadcrumb @voicemail_account.name, method( :"#{parent.class.name.underscore}_voicemail_account_path" ).(parent, @voicemail_account)
+
+    add_breadcrumb t("voicemail_messages.index.page_title")
+  end
+
+  def sort_descending
+    if sort_column == 'created_epoch' && params[:desc].to_s.blank?
+      return true
+    end
+   
+    params[:desc].to_s == 'true'
+  end
+
+  def sort_column
+    VoicemailMessage.column_names.include?(params[:sort]) ? params[:sort] : 'created_epoch'
   end
 
 end

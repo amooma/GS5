@@ -95,9 +95,6 @@ function PresenceUpdate.sofia_register(self, event)
   local timestamp = event:getHeader('Event-Date-Timestamp');
 
   local sip_account = self:retrieve_sip_account(account, account);
-  if sip_account and common.str.to_b(self.config.trigger.sip_account_register) then
-    self:trigger_rails(sip_account, 'register', timestamp, account)
-  end
 
   self.log:debug('[', account, '] PRESENCE_UPDATE - flushing account cache on register');
   self.presence_accounts[account] = nil;
@@ -109,9 +106,6 @@ function PresenceUpdate.sofia_ungerister(self, event)
   local timestamp = event:getHeader('Event-Date-Timestamp');
 
   local sip_account = self:retrieve_sip_account(account, account);
-  if sip_account and common.str.to_b(self.config.trigger.sip_account_unregister) then
-    self:trigger_rails(sip_account, 'unregister', timestamp, account)
-  end
 
   self.log:debug('[', account, '] PRESENCE_UPDATE - flushing account cache on unregister');
   self.presence_accounts[account] = nil;
@@ -242,9 +236,6 @@ function PresenceUpdate.sip_account(self, inbound, account, domain, status, uuid
     uuid = uuid
   }:set(status_map[status] or 'terminated', caller_id);
 
-  if common.str.to_b(self.config.trigger.sip_account_presence) then
-    self:trigger_rails(sip_account, status_map[status] or 'terminated', timestamp, uuid);
-  end
 end
 
 
