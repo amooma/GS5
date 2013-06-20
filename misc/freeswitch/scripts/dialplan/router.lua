@@ -22,6 +22,7 @@ function Router.new(self, arg)
   self.variables = arg.variables or {};
   self.log_details = arg.log_details;
   self.routing_tables = {};
+
   return object;
 end
 
@@ -75,8 +76,9 @@ function Router.element_match(self, pattern, search_string, replacement, route_v
     local replace_by = common.array.expand_variables(replacement, route_variables, self.variables)
     result = search_string:gsub(pattern, replace_by);
     if self.log_details then
-      self.log:debug('ELEMENT_MATCH - ', search_string, ' ~= ', pattern, ' => ', replacement, ' => ', replace_by);
+      self.log:debug('ELEMENT_MATCH - ', search_string, ' ~= ', pattern, ' => ', replacement, ' => ', result);
     end
+
     return true, result;
   end
 
@@ -163,19 +165,9 @@ function Router.route_match(self, route)
     end
 
     if element.action ~= 'none' then
-      if element.action == 'set' then
-        if common.str.blank(element.var_in) then
-          result = true;
-          replacement = common.array.expand_variables(element.replacement, destination, self.variables);
-        else
-          local command, variable_name = common.str.partition(element.var_in, ':');
-          if command == 'fun' then
-            result, replacement = self:element_run_function(variable_name, element, destination);
-          else
-            result = true;
-            replacement = common.array.expand_variables(element.replacement, destination, self.variables);
-          end
-        end
+      if common.str.blank(element.var_in) and common.str.blank(element.pattern) and element.action == 'set' then
+        result = true;
+        replacement = common.array.expand_variables(element.replacement, destination, self.variables);
       else
         local command, variable_name = common.str.partition(element.var_in, ':');
 
