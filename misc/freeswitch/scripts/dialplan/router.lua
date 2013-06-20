@@ -165,7 +165,7 @@ function Router.route_match(self, route)
     end
 
     if element.action ~= 'none' then
-      if common.str.blank(element.var_in) and common.str.blank(element.pattern) and element.action == 'set' then
+      if common.str.blank(element.var_in) and element.action == 'set' then
         result = true;
         replacement = common.array.expand_variables(element.replacement, destination, self.variables);
       else
