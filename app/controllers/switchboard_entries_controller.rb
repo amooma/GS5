@@ -58,7 +58,7 @@ class SwitchboardEntriesController < ApplicationController
 
   private
   def switchboard_entry_params
-    params.require(:switchboard_entry).permit(:name, :sip_account_id)
+    params.require(:switchboard_entry).permit(:name, :sip_account_id, :switchable)
   end
 
   def spread_breadcrumbs

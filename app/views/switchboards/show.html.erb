@@ -26,16 +26,27 @@
                 {{avatar_img switchboardEntry.avatar_src}}
                   <small>
                     <p>
+                      {{#if switchboardEntry.name}}
                       <span class="label">{{switchboardEntry.name}}</span>
+                      {{/if}}
 
                       {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumberShortList}}
                         <span class="label">
                           {{phoneNumber.number}}
                         </span>
+
+                        {{#if activeCalls.length}}
+                          <p>
+                            {{#each activeCall in activeCalls}}
+                              <button {{action transfer_blind activeCall.id phoneNumber.number}} class="btn btn-small">Blind Transfer ({{activeCall.b_caller_id_number}})</button>
+                            {{/each}}
+                          </p>
+                        {{/if}}
                       {{/each}}
                     </p>
 
                     {{show_callstate switchboardEntry.callstate}}
+
                     {{#if switchboardEntry.sipAccount.calls.length}}
                       <p>
                       Anrufe:
@@ -51,17 +62,6 @@
                       </p>
                     {{/if}}
 
-                    {{#if activeCalls.length}}
-                      <p>
-                        Verbinden mit:
-                        <br>
-                          {{#each activeCall in activeCalls}}
-                            <button {{action blind_transfer}}>
-                              {{activeCall.b_caller_id_number}}
-                            </button>
-                          {{/each}}
-                      </p>
-                    {{/if}}
                   </small>
               </div>
             </li>
