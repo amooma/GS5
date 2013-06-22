@@ -1,6 +1,6 @@
 
-- if defined?(users.total_pages)
-  = will_paginate users, :renderer => BootstrapPagination::Rails, :previous_label => raw('<i class = "icon-chevron-left"></i>'), :next_label => raw('<i class = "icon-chevron-right"></i>')
+- if defined?(sip_accounts.total_pages)
+  = will_paginate sip_accounts, :renderer => BootstrapPagination::Rails, :previous_label => raw('<i class = "icon-chevron-left"></i>'), :next_label => raw('<i class = "icon-chevron-right"></i>')
   
 %table.table.table-striped
   %thead
