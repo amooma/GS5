@@ -1,3 +1,4 @@
 .inputs
   = f.association :sip_account, :collection => @sip_accounts, :label => t('switchboard_entries.form.sip_account_id.label'), :hint => conditional_hint('switchboard_entries.form.sip_account_id.hint'), :autofocus => true, :include_blank => false
   = f.input :name, :label => t('switchboard_entries.form.name.label'), :hint => conditional_hint('switchboard_entries.form.name.hint')
+  = f.input :switchable, :as => :boolean, :label => t('switchboard_entries.form.switchable.label'), :hint => conditional_hint('switchboard_entries.form.switchable.hint')

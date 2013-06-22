@@ -18,5 +18,10 @@
           %strong= t('switchboard_entries.show.position') + ":"
         %td
           = @switchboard_entry.position
+      %tr
+        %td
+          %strong= t('switchboard_entries.show.switchable') + ":"
+        %td
+          = @switchboard_entry.switchable
 
     = render :partial => 'shared/show_edit_destroy_part', :locals => {:parent => @switchboard, :child => @switchboard_entry }

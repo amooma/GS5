@@ -1,5 +1,4 @@
 App = Ember.Application.create({
-  LOG_TRANSITIONS: true,
   rootElement: '#emberjs-container',
 
   // Reload the switchboard every x milliseconds
@@ -9,11 +8,6 @@ App = Ember.Application.create({
       var switchboard = App.Switchboard.find(switchboard_id);
       setInterval(function() {
         switchboard.reload();
-
-        // var switchboard_entries = App.SwitchboardEntry.find();
-        // switchboard_entries.forEach(function(switchboard_entry) {
-        //   switchboard_entry.reload();
-        // });
       }, reload_interval);
     }
   }
@@ -32,15 +26,15 @@ App.SwitchboardRoute = Ember.Route.extend({
 
 // Controller
 App.SwitchboardController = Ember.ObjectController.extend({
-  blind_transfer: function() {
-    console.log('transfer')
+  transfer_blind: function(call_id, destination) {
+    console.log('test')
+    request_url = '/api/v1/calls/' + call_id + '.json';
+    jQuery.get(request_url, { transfer_blind: destination });
   }
 });
 
 // Models
-App.Store = DS.Store.extend({
-  revision: 12
-});
+App.Store = DS.Store.extend();
 
 DS.RESTAdapter.configure("plurals", {
   switchboard_entry: "switchboard_entries"
@@ -54,8 +48,6 @@ App.Switchboard = DS.Model.extend({
   switchboardEntrys: DS.hasMany('App.SwitchboardEntry'),
   activeCalls: DS.hasMany('App.ActiveCall'),
   name: DS.attr('string')
-
-
 });
 
 App.SwitchboardEntry = DS.Model.extend({
@@ -116,8 +108,7 @@ App.Call = DS.Model.extend({
     } else {
       return false
     }
-  }.property('b_callstate')  
-
+  }.property('b_callstate')
 });
 
 App.store.adapter.serializer.configure(App.PhoneNumber, { sideloadAs: 'phone_numbers' });
@@ -127,5 +118,7 @@ Ember.Handlebars.registerBoundHelper('avatar_img', function(value) {
 });
 
 Ember.Handlebars.registerBoundHelper('show_callstate', function(value) {
-  return new Handlebars.SafeString('<span class="label">' + value + '</span>');
+  if (value) {
+    return new Handlebars.SafeString('<span class="label">' + value + '</span>');
+  }
 });

@@ -11,6 +11,7 @@ Gemeinschaft42c::Application.routes.draw do
       resources :sip_accounts, :only => [:show, :index]
       resources :pager_groups
       resources :phone_numbers, :only => [:show, :index]
+      resources :calls, :only => [:index, :show, :update]
     end
 
     resources :rows 
