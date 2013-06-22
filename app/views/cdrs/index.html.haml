@@ -1,0 +1,4 @@
+- content_for :title, t("cdrs.index.page_title")
+
+- if @cdrs.count > 0
+  = render "index_core", :cdrs => @cdrs

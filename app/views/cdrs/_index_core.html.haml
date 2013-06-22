@@ -1,0 +1,33 @@
+
+- if defined?(cdrs.total_pages)
+  = will_paginate cdrs, :renderer => BootstrapPagination::Rails, :previous_label => raw('<i class = "icon-chevron-left"></i>'), :next_label => raw('<i class = "icon-chevron-right"></i>')
+  
+%table.table.table-striped
+  %thead
+    %tr
+      %th= sortable :start_stamp, t('cdrs.index.start_stamp')
+      %th= sortable :caller_id_number, t('cdrs.index.caller_id_number')
+      %th= sortable :caller_id_name, t('cdrs.index.caller_id_name')
+      %th= sortable :dialed_number, t('cdrs.index.dialed_number')
+      %th= sortable :destination_number, t('cdrs.index.destination_number')
+      %th= sortable :callee_id_number, t('cdrs.index.callee_id_number')
+      %th= sortable :callee_id_name, t('cdrs.index.callee_id_name')
+      %th= sortable :billsec, t('cdrs.index.billsec')
+      %th= sortable :hangup_cause, t('cdrs.index.hangup_cause')
+      %th= sortable :dialstatus, t('cdrs.index.dialstatus')
+
+  %tbody
+    - for cdr in cdrs
+      %tr{:class => (cdr.dialstatus == 'SUCCESS' ? '' : 'warning')}
+        %td= l cdr.start_stamp, :format => :short
+        %td= cdr.caller_id_number
+        %td= cdr.caller_id_name
+        %td= cdr.dialed_number
+        %td= cdr.destination_number
+        %td= cdr.callee_id_number
+        %td= cdr.callee_id_name
+        %td= Cdr.seconds_to_minutes_seconds(cdr.billsec)
+        %td= cdr.hangup_cause
+        %td= cdr.dialstatus
+
+        /=render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => @tenant, :child => cdr}
