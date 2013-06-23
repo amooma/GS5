@@ -64,7 +64,23 @@ App.ActiveCall = DS.Model.extend({
   callstate: DS.attr('string'),
   b_callstate: DS.attr('string'),
   destination: DS.attr('string'),
-  b_caller_id_number: DS.attr('string')
+  b_caller_id_number: DS.attr('string'),
+
+  isActive: function() {
+    if (this.get('b_callstate') == 'ACTIVE') {
+      return true
+    } else {
+      return false
+    }
+  }.property('b_callstate'),
+
+  isRinging: function() {
+    if (this.get('b_callstate') == 'RINGING') {
+      return true
+    } else {
+      return false
+    }
+  }.property('b_callstate')  
 });
 
 App.Adapter = DS.RESTAdapter.extend();
@@ -108,6 +124,14 @@ App.Call = DS.Model.extend({
     } else {
       return false
     }
+  }.property('b_callstate'),
+
+  isRinging: function() {
+    if (this.get('b_callstate') == 'RINGING') {
+      return true
+    } else {
+      return false
+    }
   }.property('b_callstate')
 });
 
@@ -122,3 +146,10 @@ Ember.Handlebars.registerBoundHelper('show_callstate', function(value) {
     return new Handlebars.SafeString('<span class="label">' + value + '</span>');
   }
 });
+
+Ember.Handlebars.registerBoundHelper('from_now', function(start_stamp) {
+  moment().lang('de');
+  var day = moment.unix(start_stamp).fromNow();
+  return day;
+});
+

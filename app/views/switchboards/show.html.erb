@@ -16,7 +16,15 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name="switchboard">
-      <h2>{{name}}</h2>
+      {{#if activeCalls.length}}
+        {{#each activeCall in activeCalls}}
+          <div {{bindAttr class=":alert activeCall.isActive:alert-success"}}>
+            {{#if activeCall.isRinging}}<i class="icon-bell"></i> Neuer {{/if}}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            Anruf von {{activeCall.b_caller_id_number}} an {{activeCall.destination}} ({{from_now activeCall.start_stamp}}).
+          </div>
+        {{/each}}
+      {{/if}}
 
       {{#if switchboardEntrys.length}}
         <ul class="thumbnails">
@@ -24,45 +32,42 @@
             <li class="span2">
               <div class="thumbnail">
                 {{avatar_img switchboardEntry.avatar_src}}
-                  <small>
-                    <p>
-                      {{#if switchboardEntry.name}}
+                <small>
+                <p></p>
+                  {{#if switchboardEntry.name}}
+                    <p class="text-center">
                       <span class="label">{{switchboardEntry.name}}</span>
-                      {{/if}}
-
-                      {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumberShortList}}
-                        <span class="label">
-                          {{phoneNumber.number}}
-                        </span>
-
-                        {{#if activeCalls.length}}
-                          <p>
-                            {{#each activeCall in activeCalls}}
-                              <button {{action transfer_blind activeCall.id phoneNumber.number}} class="btn btn-small">Blind Transfer ({{activeCall.b_caller_id_number}})</button>
-                            {{/each}}
-                          </p>
-                        {{/if}}
-                      {{/each}}
                     </p>
+                  {{/if}}
 
-                    {{show_callstate switchboardEntry.callstate}}
+                  <p>
+                  {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumberShortList}}
+                    <span class="label">
+                      {{phoneNumber.number}}
+                    </span>
 
-                    {{#if switchboardEntry.sipAccount.calls.length}}
+                    {{#if activeCalls.length}}
                       <p>
-                      Anrufe:
-                      <br>
-                      {{#each call in switchboardEntry.sipAccount.calls}}
-                        <span {{bindAttr class=":label call.isActive:label-success"}}>
-                            {{call.b_caller_id_number}} -> {{call.destination}}
-                            {{#if call.isActive}}
-                            *
-                            {{/if}}
-                        </span>
-                      {{/each}}
+                        {{#each activeCall in activeCalls}}
+                          <button {{action transfer_blind activeCall.id phoneNumber.number}} class="btn btn-small">Transfer</button>
+                        {{/each}}
                       </p>
                     {{/if}}
+                  {{/each}}
+                  </p>
 
-                  </small>
+                  {{#if switchboardEntry.sipAccount.calls.length}}
+                    <p>
+                      {{#each call in switchboardEntry.sipAccount.calls}}
+                        <span {{bindAttr class=":label call.isRinging:label-warning:label-success"}}>
+                          {{#if call.isRinging}}<i class="icon-bell icon-white"></i>{{/if}}
+                          von {{call.b_caller_id_number}} an {{call.destination}}
+                        </span>
+                      {{/each}}
+                    </p>
+                  {{/if}}
+
+                </small>
               </div>
             </li>
           {{/each}}
@@ -73,6 +78,8 @@
   </div>
 </div>
 
+<script src="/js/libs/moment/moment.min.js"></script>
+<script src="/js/libs/moment/lang/de.js"></script>
 <script src="/js/libs/handlebars.js"></script>
 <script src="/js/libs/ember.js"></script>
 <script src="/js/libs/ember-data.js"></script>
