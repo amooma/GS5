@@ -11,6 +11,7 @@ de:
       sip_account_id: 'SIP-Account'
       name: 'Name'
       position: 'Position'
+      switchable: 'Vermittelbar'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Switchboard-Eintrag'
         destroy: 'Löschen'
@@ -24,6 +25,7 @@ de:
       sip_account_id: 'SIP-Account'
       name: 'Name'
       position: 'Position'
+      switchable: 'Vermittelbar'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
@@ -52,4 +54,7 @@ de:
       position:
         label: 'Position'
         hint: ''
+      switchable:
+        label: 'Vermittelbarer SIP-Account'
+        hint: 'Gespräche an diesen SIP-Account können im Switchboard vermittelt werden.'
       submit: 'Absenden'
