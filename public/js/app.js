@@ -27,10 +27,14 @@ App.SwitchboardRoute = Ember.Route.extend({
 // Controller
 App.SwitchboardController = Ember.ObjectController.extend({
   transfer_blind: function(call_id, destination) {
-    console.log('test')
     request_url = '/api/v1/calls/' + call_id + '.json';
     jQuery.get(request_url, { transfer_blind: destination });
-  }
+  },
+
+  transfer_attended: function(call_id, destination) {
+    request_url = '/api/v1/calls/' + call_id + '.json';
+    jQuery.get(request_url, { transfer_attended: destination });
+  }  
 });
 
 // Models

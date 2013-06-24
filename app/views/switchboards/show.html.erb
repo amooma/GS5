@@ -50,6 +50,7 @@
                       <p>
                         {{#each activeCall in activeCalls}}
                           <button {{action transfer_blind activeCall.id phoneNumber.number}} class="btn btn-small">Transfer</button>
+                          <button {{action transfer_attended activeCall.id phoneNumber.number}} class="btn btn-small">Attended Transfer</button>
                         {{/each}}
                       </p>
                     {{/if}}
