@@ -44,11 +44,7 @@ class Call < ActiveRecord::Base
       return nil
     end
 
-    if call_leg == :bleg
-      channel_uuid = self.b_uuid
-    else
-      channel_uuid = self.uuid
-    end
+    channel_uuid = call_leg == :bleg ? self.b_uuid : channel_uuid = self.uuid
 
     if channel_uuid.blank?
       return nil
@@ -63,24 +59,28 @@ class Call < ActiveRecord::Base
     return FreeswitchAPI.api_result(FreeswitchAPI.api('uuid_transfer', channel_uuid, destination))
   end
 
+  def hold(call_leg=:aleg, action=:hold)
+    channel_uuid = call_leg == :bleg ? self.b_uuid : channel_uuid = self.uuid
+    hold_off = action == :retrieve ? 'off' : ''
 
-  def self.bridge(call_uuid1, call_uuid2, hangup_uuids=[])
-    if call_uuid1.blank? || call_uuid2.blank?
+    if channel_uuid.blank?
       return nil
     end
 
     require 'freeswitch_event'
-    result = FreeswitchAPI.api_result(FreeswitchAPI.api('uuid_bridge', call_uuid1, call_uuid2))
-    
-    if result 
-      hangup_uuids.each do |kill_uuid|
-        FreeswitchAPI.execute('uuid_kill', kill_uuid, true)
-      end
-    end
-
-    return result
+    result = FreeswitchAPI.api_result(FreeswitchAPI.api('uuid_hold', hold_off, channel_uuid))
   end
 
+  def park(call_leg=:aleg)
+    channel_uuid = call_leg == :bleg ? self.b_uuid : channel_uuid = self.uuid
+
+    if channel_uuid.blank?
+      return nil
+    end
+
+    require 'freeswitch_event'
+    result = FreeswitchAPI.api_result(FreeswitchAPI.api('uuid_park', channel_uuid))
+  end
   
   def get_variable_from_uuid(channel_uuid, variable_name)
     if channel_uuid.blank? 
@@ -105,4 +105,20 @@ class Call < ActiveRecord::Base
     return get_variable_from_uuid(self.b_uuid, variable_name);
   end
 
+  def self.bridge(call_uuid1, call_uuid2, hangup_uuids=[])
+    if call_uuid1.blank? || call_uuid2.blank?
+      return nil
+    end
+
+    require 'freeswitch_event'
+    result = FreeswitchAPI.api_result(FreeswitchAPI.api('uuid_bridge', call_uuid1, call_uuid2))
+    
+    if result 
+      hangup_uuids.each do |kill_uuid|
+        FreeswitchAPI.execute('uuid_kill', kill_uuid, true)
+      end
+    end
+
+    return result
+  end
 end
