@@ -40,22 +40,32 @@
                     </p>
                   {{/if}}
 
-                  <p>
-                  {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumberShortList}}
-                    <span class="label">
-                      {{phoneNumber.number}}
-                    </span>
+                  {{#if switchboardEntry.switchable}}
+                    <p>
+                    {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumberShortList}}
+                      <span class="label">
+                        {{phoneNumber.number}}
+                      </span>
+                    {{/each}}
+                    </p>
+                  {{else}}
+                    <p>
+                    {{#each phoneNumber in switchboardEntry.sipAccount.phoneNumberShortList}}
+                      <span class="label">
+                        {{phoneNumber.number}}
+                      </span>
 
-                    {{#if dispatchableIncomingCalls.length}}
-                      <p>
-                        {{#each dispatchableIncomingCall in dispatchableIncomingCalls}}
-                          <button {{action transfer_blind dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Transfer</button>
-                          <button {{action transfer_attended dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Attended Transfer</button>
-                        {{/each}}
-                      </p>
-                    {{/if}}
-                  {{/each}}
-                  </p>
+                      {{#if dispatchableIncomingCalls.length}}
+                        <p>
+                          {{#each dispatchableIncomingCall in dispatchableIncomingCalls}}
+                            <button {{action transfer_blind dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Transfer</button>
+                            <button {{action transfer_attended dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Attended Transfer</button>
+                          {{/each}}
+                        </p>
+                      {{/if}}
+                    {{/each}}
+                    </p>
+                  {{/if}}
 
                   {{#if switchboardEntry.sipAccount.calls.length}}
                     <p>

@@ -61,7 +61,8 @@ App.SwitchboardEntry = DS.Model.extend({
   name: DS.attr('string'),
   path_to_user: DS.attr('string'),
   avatar_src: DS.attr('string'),
-  callstate: DS.attr('string')  
+  callstate: DS.attr('string'),
+  switchable: DS.attr('boolean')
 });
 
 App.ActiveCall = DS.Model.extend({
