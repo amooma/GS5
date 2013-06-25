@@ -51,6 +51,7 @@ DS.RESTAdapter.reopen({
 App.Switchboard = DS.Model.extend({
   switchboardEntrys: DS.hasMany('App.SwitchboardEntry'),
   activeCalls: DS.hasMany('App.ActiveCall'),
+  dispatchableIncomingCalls: DS.hasMany('App.DispatchableIncomingCall'),
   name: DS.attr('string')
 });
 
@@ -64,6 +65,30 @@ App.SwitchboardEntry = DS.Model.extend({
 });
 
 App.ActiveCall = DS.Model.extend({
+  start_stamp: DS.attr('number'),
+  callstate: DS.attr('string'),
+  b_callstate: DS.attr('string'),
+  destination: DS.attr('string'),
+  b_caller_id_number: DS.attr('string'),
+
+  isActive: function() {
+    if (this.get('b_callstate') == 'ACTIVE') {
+      return true
+    } else {
+      return false
+    }
+  }.property('b_callstate'),
+
+  isRinging: function() {
+    if (this.get('b_callstate') == 'RINGING') {
+      return true
+    } else {
+      return false
+    }
+  }.property('b_callstate')  
+});
+
+App.DispatchableIncomingCall = DS.Model.extend({
   start_stamp: DS.attr('number'),
   callstate: DS.attr('string'),
   b_callstate: DS.attr('string'),

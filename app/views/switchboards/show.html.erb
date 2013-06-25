@@ -46,11 +46,11 @@
                       {{phoneNumber.number}}
                     </span>
 
-                    {{#if activeCalls.length}}
+                    {{#if dispatchableIncomingCalls.length}}
                       <p>
-                        {{#each activeCall in activeCalls}}
-                          <button {{action transfer_blind activeCall.id phoneNumber.number}} class="btn btn-small">Transfer</button>
-                          <button {{action transfer_attended activeCall.id phoneNumber.number}} class="btn btn-small">Attended Transfer</button>
+                        {{#each dispatchableIncomingCall in dispatchableIncomingCalls}}
+                          <button {{action transfer_blind dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Transfer</button>
+                          <button {{action transfer_attended dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Attended Transfer</button>
                         {{/each}}
                       </p>
                     {{/if}}
