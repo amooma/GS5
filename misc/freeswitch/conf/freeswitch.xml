@@ -670,7 +670,7 @@
                 <action function="play-file" data="voicemail/vm-message_number.wav"/>
                 <action function="say" data="$1" method="pronounced" type="items"/>
                 <action function="play-file" data="voicemail/vm-received.wav"/>
-                <action function="say" data="$2" method="pronounced" type="short_date_time"/>
+                <action function="say" data="$2" method="pronounced" type="current_date_time"/>
                 <action function="play-file" data="$3"/>
               </match>
             </input> 
