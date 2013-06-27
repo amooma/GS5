@@ -127,6 +127,7 @@ App.SipAccount = DS.Model.extend({
   phoneNumbers: DS.hasMany('App.PhoneNumber'),
   callerName: DS.attr('string'),
   authName: DS.attr('string'),
+  is_registrated: DS.attr('boolean'),
 
   phoneNumberShortList: Ember.computed(function() {
       var phoneNumbers = this.get('phoneNumbers');
