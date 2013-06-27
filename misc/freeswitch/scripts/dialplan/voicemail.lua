@@ -349,7 +349,10 @@ function Voicemail.leave(self, caller, greeting, number)
   end 
   os.remove(record_file_name);
   caller:send_display('Goodbye');
-  caller.session:sayPhrase('voicemail_goodbye');
+
+  if common.str.blank(greeting_file) then
+    caller.session:sayPhrase('voicemail_goodbye');
+  end
 end
 
 
