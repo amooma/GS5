@@ -5,16 +5,20 @@ module Api
 
       def index
         @user = current_user
-        @switchboards = @user.switchboards
+        @switchboards = Switchboard.all
 
-        respond_with @switchboards
+        if can? :read, @switchboards
+          respond_with @switchboards
+        end
       end
 
       def show
         @user = current_user
-        @switchboard = @user.switchboards.find(params[:id])
+        @switchboard = Switchboard.find(params[:id])
 
-        respond_with @switchboard
+        if can? :read, @switchboard
+          respond_with @switchboard
+        end
       end
     end
   end

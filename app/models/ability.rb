@@ -95,6 +95,10 @@ class Ability
           #
           cannot :manage, RestoreJob
 
+          # Admin can manage all switchboards.
+          #
+          can :manage, Switchboard
+
         else
           # Any user can do the following stuff.
           #
