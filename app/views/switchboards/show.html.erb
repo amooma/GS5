@@ -59,8 +59,12 @@
                         {{#if dispatchableIncomingCalls.length}}
                           <p>
                             {{#each dispatchableIncomingCall in dispatchableIncomingCalls}}
-                              <button {{action transfer_blind dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Transfer</button>
-                              <button {{action transfer_attended dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Attended Transfer</button>
+                              {{#if switchboardEntry.switchboard.blind_transfer_activated}}
+                                <button {{action transfer_blind dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Transfer</button>
+                              {{/if}}
+                              {{#if switchboardEntry.switchboard.attended_transfer_activated}}
+                                <button {{action transfer_attended dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Attended Transfer</button>
+                              {{/if}}
                             {{/each}}
                           </p>
                         {{/if}}

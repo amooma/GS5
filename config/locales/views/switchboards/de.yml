@@ -13,6 +13,8 @@ de:
       show_avatars: 'Show avatars'
       entry_width: 'Entry width'
       amount_of_displayed_phone_numbers: 'Anzahl der angezeigten Telefonnummern'     
+      blind_transfer_activated: 'Transfer'
+      attended_transfer_activated: 'Transfer mit Rückfrage'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Switchboard'
         destroy: 'Löschen'
@@ -28,6 +30,8 @@ de:
       show_avatars: 'Show avatars'
       entry_width: 'Entry width'
       amount_of_displayed_phone_numbers: 'Anzahl der angezeigten Telefonnummern'     
+      blind_transfer_activated: 'Transfer'
+      attended_transfer_activated: 'Transfer mit Rückfrage'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
@@ -61,5 +65,12 @@ de:
         hint: '1 - 4'
       amount_of_displayed_phone_numbers:
         label: 'Anzahl Telefonnummern'
-        hint: 'Wie viel Telefonnummern werden in einem Eintrag angezeigt.'        
+        hint: 'Wie viel Telefonnummern werden in einem Eintrag angezeigt.'
+      blind_transfer_activated:
+        label: 'Transfer'
+        hint: ''
+      attended_transfer_activated:
+        label: 'Transfer mit Rückfrage'
+        hint: 'Funktioniert nicht mit allen Telefonen.'
+
       submit: 'Absenden'
