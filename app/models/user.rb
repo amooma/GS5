@@ -107,6 +107,8 @@ class User < ActiveRecord::Base
 
   after_save :become_a_member_of_default_user_groups
 
+  after_save :change_language_of_child_objects
+
   def destroy
     clean_whitelist_entries
     super
@@ -243,6 +245,17 @@ class User < ActiveRecord::Base
           self.group_memberships.create(:group_id => group.id)
         end
       end
+    end
+  end
+
+  def change_language_of_child_objects
+    if !self.language_id_changed?
+      return nil
+    end
+
+    code = self.language.code
+    self.sip_accounts.each do |sip_account|
+      sip_account.update_attributes(:language_code => code)
     end
   end
 
