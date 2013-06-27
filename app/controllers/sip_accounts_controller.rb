@@ -85,6 +85,7 @@ class SipAccountsController < ApplicationController
       m = method( :"#{@parent.class.name.underscore}_sip_account_path" )
       redirect_to m.( @parent, @sip_account ), :notice  => t('sip_accounts.controller.successfuly_updated')
     else
+      possible_voicemail_accounts
       render :edit
     end
   end
