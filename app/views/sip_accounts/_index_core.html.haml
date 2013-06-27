@@ -26,7 +26,7 @@
           %td
             = sip_account.sip_accountable
         %td
-          - if sip_account.registration
+          - if sip_account.registration && (sip_account.registration.expires - Time.now.to_i) > 0
             %i.icon-ok
           - else
             %i.icon-ban-circle
