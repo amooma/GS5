@@ -154,12 +154,11 @@ class SipAccount < ActiveRecord::Base
     return SipRegistration.where(:sip_user => self.auth_name).first
   end
 
-  def call( phone_number, origin_cid_number = nil, origin_cid_name = 'Call' )
-    origin_cid_number = origin_cid_number || phone_number
+  def call( phone_number, caller_id_number = nil, caller_id_name = 'Call', auto_answer = false )
     require 'freeswitch_event'
     return FreeswitchAPI.execute(
       'originate', 
-      "{origination_uuid=#{UUID.new.generate},origination_caller_id_number='#{phone_number}',origination_caller_id_name='#{origin_cid_name}'}user/#{self.auth_name} #{phone_number}", 
+      "{origination_uuid=#{UUID.new.generate},origination_caller_id_number='#{caller_id_number||phone_number}',origination_caller_id_name='#{caller_id_name}',sip_auto_answer='#{auto_answer}'}user/#{self.auth_name} #{phone_number}", 
       true
     );
   end
