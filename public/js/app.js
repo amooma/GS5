@@ -53,6 +53,7 @@ App.Switchboard = DS.Model.extend({
   activeCalls: DS.hasMany('App.ActiveCall'),
   dispatchableIncomingCalls: DS.hasMany('App.DispatchableIncomingCall'),
   name: DS.attr('string'),
+  show_avatars: DS.attr('boolean'),
   blind_transfer_activated: DS.attr('boolean'),
   attended_transfer_activated: DS.attr('boolean')
 });

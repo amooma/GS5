@@ -26,12 +26,15 @@
         {{/each}}
       {{/if}}
 
+
       {{#if switchboardEntrys.length}}
         <ul class="thumbnails">
           {{#each switchboardEntry in switchboardEntrys}}
             <li class="span2">
               <div class="thumbnail">
-                {{avatar_img switchboardEntry.avatar_src}}
+                {{#if switchboardEntry.switchboard.show_avatars}}
+                  {{avatar_img switchboardEntry.avatar_src}}
+                {{/if}}
                 <small>
                 <p></p>
                   {{#if switchboardEntry.name}}
