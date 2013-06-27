@@ -156,11 +156,13 @@ class SipAccount < ActiveRecord::Base
 
   def call( phone_number, caller_id_number = nil, caller_id_name = 'Call', auto_answer = false )
     require 'freeswitch_event'
-    return FreeswitchAPI.execute(
+    origination_uuid = UUID.new.generate
+    if FreeswitchAPI.execute(
       'originate', 
-      "{origination_uuid=#{UUID.new.generate},origination_caller_id_number='#{caller_id_number||phone_number}',origination_caller_id_name='#{caller_id_name}',sip_auto_answer='#{auto_answer}'}user/#{self.auth_name} #{phone_number}", 
-      true
-    );
+      "{origination_uuid=#{origination_uuid},origination_caller_id_number='#{caller_id_number||phone_number}',origination_caller_id_name='#{caller_id_name}',sip_auto_answer='#{auto_answer}'}user/#{self.auth_name} #{phone_number}", 
+      true)
+      return origination_uuid
+    end
   end
 
   def target_group_ids_by_permission(permission)
