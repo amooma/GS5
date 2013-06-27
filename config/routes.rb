@@ -12,6 +12,7 @@ Gemeinschaft42c::Application.routes.draw do
       resources :pager_groups
       resources :phone_numbers, :only => [:show, :index]
       resources :calls, :only => [:index, :show, :update]
+      resources :phone_book_entries, :only => [:index]
     end
 
     resources :rows 

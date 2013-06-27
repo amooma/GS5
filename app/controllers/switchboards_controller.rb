@@ -58,7 +58,7 @@ class SwitchboardsController < ApplicationController
 
   private
   def switchboard_params
-    params.require(:switchboard).permit(:name, :reload_interval, :show_avatars, :entry_width, :amount_of_displayed_phone_numbers, :blind_transfer_activated, :attended_transfer_activated)
+    params.require(:switchboard).permit(:name, :reload_interval, :show_avatars, :entry_width, :amount_of_displayed_phone_numbers, :blind_transfer_activated, :attended_transfer_activated, :search_activated)
   end
 
   def spread_breadcrumbs

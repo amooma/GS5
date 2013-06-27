@@ -26,6 +26,35 @@
         {{/each}}
       {{/if}}
 
+      {{#if search_activated}}
+        <div class="well span3 pull-right">
+          <p>
+            {{input type="text" value=searchText size="10" placeholder="Suchen..."}}
+          </p>
+          <ul>
+            {{#each phoneBookEntry in searchResults}}
+              <li>
+                {{phoneBookEntry.search_result_display}}<br />
+
+                {{#each phoneNumber in phoneBookEntry.phoneNumbers}}
+                  <span class="label">
+                    {{phoneNumber.number}}
+                  </span>
+
+                  {{#each dispatchableIncomingCall in dispatchableIncomingCalls}}
+                    {{#if blind_transfer_activated}}
+                      <button {{action transfer_blind dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Transfer</button>
+                    {{/if}}
+                    {{#if attended_transfer_activated}}
+                      <button {{action transfer_attended dispatchableIncomingCall.id phoneNumber.number}} class="btn btn-small">Attended Transfer</button>
+                    {{/if}}
+                  {{/each}}
+                {{/each}}
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      {{/if}}
 
       {{#if switchboardEntrys.length}}
         <ul class="thumbnails">

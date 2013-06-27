@@ -15,6 +15,7 @@ de:
       amount_of_displayed_phone_numbers: 'Anzahl der angezeigten Telefonnummern'     
       blind_transfer_activated: 'Transfer'
       attended_transfer_activated: 'Transfer mit Rückfrage'
+      search_activated: 'Suche'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Switchboard'
         destroy: 'Löschen'
@@ -32,6 +33,7 @@ de:
       amount_of_displayed_phone_numbers: 'Anzahl der angezeigten Telefonnummern'     
       blind_transfer_activated: 'Transfer'
       attended_transfer_activated: 'Transfer mit Rückfrage'
+      search_activated: 'Suche'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
@@ -72,5 +74,7 @@ de:
       attended_transfer_activated:
         label: 'Transfer mit Rückfrage'
         hint: 'Funktioniert nicht mit allen Telefonen.'
-
+      search_activated:
+        label: 'Suche aktivieren'
+        hint: ''
       submit: 'Absenden'

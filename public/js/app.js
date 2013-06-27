@@ -34,14 +34,23 @@ App.SwitchboardController = Ember.ObjectController.extend({
   transfer_attended: function(call_id, destination) {
     request_url = '/api/v1/calls/' + call_id + '.json';
     jQuery.get(request_url, { transfer_attended: destination });
-  }  
+  },
+
+  searchText: null,
+
+  searchResults: function() {
+    var searchText = this.get('searchText');
+    if (!searchText) { return; }
+    return App.PhoneBookEntry.find({ query: searchText });
+  }.property('searchText')
 });
 
 // Models
 App.Store = DS.Store.extend();
 
 DS.RESTAdapter.configure("plurals", {
-  switchboard_entry: "switchboard_entries"
+  switchboard_entry: "switchboard_entries",
+  phone_book_entry: "phone_book_entries"
 });
 
 DS.RESTAdapter.reopen({
@@ -55,6 +64,7 @@ App.Switchboard = DS.Model.extend({
   name: DS.attr('string'),
   show_avatars: DS.attr('boolean'),
   blind_transfer_activated: DS.attr('boolean'),
+  search_activated: DS.attr('boolean'),
   attended_transfer_activated: DS.attr('boolean')
 });
 
@@ -139,12 +149,6 @@ App.SipAccount = DS.Model.extend({
 
 });
 
-App.PhoneNumber = DS.Model.extend({
-  name: DS.attr('string'),
-  number: DS.attr('string'),
-  destination: DS.attr('string')
-});
-
 App.Call = DS.Model.extend({
   start_stamp: DS.attr('number'),
   callstate: DS.attr('string'),
@@ -169,8 +173,24 @@ App.Call = DS.Model.extend({
   }.property('b_callstate')
 });
 
+App.PhoneBookEntry = DS.Model.extend({
+  first_name: DS.attr('string'),
+  last_name: DS.attr('string'),
+  organization: DS.attr('string'),
+  search_result_display: DS.attr('string'),
+  phoneNumbers: DS.hasMany('App.PhoneNumber')
+});
+
+App.PhoneNumber = DS.Model.extend({
+  name: DS.attr('string'),
+  number: DS.attr('string'),
+  destination: DS.attr('string')
+});
+
 App.store.adapter.serializer.configure(App.PhoneNumber, { sideloadAs: 'phone_numbers' });
 
+// Handlebar Helpers
+//
 Ember.Handlebars.registerBoundHelper('avatar_img', function(value) {
   return new Handlebars.SafeString('<img alt="Avatar image" class="img-rounded" src="' + value + '" style="width: 100px;">');
 });
