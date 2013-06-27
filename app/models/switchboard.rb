@@ -25,8 +25,13 @@ class Switchboard < ActiveRecord::Base
                              }
 
   belongs_to :user, :touch => true
+
   has_many :switchboard_entries, :dependent => :destroy
+  has_many :switchable_switchboard_entries, :class_name => "SwitchboardEntry", :conditions => {:switchable => true}
+
   has_many :sip_accounts, :through => :switchboard_entries
+  has_many :switchable_sip_accounts, :source => :sip_account, :through => :switchable_switchboard_entries, :uniq => true
+
   has_many :phone_numbers, :through => :sip_accounts
 
   before_validation :convert_0_to_nil
@@ -36,7 +41,11 @@ class Switchboard < ActiveRecord::Base
   end
 
   def active_calls
-    self.switchboard_entries.where(:switchable => true).map{|se| se.sip_account}.uniq.map{|sip_account| sip_account.calls}.flatten
+    Call.where("sip_account_id = ? or b_sip_account_id = ?", self.switchable_sip_account_ids, self.switchable_sip_account_ids).order(:start_stamp)
+  end
+
+  def dispatchable_incoming_calls
+    Call.where("b_sip_account_id = ?", self.switchable_sip_account_ids).order(:start_stamp)
   end
 
   private

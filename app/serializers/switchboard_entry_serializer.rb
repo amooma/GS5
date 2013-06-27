@@ -1,5 +1,5 @@
 class SwitchboardEntrySerializer < ActiveModel::Serializer
-  attributes :id, :name, :path_to_user, :avatar_src, :callstate
+  attributes :id, :name, :path_to_user, :avatar_src, :callstate, :switchable
 
   has_one :sip_account, embed: :ids
   has_one :switchboard, embed: :ids

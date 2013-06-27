@@ -27,10 +27,14 @@ App.SwitchboardRoute = Ember.Route.extend({
 // Controller
 App.SwitchboardController = Ember.ObjectController.extend({
   transfer_blind: function(call_id, destination) {
-    console.log('test')
     request_url = '/api/v1/calls/' + call_id + '.json';
     jQuery.get(request_url, { transfer_blind: destination });
-  }
+  },
+
+  transfer_attended: function(call_id, destination) {
+    request_url = '/api/v1/calls/' + call_id + '.json';
+    jQuery.get(request_url, { transfer_attended: destination });
+  }  
 });
 
 // Models
@@ -47,6 +51,7 @@ DS.RESTAdapter.reopen({
 App.Switchboard = DS.Model.extend({
   switchboardEntrys: DS.hasMany('App.SwitchboardEntry'),
   activeCalls: DS.hasMany('App.ActiveCall'),
+  dispatchableIncomingCalls: DS.hasMany('App.DispatchableIncomingCall'),
   name: DS.attr('string')
 });
 
@@ -56,10 +61,35 @@ App.SwitchboardEntry = DS.Model.extend({
   name: DS.attr('string'),
   path_to_user: DS.attr('string'),
   avatar_src: DS.attr('string'),
-  callstate: DS.attr('string')  
+  callstate: DS.attr('string'),
+  switchable: DS.attr('boolean')
 });
 
 App.ActiveCall = DS.Model.extend({
+  start_stamp: DS.attr('number'),
+  callstate: DS.attr('string'),
+  b_callstate: DS.attr('string'),
+  destination: DS.attr('string'),
+  b_caller_id_number: DS.attr('string'),
+
+  isActive: function() {
+    if (this.get('b_callstate') == 'ACTIVE') {
+      return true
+    } else {
+      return false
+    }
+  }.property('b_callstate'),
+
+  isRinging: function() {
+    if (this.get('b_callstate') == 'RINGING') {
+      return true
+    } else {
+      return false
+    }
+  }.property('b_callstate')  
+});
+
+App.DispatchableIncomingCall = DS.Model.extend({
   start_stamp: DS.attr('number'),
   callstate: DS.attr('string'),
   b_callstate: DS.attr('string'),
