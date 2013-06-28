@@ -66,7 +66,7 @@ module Api
         # Let's sort the results and do pagination.
         #
         phone_book_entries = phone_book_entries.
-                              order([ :last_name, :first_name, :organization ])
+                              order([ :last_name, :first_name, :organization ]).limit(20)
 
         respond_with phone_book_entries
       end
