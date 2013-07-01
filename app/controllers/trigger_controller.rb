@@ -135,8 +135,18 @@ class TriggerController < ApplicationController
 
           working_path, tiff_file = File.split(fax_document.tiff)
           if fax_document.store_dir != working_path
-            FileUtils.mkdir(fax_document.store_dir)
-            FileUtils.mv(fax_document.tiff, fax_document.store_dir)
+            begin
+              FileUtils.mkdir(fax_document.store_dir)
+            rescue => e
+              logger.error "PDF fax directory not created: #{fax_document.store_dir} => #{e.inspect}"
+            end
+
+            begin
+              FileUtils.mv(fax_document.tiff, fax_document.store_dir)
+            rescue => e
+              logger.error "PDF fax files not moved: #{fax_document.tiff} => #{e.inspect}"
+            end
+
             fax_document.tiff = "#{fax_document.store_dir}/#{tiff_file}"
           end
 
