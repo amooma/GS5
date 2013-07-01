@@ -178,7 +178,7 @@ class TriggerController < ApplicationController
       if errors.count == 0
         # Indicate a new fax in the navigation bar.
         #
-        if @last_fax_document.fax_account.fax_accountable.class == User
+        if @last_fax_document && @last_fax_document.fax_account.fax_accountable.class == User
           user = @last_fax_document.fax_account.fax_accountable
           PrivatePub.publish_to("/users/#{user.id}/messages/new", "$('#new_voicemail_or_fax_indicator').hide('fast').show('slow');")
           PrivatePub.publish_to("/users/#{user.id}/messages/new", "document.title = '* ' + document.title.replace( '* ' , '');")
