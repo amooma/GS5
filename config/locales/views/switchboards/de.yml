@@ -16,6 +16,7 @@ de:
       blind_transfer_activated: 'Transfer'
       attended_transfer_activated: 'Transfer mit Rückfrage'
       search_activated: 'Suche'
+      reverse_lookup: 'Inverssuche'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Switchboard'
         destroy: 'Löschen'
@@ -30,10 +31,12 @@ de:
       reload_interval:: 'Reload Interval'
       show_avatars: 'Show avatars'
       entry_width: 'Entry width'
+
       amount_of_displayed_phone_numbers: 'Anzahl der angezeigten Telefonnummern'     
       blind_transfer_activated: 'Transfer'
       attended_transfer_activated: 'Transfer mit Rückfrage'
       search_activated: 'Suche'
+      reverse_lookup: 'Inverssuche'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass die dieses Element löschen möchten?'
         destroy: 'Löschen'
@@ -77,4 +80,6 @@ de:
       search_activated:
         label: 'Suche aktivieren'
         hint: ''
+      reverse_lookup: 'Inverssuche aktivieren'
+        hint: 'Bei der Eingabe eine Ziffernfolge wird nach einem Telefonbucheintrag gesucht.'
       submit: 'Absenden'

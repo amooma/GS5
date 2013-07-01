@@ -41,7 +41,7 @@ App.SwitchboardController = Ember.ObjectController.extend({
   searchResults: function() {
     var searchText = this.get('searchText');
     if (!searchText) { return; }
-    return App.PhoneBookEntry.find({ query: searchText });
+    return App.PhoneBookEntry.find({ query: searchText, switchboard_id: switchboard_id });
   }.property('searchText')
 });
 

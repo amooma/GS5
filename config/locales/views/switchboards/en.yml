@@ -16,6 +16,7 @@ en:
       blind_transfer_activated: 'Blind Transfer'
       attended_transfer_activated: 'Attended Transfer'
       search_activated: 'Search function'
+      reverse_lookup: 'Reverse lookup'
       actions:
         confirm_destroy: 'Are you sure you want to delete this Switchboard?'
         destroy: 'Delete'
@@ -34,6 +35,7 @@ en:
       blind_transfer_activated: 'Blind Transfer'
       attended_transfer_activated: 'Attended Transfer'
       search_activated: 'Search function'      
+      reverse_lookup: 'Reverse lookup'
       actions:
         confirm_destroy: 'Are you sure you want to delete this element?'
         destroy: 'Delete'
@@ -76,5 +78,7 @@ en:
         hint: 'Does not work with all phone models.'
       search_activated:
         label: 'Activate search function'
-        hint: ''        
+        hint: ''
+      reverse_lookup: 'Activate reverse lookup'
+        hint: 'Bei der Eingabe eine Ziffernfolge wird nach einem Telefonbucheintrag gesucht.'
       submit: 'Submit'

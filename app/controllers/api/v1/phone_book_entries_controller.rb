@@ -5,13 +5,14 @@ module Api
 
       def index
         query = params[:query]
+        switchboard = Switchboard.find(params[:switchboard_id])
         
         return nil if query.blank?
 
         current_ability = Ability.new(current_user)
         phone_book_entries = PhoneBookEntry.accessible_by(current_ability)
 
-        if query.match(/^\+?\d+$/) != nil
+        if query.match(/^\+?\d+$/) != nil && switchboard && switchboard.reverse_lookup_activated
           # Find by phone number
           phone_book_entries_ids = phone_book_entries.map{|entry| entry.id}
           found_phone_numbers = PhoneNumber.
