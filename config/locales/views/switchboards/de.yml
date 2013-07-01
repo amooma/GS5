@@ -80,6 +80,7 @@ de:
       search_activated:
         label: 'Suche aktivieren'
         hint: ''
-      reverse_lookup: 'Inverssuche aktivieren'
+      reverse_lookup: 
+        label: 'Inverssuche aktivieren'
         hint: 'Bei der Eingabe eine Ziffernfolge wird nach einem Telefonbucheintrag gesucht.'
       submit: 'Absenden'

@@ -79,6 +79,7 @@ en:
       search_activated:
         label: 'Activate search function'
         hint: ''
-      reverse_lookup: 'Activate reverse lookup'
+      reverse_lookup: 
+        label: 'Activate reverse lookup'
         hint: 'Bei der Eingabe eine Ziffernfolge wird nach einem Telefonbucheintrag gesucht.'
       submit: 'Submit'
