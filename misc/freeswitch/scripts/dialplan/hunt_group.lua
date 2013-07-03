@@ -165,7 +165,11 @@ function HuntGroup.run(self, dialplan_object, caller, destination)
           table.insert(recursive_destinations, forwarding_destination);
         end
         require 'dialplan.sip_call'
-        result = dialplan.sip_call.SipCall:new{ log = self.log, database = self.database, caller = caller }:fork( recursive_destinations, { callee_id_number = hunt_group_destination.number, timeout = member_timeout });
+        result = dialplan.sip_call.SipCall:new{ log = self.log, database = self.database, caller = caller }:fork( recursive_destinations, 
+          { callee_id_number = hunt_group_destination.number, 
+            timeout = member_timeout,
+            send_ringing = ( dialplan_object.send_ringing_to_gateways and caller.from_gateway ),
+          });
         if result.disposition == 'SUCCESS' then
           if result.fork_index then
             result.destination = recursive_destinations[result.fork_index];
