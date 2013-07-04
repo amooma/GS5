@@ -130,6 +130,7 @@ function Dialplan.auth_account(self)
     return true;
   elseif not common.str.blank(self.caller.previous_destination_type) and not common.str.blank(self.caller.previous_destination_uuid) then
     self.log:info('AUTH previous_destination - ', self.caller.previous_destination_type, '=', self.caller.previous_destination_id, '/', self.caller.previous_destination_uuid);
+    return true;
   end
 end
 
