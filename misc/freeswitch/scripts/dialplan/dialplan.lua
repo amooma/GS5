@@ -124,16 +124,18 @@ function Dialplan.auth_node(self)
 end
 
 
-function Dialplan.auth_sip_account(self)
+function Dialplan.auth_account(self)
   if not common.str.blank(self.caller.auth_account_type) then
-    self.log:info('AUTH_SIP_ACCOUNT - ', self.caller.auth_account_type, '=', self.caller.account_id, '/', self.caller.account_uuid);
+    self.log:info('AUTH auth_account - ', self.caller.auth_account_type, '=', self.caller.account_id, '/', self.caller.account_uuid);
     return true;
+  elseif not common.str.blank(self.caller.previous_destination_type) and not common.str.blank(self.caller.previous_destination_uuid) then
+    self.log:info('AUTH previous_destination - ', self.caller.previous_destination_type, '=', self.caller.previous_destination_id, '/', self.caller.previous_destination_uuid);
   end
 end
 
 
 function Dialplan.auth_gateway(self)
-  require 'common.gateway'
+  require 'common.gateway';
   local gateway_class = common.gateway.Gateway:new{ log = self.log, database = self.database};
 
   local gateway = false;
@@ -143,14 +145,14 @@ function Dialplan.auth_gateway(self)
       name = self.caller:to_s('gs_gateway_name'),
       id = self.caller:to_i('gs_gateway_id'),
     }
-    log:info('AUTH_GATEWAY - authenticaded by password and username: ', self.caller:to_s('username'), ', gateway=', gateway.id, '|', gateway.name, ', ip: ', self.caller.sip_contact_host);
+    log:info('AUTH gateway - authenticaded by password and username: ', self.caller:to_s('username'), ', gateway=', gateway.id, '|', gateway.name, ', ip: ', self.caller.sip_contact_host);
     return gateway_class:find_by_id(gateway.id);
   else
     gateway = gateway_class:authenticate(self.caller);
   end
 
   if gateway then
-    log:info('AUTH_GATEWAY - ', gateway.auth_source, ' ~ ', gateway.auth_pattern, ', gateway=', gateway.id, '|', gateway.name, ', ip: ', self.caller.sip_contact_host);
+    log:info('AUTH gateway - ', gateway.auth_source, ' ~ ', gateway.auth_pattern, ', gateway=', gateway.id, '|', gateway.name, ', ip: ', self.caller.sip_contact_host);
     return gateway_class:find_by_id(gateway.id);
   end
 end

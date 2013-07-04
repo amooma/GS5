@@ -74,7 +74,7 @@ if start_caller.from_node and not start_dialplan:auth_node() then
   log:debug('DIALPLAN_DEFAULT - node unauthorized - node_id: ', start_caller.node_id, ', domain: ', start_dialplan.domain);
   start_dialplan:hangup(401, start_dialplan.domain);
 else
-  if not start_dialplan:auth_sip_account() then
+  if not start_dialplan:auth_account() then
     local gateway = start_dialplan:auth_gateway()
 
     if gateway then
