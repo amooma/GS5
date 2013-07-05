@@ -7,11 +7,11 @@
   = f.input :call_forwarding_destination , :as => :select, :collection => @call_forwarding_destinations, :label => t('call_forwards.form.call_forwarding_destination.label'), :hint => conditional_hint('call_forwards.form.call_forwarding_destination.hint'), :include_blank => false
 
   %div{:id => 'destination_phone_number_div'}
-    = f.input :destination, :label => t('call_forwards.form.destination_phone_number.label'), :hint => conditional_hint('call_forwards.form.destination_phone_number.hint'), :input_html => { :id => 'destination_phone_number', :value => @destination_phone_number }
+    = f.input :destination_phone_number, :label => t('call_forwards.form.destination_phone_number.label'), :hint => conditional_hint('call_forwards.form.destination_phone_number.hint'), :input_html => { :id => 'destination_phone_number' }
 
   - if @available_greetings.any?
     %div{:id => 'destination_greeting_div'}
-      = f.input :destination, :as => :select, :collection => @available_greetings, :label => t('call_forwards.form.destination_greeting.label'), :hint => conditional_hint('call_forwards.form.destination_greeting.hint'), :input_html => { :id => 'destination_greeting' }
+      = f.input :destination_greeting, :as => :select, :collection => @available_greetings, :label => t('call_forwards.form.destination_greeting.label'), :hint => conditional_hint('call_forwards.form.destination_greeting.hint'), :input_html => { :id => 'destination_greeting' }
 
   = f.input :active, :label => t('call_forwards.form.active.label'), :hint => conditional_hint('call_forwards.form.active.hint')
 

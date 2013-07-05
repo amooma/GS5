@@ -29,8 +29,8 @@ class CallForwardsController < ApplicationController
     @call_forward.depth = GsParameter.get('DEFAULT_CALL_FORWARD_DEPTH')
     @call_forward.active = true
     @call_forwarding_destinations = call_forwarding_destination_types()
+    @call_forward.destinationable_type = 'PhoneNumber'
     @call_forward.destination = GsParameter.get('CALLFORWARD_DESTINATION_DEFAULT').to_s if defined?(GsParameter.get('CALLFORWARD_DESTINATION_DEFAULT'))
-    @destination_phone_number = @call_forward.destination
 
     @available_call_forward_cases = []
     CallForwardCase.all.each do |available_call_forward_case|
@@ -66,7 +66,6 @@ class CallForwardsController < ApplicationController
     @available_call_forward_cases = CallForwardCase.all
     @call_forwarding_destinations = call_forwarding_destination_types()
     @available_greetings = available_greetings()
-    @destination_phone_number = @call_forward.destination if @call_forward.call_forwarding_destination == ':PhoneNumber'
   end
 
   def update
