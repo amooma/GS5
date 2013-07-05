@@ -896,9 +896,10 @@ function Dialplan.run(self, destination)
   self.caller:set_variable('sound_prefix', common.array.try(self.config, 'sounds.' .. tostring(self.caller.language)));
   self.log:info('DIALPLAN start - caller_id: ',self.caller.caller_id_number, ' "', self.caller.caller_id_name, '" , number: ', destination.number, ', language: ', self.caller.language);
 
-
   self.caller.static_caller_id_number = self.caller.caller_id_number;
   self.caller.static_caller_id_name = self.caller.caller_id_name;
+  self.caller:set_variable('gs_caller_id_number', self.caller.caller_id_number);
+  self.caller:set_variable('gs_caller_id_name', self.caller.caller_id_name);
 
   local result = { continue = false };
   local loop = self.caller.loop_count;

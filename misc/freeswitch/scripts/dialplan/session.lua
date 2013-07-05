@@ -8,6 +8,8 @@ Session = {}
 
 -- create session object
 function Session.new(self, arg)
+  require 'common.str';
+
   arg = arg or {}
   object = arg.object or {}
   setmetatable(object, self);
@@ -29,8 +31,8 @@ function Session.init_channel_variables(self)
   self.destination_number   = self:expand_variables(self:to_s('destination_number'));
   self.called_number        = self.destination_number;
 
-  self.caller_id_number     = self:to_s('caller_id_number');
-  self.caller_id_name       = self:to_s('caller_id_name');
+  self.caller_id_number     = self.session:getVariable('gs_caller_id_number') or self:to_s('caller_id_number');
+  self.caller_id_name       = self.session:getVariable('gs_caller_id_name') or self:to_s('caller_id_name');
   self.caller_phone_number  = self.caller_id_number;
   self.caller_phone_numbers = {self.caller_id_number};
 
@@ -93,25 +95,21 @@ end
 
 -- Cast channel variable to string
 function Session.to_s(self, variable_name)
-  require 'common.str'
   return common.str.to_s(self.session:getVariable(variable_name));
 end
 
 -- Cast channel variable to integer
 function Session.to_i(self, variable_name)
-  require 'common.str'
   return common.str.to_i(self.session:getVariable(variable_name));
 end
 
 -- Cast channel variable to boolean
 function Session.to_b(self, variable_name)
-  require 'common.str'
   return common.str.to_b(self.session:getVariable(variable_name));
 end
 
 -- Split channel variable to table
 function Session.to_a(self, variable_name)
-  require 'common.str'
   return common.str.to_a(self.session:getVariable(variable_name));
 end
 
