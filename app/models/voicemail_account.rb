@@ -21,9 +21,9 @@ class VoicemailAccount < ActiveRecord::Base
 
   def notify_to
     send_notification = nil
-    if self.voicemail_settings.where(:name => 'notify', :value => true).first 
+    if self.voicemail_settings.where(:name => 'notify', :value => 'true').first 
       send_notification = true
-    elsif self.voicemail_settings.where(:name => 'notify', :value => false).first 
+    elsif self.voicemail_settings.where(:name => 'notify', :value => 'false').first 
       send_notification = false
     end
 
@@ -49,9 +49,9 @@ class VoicemailAccount < ActiveRecord::Base
 
   def notification_setting(name)
     setting = nil
-    if self.voicemail_settings.where(:name => name, :value => true).first 
+    if self.voicemail_settings.where(:name => name, :value => 'true').first 
       setting = true
-    elsif self.voicemail_settings.where(:name => name, :value => false).first 
+    elsif self.voicemail_settings.where(:name => name, :value => 'false').first 
       setting = false
     end
 
