@@ -90,25 +90,25 @@ class CallForward < ActiveRecord::Base
   end
 
   def destination_phone_number
-    if self.destinationable_type.downcase == 'phonenumber'
+    if self.destinationable_type.to_s.downcase == 'phonenumber'
       return self.destination
     end
   end
 
   def destination_phone_number=(destination_number)
-    if self.destinationable_type.downcase == 'phonenumber'
+    if self.destinationable_type.to_s.downcase == 'phonenumber'
       self.destination = destination_number
     end
   end
 
   def destination_greeting
-    if self.destinationable_type.downcase == 'voicemailaccount'
+    if self.destinationable_type.to_s.downcase == 'voicemailaccount'
       return self.destination
     end
   end
 
   def destination_greeting=(destination_file)
-    if self.destinationable_type.downcase == 'voicemailaccount'
+    if self.destinationable_type.to_s.downcase == 'voicemailaccount'
       self.destination = destination_file
     end
   end
