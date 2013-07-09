@@ -7,7 +7,8 @@ class CallForward < ActiveRecord::Base
                   :hunt_group_id,
                   :call_forwardable_type, :call_forwardable_id,
                   :call_forwarding_destination, :position, :uuid,
-                  :destinationable_type, :destinationable_id
+                  :destinationable_type, :destinationable_id, 
+                  :destination_phone_number, :destination_greeting 
   
   belongs_to :call_forwardable, :polymorphic => true
   belongs_to :destinationable, :polymorphic => true
@@ -86,6 +87,30 @@ class CallForward < ActiveRecord::Base
 
   def call_forwarding_destination=(destination_record)
     self.destinationable_id, delimeter, self.destinationable_type = destination_record.to_s.partition(':')
+  end
+
+  def destination_phone_number
+    if self.destinationable_type.to_s.downcase == 'phonenumber'
+      return self.destination
+    end
+  end
+
+  def destination_phone_number=(destination_number)
+    if self.destinationable_type.to_s.downcase == 'phonenumber'
+      self.destination = destination_number
+    end
+  end
+
+  def destination_greeting
+    if self.destinationable_type.to_s.downcase == 'voicemailaccount'
+      return self.destination
+    end
+  end
+
+  def destination_greeting=(destination_file)
+    if self.destinationable_type.to_s.downcase == 'voicemailaccount'
+      self.destination = destination_file
+    end
   end
 
   def toggle
