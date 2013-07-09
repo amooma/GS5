@@ -352,7 +352,7 @@ function Dialplan.dial(self, destination)
           self.log:debug('RINGTONE - phonebookentry=', self.caller.phone_book_entry.id, ', ringtone: ', self.caller.phone_book_entry.bellcore_id);
           self.caller:export_variable('alert_info', 'http://amooma.de;info=Ringer' .. self.caller.phone_book_entry.bellcore_id .. ';x-line-id=0');
         end
-        if self.caller.phone_book_entry.image then
+        if not common.str.blank(self.caller.phone_book_entry.image) then
           self:set_caller_picture(self.caller.phone_book_entry.id, 'phonebookentry', self.caller.phone_book_entry.image);
         elseif self.caller.account and self.caller.account.owner then
           self:set_caller_picture(self.caller.account.owner.id, self.caller.account.owner.class);
