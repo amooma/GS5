@@ -834,7 +834,7 @@ AAAA'
 
     phone_book_entries.each do |phone_book_entry|
       if phone_book_entry.phone_numbers.count > 1
-        @phone_xml_object[:entries] << { :text => phone_book_entry.to_s, :number => phone_book_entry.phone_numbers.first }
+        @phone_xml_object[:entries] << { :text => phone_book_entry.to_s, :number => phone_book_entry.phone_numbers.first.number.to_s }
       end
       phone_book_entry.phone_numbers.each do |phone_number|
         if phone_book_entry.phone_numbers.count > 1
