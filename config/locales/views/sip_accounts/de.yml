@@ -39,6 +39,7 @@ de:
       hotdeskable: 'Hot-Desk fähig'
       clip_no_screening: 'Spezifische Rufnummernanzeige (CLIP -no screening-)'
       callforward_rules_act_per_sip_account: 'Rufweiterleitungen gelten für das gesamte SIP-Account'
+      language_code: 'Sprache'
       registration: 'Registrierung'
       expires: 'Läuft ab'
       user_agent: 'User Agent'

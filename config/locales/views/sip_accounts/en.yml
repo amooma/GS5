@@ -39,6 +39,7 @@ en:
       hotdeskable: 'Hotdeskable'
       clip_no_screening: 'CLIP -no screening-'
       callforward_rules_act_per_sip_account: 'Callforwards work for the whole sip account'
+      language_code: 'Language'
       registration: 'Registration'
       expires: 'Expires'
       user_agent: 'User Agent'
