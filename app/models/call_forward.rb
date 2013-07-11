@@ -44,13 +44,6 @@ class CallForward < ActiveRecord::Base
   validates_presence_of :uuid
   validates_uniqueness_of :uuid
 
-  # Make sure the call forward's parent can't be changed:
-  before_validation { |cfwd|
-    if cfwd.id && (cfwd.call_forwardable_id != cfwd.call_forwardable_id_was || cfwd.call_forwardable_type != cfwd.call_forwardable_type_was)
-      errors.add( :call_forwardable_id, "cannot be changed." )
-    end
-  }
-
   before_validation :resolve_prerouting
 
   after_save :set_presence
