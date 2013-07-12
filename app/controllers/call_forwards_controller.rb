@@ -187,6 +187,18 @@ class CallForwardsController < ApplicationController
       end
     end
 
+    if @parent.class == HuntGroup && @parent.tenant
+      @parent.tenant.voicemail_accounts.each do |voicemail_account|
+        call_forwards_destination = CallForwardingDestination.new()
+        call_forwards_destination.id = "#{voicemail_account.id}:VoicemailAccount"
+        call_forwards_destination.label = "VoicemailAccount: #{voicemail_account.to_s}"
+        if !destinations_hash[call_forwards_destination.id]
+          destinations_hash[call_forwards_destination.id] = true
+          call_forwarding_destinations << call_forwards_destination
+        end
+      end
+    end
+
     if @parent.class == PhoneNumber
       if @parent.phone_numberable.class == SipAccount
         sip_account = @parent.phone_numberable
