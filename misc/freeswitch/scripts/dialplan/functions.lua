@@ -98,6 +98,10 @@ function Functions.dialplan_function(self, caller, dialed_number)
     result = self:call_forwarding_off(caller, 'busy');
   elseif fid == "cfbdel" then
     result = self:call_forwarding_off(caller, 'busy', true);
+  elseif fid == "cfun" then
+    result = self:call_forwarding_by_number(caller, parameters[3], false, 'always');
+  elseif fid == "cfunoff" then
+    result = self:call_forwarding_by_number(caller, parameters[3], true, 'always');
   elseif fid == "vmleave" then
     result = self:voicemail_message_leave(caller, parameters[3]);
   elseif fid == "vmcheck" then
@@ -737,6 +741,70 @@ function Functions.call_forwarding_toggle(self, caller, call_forwarding_service,
 
   caller:answer();
   caller:send_display('Call forwarding toggled');
+  caller:sleep(1000);
+  return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
+end
+
+
+function Functions.call_forwarding_by_number(self, caller, number, call_forwarding_off, call_forwarding_service, delete)
+  -- Find caller's SipAccount
+  local caller_sip_account = self:ensure_caller_sip_account(caller);
+  if not caller_sip_account then
+    return { continue = false, code = 403, phrase = 'Incompatible caller', no_cdr = true }
+  end
+
+  if common.str.blank(number) then
+    self.log:notice('FUNCTION_CALL_FORWARDING_BY_NUMBER - no phone number specified');
+    return { continue = false, code = 500, phrase = 'No number specified', no_cdr = true }
+  end
+
+  require 'common.phone_number';
+  local phone_number = common.phone_number.PhoneNumber:new{ log = self.log, database = self.database, domain = caller_sip_account.domain }:find_by_number(number);
+
+  if not phone_number then
+    self.log:notice('FUNCTION_CALL_FORWARDING_BY_NUMBER - no phone number found: ', number);
+    return { continue = false, code = 500, phrase = 'Number not found', no_cdr = true }
+  end
+
+  require 'common.object';
+  parent = common.object.Object:new{ log = self.log, database = self.database}:find{class = phone_number.record.phone_numberable_type, id = phone_number.record.phone_numberable_id};
+  parent.domain = parent.domain or self.domain;
+
+  if not parent then
+    self.log:notice('FUNCTION_CALL_FORWARDING_BY_NUMBER - no parent found: ', phone_number.record.phone_numberable_type, '=', phone_number.record.phone_numberable_id);
+    return { continue = false, code = 500, phrase = 'Parent not found', no_cdr = true }
+  end
+
+  self.log:info('FUNCTION_CALL_FORWARDING_BY_NUMBER - account: ', parent.class, '=', parent.id, '/', parent.uuid);
+
+  if parent.class == 'automaticcalldistributor' then
+    if not parent:agent_find_by_acd_and_destination(parent.id, caller_sip_account.class, caller_sip_account.id) then
+      self.log:notice('FUNCTION_CALL_FORWARDING_BY_NUMBER - caller not allowed to set call forwarding for: ', phone_number.record.phone_numberable_type, '=', phone_number.record.phone_numberable_id);
+      return { continue = false, code = 500, phrase = 'Permission denied', no_cdr = true }
+    end
+  else
+    self.log:notice('FUNCTION_CALL_FORWARDING_BY_NUMBER - parent type not forwardable by caller: ', phone_number.record.phone_numberable_type);
+    return { continue = false, code = 500, phrase = 'Permission denied', no_cdr = true }
+  end
+
+  if call_forwarding_off then
+    if not parent:call_forwarding_off(call_forwarding_service, nil, delete) then
+      self.log:notice('FUNCTION_CALL_FORWARDING_BY_NUMBER - call forwarding could not be deactivated');
+      return { continue = false, code = 500, phrase = 'Call Forwarding could not be deactivated', no_cdr = true }
+    end
+  else
+    if not parent:call_forwarding_on(call_forwarding_service, nil, delete) then
+      self.log:notice('FUNCTION_CALL_FORWARDING_BY_NUMBER - call forwarding could not be activated');
+      return { continue = false, code = 500, phrase = 'Call Forwarding could not be activated', no_cdr = true }
+    end
+  end
+
+  caller:answer();
+  if call_forwarding_off then
+    caller:send_display('Call forwarding off');
+  else
+    caller:send_display('Call forwarding on');
+  end
   caller:sleep(1000);
   return { continue = false, code = 200, phrase = 'OK', no_cdr = true }
 end
