@@ -482,3 +482,23 @@ function AutomaticCallDistributor.run(self, dialplan_object, caller, destination
 
   return result;
 end
+
+function AutomaticCallDistributor.call_forwarding_on(self, service, destination, destination_type, timeout, source)
+  
+  if not self.call_forwarding then
+    require 'common.call_forwarding';
+    self.call_forwarding = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database, parent = self, domain = self.domain };
+  end
+
+  return self.call_forwarding:call_forwarding_on(service, destination, destination_type, timeout, source)
+end
+
+
+function AutomaticCallDistributor.call_forwarding_off(self, service, source, delete)
+  if not self.call_forwarding then
+    require 'common.call_forwarding';
+    self.call_forwarding = common.call_forwarding.CallForwarding:new{ log = self.log, database = self.database, parent = self, domain = self.domain };
+  end
+
+  return self.call_forwarding:call_forwarding_off(service, source, delete)
+end
