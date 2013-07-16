@@ -189,10 +189,10 @@ function conf_conference(database)
   local config = common.configuration_table.get(database, 'conferences');
   local profiles = nil;
 
-  local event_name = params:getHeader("Event-Name")
+  local event_name = params:getHeader("Event-Name") or '';
   if event_name == 'COMMAND' then
-    local conf_name    = params:getHeader('conf_name');
-    local profile_name = params:getHeader('profile_name');
+    local conf_name    = params:getHeader('conf_name') or '';
+    local profile_name = params:getHeader('profile_name') or '';
 
     if conf_name:find('^conference%d+') then
       require 'common.conference';
