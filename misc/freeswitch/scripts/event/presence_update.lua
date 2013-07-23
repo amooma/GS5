@@ -134,6 +134,9 @@ function PresenceUpdate.presence_in(self, event)
     self.log:info('[', uuid,'] PRESENCE_CONFERENCE_', call_direction:upper(), ' ', common.str.to_i(account), ' - identifier: ', account, ', state: ', state);
     self:conference(direction, account, domain, state, uuid);
   elseif protocol == 'sip' or protocol == 'any' then
+    if common.str.blank(state) then
+      state = event:getHeader('answer-state');
+    end
     if protocol == 'sip' and common.str.blank(state) then
       self.log:debug('[', uuid,'] PRESENCE_', call_direction:upper(),' no state - protocol: ', protocol, ', account: ', account);
       return;
