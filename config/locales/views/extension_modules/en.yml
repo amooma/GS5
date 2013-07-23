@@ -1,0 +1,56 @@
+en:
+  extension_modules:
+    name: 'Extension module'
+    controller:
+      successfuly_created: 'Successfully created extension_module.'
+      successfuly_updated: 'Successfully updated extension_module.'
+      successfuly_destroyed: 'Successfully destroyed extension_module.'
+    index:
+      page_title: 'Extension modules'
+      model: 'Model'
+      mac_address: 'Mac address'
+      ip_address: 'IP address'
+      active: 'Active'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this extension_module?'
+        destroy: 'Delete'
+        edit: 'Edit'
+        show: 'View'
+        create: 'New'
+        create_for: 'New extension_module for %{resource}'
+    show:
+      page_title: 'Show extension_module'
+      model: 'Model'
+      mac_address: 'Mac address'
+      ip_address: 'IP address'
+      active: 'Active'
+      provisioning_key_active: 'Provisioning key active'
+      actions:
+        confirm_destroy: 'Are you sure you want to delete this extension_module?'
+        destroy: 'Delete extension_module'
+        edit: 'Edit extension_module'
+        view_all: 'View all extension_modules'
+    new:
+      page_title: 'New extension_module'
+    edit:
+      page_title: 'Editing Extension module'
+    form:
+      mac_address:
+        label: 'Mac address'
+        hint: ''
+      model:
+        label: 'Model'
+        hint: ''
+      ip_address:
+        label: 'IP address'
+        hint: ''
+      position:
+        label: 'Position'
+        hint: ''
+      active:
+        label: 'Active'
+        hint: ''
+      provisioning_key_active:
+        label: 'Provisioning key active'
+        hint: ''
+      submit: 'Submit'

@@ -1,0 +1,19 @@
+- content_for :title, t("extension_modules.show.page_title")
+
+%p
+  %strong= t('extension_modules.show.model') + ":"
+  = @extension_module.model
+%p
+  %strong= t('extension_modules.show.mac_address') + ":"
+  = @extension_module.mac_address
+%p
+  %strong= t('extension_modules.show.position') + ":"
+  = @extension_module.position
+%p
+  %strong= t('extension_modules.show.active') + ":"
+  = @extension_module.active
+%p
+  %strong= t('extension_modules.show.provisioning_key_active') + ":"
+  = @extension_module.provisioning_key_active
+
+= render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone, :child => @extension_module }

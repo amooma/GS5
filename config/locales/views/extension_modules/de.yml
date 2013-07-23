@@ -1,0 +1,56 @@
+de:
+  phones:
+    name: 'Erweiterungsmodul'
+    controller:
+      successfuly_created: 'Ein neues Erweiterungsmodul wurde in der Datenbank eingetragen.'
+      successfuly_updated: 'Die Daten zum Erweiterungsmodul wurden aktualisiert.'
+      successfuly_destroyed: 'Das Erweiterungsmodul wurde aus dem System entfernt.'
+    index:
+      page_title: 'Erweiterungsmodule'
+      mac_address: 'MAC-Adresse'
+      model: 'Modell'
+      ip_address: 'IP'
+      active: 'Aktiv'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie diese Erweiterungsmodul aus Gemeinschaft entfernen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Neues Erweiterungsmodul für %{resource} anlegen'
+    show:
+      page_title: 'Erweiterungsmodul'
+      mac_address: 'MAC-Adresse'
+      model: 'Modell'
+      hot_deskable: 'Hot-Desk fähig'
+      ip_address: 'IP-Adresse'
+      active: 'Aktiv'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie dieses Erweiterungsmodul aus Gemeinschaft entfernen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle Erweiterungsmodule anzeigen'
+    new:
+      page_title: 'Neues Erweiterungsmodul'
+    edit:
+      page_title: 'Erweiterungsmoduldaten bearbeiten'
+    form:
+      mac_address:
+        label: 'MAC-Adresse'
+        hint: ''
+      model:
+        label: 'Modell'
+        hint: ''
+      ip_address:
+        label: 'IP-Adresse'
+        hint: ''
+      position:
+        label: 'Position'
+        hint: ''
+      active:
+        label: 'Aktiv'
+        hint: ''
+      provisioning_key_active:
+        label: 'Provisioning Schlüssel aktiv'
+        hint: ''
+      submit: 'Absenden'

@@ -1,0 +1,6 @@
+.inputs
+  = f.input :model, :collection => ExtensionModule::MODELS, :label => t('extension_modules.form.model.label'), :hint => conditional_hint('extension_modules.form.model.hint'), :include_blank => false
+  = f.input :mac_address, :label => t('extension_modules.form.mac_address.label'), :hint => conditional_hint('extension_modules.form.mac_address.hint')
+  = f.input :position, :label => t('extension_modules.form.position.label'), :hint => conditional_hint('extension_modules.form.position.hint')
+  = f.input :active, :label => t('extension_modules.form.active.label'), :hint => conditional_hint('extension_modules.form.active.hint')
+  = f.input :provisioning_key_active, :label => t('extension_modules.form.provisioning_key_active.label'), :hint => conditional_hint('extension_modules.form.provisioning_key_active.hint')

@@ -1,0 +1,6 @@
+- content_for :title, t("extension_modules.index.page_title")
+
+- if @extension_modules && @extension_modules.count > 0
+  = render "index_core", :extension_modules => @extension_modules
+
+= render :partial => 'shared/create_link', :locals => {:parent => @phone, :child_class => ExtensionModule}

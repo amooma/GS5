@@ -1,0 +1,13 @@
+%table.table.table-striped
+  %tr
+    %th= t('extension_modules.index.model')
+    %th= t('extension_modules.index.mac_address')
+    %th= t('extension_modules.index.active')
+
+  
+  - for extension_module in extension_modules
+    %tr
+      %td= extension_module.model
+      %td= extension_module.mac_address
+      %td= extension_module.active
+      =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => @phone, :child => extension_module}
