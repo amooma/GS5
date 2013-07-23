@@ -1,0 +1,44 @@
+!!! XML
+%settings
+  %webserver
+    %auth_type{:perm => '$'}= @settings[:auth_type]
+    %user{:perm => '!'}= @settings[:user]
+    %passwd{:perm => '!'}= @settings[:passwd]   
+
+  %global
+    %periodic_provisioning{:perm => '$'}
+    %periodic_provisioning_interval{:perm => '$'}
+    %provisioning_server{:perm => '!'}= @settings[:provisioning_server]
+
+  %gui
+    %phone_ip{:perm => '!'}= @settings[:phone_ip]
+    %phone_scheme{:perm => '$'}https
+    %phone_user{:perm => '!'}= @settings[:user]
+    %phone_passwd{:perm => '!'}= @settings[:passwd] 
+
+    != "\<!-- active buttons: #{@buttons.count} --\>"
+    - index_left = 0
+    - index_right = 0
+    - for page in 1..3 do
+      != "\<!-- page: #{page} --\>"
+      - for key in 1..8 do
+        - index_left = index_left + 1
+        - button = @buttons.shift
+        - if !button
+          - button = {}
+          
+        %left_button_imageurl{:idx=> index_left, :perm=>"!"}= button[:imageurl]
+        %left_button_name{:idx=> index_left, :perm=>"!"}= button[:label]
+        %left_button_type{:idx=> index_left, :perm=>"!"}= button[:type]
+        %left_button_value{:idx=> index_left, :perm=>"!"}= button[:value]
+
+      - for key in 1..8 do
+        - index_right = index_right + 1
+        - button = @buttons.shift
+        - if !button
+          - button = {}
+
+        %right_button_imageurl{:idx=> index_right, :perm=>"!"}= button[:imageurl]
+        %right_button_name{:idx=> index_right, :perm=>"!"}= button[:label]
+        %right_button_type{:idx=> index_right, :perm=>"!"}= button[:type]
+        %right_button_value{:idx=> index_right, :perm=>"!"}= button[:value]

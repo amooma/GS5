@@ -1,6 +1,6 @@
 class ConfigSnomController < ApplicationController
-	MAX_SIP_ACCOUNTS_COUNT = 11
-	MAX_SOFTKEYS_COUNT = 12 + (42 * 3) - 1
+  MAX_SIP_ACCOUNTS_COUNT = 11
+  MAX_SOFTKEYS_COUNT = 12 + (42 * 3) - 1
   MAX_DIRECTORY_ENTRIES = 20
   KEY_REGEXP = {
     '0' => "[ -.,_0]+",
@@ -15,12 +15,112 @@ class ConfigSnomController < ApplicationController
     '9' => "[wxyz9]",
   }
 
-	skip_authorization_check
-	
-	before_filter { |controller|
+  SNOM_PHONE_DEFAULTS = {
+    'Snom 300' => {
+      :softkeys_physical => 6,
+      :softkeys_logical => 6,
+    },
+      'Snom 320' => {
+      :softkeys_physical => 12,
+      :softkeys_logical => 12,
+    },
+      'Snom 360' => {
+      :softkeys_physical => 12,
+      :softkeys_logical => 12,
+    },
+      'Snom 360' => {
+      :softkeys_physical => 12,
+      :softkeys_logical => 12,
+    },
+      'Snom 370' => {
+      :softkeys_physical => 12,
+      :softkeys_logical => 12,
+    },
+      'Snom 820' => {
+      :softkeys_physical => 4,
+      :softkeys_logical => 16,
+    },
+      'Snom 821' => {
+      :softkeys_physical => 4,
+      :softkeys_logical => 12,
+    },
+    'Snom 870' => {
+      :softkeys_physical => 0,
+      :softkeys_logical => 16,
+    },
+    'Snom vision' => {
+      :softkeys_physical => 16,
+      :softkeys_logical => 48,
+      :pages => 3,
+    },
+  }
+
+  skip_authorization_check
+
+  before_filter { |controller|
     @mac_address = params[:mac_address].to_s.upcase.gsub(/[^0-9A-F]/,'')
     @provisioning_authenticated = false
+    if !params[:phone].blank?
+      @phone = Phone.where({ :id => params[:phone].to_i }).first
+      if !params[:sip_account].blank?
+        @sip_account = @phone.sip_accounts.where({ :id => params[:sip_account].to_i }).first
+      end
+    end
+  }
 
+  def show
+    if @mac_address.blank?
+      render(
+        :status => 404,
+        :layout => false,
+        :content_type => 'text/plain',
+        :text => "<!-- Phone not found -->",
+      )
+      return
+    end
+
+    mac_address_to_model = {
+      '00041325' => 'Snom 300',
+      '00041328' => 'Snom 300',
+      '0004132D' => 'Snom 300',
+      '0004132F' => 'Snom 300',
+      '00041334' => 'Snom 300',
+      '00041350' => 'Snom 300',
+      '0004133B' => 'Snom 300',
+      '00041337' => 'Snom 300',
+      '00041324' => 'Snom 320',
+      '00041327' => 'Snom 320',
+      '0004132C' => 'Snom 320',
+      '00041331' => 'Snom 320',
+      '00041335' => 'Snom 320',
+      '00041338' => 'Snom 320',
+      '00041351' => 'Snom 320',
+      '00041323' => 'Snom 360',
+      '00041329' => 'Snom 360',
+      '0004132B' => 'Snom 360',
+      '00041339' => 'Snom 360',
+      '00041390' => 'Snom 360',
+      '00041326' => 'Snom 370',
+      '0004132E' => 'Snom 370',
+      '0004133A' => 'Snom 370',
+      '00041352' => 'Snom 370',
+      '00041340' => 'Snom 820',
+      '00041345' => 'Snom 821',
+      '00041348' => 'Snom 821',
+      '00041341' => 'Snom 870',
+      '00041332' => 'Snom meetingPoint',
+      '00041343' => 'Snom vision',
+    }
+
+    phone_model_str = mac_address_to_model[@mac_address[0, 8]]
+    if phone_model_str == 'Snom vision'
+      snom_vision
+    elsif !phone_model_str.blank?
+      snom_phone
+    end
+  end
+	
+  def snom_phone
     if !params[:provisioning_key].blank?
       @phone = Phone.where({ :provisioning_key => params[:provisioning_key] }).first
       if @phone
@@ -154,6 +254,7 @@ class ConfigSnomController < ApplicationController
         :content_type => 'text/plain',
         :text => "<!-- Phone not found -->",
       )
+      return
     end
 
     if ! params[:sip_account].blank?
@@ -178,10 +279,17 @@ class ConfigSnomController < ApplicationController
     if ! params[:keys].blank?
       @dialpad_keys = params[:keys].to_s.strip
     end
-	}
-	
-	
-	def show
+
+    if ! @phone
+      render(
+        :status => 404,
+        :layout => false,
+        :content_type => 'text/plain',
+        :text => "<!-- Phone not found -->",
+      )
+      return
+    end
+
     send_sensitve = @provisioning_authenticated || !@phone.provisioning_key_active
     @phone_settings = Hash.new()
 
@@ -230,15 +338,15 @@ class ConfigSnomController < ApplicationController
       end
     end
 
-		if ! request.env['HTTP_USER_AGENT'].index('snom')
-			Rails.logger.info "---> User-Agent indicates not a Snom phone (#{request.env['HTTP_USER_AGENT'].inspect})"
-		else
-			Rails.logger.info "---> Phone #{@mac_address.inspect}, IP address #{request_remote_ip.inspect}"
-			@phone.update_attributes({ :ip_address => request_remote_ip })
-		end
+    if ! request.env['HTTP_USER_AGENT'].index('snom')
+    	Rails.logger.info "---> User-Agent indicates not a Snom phone (#{request.env['HTTP_USER_AGENT'].inspect})"
+    else
+    	Rails.logger.info "---> Phone #{@mac_address.inspect}, IP address #{request_remote_ip.inspect}"
+    	@phone.update_attributes({ :ip_address => request_remote_ip })
+    end
 
     @softkeys = Array.new()
-		@sip_accounts = Array.new()
+    @sip_accounts = Array.new()
     phone_sip_accounts = Array.new()
 
     if send_sensitve
@@ -252,16 +360,16 @@ class ConfigSnomController < ApplicationController
       phone_sip_accounts.each do |sip_account|
         if (sip_account.sip_accountable_type == @phone.phoneable_type) and (sip_account.sip_accountable_id == @phone.phoneable_id)
 
-        	snom_sip_account = {
+          snom_sip_account = {
             :id         => sip_account.id,
             :active     => 'on',
-        		:pname      => sip_account.auth_name,
-        		:pass       => sip_account.password,
-        		:host       => sip_account.host,
-        		:outbound   => sip_account.host,
-        		:name       => sip_account.auth_name,
-        		:realname   => 'Call',
-        		:user_idle_text  => sip_account.caller_name,
+            :pname      => sip_account.auth_name,
+            :pass       => sip_account.password,
+            :host       => sip_account.host,
+            :outbound   => sip_account.host,
+            :name       => sip_account.auth_name,
+            :realname   => 'Call',
+            :user_idle_text  => sip_account.caller_name,
             :expiry     => expiry_seconds, 
           }
 
@@ -282,217 +390,11 @@ class ConfigSnomController < ApplicationController
           @sip_accounts.push(snom_sip_account)
           sip_account_index = @sip_accounts.length
           sip_account.softkeys.order(:position).each do |softkey|
-            if softkey.softkey_function
-              softkey_function = softkey.softkey_function.name
-            end
-            case softkey_function
-            when 'blf'
-              @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => "blf <sip:#{softkey.number}@#{sip_account.host}>|f-ia-"})
-            when 'speed_dial'
-              @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => "speed #{softkey.number}"})
-            when 'dtmf'
-              @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => "dtmf #{softkey.number}"})
-            when 'log_out'
-              @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => "speed f-lo"})
-            when 'log_in'
-              @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => "speed f-li-#{softkey.number}"})
-            when 'conference'
-              conference = softkey.softkeyable
-              if conference.class == Conference
-                @softkeys.push({
-                  :context => sip_account_index,
-                  :function => softkey.softkey_function.name,
-                  :label => softkey.label,
-                  :softkey => softkey,
-                  :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
-                  :subscription => {
-                    :to => "sip:conference#{conference.id}@#{sip_account.host}",
-                    :for => "sip:conference#{conference.id}@#{sip_account.host}",
-                  },
-                  :actions => [{
-                    :type => :dial, 
-                    :target => "f-ta-#{softkey.number}",
-                    :when => 'on press',
-                    :states => 'connected,holding',
-                  },{
-                    :type => :dial, 
-                    :target => softkey.number,
-                    :when => 'on press',
-                  }],
-                })
-              end
-            when 'parking_stall'
-              parking_stall = softkey.softkeyable
-              if parking_stall.class == ParkingStall
-                @softkeys.push({
-                  :context => sip_account_index,
-                  :function => softkey.softkey_function.name,
-                  :label => softkey.label,
-                  :softkey => softkey,
-                  :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
-                  :subscription => {
-                    :to => "sip:park+#{parking_stall.name}@#{sip_account.host}",
-                    :for => "sip:park+#{parking_stall.name}@#{sip_account.host}",
-                  },
-                  :actions => [{
-                    :type => :dial, 
-                    :target => "f-cpa-#{parking_stall.name}",
-                    :when => 'on press',
-                    :states => 'connected,holding',
-                  },{
-                    :type => :dial, 
-                    :target => "f-cpa-#{parking_stall.name}",
-                    :when => 'on press',
-                  }],
-                })
-              end
-            when 'call_forwarding'
-              if softkey.softkeyable.class == CallForward then
-                @softkeys.push({
-                  :context => sip_account_index,
-                  :function => softkey.softkey_function.name,
-                  :label => softkey.label,
-                  :softkey => softkey,
-                  :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
-                  :subscription => {
-                    :to => "sip:f-cftg-#{softkey.softkeyable_id}@#{sip_account.host}",
-                    :for => "sip:f-cftg-#{softkey.softkeyable_id}@#{sip_account.host}"
-                  },
-                  :actions => [{
-                    :type => :url, 
-                    :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/call_forwarding.xml?id=#{softkey.softkeyable_id}&function=toggle",
-                    :when => 'on press',
-                  }],
-                })
-              end
-            when 'call_forwarding_always'
-              phone_number = PhoneNumber.where(:number => softkey.number, :phone_numberable_type => 'SipAccount').first
-              if phone_number
-                account_param = (phone_number.phone_numberable_id != snom_sip_account[:id] ? "&account=#{phone_number.phone_numberable_id}" : '')
-              else
-                phone_number = sip_account.phone_numbers.first
-                account_param = ''
-              end
-
-              @softkeys.push({
-                :context => sip_account_index,
-                :function => softkey.softkey_function.name,
-                :label => softkey.label,
-                :softkey => softkey,
-                :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
-                :subscription => {
-                  :to => "f-cfutg-#{phone_number.id}@#{sip_account.host}",
-                  :for => "#{sip_account.auth_name}@#{sip_account.host}"
-                },
-                :actions => [{
-                  :type => :url, 
-                  :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/call_forwarding.xml?type=always&function=toggle#{account_param}",
-                  :when => 'on press',
-                }],
-              })
-            when 'call_forwarding_assistant'
-              phone_number = PhoneNumber.where(:number => softkey.number, :phone_numberable_type => 'SipAccount').first
-              if phone_number
-                account_param = (phone_number.phone_numberable_id != snom_sip_account[:id] ? "&account=#{phone_number.phone_numberable_id}" : '')
-              else
-                phone_number = sip_account.phone_numbers.first
-                account_param = ''
-              end
-
-              @softkeys.push({
-                :context => sip_account_index,
-                :function => softkey.softkey_function.name,
-                :label => softkey.label,
-                :softkey => softkey,
-                :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
-                :subscription => {
-                  :to => "f-cfatg-#{phone_number.id}@#{sip_account.host}",
-                  :for => "#{sip_account.auth_name}@#{sip_account.host}"
-                },
-                :actions => [{
-                  :type => :url, 
-                  :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/call_forwarding.xml?type=assistant&function=toggle#{account_param}",
-                  :when => 'on press',
-                }],
-              })
-            when 'hunt_group_membership'
-              phone_number = PhoneNumber.where(:number => softkey.number, :phone_numberable_type => 'HuntGroup').first
-              if phone_number
-                hunt_group = HuntGroup.where(:id => phone_number.phone_numberable_id).first
-              end
-
-              sip_account_phone_numbers = Array.new()
-              SipAccount.where(:id => @sip_accounts.first[:id]).first.phone_numbers.each do |phone_number|
-                sip_account_phone_numbers.push(phone_number.number)
-              end
-
-              hunt_group_member_numbers = PhoneNumber.where(:number => sip_account_phone_numbers, :phone_numberable_type => 'HuntGroupMember')
-
-              hunt_group_member = nil
-              if hunt_group and hunt_group_member_numbers
-                hunt_group_member_numbers.each do |hunt_group_member_number|
-                  hunt_group_member = hunt_group.hunt_group_members.where(:id => hunt_group_member_number.phone_numberable_id).first
-                  if hunt_group_member
-                    break
-                  end
-                end
-              end
-
-              if hunt_group_member 
-                @softkeys.push({
-                  :context => sip_account_index,
-                  :function => softkey.softkey_function.name,
-                  :label => softkey.label,
-                  :softkey => softkey,
-                  :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
-                  :subscription => {
-                    :to => "f-hgmtg-#{hunt_group_member.id}@#{sip_account.host}",
-                    :for => "#{sip_account.auth_name}@#{sip_account.host}"
-                  },
-                  :actions => [{
-                    :type => :url, 
-                    :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/hunt_group.xml?group=#{hunt_group.id}&account=#{hunt_group_member.id}&function=toggle",
-                    :when => 'on press',
-                  }],
-                })
-              else
-                @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => 'none'})
-              end
-            when 'acd_membership'
-              acd_agent = nil
-              phone_number = PhoneNumber.where(:number => softkey.number, :phone_numberable_type => 'AutomaticCallDistributor').first
-              if phone_number
-                acd = AutomaticCallDistributor.where(:id => phone_number.phone_numberable_id).first
-                if acd
-                  acd_agent = acd.acd_agents.where(:destination_type => 'SipAccount', :destination_id => sip_account.id).first
-                end
-              end
-
-              if acd_agent
-                @softkeys.push({
-                  :context => sip_account_index,
-                  :function => softkey.softkey_function.name,
-                  :label => softkey.label,
-                  :softkey => softkey,
-                  :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
-                  :subscription => {
-                    :to => "f-acdmtg-#{acd_agent.id}@#{sip_account.host}",
-                    :for => "#{sip_account.auth_name}@#{sip_account.host}"
-                  },
-                  :actions => [{
-                    :type => :url, 
-                    :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/acd.xml?acd=#{acd.id}&agent=#{acd_agent.id}&function=toggle",
-                    :when => 'on press',
-                  }],
-                })
-              else
-                @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => 'none'})
-              end
-            when 'hold'
-              @softkeys.push({:context => sip_account_index, :label => softkey.label, :data => "keyevent F_R"})
-            else
-              @softkeys.push({:label => softkey.label, :data => 'none'})
-            end
+            @softkeys.push(format_key(softkey, sip_account_index))
+          end
+          if @softkeys.any? && @phone.extension_modules.any?
+            phone_defaults = SNOM_PHONE_DEFAULTS[@phone.phone_model.name]
+            @softkeys = @softkeys.first(phone_defaults[:softkeys_physical])
           end
         end
       end
@@ -603,7 +505,7 @@ class ConfigSnomController < ApplicationController
     end
 
     @softkeys.length().upto(MAX_SOFTKEYS_COUNT) do |index|
-    	@softkeys.push({:label => "", :data => "none"})
+    	@softkeys.push({:label => "", :type => 'none', :value => ''})
 		end
 
     @state_settings_url = "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/state_settings.xml"
@@ -611,10 +513,116 @@ class ConfigSnomController < ApplicationController
 		respond_to { |format|
 			format.any {
 				self.formats = [ :xml ]
-				render
+				render :snom_phone
 			}
 		}
 	end
+
+  def snom_vision
+    if !params[:provisioning_key].blank?
+      @extension_module = ExtensionModule.where({ :provisioning_key => params[:provisioning_key] }).first
+      if @extension_module
+        @provisioning_authenticated = true
+        @mac_address = @extension_module.mac_address
+      end
+    elsif @mac_address
+       @extension_module = ExtensionModule.where({ :mac_address => @mac_address }).first
+    end
+
+
+    if !@extension_module
+      render(
+        :status => 404,
+        :layout => false,
+        :content_type => 'text/plain',
+        :text => "<!-- Extension module not found -->",
+      )
+      return
+    end
+
+    if ! request.env['HTTP_USER_AGENT'].index('snom')
+      Rails.logger.info "---> User-Agent indicates not a Snom Vision (#{request.env['HTTP_USER_AGENT'].inspect})"
+    else
+      Rails.logger.info "---> Extension module #{@mac_address.inspect}, IP address #{request_remote_ip.inspect}"
+      @extension_module.update_attributes({ :ip_address => request_remote_ip })
+    end
+
+    phone = @extension_module.phone
+
+    provisioning_protocol = request.protocol
+
+    @settings = {
+      :auth_type => 'basic',
+      :provisioning_server => "#{provisioning_protocol}#{request.host_with_port}/settings-#{@extension_module.mac_address}.xml",
+      :user => '',
+      :passwd => '',
+      :phone_ip => '',
+    }
+
+    @buttons = Array.new()
+    softkeys = Array.new()
+    send_sensitve = @provisioning_authenticated || !@extension_module.provisioning_key_active
+
+    if send_sensitve && phone
+      if @provisioning_authenticated && !@extension_module.provisioning_key_active
+        @extension_module.update_attributes({ :provisioning_key_active => true })
+      end
+
+      @settings[:user] = phone.http_user
+      @settings[:passwd] = phone.http_password
+      @settings[:phone_ip] = phone.ip_address
+
+      if !GsParameter.get('PROVISIONING_KEY_LENGTH').nil? && GsParameter.get('PROVISIONING_KEY_LENGTH') > 0 && !@extension_module.provisioning_key.blank?
+        @settings[:provisioning_server] = "#{provisioning_protocol}#{request.host_with_port}/snom_vision-#{@extension_module.provisioning_key}.xml"
+      end
+
+      phone.sip_accounts.each do |sip_account|
+        softkeys.concat(sip_account.softkeys.order(:position))
+      end
+
+      phone_defaults = SNOM_PHONE_DEFAULTS[phone.phone_model.name]
+      softkeys.shift(phone_defaults[:softkeys_physical] * @extension_module.position)
+
+    else
+      @buttons << {
+        :imageurl => '',
+        :label => 'No provisioning key!',
+        :type => 'none',
+        :value =>  '',
+      }
+    end
+
+    softkeys.each do |softkey|
+      image_url = nil
+      if softkey.softkeyable.class == SipAccount
+        if softkey.softkeyable.sip_accountable.class == User
+          user = softkey.softkeyable.sip_accountable          
+          if user.image?
+             image_url = "#{provisioning_protocol}#{request.host_with_port}#{user.image_url(:small)}"
+          end
+        end
+      elsif softkey.softkeyable.class == PhoneBookEntry
+        entry = softkey.softkeyable
+        if entry.image?
+          image_url = "#{provisioning_protocol}#{request.host_with_port}#{entry.image_url(:small)}"
+        end
+      end
+        
+      button = format_key(softkey)
+      if button 
+        button[:imageurl] = image_url
+      end
+      @buttons.push(button)
+    end
+
+    respond_to { |format|
+      format.any {
+        self.formats = [ :xml ]
+        render :snom_vision
+      }
+    }
+  end
+
 
   def idle_screen
 
@@ -1327,6 +1335,223 @@ AAAA'
       return date.strftime('%H:%M')
     end
     return date.strftime('%d.%m %H:%M')
+  end
+
+  def format_key(softkey, sip_account_index = nil)
+    if !softkey.softkey_function
+      return nil
+    end
+
+    sip_account = softkey.sip_account
+
+    case softkey.softkey_function.name
+    when 'blf'
+      return {:context => sip_account_index, :label => softkey.label, :type => 'blf', :value => "<sip:#{softkey.number}@#{sip_account.host}>|f-ia-"}
+    when 'speed_dial'
+      return {:context => sip_account_index, :label => softkey.label, :type => 'speed', :value => softkey.number.to_s}
+    when 'dtmf'
+      return {:context => sip_account_index, :label => softkey.label, :type => 'dtmf', :value => softkey.number.to_s}
+    when 'log_out'
+      return {:context => sip_account_index, :label => softkey.label, :type => 'speed', :value => 'f-lo'}
+    when 'log_in'
+      return {:context => sip_account_index, :label => softkey.label, :type => 'speed', :value => "f-li-#{softkey.number}"}
+    when 'conference'
+      conference = softkey.softkeyable
+      if conference.class == Conference
+        return {
+          :context => sip_account_index,
+          :function => softkey.softkey_function.name,
+          :label => softkey.label,
+          :softkey => softkey,
+          :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
+          :subscription => {
+            :to => "sip:conference#{conference.id}@#{sip_account.host}",
+            :for => "sip:conference#{conference.id}@#{sip_account.host}",
+          },
+          :actions => [{
+            :type => :dial, 
+            :target => "f-ta-#{softkey.number}",
+            :when => 'on press',
+            :states => 'connected,holding',
+          },{
+            :type => :dial, 
+            :target => softkey.number,
+            :when => 'on press',
+          }],
+        }
+      end
+    when 'parking_stall'
+      parking_stall = softkey.softkeyable
+      if parking_stall.class == ParkingStall
+        return {
+          :context => sip_account_index,
+          :function => softkey.softkey_function.name,
+          :label => softkey.label,
+          :softkey => softkey,
+          :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
+          :subscription => {
+            :to => "sip:park+#{parking_stall.name}@#{sip_account.host}",
+            :for => "sip:park+#{parking_stall.name}@#{sip_account.host}",
+          },
+          :actions => [{
+            :type => :dial, 
+            :target => "f-cpa-#{parking_stall.name}",
+            :when => 'on press',
+            :states => 'connected,holding',
+          },{
+            :type => :dial, 
+            :target => "f-cpa-#{parking_stall.name}",
+            :when => 'on press',
+          }],
+        }
+      end
+    when 'call_forwarding'
+      if softkey.softkeyable.class == CallForward then
+        return {
+          :context => sip_account_index,
+          :function => softkey.softkey_function.name,
+          :label => softkey.label,
+          :softkey => softkey,
+          :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
+          :subscription => {
+            :to => "sip:f-cftg-#{softkey.softkeyable_id}@#{sip_account.host}",
+            :for => "sip:f-cftg-#{softkey.softkeyable_id}@#{sip_account.host}"
+          },
+          :actions => [{
+            :type => :url, 
+            :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/call_forwarding.xml?id=#{softkey.softkeyable_id}&function=toggle",
+            :when => 'on press',
+          }],
+        }
+      end
+    when 'call_forwarding_always'
+      phone_number = PhoneNumber.where(:number => softkey.number, :phone_numberable_type => 'SipAccount').first
+      if phone_number
+        account_param = (phone_number.phone_numberable_id != snom_sip_account[:id] ? "&account=#{phone_number.phone_numberable_id}" : '')
+      else
+        phone_number = sip_account.phone_numbers.first
+        account_param = ''
+      end
+
+      return {
+        :context => sip_account_index,
+        :function => softkey.softkey_function.name,
+        :label => softkey.label,
+        :softkey => softkey,
+        :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
+        :subscription => {
+          :to => "f-cfutg-#{phone_number.id}@#{sip_account.host}",
+          :for => "#{sip_account.auth_name}@#{sip_account.host}"
+        },
+        :actions => [{
+          :type => :url, 
+          :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/call_forwarding.xml?type=always&function=toggle#{account_param}",
+          :when => 'on press',
+        }],
+      }
+    when 'call_forwarding_assistant'
+      phone_number = PhoneNumber.where(:number => softkey.number, :phone_numberable_type => 'SipAccount').first
+      if phone_number
+        account_param = (phone_number.phone_numberable_id != snom_sip_account[:id] ? "&account=#{phone_number.phone_numberable_id}" : '')
+      else
+        phone_number = sip_account.phone_numbers.first
+        account_param = ''
+      end
+
+      return {
+        :context => sip_account_index,
+        :function => softkey.softkey_function.name,
+        :label => softkey.label,
+        :softkey => softkey,
+        :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
+        :subscription => {
+          :to => "f-cfatg-#{phone_number.id}@#{sip_account.host}",
+          :for => "#{sip_account.auth_name}@#{sip_account.host}"
+        },
+        :actions => [{
+          :type => :url, 
+          :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/call_forwarding.xml?type=assistant&function=toggle#{account_param}",
+          :when => 'on press',
+        }],
+      }
+    when 'hunt_group_membership'
+      phone_number = PhoneNumber.where(:number => softkey.number, :phone_numberable_type => 'HuntGroup').first
+      if phone_number
+        hunt_group = HuntGroup.where(:id => phone_number.phone_numberable_id).first
+      end
+
+      sip_account_phone_numbers = Array.new()
+      SipAccount.where(:id => @sip_accounts.first[:id]).first.phone_numbers.each do |phone_number|
+        sip_account_phone_numbers.push(phone_number.number)
+      end
+
+      hunt_group_member_numbers = PhoneNumber.where(:number => sip_account_phone_numbers, :phone_numberable_type => 'HuntGroupMember')
+
+      hunt_group_member = nil
+      if hunt_group and hunt_group_member_numbers
+        hunt_group_member_numbers.each do |hunt_group_member_number|
+          hunt_group_member = hunt_group.hunt_group_members.where(:id => hunt_group_member_number.phone_numberable_id).first
+          if hunt_group_member
+            break
+          end
+        end
+      end
+
+      if hunt_group_member 
+        return {
+          :context => sip_account_index,
+          :function => softkey.softkey_function.name,
+          :label => softkey.label,
+          :softkey => softkey,
+          :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
+          :subscription => {
+            :to => "f-hgmtg-#{hunt_group_member.id}@#{sip_account.host}",
+            :for => "#{sip_account.auth_name}@#{sip_account.host}"
+          },
+          :actions => [{
+            :type => :url, 
+            :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/hunt_group.xml?group=#{hunt_group.id}&account=#{hunt_group_member.id}&function=toggle",
+            :when => 'on press',
+          }],
+        }
+      else
+        return {:context => sip_account_index, :label => softkey.label, :type => 'none', :value => ''}
+      end
+    when 'acd_membership'
+      acd_agent = nil
+      phone_number = PhoneNumber.where(:number => softkey.number, :phone_numberable_type => 'AutomaticCallDistributor').first
+      if phone_number
+        acd = AutomaticCallDistributor.where(:id => phone_number.phone_numberable_id).first
+        if acd
+          acd_agent = acd.acd_agents.where(:destination_type => 'SipAccount', :destination_id => sip_account.id).first
+        end
+      end
+
+      if acd_agent
+        return {
+          :context => sip_account_index,
+          :function => softkey.softkey_function.name,
+          :label => softkey.label,
+          :softkey => softkey,
+          :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
+          :subscription => {
+            :to => "f-acdmtg-#{acd_agent.id}@#{sip_account.host}",
+            :for => "#{sip_account.auth_name}@#{sip_account.host}"
+          },
+          :actions => [{
+            :type => :url, 
+            :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/acd.xml?acd=#{acd.id}&agent=#{acd_agent.id}&function=toggle",
+            :when => 'on press',
+          }],
+        }
+      else
+        return {:context => sip_account_index, :label => softkey.label, :type => 'none', :value => ''}
+      end
+    when 'hold'
+      return {:context => sip_account_index, :label => softkey.label, :type => 'keyevent', :value => 'F_R'}
+    else
+      return {:label => softkey.label, :type => 'none', :value => ''}
+    end
   end
 
 end
