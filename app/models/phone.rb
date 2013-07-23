@@ -13,6 +13,8 @@ class Phone < ActiveRecord::Base
 
   has_many :phone_sip_accounts, :dependent => :destroy, :uniq => true, :order => :position
   has_many :sip_accounts, :through => :phone_sip_accounts
+
+  has_many :extension_modules
   
   belongs_to :tenant
   belongs_to :fallback_sip_account, :class_name => "SipAccount"
@@ -195,8 +197,7 @@ class Phone < ActiveRecord::Base
     return true
   end
 
-  private
-  
+  private  
   # Sanitize MAC address.
   #
   def sanitize_mac_address
