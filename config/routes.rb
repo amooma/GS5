@@ -206,10 +206,21 @@ Gemeinschaft42c::Application.routes.draw do
   # Unified path for Snom phones.
   # Enter e.g. "http://192.168.1.105:3000/settings"
   # as the Setting URL (Advanced -> Update).
-  match 'snom-:provisioning_key' => 'config_snom#show',
+  match 'snom-:provisioning_key' => 'config_snom#snom_phone',
+    :via => [:get],
+    :format => 'xml'
+  match 'snom-:provisioning_key-:mac_address' => 'config_snom#snom_phone',
+    :constraints => { :mac_address => /000413[0-9A-F]{6}/i },
     :via => [:get],
     :format => 'xml'
   match 'settings-:mac_address' => 'config_snom#show',
+    :constraints => { :mac_address => /000413[0-9A-F]{6}/i },
+    :via => [:get],
+    :format => 'xml'
+  match 'snom_vision-:provisioning_key' => 'config_snom#snom_vision',
+    :via => [:get],
+    :format => 'xml'
+  match 'snom_vision-:provisioning_key-:mac_address' => 'config_snom#snom_vision',
     :constraints => { :mac_address => /000413[0-9A-F]{6}/i },
     :via => [:get],
     :format => 'xml'
@@ -327,6 +338,7 @@ Gemeinschaft42c::Application.routes.draw do
 
   resources :phones, :only => [] do
     resources :phone_sip_accounts
+    resources :extension_modules
   end
   
   # Display all phone book entries that the current user can access:
