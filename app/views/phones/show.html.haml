@@ -96,3 +96,12 @@
       = render "phone_sip_accounts/index_core", :phone_sip_accounts => @phone.phone_sip_accounts
 
     = render :partial => 'shared/create_link', :locals => {:parent => @phone, :child_class => PhoneSipAccount}
+
+.row
+  .span12
+    %h2= t("extension_modules.index.page_title")
+    - if @phone.extension_modules.any?
+      = render "extension_modules/index_core", :extension_modules => @phone.extension_modules
+
+    = render :partial => 'shared/create_link', :locals => {:parent => @phone, :child_class => ExtensionModule}
+
