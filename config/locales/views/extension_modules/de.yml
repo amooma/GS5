@@ -1,5 +1,5 @@
 de:
-  phones:
+  extension_modules:
     name: 'Erweiterungsmodul'
     controller:
       successfuly_created: 'Ein neues Erweiterungsmodul wurde in der Datenbank eingetragen.'
