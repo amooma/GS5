@@ -1419,7 +1419,7 @@ AAAA'
           },
           :actions => [{
             :type => :url, 
-            :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/call_forwarding.xml?id=#{softkey.softkeyable_id}&function=toggle",
+            :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{sip_account.id}/call_forwarding.xml?id=#{softkey.softkeyable_id}&function=toggle",
             :when => 'on press',
           }],
         }
@@ -1427,7 +1427,7 @@ AAAA'
     when 'call_forwarding_always'
       phone_number = PhoneNumber.where(:number => softkey.number, :phone_numberable_type => 'SipAccount').first
       if phone_number
-        account_param = (phone_number.phone_numberable_id != snom_sip_account[:id] ? "&account=#{phone_number.phone_numberable_id}" : '')
+        account_param = (phone_number.phone_numberable_id != sip_account.id ? "&account=#{phone_number.phone_numberable_id}" : '')
       else
         phone_number = sip_account.phone_numbers.first
         account_param = ''
@@ -1440,19 +1440,19 @@ AAAA'
         :softkey => softkey,
         :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
         :subscription => {
-          :to => "f-cfutg-#{phone_number.id}@#{sip_account.host}",
-          :for => "#{sip_account.auth_name}@#{sip_account.host}"
+          :to => "sip:f-cfutg-#{phone_number.id}@#{sip_account.host}",
+          :for => "sip:f-cfutg-#{phone_number.id}@#{sip_account.host}",
         },
         :actions => [{
           :type => :url, 
-          :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/call_forwarding.xml?type=always&function=toggle#{account_param}",
+          :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{sip_account.id}/call_forwarding.xml?type=always&function=toggle#{account_param}",
           :when => 'on press',
         }],
       }
     when 'call_forwarding_assistant'
       phone_number = PhoneNumber.where(:number => softkey.number, :phone_numberable_type => 'SipAccount').first
       if phone_number
-        account_param = (phone_number.phone_numberable_id != snom_sip_account[:id] ? "&account=#{phone_number.phone_numberable_id}" : '')
+        account_param = (phone_number.phone_numberable_id != sip_account.id ? "&account=#{phone_number.phone_numberable_id}" : '')
       else
         phone_number = sip_account.phone_numbers.first
         account_param = ''
@@ -1465,12 +1465,12 @@ AAAA'
         :softkey => softkey,
         :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
         :subscription => {
-          :to => "f-cfatg-#{phone_number.id}@#{sip_account.host}",
-          :for => "#{sip_account.auth_name}@#{sip_account.host}"
+          :to => "sip:f-cfatg-#{phone_number.id}@#{sip_account.host}",
+          :for => "sip:f-cfatg-#{phone_number.id}@#{sip_account.host}",
         },
         :actions => [{
           :type => :url, 
-          :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/call_forwarding.xml?type=assistant&function=toggle#{account_param}",
+          :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{sip_account.id}/call_forwarding.xml?type=assistant&function=toggle#{account_param}",
           :when => 'on press',
         }],
       }
@@ -1505,12 +1505,12 @@ AAAA'
           :softkey => softkey,
           :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
           :subscription => {
-            :to => "f-hgmtg-#{hunt_group_member.id}@#{sip_account.host}",
-            :for => "#{sip_account.auth_name}@#{sip_account.host}"
+            :to => "sip:f-hgmtg-#{hunt_group_member.id}@#{sip_account.host}",
+            :for => "sip:f-hgmtg-#{hunt_group_member.id}@#{sip_account.host}",
           },
           :actions => [{
             :type => :url, 
-            :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/hunt_group.xml?group=#{hunt_group.id}&account=#{hunt_group_member.id}&function=toggle",
+            :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{sip_account.id}/hunt_group.xml?group=#{hunt_group.id}&account=#{hunt_group_member.id}&function=toggle",
             :when => 'on press',
           }],
         }
@@ -1535,12 +1535,12 @@ AAAA'
           :softkey => softkey,
           :general_type => t("softkeys.functions.#{softkey.softkey_function.name}"),
           :subscription => {
-            :to => "f-acdmtg-#{acd_agent.id}@#{sip_account.host}",
-            :for => "#{sip_account.auth_name}@#{sip_account.host}"
+            :to => "sip:f-acdmtg-#{acd_agent.id}@#{sip_account.host}",
+            :for => "sip:f-acdmtg-#{acd_agent.id}@#{sip_account.host}",
           },
           :actions => [{
             :type => :url, 
-            :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{snom_sip_account[:id]}/acd.xml?acd=#{acd.id}&agent=#{acd_agent.id}&function=toggle",
+            :target => "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{sip_account.id}/acd.xml?acd=#{acd.id}&agent=#{acd_agent.id}&function=toggle",
             :when => 'on press',
           }],
         }
