@@ -114,15 +114,38 @@ function Phone.login(self, account_id, owner_id, owner_type)
 end
 
 function Phone.resync(self, arg)
-  if not self.model then
-    self.log:notice('PHONE_RESYNC phone model not found - trying Snom resync');
-    require 'phones.snom'
-    return phones.snom.Snom:new{ log = self.log }:resync(arg);
-  end
-
+  local result = nil;
   arg.ip_address = arg.ip_address or self.record.ip_address;
   arg.http_user = arg.http_user or self.record.http_user;
   arg.http_password = arg.http_password or self.record.http_password;
+  
+  if self.model then
+    result = self.model:resync(arg);
+  else
+    self.log:notice('PHONE_RESYNC phone model not found - trying Snom resync');
+    require 'phones.snom';
+    result = phones.snom.Snom:new{ log = self.log }:resync(arg);
+  end
 
-  return self.model:resync(arg);
+  self:resync_extension_modules(arg);
+
+  return result;
+end
+
+
+function Phone.resync_extension_modules(self, arg)
+  require('common.object');
+  local object_class = common.object.Object:new{ log = self.log };
+ 
+  local sql_query = 'SELECT * FROM `extension_modules` WHERE `active` IS TRUE AND `phone_id` = ' .. common.str.to_i(self.record.id);
+  self.database:query(sql_query, function(extension_module)
+    local extension_module_class, error_message = object_class:load_one('phones.' .. extension_module.model);
+    if not extension_module_class then
+      self.log:error('RESYNC_EXTENSION_MODULE - unsupported model: ', extension_module.model, ', error: ', error_message);
+    end
+
+    arg.ip_address = extension_module.ip_address;
+    local result = extension_module_class:new{log = self.log}:resync(arg);
+    self.log:debug('RESYNC_EXTENSION_MODULE - ', extension_module_class.class, '=', extension_module.id, ', mac_address: ', extension_module.mac_address, ', ip_address: ', extension_module.ip_address, ', executed: ', tostring(result));
+  end);
 end
