@@ -14,6 +14,7 @@ function SnomVision.new(self, arg)
   self.__index = self;
   self.log = arg.log;
   self.reboot = arg.reboot or true;
+  self.class = 'snomvision';
   return object;
 end
 
