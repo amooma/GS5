@@ -116,3 +116,16 @@ function Object.find(self, attributes)
 
   return object;
 end
+
+-- local class from module
+function Object.load_one(self, module_path)
+  result, module_data = pcall(require, module_path);
+  if not result or not module_data then
+    return nil, module_data;
+  end
+  for object_name in pairs(module_data) do
+    if tostring(object_name[1]) ~= '_' then
+      return module_data[object_name];
+    end
+  end
+end
