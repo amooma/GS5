@@ -12,8 +12,6 @@ class GroupMembership < ActiveRecord::Base
             :presence => true,
             :uniqueness => { :scope => [:group_id, :item_id] }
 
-  validate  :validate_item_type_consitency
-
   validates :item,
             :presence => true
 
@@ -25,13 +23,6 @@ class GroupMembership < ActiveRecord::Base
     fist_item = self.group.group_memberships.first.try(:item)
     if fist_item
       return fist_item.class.name
-    end
-  end
-
-  def validate_item_type_consitency
-    type_allowed = self.item_type_allowed
-    if type_allowed && type_allowed != self.item_type
-      errors.add(:item_type, "must be of type: #{type_allowed}")
     end
   end
 end
