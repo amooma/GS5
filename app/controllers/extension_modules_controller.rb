@@ -44,6 +44,14 @@ class ExtensionModulesController < ApplicationController
     redirect_to phone_extension_modules_url(@phone), :notice => t('extension_modules.controller.successfuly_destroyed')
   end
 
+  def restart
+    if @extension_module.resync
+      redirect_to phone_extension_module_path(@phone, @extension_module), :notice  => t('extension_modules.controller.restart_invoked')
+    else
+      redirect_to phone_extension_module_path(@phone, @extension_module), :error  => t('extension_modules.controller.restart_failed')
+    end
+  end
+
   private
   def spread_breadcrumbs
     if @phone.phoneable.class == User
