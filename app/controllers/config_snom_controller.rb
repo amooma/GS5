@@ -547,7 +547,7 @@ class ConfigSnomController < ApplicationController
       @extension_module.update_attributes({ :ip_address => request_remote_ip })
     end
 
-    phone = @extension_module.phone
+    @phone = @extension_module.phone
 
     provisioning_protocol = request.protocol
 
@@ -563,24 +563,24 @@ class ConfigSnomController < ApplicationController
     softkeys = Array.new()
     send_sensitve = @provisioning_authenticated || !@extension_module.provisioning_key_active
 
-    if send_sensitve && phone
+    if send_sensitve && @phone
       if @provisioning_authenticated && !@extension_module.provisioning_key_active
         @extension_module.update_attributes({ :provisioning_key_active => true })
       end
 
-      @settings[:user] = phone.http_user
-      @settings[:passwd] = phone.http_password
-      @settings[:phone_ip] = phone.ip_address
+      @settings[:user] = @phone.http_user
+      @settings[:passwd] = @phone.http_password
+      @settings[:phone_ip] = @phone.ip_address
 
       if !GsParameter.get('PROVISIONING_KEY_LENGTH').nil? && GsParameter.get('PROVISIONING_KEY_LENGTH') > 0 && !@extension_module.provisioning_key.blank?
         @settings[:provisioning_server] = "#{provisioning_protocol}#{request.host_with_port}/snom_vision-#{@extension_module.provisioning_key}.xml"
       end
 
-      phone.sip_accounts.each do |sip_account|
+      @phone.sip_accounts.each do |sip_account|
         softkeys.concat(sip_account.softkeys.order(:position))
       end
 
-      phone_defaults = SNOM_PHONE_DEFAULTS[phone.phone_model.name]
+      phone_defaults = SNOM_PHONE_DEFAULTS[@phone.phone_model.name]
       softkeys.shift(phone_defaults[:softkeys_physical] * @extension_module.position)
 
     else
