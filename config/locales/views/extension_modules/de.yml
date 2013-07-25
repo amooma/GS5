@@ -5,6 +5,8 @@ de:
       successfuly_created: 'Ein neues Erweiterungsmodul wurde in der Datenbank eingetragen.'
       successfuly_updated: 'Die Daten zum Erweiterungsmodul wurden aktualisiert.'
       successfuly_destroyed: 'Das Erweiterungsmodul wurde aus dem System entfernt.'
+      restart_invoked: 'Neustart ausgeführt'
+      restart_failed: 'Neustart fehlgeschlagen'
     index:
       page_title: 'Erweiterungsmodule'
       mac_address: 'MAC-Adresse'
@@ -30,6 +32,7 @@ de:
         destroy: 'Löschen'
         edit: 'Bearbeiten'
         view_all: 'Alle Erweiterungsmodule anzeigen'
+        restart: 'Neu starten'
     new:
       page_title: 'Neues Erweiterungsmodul'
     edit:

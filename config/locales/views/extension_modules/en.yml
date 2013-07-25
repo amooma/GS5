@@ -5,6 +5,8 @@ en:
       successfuly_created: 'Successfully created extension_module.'
       successfuly_updated: 'Successfully updated extension_module.'
       successfuly_destroyed: 'Successfully destroyed extension_module.'
+      restart_invoked: 'Restart invoked'
+      restart_failed: 'Restart failed'
     index:
       page_title: 'Extension modules'
       model: 'Model'
@@ -30,6 +32,7 @@ en:
         destroy: 'Delete extension_module'
         edit: 'Edit extension_module'
         view_all: 'View all extension_modules'
+        restart: 'Restart'
     new:
       page_title: 'New extension_module'
     edit:
