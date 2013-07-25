@@ -16,4 +16,7 @@
   %strong= t('extension_modules.show.provisioning_key_active') + ":"
   = @extension_module.provisioning_key_active
 
+%p
+  = link_to raw("<i class = 'icon-repeat'></i> ") + t('extension_modules.show.actions.restart'), restart_phone_extension_module_path(@phone, @extension_module), :method => :put, :class => 'btn btn-mini'
+
 = render :partial => 'shared/show_edit_destroy_part', :locals => { :parent => @phone, :child => @extension_module }
