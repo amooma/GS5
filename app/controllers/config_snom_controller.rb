@@ -66,6 +66,9 @@ class ConfigSnomController < ApplicationController
         @sip_account = @phone.sip_accounts.where({ :id => params[:sip_account].to_i }).first
       end
     end
+
+    @type = params[:type].blank? ? nil : params[:type].to_s.strip.downcase
+    @dialpad_keys = params[:keys].blank? ? nil : params[:keys].to_s.strip
   }
 
   def show
@@ -270,14 +273,6 @@ class ConfigSnomController < ApplicationController
           :text => "<!-- SipAccount ID:#{params[:sip_account].to_i} not found -->",
         )
       end
-    end
-
-    if ! params[:type].blank?
-      @type = params[:type].to_s.strip.downcase
-    end
-
-    if ! params[:keys].blank?
-      @dialpad_keys = params[:keys].to_s.strip
     end
 
     if ! @phone
