@@ -338,7 +338,11 @@ Gemeinschaft42c::Application.routes.draw do
 
   resources :phones, :only => [] do
     resources :phone_sip_accounts
-    resources :extension_modules
+    resources :extension_modules do
+      member do
+        put 'restart'
+      end
+    end
   end
   
   # Display all phone book entries that the current user can access:
