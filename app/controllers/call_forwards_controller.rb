@@ -117,7 +117,7 @@ class CallForwardsController < ApplicationController
             add_breadcrumb @parent, sip_account_phone_number_path(@sip_account, @parent)
           elsif @parent.class == SipAccount
             add_breadcrumb t("users.index.page_title"), tenant_users_path(@user.current_tenant)
-            add_breadcrumb @user, tenant_users_path(@user.current_tenant, @user)
+            add_breadcrumb @user, tenant_user_path(@user.current_tenant, @user)
             add_breadcrumb t("sip_accounts.index.page_title"), user_sip_accounts_path(@user)
           end
         end
