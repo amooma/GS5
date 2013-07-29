@@ -52,8 +52,8 @@ function Callthrough.authenticate(self, caller)
   end
 
   self.log:debug('CALLTHROUGH_AUTHENTICATE - access_authorizations: ', #self.access_authorizations);
-  for index, authorization in ipairs(self.access_authorizations) do 
-    if authorization.phone_number then
+  for index, authorization in ipairs(self.access_authorizations) do
+    if not common.str.blank(authorization.phone_number) then
       if authorization.phone_number == caller.caller_phone_number then
         if authorization.pin and authorization.pin ~= "" then
           if caller.session:read(authorization.pin:len(), authorization.pin:len(), "ivr/ivr-please_enter_pin_followed_by_pound.wav", 3000, "#") ~= authorization.pin then
