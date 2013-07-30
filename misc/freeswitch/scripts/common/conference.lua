@@ -52,8 +52,7 @@ function Conference.settings_get(self)
 end
 
 
-function Conference.find_by_id(self, id)
-  local sql_query = 'SELECT *, (NOW() >= `start` AND NOW() <= `end`) AS `open_now` FROM `conferences` WHERE `id`= ' .. tonumber(id) .. '  LIMIT 1';
+function Conference.find_sql(self, sql_query)
   local conference = nil;
 
   self.database:query(sql_query, function(conference_entry)
@@ -79,6 +78,16 @@ function Conference.find_by_id(self, id)
   end)
   
   return conference; 
+end
+
+
+function Conference.find_by_id(self, id)
+  return self:find_sql('SELECT *, (NOW() >= `start` AND NOW() <= `end`) AS `open_now` FROM `conferences` WHERE `id`= ' .. tonumber(id) .. '  LIMIT 1');
+end
+
+
+function Conference.find_by_uuid(self, uuid)
+  return self:find_sql('SELECT *, (NOW() >= `start` AND NOW() <= `end`) AS `open_now` FROM `conferences` WHERE `uuid`= ' .. self.database:escape(uuid, '"') .. '  LIMIT 1');
 end
 
 
