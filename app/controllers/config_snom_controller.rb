@@ -441,23 +441,22 @@ class ConfigSnomController < ApplicationController
       '41' => 'SWI', # Switzerland
     }
 
+    set_language
+
     if @phone.phoneable
       if @phone.phoneable_type == 'Tenant'
         tenant = @phone.phoneable
-        language = tenant.language.code
       elsif @phone.phoneable_type == 'User'
         tenant = @phone.phoneable.current_tenant
-        language = @phone.phoneable.language.code
       end
     end
 
     if tenant && tenant.country
       tone_scheme = tenant.country.country_code
+      @phone_settings[:tone_scheme] = tone_schemes_map.include?(tone_scheme.to_s) ? tone_schemes_map[tone_scheme.to_s] : 'USA'
     end
+    @phone_settings[:language] = languages_map.include?(I18n.locale.to_s) ? languages_map[I18n.locale.to_s] : 'English'
 
-    @phone_settings[:tone_scheme] = tone_schemes_map.include?(tone_scheme.to_s) ? tone_schemes_map[tone_scheme.to_s] : 'USA'
-    @phone_settings[:language] = languages_map.include?(language.to_s) ? languages_map[language.to_s] : 'English'
-    
     xml_applications_url = "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/#{(@sip_accounts.blank? ? '0' : @sip_accounts.first[:id])}"
     @dkeys = {
       :menu => 'keyevent F_SETTINGS',
@@ -505,13 +504,19 @@ class ConfigSnomController < ApplicationController
 
     @state_settings_url = "#{request.protocol}#{request.host_with_port}/config_snom/#{@phone.id}/state_settings.xml"
 
-		respond_to { |format|
-			format.any {
-				self.formats = [ :xml ]
-				render :snom_phone
-			}
-		}
-	end
+    extension_module = @phone.extension_modules.where(:active => true, :model => 'snom_vision').first
+    if extension_module
+      @phone_settings[:vision_mac_address] = extension_module.mac_address
+      @phone_settings[:vision_provisioning_url] = "#{provisioning_protocol}#{request.host_with_port}/settings-#{extension_module.mac_address}.xml"
+    end
+
+    respond_to { |format|
+    	format.any {
+    		self.formats = [ :xml ]
+    		render :snom_phone
+    	}
+    }
+  end
 
   def snom_vision
     if !params[:provisioning_key].blank?
@@ -543,6 +548,8 @@ class ConfigSnomController < ApplicationController
     end
 
     @phone = @extension_module.phone
+
+    set_language
 
     provisioning_protocol = request.protocol
 
@@ -672,7 +679,7 @@ AAAA'
   end
 
   def log_in
-
+    set_language
     base_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath.split("?")[0]}"
     exit_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath.rpartition("/")[0]}/exit.xml"
 
@@ -761,6 +768,8 @@ AAAA'
       return
     end
 
+    set_language
+
     exit_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath.rpartition("/")[0]}/exit.xml"
 
     if @phone.user_logout()     
@@ -802,6 +811,8 @@ AAAA'
       )
       return
     end
+
+    set_language
 
     @phone_xml_object = { 
       :name => 'snom_phone_directory',
@@ -878,6 +889,8 @@ AAAA'
       return
     end
 
+    set_language
+
     if ['dialed', 'missed', 'received', 'forwarded'].include? @type
       @phone_xml_object = { 
         :name => "snom_phone_directory",
@@ -950,6 +963,7 @@ AAAA'
       return
     end
 
+    set_language
     account = @sip_account.voicemail_account
 
     if ['read', 'unread'].include? @type
@@ -1016,6 +1030,8 @@ AAAA'
       end
     end
 
+    set_language
+
     respond_to { |format|
       format.any {
         self.formats = [ :xml ]
@@ -1056,6 +1072,7 @@ AAAA'
       return
     end
 
+    set_language
     exit_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath.rpartition("/")[0]}/exit.xml"
 
     if @function == 'toggle'
@@ -1171,6 +1188,7 @@ AAAA'
       return
     end
 
+    set_language
     exit_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath.rpartition("/")[0]}/exit.xml"
 
     if @function == 'toggle'
@@ -1268,6 +1286,7 @@ AAAA'
       return
     end
 
+    set_language
     exit_url = "#{request.protocol}#{request.host_with_port}#{request.fullpath.rpartition("/")[0]}/exit.xml"
 
     if @function == 'toggle'
@@ -1546,6 +1565,25 @@ AAAA'
       return {:context => sip_account_index, :label => softkey.label, :type => 'keyevent', :value => 'F_R'}
     else
       return {:label => softkey.label, :type => 'none', :value => ''}
+    end
+  end
+
+  private
+  def set_language
+    if @sip_account && !@sip_account.language_code.blank?
+      I18n.locale = @sip_account.language_code
+    elsif @phone
+      sip_account = @phone.sip_accounts.first
+      if sip_account && !sip_account.language_code.blank?
+        I18n.locale = sip_account.language_code
+        @locale = sip_account.language_code
+      elsif @phone.phoneable
+        if @phone.phoneable_type == 'Tenant'
+          I18n.locale = tenant.language.code
+        elsif @phone.phoneable_type == 'User'
+          I18n.locale = @phone.phoneable.language.code
+        end
+      end
     end
   end
 
