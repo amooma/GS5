@@ -969,6 +969,14 @@ function Dialplan.run(self, destination)
           destination,
           result
         );
+        local forwarding_path = self.caller:to_s('gs_forwarding_path');
+        if forwarding_path ~= '' then
+          forwarding_path = forwarding_path .. ',';
+        end
+
+        forwarding_path = forwarding_path .. auth_account.class:sub(1,1) .. ':' .. auth_account.id;
+        self.caller:set_variable('gs_forwarding_path', forwarding_path);
+        self.log:debug('FORWARDING_PATH: ', forwarding_path);
       end
     end
 
