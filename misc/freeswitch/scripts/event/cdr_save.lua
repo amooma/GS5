@@ -81,6 +81,7 @@ function CdrSave.channel_destroy(self, event)
   cdr.forwarding_service = common.str.to_sql(event:getHeader('variable_gs_forwarding_service'));
   cdr.forwarding_account_id = common.str.to_sql(event:getHeader('variable_gs_auth_account_id'));
   cdr.forwarding_account_type = common.str.to_sql(camelize_type(event:getHeader('variable_gs_auth_account_type')));
+  cdr.forwarding_path = common.str.to_sql(event:getHeader('variable_gs_forwarding_path'));
   cdr.account_id = common.str.to_sql(event:getHeader('variable_gs_account_id'));
   cdr.account_type = common.str.to_sql(camelize_type(event:getHeader('variable_gs_account_type')));
   cdr.bleg_account_id = common.str.to_sql(event:getHeader('variable_gs_destination_id'));
