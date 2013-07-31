@@ -909,11 +909,24 @@ AAAA'
       calls.each do |call|
         display_name = call.display_name
         phone_number = call.display_number
+        
+        if phone_number.blank?
+          next
+        end
+
         phone_book_entry = call.phone_book_entry_by_number(phone_number)
         if display_name.blank?
           display_name = phone_book_entry.to_s
         end
 
+        if @sip_account.clir != call.clir
+          if call.clir == true
+            phone_number = 'f-dcliron-' + phone_number
+          elsif call.clir == false
+            phone_number = 'f-dcliroff-' + phone_number
+          end
+        end
+          
         @phone_xml_object[:entries].push({
             :selected => false, 
             :number => phone_number,
