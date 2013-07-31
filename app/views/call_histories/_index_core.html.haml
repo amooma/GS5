@@ -65,7 +65,10 @@
                   - else
                     = call_history.destination_number                    
                 - elsif call_history.entry_type == 'dialed'
-                  = call_history.caller_id_number
+                  - if call_history.clir
+                    %del= call_history.caller_id_number
+                  - else
+                    = call_history.caller_id_number
                 - else
                   = call_history.destination_number
               
