@@ -76,6 +76,7 @@ function CallHistory.insert_event(self, uuid, account_type, account_id, entry_ty
   call_history.callee_account_id = common.str.to_sql(event:getHeader('variable_gs_destination_id'));
   call_history.destination_number = common.str.to_sql(event:getHeader('variable_gs_destination_number'));
   call_history.forwarding_service = common.str.to_sql(event:getHeader('variable_gs_forwarding_service'));
+  call_history.clir = common.str.to_sql(common.str.to_b(event:getHeader('variable_gs_clir')));
 
   if not common.str.to_b(event:getHeader('variable_gs_clir')) then
     call_history.caller_account_type = common.str.to_sql(camelize_type(event:getHeader('variable_gs_caller_account_type') or event:getHeader('variable_gs_account_type')));
