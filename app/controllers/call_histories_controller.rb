@@ -71,8 +71,17 @@ class CallHistoriesController < ApplicationController
     @call_history = CallHistory.where(:id => params[:id]).first
     if can?(:call, @call_history) && @sip_account.registration
       phone_number = @call_history.display_number
-      if ! phone_number.blank? 
-        @sip_account.call(phone_number)
+      caller_id_number = phone_number
+      if ! phone_number.blank?
+        if @sip_account.clir != @call_history.clir
+          if @call_history.clir == true
+            phone_number = 'f-dcliron-' + phone_number
+          elsif call.clir == false
+            phone_number = 'f-dcliroff-' + phone_number
+          end
+        end
+
+        @sip_account.call(phone_number, caller_id_number, @call_history.display_name)
       end
     end
     redirect_to(:back)
