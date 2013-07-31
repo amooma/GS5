@@ -115,10 +115,13 @@ end
 
 function Phone.resync(self, arg)
   local result = nil;
-  arg.ip_address = arg.ip_address or self.record.ip_address;
-  arg.http_user = arg.http_user or self.record.http_user;
-  arg.http_password = arg.http_password or self.record.http_password;
-  
+
+  if self.record then
+    arg.ip_address = arg.ip_address or self.record.ip_address;
+    arg.http_user = arg.http_user or self.record.http_user;
+    arg.http_password = arg.http_password or self.record.http_password;
+  end
+
   if self.model then
     result = self.model:resync(arg);
   else
@@ -127,7 +130,9 @@ function Phone.resync(self, arg)
     result = phones.snom.Snom:new{ log = self.log }:resync(arg);
   end
 
-  self:resync_extension_modules(arg);
+  if self.record and self.record.id then
+    self:resync_extension_modules(arg);
+  end
 
   return result;
 end
