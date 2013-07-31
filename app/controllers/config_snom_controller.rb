@@ -1577,12 +1577,8 @@ AAAA'
       if sip_account && !sip_account.language_code.blank?
         I18n.locale = sip_account.language_code
         @locale = sip_account.language_code
-      elsif @phone.phoneable
-        if @phone.phoneable_type == 'Tenant'
-          I18n.locale = tenant.language.code
-        elsif @phone.phoneable_type == 'User'
-          I18n.locale = @phone.phoneable.language.code
-        end
+      elsif @phone.phoneable && @phone.phoneable.respond_to?('language') && @phone.phoneable.language
+        I18n.locale = @phone.phoneable.language.code
       end
     end
   end
