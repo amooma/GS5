@@ -6,4 +6,6 @@ You've just received a voicemail on your Gemeinschaft account <%= @voicemail[:de
             To: <%= @voicemail[:to] %>
 Receiving Time: <%= @voicemail[:date] %>
 Message length: <%= @voicemail[:duration] %>
+<% if !@voicemail[:file_name].blank? %>
           File: <%= @voicemail[:file_name] %>
+<% end %>
