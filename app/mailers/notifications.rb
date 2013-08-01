@@ -55,7 +55,8 @@ class Notifications < ActionMailer::Base
       if caller_number.blank?
         caller_number = 'anonymous'
       end
-      attachments["#{Time.at(freeswitch_voicemail_msg.created_epoch).getlocal.strftime('%Y%m%d-%H%M%S')}-#{caller_number}.wav"] = File.read(freeswitch_voicemail_msg.file_path)
+      @voicemail[:file_name] = "#{Time.at(freeswitch_voicemail_msg.created_epoch).getlocal.strftime('%Y%m%d-%H%M%S')}-#{caller_number}.wav"
+      attachments[@voicemail[:file_name]] = File.read(freeswitch_voicemail_msg.file_path)
     end
 
     mail(from: Tenant.find(GsParameter.get('DEFAULT_API_TENANT_ID')).from_field_voicemail_email, to: email, :subject => "New Voicemail from #{@voicemail[:from]}, received #{Time.at(freeswitch_voicemail_msg.created_epoch).getlocal.to_s}")
