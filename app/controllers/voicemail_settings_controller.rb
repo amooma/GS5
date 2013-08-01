@@ -42,6 +42,9 @@ class VoicemailSettingsController < ApplicationController
     @voicemail_setting = @voicemail_account.voicemail_settings.find(params[:id])
     @input_type = VoicemailSetting::VOICEMAIL_SETTINGS.fetch(@voicemail_setting.name,{}).fetch(:input, 'String')
     @input_html = VoicemailSetting::VOICEMAIL_SETTINGS.fetch(@voicemail_setting.name,{}).fetch(:html, {})
+    if @input_type == :boolean && @voicemail_setting.value == 'true'
+      @input_html[:checked] = true
+    end
   end
 
   def update
