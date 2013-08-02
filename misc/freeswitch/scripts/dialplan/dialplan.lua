@@ -729,14 +729,6 @@ function Dialplan.switch(self, destination)
     destination.callee_id_number = destination.number;
     destination.callee_id_name = nil;
 
-    require 'dialplan.router'
-    local routes =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('outbound');
-    
-    if not routes or #routes == 0 then
-      self.log:notice('SWITCH - no route - number: ', destination.number);
-      return { continue = false, code = 404, phrase = 'No route' }
-    end
-
     if self.phonebook_number_lookup then
       local user_id = common.array.try(self.caller, 'account.owner.id');
       local tenant_id = common.array.try(self.caller, 'account.owner.record.current_tenant_id');
@@ -766,7 +758,16 @@ function Dialplan.switch(self, destination)
 
     self.caller:set_callee_id(destination.callee_id_number, destination.callee_id_name);
 
+    require 'dialplan.router'
+    local routes =  dialplan.router.Router:new{ log = self.log, database = self.database, caller = self.caller, variables = self.caller }:route_run('outbound');
+    
+    if not routes or #routes == 0 then
+      self.log:notice('SWITCH - no route - number: ', destination.number);
+      return { continue = false, code = 404, phrase = 'No route' }
+    end
+    
     for index, route in ipairs(routes) do
+      self.caller:set_callee_id(route.callee_id_number or destination.callee_id_number, route.callee_id_name or destination.callee_id_name);
       if route.type == 'hangup' then
         self.log:notice('SWITCH_HANGUP - code: ', route.code, ', phrase: ', route.phrase, ', cause: ', route.cause);
         return { continue = false, code = route.code or '404', phrase = route.phrase, cause = route.cause }
