@@ -274,3 +274,58 @@ function Gateway.parameters_build(self, gateway_id, technology)
 
   return parameters;
 end
+
+
+function Gateway.headers_get(self, header_type, gateway_id)
+  gateway_id = gateway_id or self.id;
+
+  local sql_query = 'SELECT * FROM `gateway_headers` WHERE `gateway_id` = ' .. tonumber(gateway_id) .. ' AND `header_type` = ' .. self.database:escape(header_type, '"');
+
+  local headers = {};
+  self.database:query(sql_query, function(entry)
+    table.insert(headers, entry);
+  end)
+
+  return headers;
+end
+
+function Gateway.constraint_match(self, pattern, search_string)
+  local success, result = pcall(string.find, tostring(search_string), tostring(pattern));
+
+  if not success then
+    self.log:error('CONSTRAINT_ERROR - table error - pattern: ', pattern, ', search_string: ', search_string);
+  end
+
+  return result;
+end
+
+function Gateway.origination_variables(self, header_type, origination_variables, variables)
+  local dtmf = tostring(self.settings.dtmf_type):lower();
+  if dtmf == 'inband' then
+    table.insert(origination_variables,  "dtmf_type=none");
+  elseif dtmf == 'none' or dtmf == 'info' then
+    table.insert(origination_variables,  "dtmf_type=" .. dtmf);
+  else
+    table.insert(origination_variables,  "dtmf_type=rfc2833");
+  end
+
+  local headers = self:headers_get(header_type);
+  self.log:debug(headers);
+  for index, header in ipairs(headers) do
+    local search_string = common.array.try(variables, header.constraint_source)
+    if common.str.blank(header.constraint_source) or self:constraint_match(header.constraint_value, search_string) then
+      if header.header_type == 'invite' then
+        local origination_variable = "sip_h_" .. header.name;
+        if header.name:lower() == 'from' then
+          origination_variable = 'sip_from_uri';
+          origination_variable = 'sip_invite_from_uri';
+        elseif header.name:lower() == 'to' then
+          origination_variable = 'sip_invite_to_uri';
+        elseif header.name:lower() == 'invite' then
+          origination_variable = 'sip_invite_req_uri';
+        end
+        table.insert(origination_variables,  origination_variable .. "='" .. common.array.expand_variables(header.value, variables) .. "'");
+      end
+    end
+  end
+end
