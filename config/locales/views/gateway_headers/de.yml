@@ -1,0 +1,66 @@
+de:
+  gateway_headers:
+    name: 'Header'
+    controller:
+      successfuly_created: 'Header wurde angelegt.'
+      successfuly_updated: 'Header wurde aktualisiert.'
+      successfuly_destroyed: 'Header wurde gelöscht.'
+    index:
+      page_title: 'Header'
+      gateway_id: 'Gateway'
+      name: 'Name'
+      value: 'Value'
+      class_type: 'Class type'
+      description: 'Description'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass Sie folgendes löschen möchten: Header'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        show: 'Anzeigen'
+        create: 'Neu anlegen'
+        create_for: 'Header neu anlegen für %{resource}'
+    show:
+      page_title: 'Header bearbeiten'
+      gateway: 'Gateway'
+      name: 'Name'
+      value: 'Value'
+      class_type: 'Class type'
+      description: 'Description'
+      actions:
+        confirm_destroy: 'Sind Sie sicher, dass die diesen Header löschen möchten?'
+        destroy: 'Löschen'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    new:
+      page_title: 'Header neu anlegen'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+    edit:
+      page_title: 'Header bearbeiten'
+      actions:
+        back_to_list: 'Zurück zur Übersicht'
+        edit: 'Bearbeiten'
+        view_all: 'Alle anzeigen'
+    form:
+      gateway_id:
+        label: 'Gateway'
+        hint: ''
+      name:
+        label: 'Header'
+        hint: ''
+      value:
+        label: 'Wert'
+        hint: ''
+      header_type:
+        label: 'Typ'
+        hint: ''
+      description:
+        label: 'Beschreibung'
+        hint: ''
+      constraint_source:
+        label: 'Consstraint source'
+        hint: ''
+      constraint_value:
+        label: 'Consstraint value'
+        hint: ''
+      submit: 'Absenden'
