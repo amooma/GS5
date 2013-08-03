@@ -96,18 +96,9 @@ en:
         profile:
           label: 'Profile'
           hint: 'Name of SIP profile'
-        from:
-          label: 'From header'
-          hint: '"From" header to be sent to gateway'
-        from_clir:
-          label: 'From on CLIR'
-          hint: '"From" header with supressed caller ID'
-        asserted_identity:
-          label: 'Asserted identity'
-          hint: '"P-Asserted-Identity" header to be sent to gateway'
-        asserted_identity_clir:
-          label: 'Asserted identity CLIR'
-          hint: '"P-Asserted-Identity" header with supressed caller ID'
+        dtmf_type:
+          label: 'DTMF type'
+          hint: '"DTMF type: rfc2833, info, inband or none'
       xmpp:
         server:
           label: 'Server'
