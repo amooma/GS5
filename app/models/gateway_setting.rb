@@ -14,10 +14,7 @@ class GatewaySetting < ActiveRecord::Base
       'contact' =>  'String',
       'dial_string' =>  'String',
       'profile' =>  'String',
-      'from' => 'String',
-      'from_clir' => 'String',
-      'asserted_identity' => 'String',
-      'asserted_identity_clir' => 'String',
+      'dtmf_type' => 'String',
     },
    'xmpp' => { 
       'server' => 'String', 
