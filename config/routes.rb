@@ -76,6 +76,7 @@ Gemeinschaft42c::Application.routes.draw do
   resources :gateways do
     resources :gateway_settings
     resources :gateway_parameters
+    resources :gateway_headers
   end
 
   resources :gs_parameters, :only => [:show, :index, :update, :edit]
