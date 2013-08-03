@@ -1,0 +1,8 @@
+.inputs
+  = f.input :header_type, :collection => GatewayHeader::HEADER_TYPES, :label => t('gateway_headers.form.header_type.label'), :hint => conditional_hint('gateway_headers.form.header_type.hint'), :include_blank => false
+  = f.input :constraint_source, :label => t('gateway_headers.form.constraint_source.label'), :hint => conditional_hint('gateway_headers.form.constraint_source.hint')
+  = f.input :constraint_value, :label => t('gateway_headers.form.constraint_value.label'), :hint => conditional_hint('gateway_headers.form.constraint_value.hint')
+  = f.input :name, :label => t('gateway_headers.form.name.label'), :hint => conditional_hint('gateway_headers.form.name.hint'), :autofocus => true
+  = f.input :value, :label => t('gateway_headers.form.value.label'), :hint => conditional_hint('gateway_headers.form.value.hint')
+  
+  = f.input :description, :label => t('gateway_headers.form.description.label'), :hint => conditional_hint('gateway_headers.form.description.hint')

@@ -1,0 +1,20 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th= t('gateway_headers.index.header_type')
+      %th= t('gateway_headers.index.constraint')
+      %th= t('gateway_headers.index.name')
+      %th= t('gateway_headers.index.value')
+
+  %tbody
+    - for gateway_header in gateway_headers
+      %tr
+        %td= gateway_header.header_type
+        %td
+          = gateway_header.constraint_source
+          - if !gateway_header.constraint_source.blank?
+            %strong ~=
+          = gateway_header.constraint_value
+        %td= gateway_header.name
+        %td= gateway_header.value
+        =render :partial => 'shared/index_view_edit_destroy_part', :locals => {:parent => gateway_header.gateway, :child => gateway_header}

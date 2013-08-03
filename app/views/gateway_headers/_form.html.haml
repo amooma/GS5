@@ -1,0 +1,7 @@
+= simple_form_for([@gateway, @gateway_header]) do |f|
+  = f.error_notification
+
+  = render "form_core", :f => f
+
+  .form-actions
+    = f.button :submit, conditional_t('gateway_headers.form.submit')
