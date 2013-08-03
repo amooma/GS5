@@ -6,6 +6,7 @@ class Gateway < ActiveRecord::Base
 
   has_many :gateway_settings, :dependent => :destroy
   has_many :gateway_parameters, :dependent => :destroy
+  has_many :gateway_headers, :dependent => :destroy
   has_many :call_routes, :as => :endpoint, :dependent => :nullify
 
   validates :name,
