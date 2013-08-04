@@ -11,9 +11,6 @@
       %tr
         %td= gateway_header.header_type
         %td
-          = gateway_header.constraint_source
-          - if !gateway_header.constraint_source.blank?
-            %strong ~=
           = gateway_header.constraint_value
         %td= gateway_header.name
         %td= gateway_header.value
