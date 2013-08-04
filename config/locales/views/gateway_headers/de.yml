@@ -58,9 +58,9 @@ de:
         label: 'Beschreibung'
         hint: ''
       constraint_source:
-        label: 'Consstraint source'
+        label: 'Beschränkungsquelle'
         hint: ''
       constraint_value:
-        label: 'Consstraint value'
+        label: 'Beschränkung'
         hint: ''
       submit: 'Absenden'

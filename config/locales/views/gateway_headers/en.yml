@@ -58,9 +58,9 @@ en:
         label: 'Description'
         hint: ''
       constraint_source:
-        label: 'Consstraint source'
+        label: 'Constraint source'
         hint: ''
       constraint_value:
-        label: 'Consstraint value'
+        label: 'Constraint'
         hint: ''
       submit: 'Submit'
