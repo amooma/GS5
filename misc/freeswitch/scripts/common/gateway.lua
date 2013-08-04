@@ -289,17 +289,43 @@ function Gateway.headers_get(self, header_type, gateway_id)
   return headers;
 end
 
-function Gateway.constraint_match(self, pattern, search_string)
-  local success, result = pcall(string.find, tostring(search_string), tostring(pattern));
 
-  if not success then
-    self.log:error('CONSTRAINT_ERROR - table error - pattern: ', pattern, ', search_string: ', search_string);
+function Gateway.constraint_match(self, constraints_str, variable_sets)
+  if common.str.blank(constraints_str) then
+    entry_match = true;
+  else
+    local constraints = common.str.strip_to_a(constraints_str, ',')
+    for constraint_index=1, #constraints do
+      local variable_name, pattern = common.str.partition(constraints[constraint_index], '!=')
+      local invert = variable_name ~= nil;
+      if not variable_name then
+        variable_name, pattern = common.str.partition(constraints[constraint_index], '=')
+      end
+
+      if not common.str.blank(variable_name) and not common.str.blank(pattern) then        
+        local search_string = common.array.expand_variable(variable_name, variable_sets);
+        if search_string ~= nil then
+          local success, result = pcall(string.find, tostring(search_string), pattern);
+          
+          entry_match = common.str.to_b(result);
+
+          if invert then
+            entry_match = not entry_match;
+          end
+
+          if entry_match == false then
+            break;
+          end
+        end
+      end
+    end
   end
 
-  return result;
+  return entry_match;
 end
 
-function Gateway.origination_variables(self, header_type, origination_variables, variables)
+
+function Gateway.origination_variables(self, header_type, origination_variables, ...)
   local dtmf = tostring(self.settings.dtmf_type):lower();
   if dtmf == 'inband' then
     table.insert(origination_variables,  "dtmf_type=none");
@@ -309,22 +335,35 @@ function Gateway.origination_variables(self, header_type, origination_variables,
     table.insert(origination_variables,  "dtmf_type=rfc2833");
   end
 
-  local headers = self:headers_get(header_type);
-  self.log:debug(headers);
+  local header_to_variable = {
+    default = {
+      default = 'sip_h_',
+      from = 'sip_full_from',
+      to = 'sip_full_to',
+      invite = 'sip_req_uri',
+    },
+    invite = {
+      default = 'sip_h_',
+      from = 'sip_invite_full_from',
+      to = 'sip_invite_full_to',
+      invite = 'sip_invite_req_uri',
+      route = 'sip_invite_route_uri',
+      ['Record-Route'] = 'sip_invite_record_route',
+    }
+  }
+
+  local variable_sets = {...};
+  local headers = self:headers_get('default');
+  for index, header in ipairs(self:headers_get(header_type)) do
+    table.insert(headers, header);
+  end
+
   for index, header in ipairs(headers) do
-    local search_string = common.array.try(variables, header.constraint_source)
-    if common.str.blank(header.constraint_source) or self:constraint_match(header.constraint_value, search_string) then
-      if header.header_type == 'invite' then
-        local origination_variable = "sip_h_" .. header.name;
-        if header.name:lower() == 'from' then
-          origination_variable = 'sip_from_uri';
-          origination_variable = 'sip_invite_from_uri';
-        elseif header.name:lower() == 'to' then
-          origination_variable = 'sip_invite_to_uri';
-        elseif header.name:lower() == 'invite' then
-          origination_variable = 'sip_invite_req_uri';
-        end
-        table.insert(origination_variables,  origination_variable .. "='" .. common.array.expand_variables(header.value, variables) .. "'");
+    local search_string = common.array.expand_variable(header.constraint_source, variable_sets);
+    if common.str.blank(header.constraint_source) or self:constraint_match(header.constraint_value, variable_sets) then
+      if header_to_variable[header.header_type] then
+        local origination_variable = header_to_variable[header.header_type][header.name:lower()] or header_to_variable[header.header_type].default .. header.name;
+        table.insert(origination_variables,  origination_variable .. "='" .. common.array.expand_variables(header.value, unpack(variable_sets)) .. "'");
       end
     end
   end
