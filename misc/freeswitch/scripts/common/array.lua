@@ -41,10 +41,11 @@ end
 function expand_variable(variable_path, variable_sets)
   for index=1, #variable_sets do
     local result = try(variable_sets[index], variable_path);
-    if result then
+    if result ~= nil then
       return result;
     end
   end
+  return nil;
 end
 
 -- replace variables in a string by array values
