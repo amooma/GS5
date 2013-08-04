@@ -1,5 +1,6 @@
 class GatewayHeader < ActiveRecord::Base
   HEADER_TYPES = [
+    'default',
     'invite', 
   #  'provisional', 
   # 'request', 
