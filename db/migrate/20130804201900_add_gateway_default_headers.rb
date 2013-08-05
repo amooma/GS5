@@ -5,7 +5,7 @@ class AddGatewayDefaultHeaders < ActiveRecord::Migration
     GsParameter.where(:entity => 'sip_gateways', :section => 'settings', :name => 'asserted_identity').destroy_all
     GsParameter.where(:entity => 'sip_gateways', :section => 'settings', :name => 'asserted_identity_clir').destroy_all
 
-    GsParameter.create(:entity => 'sip_gateways', :section => 'settings', :name => 'dtmf',  :value => 'rfc2833', :class_type => 'String')
+    GsParameter.create(:entity => 'sip_gateways', :section => 'settings', :name => 'dtmf_type',  :value => 'rfc2833', :class_type => 'String')
 
     GsParameter.create(:entity => 'sip_gateways', :section => 'headers_default', :name => 'INVITE',  :value => '"sip:{destination_number}@{domain}', :class_type => 'String')
     GsParameter.create(:entity => 'sip_gateways', :section => 'headers_default', :name => 'To',  :value => '<sip:{destination_number}@{domain}>', :class_type => 'String')
