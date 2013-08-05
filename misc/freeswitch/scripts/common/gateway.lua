@@ -360,7 +360,7 @@ function Gateway.origination_variables(self, header_type, origination_variables,
 
   for index, header in ipairs(headers) do
     local search_string = common.array.expand_variable(header.constraint_source, variable_sets);
-    if common.str.blank(header.constraint_source) or self:constraint_match(header.constraint_value, variable_sets) then
+    if common.str.blank(header.constraint_value) or self:constraint_match(header.constraint_value, variable_sets) then
       if header_to_variable[header.header_type] then
         local origination_variable = header_to_variable[header.header_type][header.name:lower()] or header_to_variable[header.header_type].default .. header.name;
         table.insert(origination_variables,  origination_variable .. "='" .. common.array.expand_variables(header.value, unpack(variable_sets)) .. "'");
