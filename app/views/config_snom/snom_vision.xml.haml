@@ -29,8 +29,12 @@
           
         %left_button_imageurl{:idx=> index_left, :perm=>"!"}= button[:imageurl]
         %left_button_name{:idx=> index_left, :perm=>"!"}= button[:label]
-        %left_button_type{:idx=> index_left, :perm=>"!"}= button[:type]
-        %left_button_value{:idx=> index_left, :perm=>"!"}= button[:value]
+        - if button[:general_type].blank?
+          %left_button_type{:idx=> index_left, :perm=>"!"}= button[:type]
+          %left_button_value{:idx=> index_left, :perm=>"!"}= button[:value]
+        - else
+          %left_button_type{:idx=> index_left, :perm=>"!"} xml
+          %left_button_value{:idx=> index_left, :perm=>"!"}
 
       - for key in 1..8 do
         - index_right = index_right + 1
@@ -40,5 +44,9 @@
 
         %right_button_imageurl{:idx=> index_right, :perm=>"!"}= button[:imageurl]
         %right_button_name{:idx=> index_right, :perm=>"!"}= button[:label]
-        %right_button_type{:idx=> index_right, :perm=>"!"}= button[:type]
-        %right_button_value{:idx=> index_right, :perm=>"!"}= button[:value]
+        - if button[:general_type].blank?
+          %right_button_type{:idx=> index_right, :perm=>"!"}= button[:type]
+          %right_button_value{:idx=> index_right, :perm=>"!"}= button[:value]
+        - else
+          %right_button_type{:idx=> index_right, :perm=>"!"} xml
+          %right_button_value{:idx=> index_right, :perm=>"!"}
