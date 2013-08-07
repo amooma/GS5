@@ -7,13 +7,13 @@ class AddGatewayDefaultHeaders < ActiveRecord::Migration
 
     GsParameter.create(:entity => 'sip_gateways', :section => 'settings', :name => 'dtmf_type',  :value => 'rfc2833', :class_type => 'String')
 
-    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_default', :name => 'INVITE',  :value => 'sip:{destination_number}@{domain}', :class_type => 'String')
-    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_default', :name => 'To',  :value => '<sip:{destination_number}@{domain}>', :class_type => 'String')
-    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_default_clir_off', :name => 'From',  :value => '"{caller_id_name}" <sip:{caller_id_number}@{domain_local}>', :class_type => 'String')
-    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_default_clir_on', :name => 'From',  :value => '"Anonymous" <sip:anonymous@{domain_local}>', :class_type => 'String')
-    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_default_clir_off', :name => 'P-Asserted-Identity',  :value => '"{caller_id_name}" <sip:{caller_id_number}@{domain_local}>', :class_type => 'String')
-    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_default_clir_on', :name => 'P-Asserted-Identity',  :value => '"Anonymous" <sip:{caller_id_number}@{domain_local}>', :class_type => 'String')
-    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_default_clir_on', :name => 'Privacy',  :value => 'id', :class_type => 'String')
+    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_invite', :name => 'INVITE',  :value => 'sip:{destination_number}@{domain}', :class_type => 'String')
+    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_invite', :name => 'To',  :value => '<sip:{destination_number}@{domain}>', :class_type => 'String')
+    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_invite_clir_off', :name => 'From',  :value => '"{caller_id_name}" <sip:{caller_id_number}@{domain_local}>', :class_type => 'String')
+    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_invite_clir_on', :name => 'From',  :value => '"Anonymous" <sip:anonymous@{domain_local}>', :class_type => 'String')
+    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_invite_clir_off', :name => 'P-Asserted-Identity',  :value => '"{caller_id_name}" <sip:{caller_id_number}@{domain_local}>', :class_type => 'String')
+    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_invite_clir_on', :name => 'P-Asserted-Identity',  :value => '"Anonymous" <sip:{caller_id_number}@{domain_local}>', :class_type => 'String')
+    GsParameter.create(:entity => 'sip_gateways', :section => 'headers_invite_clir_on', :name => 'Privacy',  :value => 'id', :class_type => 'String')
   end
 
   def down
