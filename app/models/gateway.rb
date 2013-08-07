@@ -73,14 +73,16 @@ class Gateway < ActiveRecord::Base
       GsParameter.where(:entity => 'sip_gateways', :section => 'settings').each do |default_setting|
         self.gateway_settings.create(:name => default_setting.name, :value => default_setting.value, :class_type => default_setting.class_type, :description => default_setting.description)
       end
-      GsParameter.where(:entity => 'sip_gateways', :section => 'headers_default').each do |default_header|
-        self.gateway_headers.create(:name => default_header.name, :value => default_header.value, :header_type => 'default', :description => default_header.description)
-      end
-       GsParameter.where(:entity => 'sip_gateways', :section => 'headers_default_clir_off').each do |default_header|
-        self.gateway_headers.create(:constraint_value => 'clir=false', :name => default_header.name, :value => default_header.value, :header_type => 'default', :description => default_header.description)
-      end
-      GsParameter.where(:entity => 'sip_gateways', :section => 'headers_default_clir_on').each do |default_header|
-        self.gateway_headers.create(:constraint_value => 'clir=true', :name => default_header.name, :value => default_header.value, :header_type => 'default', :description => default_header.description)
+      GatewayHeader::HEADER_TYPES.each do |header_type|
+        GsParameter.where(:entity => 'sip_gateways', :section => 'headers_' + header_type).each do |default_header|
+          self.gateway_headers.create(:name => default_header.name, :value => default_header.value, :header_type => header_type, :description => default_header.description)
+        end
+         GsParameter.where(:entity => 'sip_gateways', :section => 'headers_' + header_type + '_clir_off').each do |default_header|
+          self.gateway_headers.create(:constraint_value => 'clir=false', :name => default_header.name, :value => default_header.value, :header_type => header_type, :description => default_header.description)
+        end
+        GsParameter.where(:entity => 'sip_gateways', :section => 'headers_' + header_type + '_clir_on').each do |default_header|
+          self.gateway_headers.create(:constraint_value => 'clir=true', :name => default_header.name, :value => default_header.value, :header_type => header_type, :description => default_header.description)
+        end
       end
     end
   end
