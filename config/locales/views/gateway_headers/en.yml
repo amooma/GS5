@@ -22,9 +22,10 @@ en:
     show:
       page_title: 'Show Header'
       gateway: 'Gateway'
+      header_type: 'Type'
+      constraint_value: 'Constraint'
       name: 'Name'
       value: 'Value'
-      class_type: 'Class type'
       description: 'Description'
       actions:
         confirm_destroy: 'Are you sure you want to delete this element?'
