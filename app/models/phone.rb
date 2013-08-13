@@ -145,6 +145,28 @@ class Phone < ActiveRecord::Base
       event.add_header("host", sip_account.sip_domain.host)
       event.add_header("content-type", "application/simple-message-summary")   
       return event.fire()
+  elsif self.phone_model.manufacturer.ieee_name == 'Polycom'
+      if !sip_account
+        self.sip_accounts.where(:sip_accountable_type => self.phoneable_type).each do |sip_account_associated|
+          if sip_account_associated.registration
+            sip_account = sip_account_associated
+            break
+          end
+        end
+      end
+
+      if ! sip_account or ! sip_account.registration
+        return false
+      end
+
+      require 'freeswitch_event'
+      event = FreeswitchEvent.new("NOTIFY")
+      event.add_header("profile", "gemeinschaft")
+      event.add_header("event-string", "check-sync;reboot=#{reboot.to_s}")
+      event.add_header("user", sip_account.auth_name)
+      event.add_header("host", sip_account.sip_domain.host)
+      event.add_header("content-type", "application/simple-message-summary")   
+      return event.fire()
   end
 
 
