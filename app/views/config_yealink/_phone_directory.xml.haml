@@ -1,6 +1,12 @@
 %YealinkIPPhoneDirectory
   - @phone_book.phone_book_entries.each do |phone_book_entry|
-    - if !phone_book_entry.to_s.blank? && phone_book_entry.phone_numbers.first
+    - phone_numbers = phone_book_entry.phone_numbers
+    - if !phone_book_entry.to_s.blank? && phone_numbers.any?
+      - mobile_phone = phone_numbers.where(:name => 'mobile').first
+      - phone = (phone_numbers - [mobile_phone]).first
       %DirectoryEntry
         %Name= phone_book_entry.to_s
-        %Telephone= phone_book_entry.phone_numbers.first.number
+        - if phone
+          %Telephone= phone.number
+        - if mobile_phone
+          %Telephone= mobile_phone.number
