@@ -22,10 +22,11 @@ de:
     show:
       page_title: 'Header bearbeiten'
       gateway: 'Gateway'
+      header_type: 'Typ'
+      constraint_value: 'Beschränkung'
       name: 'Name'
-      value: 'Value'
-      class_type: 'Class type'
-      description: 'Description'
+      value: 'Wert'
+      description: 'Beschreibung'
       actions:
         confirm_destroy: 'Sind Sie sicher, dass die diesen Header löschen möchten?'
         destroy: 'Löschen'
