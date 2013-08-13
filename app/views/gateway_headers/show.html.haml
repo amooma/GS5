@@ -1,17 +1,17 @@
 - content_for :title, t("gateway_headers.show.page_title")
 
 %p
-  %strong= t('gateway_headers.show.gateway') + ":"
-  = @gateway_header.gateway
+  %strong= t('gateway_headers.show.header_type') + ":"
+  = @gateway_header.header_type
+%p
+  %strong= t('gateway_headers.show.constraint_value') + ":"
+  = @gateway_header.constraint_value
 %p
   %strong= t('gateway_headers.show.name') + ":"
   = @gateway_header.name
 %p
   %strong= t('gateway_headers.show.value') + ":"
   = @gateway_header.value
-%p
-  %strong= t('gateway_headers.show.class_type') + ":"
-  = @gateway_header.class_type
 %p
   %strong= t('gateway_headers.show.description') + ":"
   = @gateway_header.description
