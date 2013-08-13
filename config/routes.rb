@@ -203,6 +203,10 @@ Gemeinschaft42c::Application.routes.draw do
   get "config_polycom/:phone/:sip_account/phone_book"         => "config_polycom#phone_book"
   get "config_polycom/:phone/:sip_account/call_history"       => "config_polycom#call_history"
   get "config_polycom/:phone/:sip_account/idle_screen"        => "config_polycom#idle_screen"
+
+  #Yealink
+  get "config_yealink/:phone/:sip_account/phone_book"         => "config_yealink#phone_book"
+  get "config_yealink/:phone/:sip_account/:phone_book/phone_book"         => "config_yealink#phone_book"
  
   # Unified path for Snom phones.
   # Enter e.g. "http://192.168.1.105:3000/settings"
@@ -218,6 +222,10 @@ Gemeinschaft42c::Application.routes.draw do
     :constraints => { :mac_address => /000413[0-9A-F]{6}/i },
     :via => [:get],
     :format => 'xml'
+  match 'settings-:mac_address' => 'config_yealink#show',
+    :constraints => { :mac_address => /001565[0-9A-F]{6}/i },
+    :via => [:get],
+    :format => 'text'
   match 'snom_vision-:provisioning_key' => 'config_snom#snom_vision',
     :via => [:get],
     :format => 'xml'
@@ -232,6 +240,10 @@ Gemeinschaft42c::Application.routes.draw do
     :constraints => { :mac_address => /0004f2[0-9A-F]{6}/i },
     :via => [:get],
     :format => 'xml'
+  match ':mac_address.cfg' => 'config_yealink#show',
+    :constraints => { :mac_address => /001565[0-9A-F]{6}/i },
+    :via => [:get],
+    :format => 'text'
   match 'settings-:mac_address.cfg' => 'config_polycom#settings',
     :constraints => { :mac_address => /0004f2[0-9A-F]{6}/i },
     :via => [:get],
