@@ -5,6 +5,10 @@
     - @gateway.gateway_settings.each do |setting|
       %setting{ :name => setting.name, :value => setting.value, :class_type => setting.class_type, :description => setting.description }
 
+  %gateway_headers{ :count => @gateway.gateway_headers.count }
+    - @gateway.gateway_headers.each do |header|
+      %header{ :header_type => header.header_type, :constraint => header.constraint_value, :name => header.name, :value => header.value, :description => header.description }
+
   %gateway_parameters{ :count => @gateway.gateway_parameters.count }
     - @gateway.gateway_parameters.each do |parameter|
       %parameter{ :name => parameter.name, :value => parameter.value, :class_type => parameter.class_type, :description => parameter.description }
