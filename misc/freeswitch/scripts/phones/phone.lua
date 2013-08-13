@@ -27,11 +27,14 @@ function Phone.list_by_sql(self, sql_query)
     phone.record.ieee_name = common.str.downcase(account_entry.ieee_name);
 
     if phone.record.ieee_name == 'snom technology ag' then
-      require 'phones.snom'
+      require 'phones.snom';
       phone.model = phones.snom.Snom:new{ log = self.log };
     elseif account_entry.ieee_name == 'siemens enterprise communicationsgmbh & co. kg' then
-      require 'phones.siemens'
+      require 'phones.siemens';
       phone.model = phones.siemens.Siemens:new{ log = self.log };
+    elseif phone.record.ieee_name == 'xiamen yealink network technology co.,ltd' then
+      require 'phones.yealink';
+      phone.model = phones.yealink.Yealink:new{ log = self.log };
     end
     table.insert(account_phones, phone);
   end)
