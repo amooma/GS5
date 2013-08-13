@@ -1,0 +1,6 @@
+%YealinkIPPhoneDirectory
+  - @phone_book.phone_book_entries.each do |phone_book_entry|
+    - if !phone_book_entry.to_s.blank? && phone_book_entry.phone_numbers.first
+      %DirectoryEntry
+        %Name= phone_book_entry.to_s
+        %Telephone= phone_book_entry.phone_numbers.first.number

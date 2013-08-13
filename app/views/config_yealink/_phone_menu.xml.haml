@@ -1,0 +1,6 @@
+%YealinkIPPhoneMenu
+  %Title Gemeinschaft
+  - @phone_books.each do |phone_book|
+    %MenuItem
+      %Name= phone_book[:name]
+      %URL= phone_book[:url]
