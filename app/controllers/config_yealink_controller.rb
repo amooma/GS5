@@ -67,6 +67,15 @@ class ConfigYealinkController < ApplicationController
       handset
     }
 
+    @provisioning_url = "#{request.protocol}#{request.host_with_port}"
+
+    if ! request.env['HTTP_USER_AGENT'].index('Yealink')
+      Rails.logger.info "---> User-Agent indicates not a Yealink phone (#{request.env['HTTP_USER_AGENT'].inspect})"
+    else
+      Rails.logger.info "---> Phone #{@mac_address.inspect}, IP address #{request_remote_ip.inspect}"
+      @phone.update_attributes({ :ip_address => request_remote_ip })
+    end
+
 
   end
 
