@@ -1,0 +1,18 @@
+= '#!version:1.0.0.1'
+
+= 'lang.wui = English'
+= 'call_waiting.enable = 1'
+= 'voice.tone.country = Germany'
+
+- @sip_accounts.each_with_index do |sip_account, index|
+  - i = index + 1
+  - sip_account.each_pair do |key, value|
+    = "account.#{i}.#{key} = #{value}"
+
+- @handsets.each_with_index do |handset, index|
+  - i = index + 1
+  - handset.each_pair do |key, value|
+    = "handset.#{i}.#{key} = #{value}"
+
+= "remote_phonebook.data.1.url = #{@phonebook_url}"
+= 'remote_phonebook.data.1.name = Contacts'
