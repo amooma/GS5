@@ -113,10 +113,7 @@ class Phone < ActiveRecord::Base
       rescue
         return false
       end
-    end
-      
-    return false
-   elsif self.phone_model.manufacturer.ieee_name == 'XIAMEN YEALINK NETWORK TECHNOLOGY CO.,LTD'
+    elsif self.phone_model.manufacturer.ieee_name == 'XIAMEN YEALINK NETWORK TECHNOLOGY CO.,LTD'
       if !sip_account
         self.sip_accounts.where(:sip_accountable_type => self.phoneable_type).each do |sip_account_associated|
           if sip_account_associated.registration
@@ -145,7 +142,7 @@ class Phone < ActiveRecord::Base
       event.add_header("host", sip_account.sip_domain.host)
       event.add_header("content-type", "application/simple-message-summary")   
       return event.fire()
-  elsif self.phone_model.manufacturer.ieee_name == 'Polycom'
+    elsif self.phone_model.manufacturer.ieee_name == 'Polycom'
       if !sip_account
         self.sip_accounts.where(:sip_accountable_type => self.phoneable_type).each do |sip_account_associated|
           if sip_account_associated.registration
@@ -167,6 +164,9 @@ class Phone < ActiveRecord::Base
       event.add_header("host", sip_account.sip_domain.host)
       event.add_header("content-type", "application/simple-message-summary")   
       return event.fire()
+    end
+      
+    return false
   end
 
 
