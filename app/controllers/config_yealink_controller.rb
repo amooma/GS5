@@ -15,6 +15,92 @@ class ConfigYealinkController < ApplicationController
       @phone = Phone.where(:mac_address => @mac_address).first
     end
 
+    if ! @phone && GsParameter.get('PROVISIONING_AUTO_ADD_PHONE')
+      tenant = Tenant.where(:id => GsParameter.get('PROVISIONING_AUTO_TENANT_ID')).first
+      if ! tenant
+        render(
+          :status => 404,
+          :layout => false,
+          :content_type => 'text/plain',
+          :text => "<!-- Tenant not found -->",
+        )
+        return
+      end
+
+      @phone = tenant.phones.build
+      @phone.mac_address = @mac_address
+      @phone.hot_deskable = true
+      @phone.tenant = tenant
+      @phone.http_user = 'admin'
+
+      if !GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD').nil? && @phone.http_password.blank?
+        if GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD').class == Fixnum
+          @phone.update_attributes({ :http_password => SecureRandom.hex(GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD')) })
+        elsif GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD').class == String
+          @phone.update_attributes({ :http_password => GsParameter.get('PROVISIONING_SET_HTTP_PASSWORD') })
+        end
+      end
+
+      @phone.phone_model = PhoneModel.where(:name => 'Yealink W52P').first
+      if ! @phone.save
+        render(
+          :status => 500,
+          :layout => false,
+          :content_type => 'text/plain',
+          :text => "<!-- #{@phone.errors.messages.inspect} -->",
+        )
+        return
+      end
+
+      if ! GsParameter.get('PROVISIONING_AUTO_ADD_SIP_ACCOUNT')
+        return
+      end
+
+      caller_name_index = 0
+      sip_account_last = tenant.sip_accounts.where('caller_name LIKE ?', "#{GsParameter.get('PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX')}%").sort { |item1, item2| 
+        item1.caller_name.gsub(/[^0-9]/, '').to_i <=> item2.caller_name.gsub(/[^0-9]/, '').to_i
+      }.last
+
+      if sip_account_last
+        caller_name_index = sip_account_last.caller_name.gsub(/[^0-9]/, '').to_i
+      end
+      caller_name_index = caller_name_index + 1
+
+      @sip_account = tenant.sip_accounts.build
+      @sip_account.caller_name = "#{GsParameter.get('PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX')}#{caller_name_index}"
+      @sip_account.call_waiting = GsParameter.get('CALL_WAITING')
+      @sip_account.clir = GsParameter.get('DEFAULT_CLIR_SETTING')
+      @sip_account.clip = GsParameter.get('DEFAULT_CLIP_SETTING')
+      @sip_account.voicemail_pin = random_pin
+      @sip_account.hotdeskable = false
+      loop do
+        @sip_account.auth_name = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_AUTH_NAME'))
+        break unless SipAccount.exists?(:auth_name => @sip_account.auth_name)
+      end
+      @sip_account.password = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_PASSWORD'))
+
+      if ! @sip_account.save
+        render(
+          :status => 500,
+          :layout => false,
+          :content_type => 'text/plain',
+          :text => "<!-- #{@sip_account.errors.messages.inspect} -->",
+        )
+        return
+      end
+
+      @phone.fallback_sip_account = @sip_account
+      if ! @phone.save
+        render(
+          :status => 500,
+          :layout => false,
+          :content_type => 'text/plain',
+          :text => "<!-- #{@phone.errors.messages.inspect} -->",
+        )
+        return
+      end
+    end
+
     if ! @phone
       render(
         :status => 404,
@@ -24,10 +110,6 @@ class ConfigYealinkController < ApplicationController
       )
       return false
     end
-
-    
-
-    
 
     if @phone.sip_accounts.any?
       sip_accounts = @phone.sip_accounts
@@ -75,8 +157,6 @@ class ConfigYealinkController < ApplicationController
       Rails.logger.info "---> Phone #{@mac_address.inspect}, IP address #{request_remote_ip.inspect}"
       @phone.update_attributes({ :ip_address => request_remote_ip })
     end
-
-
   end
 
   def phone_book
