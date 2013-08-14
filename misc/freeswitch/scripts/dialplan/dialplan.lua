@@ -18,6 +18,7 @@ local CALL_FORWARDING_SERVICES = {
   HUNT_GROUP_EMPTY = 'offline',
   ACD_NO_AGENTS = 'offline',
   ACD_TIMEOUT = 'noanswer',
+  NO_USER_RESPONSE = 'offline',
 }
 
 -- create dialplan object
