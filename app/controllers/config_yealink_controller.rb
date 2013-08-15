@@ -41,7 +41,22 @@ class ConfigYealinkController < ApplicationController
         end
       end
 
-      @phone.phone_model = PhoneModel.where(:name => 'Yealink W52P').first
+      phone_model = nil
+      if request.env['HTTP_USER_AGENT'].index('W52P')
+        phone_model = PhoneModel.where(:name => 'Yealink W52P').first 
+      end
+
+      if ! phone_model
+        render(
+          :status => 404,
+          :layout => false,
+          :content_type => 'text/plain',
+          :text => "<!-- Phone Model not found in: \"#{request.env['HTTP_USER_AGENT']}\" -->",
+        )
+        return
+      end
+
+      @phone.phone_model = phone_model
       if ! @phone.save
         render(
           :status => 500,
@@ -132,6 +147,7 @@ class ConfigYealinkController < ApplicationController
          sip_account_entry['user_name']  = sip_account.auth_name
          sip_account_entry['sip_server_host']  = sip_account.sip_domain
          sip_account_entry['outbound_host'] = sip_account.sip_domain
+         sip_account_entry['sip_listen_port'] = 5060 + (index*2)
       end
 
       sip_account_entry
@@ -243,8 +259,8 @@ class ConfigYealinkController < ApplicationController
       'backup_outbound_host' => '',
       'backup_outbound_port' => '',
       'anonymous_call' => '0',
-      'anonymous_call_oncode' => 'f-cliron',
-      'anonymous_call_offcode' => 'f-cliroff',
+      'anonymous_call_oncode' => '',
+      'anonymous_call_offcode' => '',
       'reject_anonymous_call' => '0',
       'anonymous_reject_oncode' => '',
       'anonymous_reject_offcode' => '',
@@ -272,8 +288,8 @@ class ConfigYealinkController < ApplicationController
       'dtmf.dtmf_payload' => '',
       'dtmf.info_type' => '',
       'dnd.enable' => '0',
-      'dnd.on_code' => 'f-dndon',
-      'dnd.off_code' => 'f-dndoff',
+      'dnd.on_code' => '',
+      'dnd.off_code' => '',
       }
   end
 
