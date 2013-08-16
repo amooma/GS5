@@ -1,12 +1,14 @@
 %YealinkIPPhoneDirectory
-  - @phone_book.phone_book_entries.each do |phone_book_entry|
-    - phone_numbers = phone_book_entry.phone_numbers
-    - if !phone_book_entry.to_s.blank? && phone_numbers.any?
-      - mobile_phone = phone_numbers.where(:name => 'mobile').first
-      - phone = (phone_numbers - [mobile_phone]).first
-      %DirectoryEntry
-        %Name= phone_book_entry.to_s
-        - if phone
-          %Telephone= phone.number
-        - if mobile_phone
-          %Telephone= mobile_phone.number
+  - cache(['yealink_phone_directory_table', @phone_book.id, @phone_book.phone_book_entries]) do 
+    - @phone_book.phone_book_entries.each do |phone_book_entry|
+      - cache(['yealink_phone_directory_table_tr', @phone_book.id, phone_book_entry]) do
+        - phone_numbers = phone_book_entry.phone_numbers
+        - if !phone_book_entry.to_s.blank? && phone_numbers.any?
+          - mobile_phone = phone_numbers.where(:name => 'mobile').first
+          - phone = (phone_numbers - [mobile_phone]).first
+          %DirectoryEntry
+            %Name= phone_book_entry.to_s
+            - if phone
+              %Telephone= phone.number
+            - if mobile_phone
+              %Telephone= mobile_phone.number
