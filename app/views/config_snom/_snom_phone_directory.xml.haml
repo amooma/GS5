@@ -1,19 +1,22 @@
 !!! XML
-%SnomIPPhoneDirectory{:speedselect => 'off'}
-  %Title= @phone_xml_object[:title]
-  %Prompt= @phone_xml_object[:prompt]
-  - @phone_xml_object[:entries].each do |entry|
-    %DirectoryEntry{:sel => entry[:selected].to_s}
-      %Name= entry[:text]
-      %Telephone= entry[:number]
+- cache(['snom_phone_directory', @sip_account.id, @phone_xml_object]) do
+  %SnomIPPhoneDirectory{:speedselect => 'off'}
+    %Title= @phone_xml_object[:title]
+    %Prompt= @phone_xml_object[:prompt]
+    - cache(['snom_phone_directory_table', @sip_account.id, @phone_xml_object[:entries]]) do
+      - @phone_xml_object[:entries].each do |entry|
+        - cache(['yealink_phone_directory_table_tr', @sip_account.id, entry]) do
+          %DirectoryEntry{:sel => entry[:selected].to_s}
+            %Name= entry[:text]
+            %Telephone= entry[:number]
 
-  - if @phone_xml_object[:softkeys]
-    - @phone_xml_object[:softkeys].each do |softkey|
-      %SoftKeyItem
-        %Name=  softkey[:name]
-        - if ! softkey[:label].blank?
-          %Label= softkey[:label]
-        - if ! softkey[:url].blank?
-          %URL= softkey[:url]
-        - if ! softkey[:softkey].blank?
-          %URL= softkey[:softkey]
+    - if @phone_xml_object[:softkeys]
+      - @phone_xml_object[:softkeys].each do |softkey|
+        %SoftKeyItem
+          %Name=  softkey[:name]
+          - if ! softkey[:label].blank?
+            %Label= softkey[:label]
+          - if ! softkey[:url].blank?
+            %URL= softkey[:url]
+          - if ! softkey[:softkey].blank?
+            %URL= softkey[:softkey]
