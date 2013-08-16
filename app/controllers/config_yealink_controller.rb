@@ -4,7 +4,6 @@ class ConfigYealinkController < ApplicationController
   MAX_HANDSETS = 5
   MAX_PHONEBOOK_ENTRIES = 1000
   IGNORE_PHONEBOOK_EXCEEDING = 500
-  MAX_PHONE_BOOKS = 5
   SIP_DEFAULT_PORT = 5060
 
   before_filter {
