@@ -2,7 +2,8 @@ class ConfigYealinkController < ApplicationController
 
   MAX_SIP_ACCOUNTS = 5
   MAX_HANDSETS = 5
-  MAX_PHONEBOOK_ENTRIES = 100
+  MAX_PHONEBOOK_ENTRIES = 1000
+  IGNORE_PHONEBOOK_EXCEEDING = 500
   MAX_PHONE_BOOKS = 5
   SIP_DEFAULT_PORT = 5060
 
@@ -201,6 +202,13 @@ class ConfigYealinkController < ApplicationController
     phone_book_ids = {}
     if @phone.phoneable.class == User
       @phone.phoneable.phone_books.each do |phone_book|
+        if @phone_books.count >= MAX_PHONEBOOK_ENTRIES
+          break
+        end
+        if phone_book.phone_book_entries.count > IGNORE_PHONEBOOK_EXCEEDING
+          next
+        end
+
         @phone_books << {:name => phone_book.name, :url => "#{base_url}/#{phone_book.id}/phone_book.xml"}
         phone_book_ids[phone_book.id]
       end
@@ -211,6 +219,13 @@ class ConfigYealinkController < ApplicationController
 
     if tenant
       tenant.phone_books.each do |phone_book|
+        if @phone_books.count >= MAX_PHONEBOOK_ENTRIES
+          break
+        end
+        if phone_book.phone_book_entries.count > IGNORE_PHONEBOOK_EXCEEDING
+          next
+        end
+
         @phone_books << {:name => phone_book.name, :url => "#{base_url}/#{phone_book.id}/phone_book.xml"}
         phone_book_ids[phone_book.id]
       end
