@@ -213,7 +213,7 @@ class ConfigYealinkController < ApplicationController
       end
       tenant = @phone.phoneable.current_tenant
     elsif @phone.phoneable.class == Tenant
-      tenant = @phone.phoneable.class
+      tenant = @phone.phoneable
     end
 
     if tenant
