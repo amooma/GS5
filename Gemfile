@@ -48,6 +48,8 @@ group :development do
   # Debugging http://railscasts.com/episodes/402-better-errors-railspanel
   gem 'better_errors'
   gem 'binding_of_caller'
+
+  gem 'rails-erd'
 end
 
 group :test do

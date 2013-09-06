@@ -51,6 +51,7 @@ GEM
     carrierwave (0.8.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
+    choice (0.1.6)
     chronic (0.9.1)
     chunky_png (1.2.7)
     coderay (1.0.9)
@@ -150,6 +151,11 @@ GEM
       activesupport (= 3.2.13)
       bundler (~> 1.0)
       railties (= 3.2.13)
+    rails-erd (1.1.0)
+      activerecord (>= 3.0)
+      activesupport (>= 3.0)
+      choice (~> 0.1.6)
+      ruby-graphviz (~> 1.0.4)
     railties (3.2.13)
       actionpack (= 3.2.13)
       activesupport (= 3.2.13)
@@ -161,6 +167,7 @@ GEM
     rake (10.0.3)
     rdoc (3.12.2)
       json (~> 1.4)
+    ruby-graphviz (1.0.9)
     sass (3.2.7)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -246,6 +253,7 @@ DEPENDENCIES
   private_pub
   quiet_assets
   rails (= 3.2.13)
+  rails-erd
   sass-rails
   sextant
   simple_form (~> 2.1.0)
