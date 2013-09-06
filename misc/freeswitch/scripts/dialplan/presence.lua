@@ -53,6 +53,7 @@ function Presence.set(self, state, caller_number)
       event:addHeader('presence-call-direction', direction);
       event:addHeader('answer-state', state);
       event:addHeader('unique-id', self.uuid);
+      event:addHeader('event_origin', 'gemeinschaft');
       if caller_number then
         if self.inbound then
           event:addHeader('Caller-Destination-Number', caller_number);
