@@ -128,7 +128,9 @@ function PresenceUpdate.presence_in(self, event)
     direction = false;
   end
 
-  if protocol == 'conf' then    
+  if tostring(event:getHeader('event_origin')) == 'gemeinschaft' then
+    self.log:debug('[', uuid,'] PRESENCE_', call_direction:upper(),'_LOOP ignored - protocol: ', protocol, ', account: ', account, ', state: ', state);
+  elseif protocol == 'conf' then    
     state = event:getHeader('answer-state');
     local login = tostring(event:getHeader('proto'));
     self.log:info('[', uuid,'] PRESENCE_CONFERENCE_', call_direction:upper(), ' ', common.str.to_i(account), ' - identifier: ', account, ', state: ', state);
