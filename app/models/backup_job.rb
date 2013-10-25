@@ -10,7 +10,6 @@ class BackupJob < ActiveRecord::Base
     self.started_at.to_s
   end
 
-  private
   def set_state_to_queued
     self.state ||= 'queued'
     self.started_at = Time.now
