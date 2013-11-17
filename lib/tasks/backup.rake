@@ -7,13 +7,13 @@ namespace :backup do
   desc "Do a backup."
   task :queue_a_new_backup => :environment do
     backup_job = BackupJob.create
-    echo "BackupJob ID: #{backup_job.id}"
+    puts "BackupJob ID: #{backup_job.id}"
   end
 
   desc "Do a backup. Now!"
   task :force_now => :environment do
     backup_job = BackupJob.create(:state => 'force now')
-    echo "BackupJob ID: #{backup_job.id}"
+    puts "BackupJob ID: #{backup_job.id}"
   end
 
   desc "Restore the system"
