@@ -207,6 +207,9 @@ Gemeinschaft42c::Application.routes.draw do
   #Yealink
   get "config_yealink/:phone/:sip_account/phone_book"         => "config_yealink#phone_book"
   get "config_yealink/:phone/:sip_account/:phone_book/phone_book"         => "config_yealink#phone_book"
+
+  #Gigaset
+  get "config_gigaset/:phone/:sip_account/phone_book"         => "config_gigaset#phone_book"
  
   # Unified path for Snom phones.
   # Enter e.g. "http://192.168.1.105:3000/settings"
@@ -226,6 +229,17 @@ Gemeinschaft42c::Application.routes.draw do
     :constraints => { :mac_address => /001565[0-9A-F]{6}/i },
     :via => [:get],
     :format => 'text'
+  match 'gigaset/:build_variant/:provisioning_id/settings-:mac_address' => 'config_gigaset#show',
+    :constraints => { :mac_address => /7C2F80[0-9A-F]{6}/i },
+    :via => [:get],
+    :format => 'xml'
+  match 'gigaset/:provisioning_key/:build_variant/:provisioning_id/settings-:mac_address' => 'config_gigaset#show',
+    :constraints => { :mac_address => /7C2F80[0-9A-F]{6}/i },
+    :via => [:get],
+    :format => 'xml'
+  match 'gigaset/:build_variant/:provisioning_id/:file_name' => 'config_gigaset#binary',
+    :via => [:get],
+    :format => 'bin'
   match 'snom_vision-:provisioning_key' => 'config_snom#snom_vision',
     :via => [:get],
     :format => 'xml'

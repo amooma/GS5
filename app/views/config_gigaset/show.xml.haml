@@ -1,0 +1,9 @@
+!!! XML
+%ProviderFrame{'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance', 'xsi:noNamespaceSchemaLocation' => 'N510.xsd'}
+  %Provider
+    != "<MAC_ADDRESS value='#{@mac_address}'/>"
+    != "<VERSION value='#{@config_version}'/>"
+    != "<PROFILE_NAME class='string' value='#{@profile_name}'/>"
+
+    - @settings.each  do |key, value|
+      != "<SYMB_ITEM ID='#{key}' class='symb_item' value='#{value}'/>"
