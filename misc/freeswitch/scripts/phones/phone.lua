@@ -35,6 +35,9 @@ function Phone.list_by_sql(self, sql_query)
     elseif phone.record.ieee_name == 'xiamen yealink network technology co.,ltd' then
       require 'phones.yealink';
       phone.model = phones.yealink.Yealink:new{ log = self.log };
+    elseif phone.record.ieee_name == 'gigaset communications gmbh' then
+      require 'phones.gigaset';
+      phone.model = phones.gigaset.Gigaset:new{ log = self.log };
     end
     table.insert(account_phones, phone);
   end)
