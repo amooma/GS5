@@ -1,0 +1,13 @@
+!!! XML
+%list{:response => "get_list", :type => @type, :last => @last, :total => @total, :first => @first}
+  - @phone_book_entries.each do |phone_book_entry|
+    %entry{:id => phone_book_entry.id}
+      %ln= phone_book_entry.last_name
+      %fn= phone_book_entry.first_name
+      - phone_book_entry.phone_numbers.each do |phone_number|
+        - if phone_number.name.to_s.downcase == 'mobile'
+          %mb= phone_number.number
+        - elsif phone_number.name.to_s.downcase == 'fax'
+          %fx= phone_number.number
+        - else
+          %hm= phone_number.number
