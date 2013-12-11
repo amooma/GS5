@@ -484,9 +484,13 @@ class ConfigGigasetController < ApplicationController
       return nil
     end
 
-    phone_model = 'Gigaset C610 IP'
-    if build_variant == 42 && provisioning_id == 2
-      phone_model = 'Gigaset N510 IP PRO'
+    phone_model = 'Gigaset'
+    if build_variant == 42 
+      if provisioning_id == 1
+        phone_model = 'Gigaset C610 IP'
+      elsif provisioning_id == 2
+        phone_model = 'Gigaset N510 IP PRO'
+      end
     end
 
     tenant = Tenant.where(:id => GsParameter.get('PROVISIONING_AUTO_TENANT_ID')).first
