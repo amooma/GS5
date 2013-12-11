@@ -2,6 +2,7 @@ class ConfigGigasetController < ApplicationController
 
   MAX_SIP_ACCOUNTS = 6
   MAX_HANDSETS = 4
+  MAX_DIRECTORY_ENTRIES = 255
 
   before_filter {
     @mac_address = params[:mac_address].to_s.upcase.gsub(/[^0-9A-F]/,'')
@@ -31,7 +32,7 @@ class ConfigGigasetController < ApplicationController
     @phone.phone_sip_accounts.each do |phone_sip_account|
       config_changed << phone_sip_account.updated_at
     end
-    #@config_version = Time.now.utc.strftime('%d%m%y%H%M')
+    @config_version = Time.now.utc.strftime('%d%m%y%H%M')
 
 =begin
     countries_map = {
@@ -232,11 +233,23 @@ class ConfigGigasetController < ApplicationController
       'BS_XML_Netdirs.astNetdirProvider[1].aucWhitePagesDirName' => '"GS5"',
       'BS_XML_Netdirs.astNetdirProvider[1].aucUsername' => '""',
       'BS_XML_Netdirs.astNetdirProvider[1].aucPassword' => '""',
+     # 'BS_XML_Netdirs.astNetdirProvider[0].aucYellowPagesDirName' => '"Company"',
+     # 'BS_XML_Netdirs.aucNetdirSelForAutoLookup' => "0x00,0x00,0x00,0x00,0x00,0x00",
+     # 'BS_XML_Netdirs.astNetdirProvider[0].aucWhitePagesDirName' => '"Name"',
+     # 'BS_XML_Netdirs.astNetdirProvider[0].aucServerURL' => '""',
+     # 'BS_XML_Netdirs.aucActivatedNetdirs' => "0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00",
+     # 'BS_XML_Netdirs.astNetdirProvider[0].aucPassword' => '""',
+     # 'BS_IP_Data.ucB_ADD_SIPID_TO_HTTP_REQ' => "1",
+     # 'BS_XML_Netdirs.astNetdirProvider[0].aucUsername' => '""',
+     # 'BS_XML_Netdirs.astNetdirProvider[0].aucProviderName' => '"Gemeinschaft"',
     }
 
+
+
+
     if ! @phone.http_password.blank?
-      pin = @phone.http_password.to_s + '0000'
-      @settings['BS_CUSTOM.aucKdsPin[0]'] = "0x#{pin.byteslice(0,2)},0x#{pin.byteslice(2,2)}"
+      pin = @phone.http_password.to_s.gsub(/[^0-9]/,'') + '0000'
+      @settings['BS_CUSTOM.aucKdsPin[0]'] = "0x#{pin[0,2]},0x#{pin[2,2]}"
     end
 
     for index in 1..MAX_SIP_ACCOUNTS
@@ -353,9 +366,17 @@ class ConfigGigasetController < ApplicationController
     if sip_accounts.any?
       phone_book_url = "#{request.protocol}#{request.host_with_port}/config_gigaset/#{@phone.id}/#{sip_accounts.first.id}/phone_book.xml"
       @settings['BS_XML_Netdirs.astNetdirProvider[1].aucServerURL'] = "\"#{phone_book_url}\""
+      #@settings['BS_XML_Netdirs.astNetdirProvider[0].aucServerURL'] = "\"#{phone_book_url}\""
     end
 
-    @config_version = config_changed.sort.last.utc.strftime('%d%m%y%H%M')
+    #@config_version = config_changed.sort.last.utc.strftime('%d%m%y%H%M')
+
+    if request.env['HTTP_USER_AGENT'].index('N510') || request.env['HTTP_USER_AGENT'].index('C610')
+      Rails.logger.info "---> Phone #{@mac_address.inspect}, IP address #{request_remote_ip.inspect}"
+      @phone.update_attributes({ :ip_address => request_remote_ip })
+    else
+      Rails.logger.info "---> User-Agent indicates not a Gigaset phone (#{request.env['HTTP_USER_AGENT'].inspect})"
+    end
   end
 
 
@@ -405,8 +426,46 @@ class ConfigGigasetController < ApplicationController
       return false
     end
 
+    if !params[:sip_account].blank?
+      @sip_account = @phone.sip_accounts.where({ :id => params[:sip_account].to_i }).first  || 
+      if !@sip_account && @phone.fallback_sip_account && @phone.fallback_sip_account.id == params[:sip_account].to_i
+        @sip_account = @phone.fallback_sip_account
+      end
+    end
+
     base_url = "#{request.protocol}#{request.host_with_port}/config_gigaset/#{@phone.id}/#{sip_accounts.first.id}"
     phone_book_url = "#{base_url}/phone_book.xml"
+
+    phone_books = Array.new()
+
+    if @sip_account
+      phone_books = phone_books + @sip_account.sip_accountable.try(:phone_books).all
+      if @sip_account.sip_accountable.class == User
+        phone_books = phone_books + @sip_account.sip_accountable.try(:current_tenant).try(:phone_books).all
+      end
+    end
+
+    phone_book_ids = Array.new()
+    phone_books.each do |phone_book|
+      phone_book_ids << phone_book.id
+    end
+
+    ln = params[:ln].to_s.encode!('UTF-8', 'UTF-8', :invalid => :replace).gsub(/[^0-9a-zA-Z-_]/,'') + '%'
+    hm = params[:hm].to_s + '%'
+
+    @phone_book_entries = PhoneBookEntry.where(:phone_book_id => phone_book_ids).where('last_name LIKE ?', ln).order(:last_name).order(:first_name).limit(MAX_DIRECTORY_ENTRIES)
+    @first = params[:first].to_i
+    @type = params[:type].to_s
+    count = params[:count].to_i
+
+    @total = @phone_book_entries.count
+
+    if @first && count
+      @phone_book_entries = @phone_book_entries[@first-1, count]
+    end
+
+    @last = (@first+count-1)
+    @last = @last < @total ? @last : @total
   end
 
   private
