@@ -485,7 +485,7 @@ class ConfigGigasetController < ApplicationController
     end
 
     phone_model = 'Gigaset C610 IP'
-    if build_variant == 42 && provisioning_id = 2
+    if build_variant == 42 && provisioning_id == 2
       phone_model = 'Gigaset N510 IP PRO'
     end
 
