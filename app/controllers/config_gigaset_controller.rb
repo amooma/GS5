@@ -16,6 +16,13 @@ class ConfigGigasetController < ApplicationController
       @phone = Phone.where(:mac_address => @mac_address).first
     end
 
+    if ! @phone && GsParameter.get('PROVISIONING_AUTO_ADD_PHONE')
+      @phone = create_phone(@mac_address, @build_variant, @provisioning_id)
+      if @phone && GsParameter.get('PROVISIONING_AUTO_ADD_SIP_ACCOUNT')
+        create_sip_account(@phone)
+      end
+    end
+
     if ! @phone
       render(
         :status => 404,
@@ -27,11 +34,6 @@ class ConfigGigasetController < ApplicationController
     end
 
     @profile_name = 'GS5'
-
-    config_changed = [@phone.updated_at]
-    @phone.phone_sip_accounts.each do |phone_sip_account|
-      config_changed << phone_sip_account.updated_at
-    end
     @config_version = Time.now.utc.strftime('%d%m%y%H%M')
 
 =begin
@@ -322,10 +324,10 @@ class ConfigGigasetController < ApplicationController
       @settings["BS_AE_Subscriber.stMtDat[#{index-1}].aucTlnName"] = "\"HS#{index}\""
     end
 
-    sip_accounts = @phone.sip_accounts.any? ? @phone.sip_accounts : [@phone.fallback_sip_account]
+    sip_accounts = @phone.fallback_sip_account ? [@phone.fallback_sip_account] : []
+    sip_accounts = @phone.sip_accounts.any? ? @phone.sip_accounts : sip_accounts
 
     sip_accounts.each_with_index do |sip_account, index|
-      config_changed << sip_account.updated_at
       @settings["BS_IP_Data1.aucS_SIP_ACCOUNT_NAME_#{index+1}"] = "\"#{sip_account.caller_name}\""
       @settings["BS_IP_Data1.ucB_SIP_ACCOUNT_IS_ACTIVE_#{index+1}"] = "1"
       @settings["BS_Accounts.astAccounts[#{index}].aucAccountName[0]"] = sip_account.phone_numbers.first ? "\"#{sip_account.phone_numbers.first.number}\"" : "\"#{sip_account.caller_name}\""
@@ -351,25 +353,23 @@ class ConfigGigasetController < ApplicationController
       end
     end
 
-    mask = 0
-    for index in 1..MAX_HANDSETS
-      if sip_accounts.count <= index
-        if sip_accounts.last.phone_numbers.first
-          @settings["BS_AE_Subscriber.stMtDat[#{index-1}].aucTlnName"] = "\"#{index}:#{sip_accounts.last.phone_numbers.first.number}\""
-        end
-        mask = mask + 2**(index-1)
-        @settings["BS_Accounts.astAccounts[#{sip_accounts.count-1}].uiSendMask"] = mask
-        @settings["BS_Accounts.astAccounts[#{sip_accounts.count-1}].uiReceiveMask"] = mask
-      end
-    end
-
     if sip_accounts.any?
+      mask = 0
+      for index in 1..MAX_HANDSETS
+        if sip_accounts.count <= index
+          if sip_accounts.last.phone_numbers.first
+            @settings["BS_AE_Subscriber.stMtDat[#{index-1}].aucTlnName"] = "\"#{index}:#{sip_accounts.last.phone_numbers.first.number}\""
+          end
+          mask = mask + 2**(index-1)
+          @settings["BS_Accounts.astAccounts[#{sip_accounts.count-1}].uiSendMask"] = mask
+          @settings["BS_Accounts.astAccounts[#{sip_accounts.count-1}].uiReceiveMask"] = mask
+        end
+      end
+
       phone_book_url = "#{request.protocol}#{request.host_with_port}/config_gigaset/#{@phone.id}/#{sip_accounts.first.id}/phone_book.xml"
       @settings['BS_XML_Netdirs.astNetdirProvider[1].aucServerURL'] = "\"#{phone_book_url}\""
       #@settings['BS_XML_Netdirs.astNetdirProvider[0].aucServerURL'] = "\"#{phone_book_url}\""
     end
-
-    #@config_version = config_changed.sort.last.utc.strftime('%d%m%y%H%M')
 
     if request.env['HTTP_USER_AGENT'].index('N510') || request.env['HTTP_USER_AGENT'].index('C610')
       Rails.logger.info "---> Phone #{@mac_address.inspect}, IP address #{request_remote_ip.inspect}"
@@ -477,6 +477,68 @@ class ConfigGigasetController < ApplicationController
       value.length+1,
       value,
     ].pack("CCCCa#{value.length+1}")
+  end
 
+  def create_phone(mac_address, build_variant, provisioning_id)
+    if !build_variant || !provisioning_id || !mac_address
+      return nil
+    end
+
+    phone_model = 'Gigaset C610 IP'
+    if build_variant == 42 && provisioning_id = 2
+      phone_model = 'Gigaset N510 IP PRO'
+    end
+
+    tenant = Tenant.where(:id => GsParameter.get('PROVISIONING_AUTO_TENANT_ID')).first
+    if ! tenant
+      return nil
+    end
+
+    phone = tenant.phones.build
+    phone.mac_address = mac_address
+    phone.hot_deskable = true
+    phone.tenant = tenant
+    phone.phone_model = PhoneModel.where(:name => phone_model).first
+    if ! phone.save
+      return nil
+    end
+
+    return phone
+  end
+
+  def create_sip_account(phone)
+    caller_name_index = 0
+    sip_account_last = phone.tenant.sip_accounts.where('caller_name LIKE ?', "#{GsParameter.get('PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX')}%").sort { |item1, item2| 
+      item1.caller_name.gsub(/[^0-9]/, '').to_i <=> item2.caller_name.gsub(/[^0-9]/, '').to_i
+    }.last
+
+    if sip_account_last
+      caller_name_index = sip_account_last.caller_name.gsub(/[^0-9]/, '').to_i
+    end
+    caller_name_index = caller_name_index + 1
+
+    sip_account = phone.tenant.sip_accounts.build
+    sip_account.caller_name = "#{GsParameter.get('PROVISIONING_AUTO_SIP_ACCOUNT_CALLER_PREFIX')}#{caller_name_index}"
+    sip_account.call_waiting = GsParameter.get('CALL_WAITING')
+    sip_account.clir = GsParameter.get('DEFAULT_CLIR_SETTING')
+    sip_account.clip = GsParameter.get('DEFAULT_CLIP_SETTING')
+    sip_account.voicemail_pin = random_pin
+    sip_account.callforward_rules_act_per_sip_account = GsParameter.get('CALLFORWARD_RULES_ACT_PER_SIP_ACCOUNT_DEFAULT')
+    sip_account.hotdeskable = false
+    loop do
+      sip_account.auth_name = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_AUTH_NAME'))
+      break unless SipAccount.exists?(:auth_name => sip_account.auth_name)
+    end
+    sip_account.password = SecureRandom.hex(GsParameter.get('DEFAULT_LENGTH_SIP_PASSWORD'))
+
+    if ! sip_account.save
+      return nil
+    end
+
+    phone.fallback_sip_account = sip_account
+    if ! phone.save
+      return nil
+    end
+    return sip_account
   end
 end
