@@ -27,7 +27,7 @@ en:
         hint: ''
       default_area_code:
         label: 'Default area code'
-        hint: ''
+        hint: 'without the leading zero; e.g. 30 for Berlin'
       trunk_access_code:
         label: 'Trunk access code'
         hint: ''
