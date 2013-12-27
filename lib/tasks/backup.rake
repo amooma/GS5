@@ -82,5 +82,12 @@ namespace :backup do
       restore_job.destroy
     end
   end
-
+  desc "Cleanup backups."
+  task :cleanup, [:daystokeep] => :environment do |t,a|
+    a.with_defaults(:daystokeep => 90)
+    cleanuptime = Time.now - a.daystokeep.to_i.day
+    puts "Deleting backups to #{cleanuptime.to_s} ..."
+    BackupJob.where("started_at < ?",cleanuptime).find_each { |entry| entry.destroy }
+    puts "Done."
+  end
 end
