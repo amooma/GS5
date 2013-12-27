@@ -2,6 +2,13 @@ GS5
 ===
 Gemeinschaft 5 by [AMOOMA GmbH](http://amooma.de) in Germany. It is a FreeSWITCH and Ruby on Rails based PBX. This Github repository is our development environment.
 
+MIT License
+===========
+Copyright (c) 2013 AMOOMA GmbH
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 Documentation
 =============
 Please have a look at our [Wiki](https://github.com/amooma/GS5/wiki).
@@ -14,20 +21,6 @@ Feature requests
 ================
 Please open a new issue and mark it as a feature request.
 
-Roadmap
-=======
-We don't have a public roadmap. But we do track the future work with issues. So have a look at [https://github.com/amooma/GS5/issues](https://github.com/amooma/GS5/issues) for future features.
-
-License
-=======
-We use this public repository to develop. Do not use this code on a production system! Do not give away this code to your clients! This code is strictly for development purposes and GS5 is not a GPL project.
-
-DO NOT USE CODE FROM THE CONTENT OF THIS REPOSITORY FOR A PRODUCTION SYSTEM!
-
-You can download a free and stable version of GS5 for your production system at [http://amooma.de/gemeinschaft/gs5](http://amooma.de/gemeinschaft/gs5).
-
 Development How-to
 ==================
-There is a master and a develop branch in this repository. If you are familiar with [http://nvie.com/posts/a-successful-git-branching-model/](http://nvie.com/posts/a-successful-git-branching-model/) you are good to go. Please send a pull request and an e-mail to stefan.wintermeyer@amooma.de with some info about your code. Regular developer get access to the repository, a closed developer mailinglist and hardware in case they need it.
-
-We only accept code which was written 100% by you and were you grant us the rights for the code.
+There is a master and a develop branch in this repository. If you are familiar with [http://nvie.com/posts/a-successful-git-branching-model/](http://nvie.com/posts/a-successful-git-branching-model/) you are good to go. Pull request is your friend.
