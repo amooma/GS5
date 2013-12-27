@@ -82,8 +82,10 @@ namespace :backup do
       restore_job.destroy
     end
   end
+
   desc "Cleanup backups."
   task :cleanup, [:daystokeep] => :environment do |t,a|
+    # this task will purge all backups started before :daystokeep (default 90) days from disk and database to save disk space
     a.with_defaults(:daystokeep => 90)
     cleanuptime = Time.now - a.daystokeep.to_i.day
     puts "Deleting backups to #{cleanuptime.to_s} ..."
