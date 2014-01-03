@@ -1,6 +1,5 @@
 namespace :csvphonebook do
   require 'csv'
-  require 'digest/md5'
 
   # CSV format (headers are inspired by LDAP attributes):
   #
