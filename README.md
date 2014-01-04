@@ -1,6 +1,6 @@
 GS5
 ===
-Gemeinschaft 5 by [AMOOMA GmbH](http://amooma.de) in Germany. It is a FreeSWITCH and Ruby on Rails based PBX. This Github repository is our development environment.
+Gemeinschaft 5 by AMOOMA GmbH in Germany. It is a FreeSWITCH and Ruby on Rails based PBX.
 
 MIT License
 ===========

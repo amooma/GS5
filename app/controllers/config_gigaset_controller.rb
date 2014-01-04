@@ -450,7 +450,7 @@ class ConfigGigasetController < ApplicationController
       phone_book_ids << phone_book.id
     end
 
-    ln = params[:ln].to_s.encode!('UTF-8', 'UTF-8', :invalid => :replace).gsub(/[^0-9a-zA-Z-_]/,'_') + '%'
+    ln = params[:ln].to_s.encode!('UTF-8', 'UTF-8', :invalid => :replace).gsub(/[^0-9a-zA-Z\-_]/,'_') + '%'
     hm = params[:hm].to_s + '%'
 
     @phone_book_entries = PhoneBookEntry.where(:phone_book_id => phone_book_ids).where('last_name LIKE ?', ln).order(:last_name).order(:first_name).limit(MAX_DIRECTORY_ENTRIES)
