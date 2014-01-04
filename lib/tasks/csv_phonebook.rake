@@ -1,10 +1,18 @@
 namespace :csvphonebook do
   require 'csv'
 
-  # CSV format (headers are inspired by LDAP attributes):
+  #
+  # CSV format (headers are inspired by LDAP attributes).
+  # Columns givenName,sn,company are mandatory, other columns are optional.
   #
   # givenName,sn,company,telephoneNumber,mobile,department,streetAddress,postalCode,l,title
   # Max,Mustermann,Musterfirma,+123456789,+91123456789,Abteilung XY,Musterstraße 1 a,12345,Musterstadt,Musterchief
+  #
+  #
+  # usage:
+  # rake csvphonebook:add[/path/to/file.csv,"name of phone book"]
+  # rake csvphonebook:delete[/path/to/file.csv,"name of phone book"]
+  #
 
   desc "Delete phonebook entries from a CSV file."
   task :delete, [:csvfile, :phonebookname] => :environment do |t,a|
