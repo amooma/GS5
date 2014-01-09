@@ -5,8 +5,8 @@ namespace :csvphonebook do
   # CSV format (headers are inspired by LDAP attributes).
   # Columns givenName,sn,company are mandatory, other columns are optional.
   #
-  # givenName,sn,company,telephoneNumber,mobile,department,streetAddress,postalCode,l,title
-  # Max,Mustermann,Musterfirma,+123456789,+91123456789,Abteilung XY,Musterstraße 1 a,12345,Musterstadt,Musterchief
+  # givenName,sn,company,telephoneNumber,mobile,department,streetAddress,postalCode,l,title,co
+  # Max,Mustermann,Musterfirma,+123456789,+91123456789,Abteilung XY,Musterstraße 1 a,12345,Musterstadt,Musterchief,Germany
   #
   #
   # usage:
@@ -75,11 +75,17 @@ namespace :csvphonebook do
           number.phone_numberable_id   = pbe.id
           number.save
         end
-        if !(entry['streetAddress'].blank? && entry['postalCode'].blank? && entry['l'].blank?)
+        if !(entry['streetAddress'].blank? && entry['postalCode'].blank? && entry['l'].blank? && entry['co'].blank?)
           addr                     = Address.new
           addr.street              = entry['streetAddress']
           addr.zip_code            = entry['postalCode']
           addr.city                = entry['l']
+          if !entry['co'].blank?
+            country = Country.find(:first, :conditions => { :name => entry['co']})
+            if !country.nil?
+              addr.country_id      = country.id
+            end
+          end
           addr.phone_book_entry_id = pbe.id
           addr.save
         end
