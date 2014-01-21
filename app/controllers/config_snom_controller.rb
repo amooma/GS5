@@ -55,6 +55,40 @@ class ConfigSnomController < ApplicationController
     },
   }
 
+  MAC_ADDRESS_TO_MODEL = {
+    '00041325' => 'Snom 300',
+    '00041328' => 'Snom 300',
+    '0004132D' => 'Snom 300',
+    '0004132F' => 'Snom 300',
+    '00041334' => 'Snom 300',
+    '00041350' => 'Snom 300',
+    '0004133B' => 'Snom 300',
+    '00041337' => 'Snom 300',
+    '00041324' => 'Snom 320',
+    '00041327' => 'Snom 320',
+    '0004132C' => 'Snom 320',
+    '00041331' => 'Snom 320',
+    '00041335' => 'Snom 320',
+    '00041338' => 'Snom 320',
+    '00041351' => 'Snom 320',
+    '0004133F' => 'Snom 320',
+    '00041323' => 'Snom 360',
+    '00041329' => 'Snom 360',
+    '0004132B' => 'Snom 360',
+    '00041339' => 'Snom 360',
+    '00041390' => 'Snom 360',
+    '00041326' => 'Snom 370',
+    '0004132E' => 'Snom 370',
+    '0004133A' => 'Snom 370',
+    '00041352' => 'Snom 370',
+    '00041340' => 'Snom 820',
+    '00041345' => 'Snom 821',
+    '00041348' => 'Snom 821',
+    '00041341' => 'Snom 870',
+    '00041332' => 'Snom meetingPoint',
+    '00041343' => 'Snom vision',
+  }
+
   skip_authorization_check
 
   before_filter { |controller|
@@ -85,40 +119,9 @@ class ConfigSnomController < ApplicationController
       return
     end
 
-    mac_address_to_model = {
-      '00041325' => 'Snom 300',
-      '00041328' => 'Snom 300',
-      '0004132D' => 'Snom 300',
-      '0004132F' => 'Snom 300',
-      '00041334' => 'Snom 300',
-      '00041350' => 'Snom 300',
-      '0004133B' => 'Snom 300',
-      '00041337' => 'Snom 300',
-      '00041324' => 'Snom 320',
-      '00041327' => 'Snom 320',
-      '0004132C' => 'Snom 320',
-      '00041331' => 'Snom 320',
-      '00041335' => 'Snom 320',
-      '00041338' => 'Snom 320',
-      '00041351' => 'Snom 320',
-      '00041323' => 'Snom 360',
-      '00041329' => 'Snom 360',
-      '0004132B' => 'Snom 360',
-      '00041339' => 'Snom 360',
-      '00041390' => 'Snom 360',
-      '00041326' => 'Snom 370',
-      '0004132E' => 'Snom 370',
-      '0004133A' => 'Snom 370',
-      '00041352' => 'Snom 370',
-      '00041340' => 'Snom 820',
-      '00041345' => 'Snom 821',
-      '00041348' => 'Snom 821',
-      '00041341' => 'Snom 870',
-      '00041332' => 'Snom meetingPoint',
-      '00041343' => 'Snom vision',
-    }
+    
 
-    phone_model_str = mac_address_to_model[@mac_address[0, 8]]
+    phone_model_str = MAC_ADDRESS_TO_MODEL[@mac_address[0, 8]]
     if phone_model_str == 'Snom vision'
       snom_vision
     elsif !phone_model_str.blank?
@@ -157,39 +160,7 @@ class ConfigSnomController < ApplicationController
         @phone.hot_deskable = true
         @phone.tenant = tenant
 
-        mac_address_to_model = {
-          '00041325' => 'Snom 300',
-          '00041328' => 'Snom 300',
-          '0004132D' => 'Snom 300',
-          '0004132F' => 'Snom 300',
-          '00041334' => 'Snom 300',
-          '00041350' => 'Snom 300',
-          '0004133B' => 'Snom 300',
-          '00041337' => 'Snom 300',
-          '00041324' => 'Snom 320',
-          '00041327' => 'Snom 320',
-          '0004132C' => 'Snom 320',
-          '00041331' => 'Snom 320',
-          '00041335' => 'Snom 320',
-          '00041338' => 'Snom 320',
-          '00041351' => 'Snom 320',
-          '00041323' => 'Snom 360',
-          '00041329' => 'Snom 360',
-          '0004132B' => 'Snom 360',
-          '00041339' => 'Snom 360',
-          '00041390' => 'Snom 360',
-          '00041326' => 'Snom 370',
-          '0004132E' => 'Snom 370',
-          '0004133A' => 'Snom 370',
-          '00041352' => 'Snom 370',
-          '00041340' => 'Snom 820',
-          '00041345' => 'Snom 821',
-          '00041348' => 'Snom 821',
-          '00041341' => 'Snom 870',
-          '00041332' => 'Snom meetingPoint',
-        }
-
-        @phone.phone_model = PhoneModel.where(:name => mac_address_to_model[@mac_address[0, 8]]).first
+        @phone.phone_model = PhoneModel.where(:name => MAC_ADDRESS_TO_MODEL[@mac_address[0, 8]]).first
         if ! @phone.save
           render(
             :status => 500,
