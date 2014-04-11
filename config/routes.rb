@@ -200,16 +200,16 @@ Gemeinschaft42c::Application.routes.draw do
   get "config_siemens/:phone/:sip_account/menu"            => "config_siemens#menu"
 
   #Polycom
-  get "config_polycom/:phone/:sip_account/phone_book"         => "config_polycom#phone_book"
-  get "config_polycom/:phone/:sip_account/call_history"       => "config_polycom#call_history"
-  get "config_polycom/:phone/:sip_account/idle_screen"        => "config_polycom#idle_screen"
+  get "config_polycom/:phone/:sip_account/phone_book"      => "config_polycom#phone_book"
+  get "config_polycom/:phone/:sip_account/call_history"    => "config_polycom#call_history"
+  get "config_polycom/:phone/:sip_account/idle_screen"     => "config_polycom#idle_screen"
 
   #Yealink
-  get "config_yealink/:phone/:sip_account/phone_book"         => "config_yealink#phone_book"
+  get "config_yealink/:phone/:sip_account/phone_book"      => "config_yealink#phone_book"
   get "config_yealink/:phone/:sip_account/:phone_book/phone_book"         => "config_yealink#phone_book"
 
   #Gigaset
-  get "config_gigaset/:phone/:sip_account/phone_book"         => "config_gigaset#phone_book"
+  get "config_gigaset/:phone/:sip_account/phone_book"      => "config_gigaset#phone_book"
  
   # Unified path for Snom phones.
   # Enter e.g. "http://192.168.1.105:3000/settings"
@@ -266,6 +266,12 @@ Gemeinschaft42c::Application.routes.draw do
     :constraints => { :mac_address => /0004f2[0-9A-F]{6}/i },
     :via => [:get],
     :format => 'xml'
+
+  # Pingtel
+  match 'getConfig' => 'config_pingtel#show',
+    :constraints => { :mac_address => /00d01e[0-9a-f]{6}/i },
+    :via => [:get],
+    :format => 'text'
     
   # Snom default path.
   # e.g. "/snom360-000413000000.htm"
