@@ -57,10 +57,12 @@ class ConfigPingtelController < ApplicationController
       'USER_DEFAULT_OUTBOUND_LINE' => 'PHONESET_LINE',
     }
 
+    sip_accounts = Array.new
+
     if @phone.sip_accounts.any?
       sip_accounts = @phone.sip_accounts
-    else
-      sip_accounts = [@phone.fallback_sip_account]
+    elsif @phone.fallback_sip_account
+      sip_accounts << @phone.fallback_sip_account
     end
 
     if sip_accounts.any?
